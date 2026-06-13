@@ -29,15 +29,14 @@ function TradeSave(trade)
 
   local ok, werr = pcall(function()
     fp:write(TradeLine)
+    fp:flush()
+    fp:close()
   end)
   if not ok then
     log.error("Ошибка записи в MyTrades.csv: " .. werr)
   end
 
-  pcall(function()
-    fp:flush()
-  end)
-  pcall(function()
-    fp:close()
-  end)
+    pcall(function()
+      fp:close()
+    end)
 end

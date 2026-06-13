@@ -23,6 +23,7 @@ function main()
     end
 
     -- Обработка событий
+    ClearPositionCache()
 
     -- Обработка ответов от сервера
     for i, TransReplie in ipairs(N_TransReplies) do

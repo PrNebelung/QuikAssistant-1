@@ -21,7 +21,7 @@ QTable.__index = QTable
 function QTable.new()
   local t_id = AllocTable()
   if t_id ~= nil then
-    q_table = {}
+    local q_table = {}
     setmetatable(q_table, QTable)
     q_table.t_id = t_id
     q_table.caption = ""
