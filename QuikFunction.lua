@@ -364,7 +364,7 @@ function CheckOrder(order)
       local nominal = 100.0
       if tonumber(order.Price) > tonumber(nominal) then
         local reason = string.format(
-          "Цена последней сделки выше номинала 100%% (цена: %s%%)"
+          "Цена последней сделки выше номинала 100%% (цена: %s%%)",
           tostring(order.Price)
         )
         log.warn(reason .. " " .. order.Print())
@@ -378,7 +378,7 @@ function CheckOrder(order)
     local position = GetPosition(order.SecurityCode)
     if position ~= nil and tonumber(position.wa_position_price) < tonumber(order.Price) then
       local reason = string.format(
-        "Цена последней сделки выше средней цены %s"
+        "Цена последней сделки выше средней цены %s",
         string.format("%.2f", position.wa_position_price)
       )
       log.warn(reason .. " " .. order.Print())

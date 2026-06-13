@@ -35,8 +35,4 @@ function TradeSave(trade)
   if not ok then
     log.error("Ошибка записи в MyTrades.csv: " .. werr)
   end
-
-    pcall(function()
-      fp:close()
-    end)
 end
