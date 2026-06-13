@@ -286,7 +286,7 @@ function CheckOrder(order)
         tostring(order.Price),
         tostring(priceMin)
       )
-      log.warn(reason .. " " .. order.Print())
+      log.debug(reason .. " " .. order.Print())
       return false, reason
     end
   end

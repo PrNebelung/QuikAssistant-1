@@ -41,13 +41,21 @@ local function openLogFile()
       logFileHandle:close()
     end)
   end
-  local fp = io.open(getScriptPath() .. filePath, "a")
+  local fp = io.open(getScriptPath() .. filePath, "ab")
   if fp then
     logFileHandle = fp
     logFilePath = filePath
     return fp
   end
   return nil
+end
+
+local function makeRelativePath(path)
+  local scriptPath = getScriptPath()
+  if scriptPath and path:sub(1, #scriptPath) == scriptPath then
+    return path:sub(#scriptPath + 1)
+  end
+  return path
 end
 
 local levels = {}
@@ -85,7 +93,8 @@ for i, x in ipairs(modes) do
 
     local msg = tostring(...)
     local info = debug.getinfo(2, "Sl")
-    local lineinfo = info.short_src .. ":" .. info.currentline
+    local fullPath = info.short_src .. ":" .. info.currentline
+    local lineinfo = makeRelativePath(info.short_src) .. ":" .. info.currentline
 
     -- Output to console
     print(
@@ -100,14 +109,14 @@ for i, x in ipairs(modes) do
       )
     )
 
-    -- Output to log file
-    if Broker and Broker ~= "" then
+    -- Output to log file (INFO and above only)
+    if Broker and Broker ~= "" and levels[x.name] >= levels["info"] then
       local fp = openLogFile()
       if fp then
         local str = string.format(
-          "%-6s\t\t%s\t\t%s\t\t%s:\t\t%s\n",
+          "%-6s %s [%s] %s: %s\n",
           nameupper,
-          os.date("%x %X", os.time()),
+          os.date("%H:%M:%S"),
           Broker,
           lineinfo,
           msg
