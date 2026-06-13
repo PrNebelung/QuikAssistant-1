@@ -158,3 +158,32 @@ for i, line in enumerate(text.split(chr(10))[:20], 1):
 - **Never** use the Edit tool on lines with Russian text
 - Always use `cp1251_wrapper.py` for modifications
 - Run `python cp1251_wrapper.py check_all` after any encoding-related changes
+
+## Architecture Notes
+
+### Price Adjustment Flow
+- `AdjustPrice(order)` — single source of price correction (deviation from LAST, PRICEMIN floor)
+- `CheckOrder(order)` — only validates (PRICEMIN, position, volume, actuation, bond nominal, avg price)
+- `SubmitOrders()` calls `AdjustPrice` first, then `CheckOrder`
+- **Do NOT add price correction to CheckOrder** — was a bug (double adjustment)
+
+### Log Levels in File
+- Only INFO and above go to log file (TRACE/DEBUG only to console)
+- Log file is UTF-8 encoded
+- `[SKIP]` messages include ticker symbols in brackets
+
+### Test Commands
+```bash
+lua Tests/run_tests.lua                                    # Unit tests (148)
+lua IntegrationTests/run_integration_tests.lua --broker=TEST --session=main
+lua IntegrationTests/run_integration_tests.lua --broker=VTB --session=main
+lua IntegrationTests/run_integration_tests.lua --broker=PSB --session=main
+lua IntegrationTests/run_integration_tests.lua --broker=FINAM --session=main
+lua IntegrationTests/run_integration_tests.lua --broker=RSHB --session=main
+```
+
+### Known Issues (manual fix needed)
+- 12 unused functions in QuikFunction, TableOrders, TableSetting, TableConstructor
+- Commented-out code block in TableOrders.lua:14-40
+- Unused globals in Setting.lua (TRANS_STATUS_REJECTED, VolumeOrderMin, OFZVolumeOrderMax)
+- Function removal via Python scripts is unreliable due to Lua nesting complexity — use IDE
