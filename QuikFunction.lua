@@ -268,17 +268,8 @@ function CheckOrder(order)
 
   local priceLast = GetPriceLast(order)
 
-  -- Проверка, была ли цена последней сделки ниже (покупка)
+  -- Валидация PRICEMIN (корректировка цены — в AdjustPrice)
   if order:IsBuy() then
-    if tonumber(priceLast) < tonumber(order.Price) and tonumber(priceLast) ~= 0 then
-      log.debug(
-        "Цена последней сделки была выше цены. Корректировка цены "
-          .. tostring(priceLast)
-          .. "используется для корректировки ордера. "
-          .. order.Print()
-      )
-      order.Price = priceLast - PRICE_DEVIATION_MULTIPLIER * order.SecurityInfo.min_price_step
-    end
     local priceMin = tonumber(GetPriceMin(order))
     if priceMin ~= nil and priceMin > 0 and tonumber(order.Price) < priceMin then
       local reason = string.format(
@@ -288,19 +279,6 @@ function CheckOrder(order)
       )
       log.debug(reason .. " " .. order.Print())
       return false, reason
-    end
-  end
-
-  -- Проверка, была ли цена последней сделки выше (продажа)
-  if order:IsSell() then
-    if tonumber(priceLast) > tonumber(order.Price) and tonumber(priceLast) ~= 0 then
-      log.debug(
-        "Цена последней сделки была ниже цены. Корректировка цены "
-          .. tostring(priceLast)
-          .. "используется для корректировки ордера. "
-          .. order.Print()
-      )
-      order.Price = priceLast + PRICE_DEVIATION_MULTIPLIER * order.SecurityInfo.min_price_step
     end
   end
 
