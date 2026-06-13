@@ -101,7 +101,8 @@ function UpdateTableOrdersControl(t, order)
   local priceLast = GetPriceCurrent(order.class_code, order.sec_code)
   local operation = GetOrderOperation(order)
   local actuation = (tonumber(priceLast) - tonumber(order.price)) / tonumber(order.price) * 100
-  local lastChange = getParamEx(order.class_code, order.sec_code, "LASTCHANGE").param_value
+  local lcResult = getParamEx(order.class_code, order.sec_code, "LASTCHANGE")
+  local lastChange = lcResult and lcResult.param_value or 0
 
   local row = FindRow(t, order.order_num)
   if row == nil then
@@ -152,9 +153,11 @@ function ClearTableOrdersControl()
 end
 
 function GetPriceCurrent(classCode, secCode)
-  local priceLast = getParamEx(classCode, secCode, "LAST").param_value
+  local lastResult = getParamEx(classCode, secCode, "LAST")
+  local priceLast = lastResult and lastResult.param_value or "0"
   if tonumber(priceLast) == 0 then
-    priceLast = getParamEx(classCode, secCode, "PREVPRICE").param_value
+    local prevResult = getParamEx(classCode, secCode, "PREVPRICE")
+    priceLast = prevResult and prevResult.param_value or "0"
   end
   return priceLast
 end

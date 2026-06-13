@@ -190,10 +190,11 @@ function SetPortfolioInfo(t)
     row = t:AddLine()
   end
 
-  local lastChange = getParamEx("INDX", "IMOEX", "LASTCHANGE").param_value
+  local result = getParamEx("INDX", "IMOEX", "LASTCHANGE")
+  local lastChange = result and result.param_value or 0
 
   SetCell(t.t_id, row, 1, nameSettingIndexMOEX)
-  SetCell(t.t_id, row, 2, string.format("%.2f", lastChange))
+  SetCell(t.t_id, row, 2, string.format("%.2f", tonumber(lastChange) or 0))
   SetCell(t.t_id, row, 3, problem)
 end
 
@@ -263,7 +264,13 @@ function EventCallbackTableSetting(t_id, msg, par1, par2)
       or param == nameSettingFileBuyOrderBondsEdge
     then
       local file = getScriptPath() .. "//Data//" .. GetCell(t_id, row, 2).image
-      os.execute("notepad.exe " .. file)
+      local filename = GetCell(t_id, row, 2).image
+      if filename and filename:match("^[%%w%s%%._%%-/\\]+$") then
+        local file = getScriptPath() .. "//Data//" .. filename
+        os.execute('start "" notepad.exe "' .. file .. '"')
+      else
+        log.error("Недопустимое имя файла: " .. tostring(filename))
+      end
     end
 
     if param == nameSettingServerTime then
