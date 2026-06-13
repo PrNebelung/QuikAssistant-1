@@ -271,6 +271,7 @@ end
 function SubmitOrders(orders)
   local stats = { sent = 0, rejected = 0, duplicate = 0 }
   local skipReasons = {}
+  local skipTickers = {}
 
   for i, order in pairs(orders) do
     AdjustPrice(order)
@@ -284,6 +285,8 @@ function SubmitOrders(orders)
         stats.rejected = stats.rejected + 1
         local key = rejectReason or "unknown"
         skipReasons[key] = (skipReasons[key] or 0) + 1
+        if not skipTickers[key] then skipTickers[key] = {} end
+        table.insert(skipTickers[key], order.SecurityCode)
       else
       local clientAccountCode = AccountCode
       if order:IsSpb() then
@@ -324,7 +327,9 @@ function SubmitOrders(orders)
     log.debug(string.format("  [SKIP] %d orders: already in QUIK or sent this session", stats.duplicate))
   end
   for reason, count in pairs(skipReasons) do
-    log.warn(string.format("  [SKIP] %d orders: %s", count, reason))
+    local tickers = skipTickers[reason] or {}
+    local tickerList = table.concat(tickers, ", ")
+    log.warn(string.format("  [SKIP] %d orders: %s [%s]", count, reason, tickerList))
   end
 
   return stats
