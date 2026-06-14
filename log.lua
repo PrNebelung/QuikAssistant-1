@@ -51,13 +51,29 @@ local function openLogFile()
 end
 
 local function makeRelativePath(path)
+  if not path or path == "" then
+    return path
+  end
   local scriptPath = getScriptPath()
-  if scriptPath and path:sub(1, #scriptPath) == scriptPath then
+  if scriptPath and scriptPath ~= "" and path:sub(1, #scriptPath) == scriptPath then
     return path:sub(#scriptPath + 1)
+  end
+  -- Find "QuikAssistant" in path
+  local idx = path:find("QuikAssistant", 1, true)
+  if idx then
+    return path:sub(idx)
+  end
+  -- Strip drive letter (C:\)
+  local driveIdx = path:find(":[/\\]")
+  if driveIdx then
+    local afterDrive = path:sub(driveIdx + 2)
+    local slashIdx = afterDrive:find("[/\\]")
+    if slashIdx then
+      return afterDrive:sub(slashIdx + 1)
+    end
   end
   return path
 end
-
 local levels = {}
 for i, v in ipairs(modes) do
   levels[v.name] = i
@@ -95,6 +111,9 @@ for i, x in ipairs(modes) do
     local info = debug.getinfo(2, "Sl")
     local fullPath = info.short_src .. ":" .. info.currentline
     local lineinfo = makeRelativePath(info.short_src) .. ":" .. info.currentline
+
+    -- Debug: show raw short_src
+    -- io.write("DEBUG short_src: [" .. tostring(info.short_src) .. "] -> [" .. makeRelativePath(info.short_src) .. "]\n")
 
     -- Output to console
     print(

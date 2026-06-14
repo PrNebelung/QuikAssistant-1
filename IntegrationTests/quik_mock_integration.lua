@@ -7,6 +7,15 @@
 -- ==========================================
 
 _G.getScriptPath = function()
+  local info = debug.getinfo(1, "S")
+  local src = info.source
+  if src and src:sub(1,1) == "@" then
+    src = src:sub(2)
+  end
+  local idx = src:find("QuikAssistant", 1, true)
+  if idx then
+    return src:sub(1, idx - 1)
+  end
   return "."
 end
 _G.isConnected = function()
