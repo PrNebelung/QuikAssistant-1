@@ -29,10 +29,7 @@ function GetSecurityInfo(securityCode)
       return SecurityInfo
     end
   end
-  log.error(
-    "Инструмент не найден: "
-      .. securityCode
-  )
+  log.error("Инструмент не найден: " .. securityCode)
   return nil
 end
 
@@ -96,12 +93,9 @@ function Order:new(securityCode)
 
   --- Проверка, является ли инструмент иностранной бумагой на СПБ
 
-
   --- Проверка, является ли инструмент иностранной
 
-
   --- Проверка, является ли инструмент в долларах
-
 
   --- Проверка, является ли операцией покупки
   function obj:IsBuy()
@@ -196,7 +190,6 @@ function Order:new(securityCode)
     end
   end
 
-  
   function obj:SetQuantitySell(operation, price, quantityMax, positionQty)
     obj.Operation = operation
     if price ~= nil and tonumber(price) > 0 and quantityMax ~= nil and tonumber(quantityMax) > 0 and obj:IsSell() then

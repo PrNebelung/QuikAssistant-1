@@ -12,7 +12,8 @@ nameSettingFileBuyOrderEdge = "Файл с заявками на покупку на экстремумах"
 nameSettingFileBuyOrderBondsEdge =
   "Файл с заявками на покупку облигаций на экстремумах"
 
-nameSettingFileSellOrderEdge = "Файл с заказами на продажу (настольчик)"nameSettingInAllAssets = "Все валюты активы"
+nameSettingFileSellOrderEdge = "Файл с заказами на продажу (настольчик)"
+nameSettingInAllAssets = "Все валюты активы"
 nameSettingAllAssets = "Активы в валюте"
 nameSettingProfitLoss = "Прибыль/убыток"
 nameSettingRateChange = "% Изменение"

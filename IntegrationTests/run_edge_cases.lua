@@ -245,7 +245,14 @@ test("getParamEx облиг PRICEMIN=80", function()
 end)
 test("sendTransaction NEW_ORDER", function()
   clearMockData()
-  sendTransaction({ ACTION = "NEW_ORDER", SECCODE = "GAZP", CLASSCODE = "TQBR", OPERATION = "B", PRICE = "100.00", QUANTITY = "10" })
+  sendTransaction({
+    ACTION = "NEW_ORDER",
+    SECCODE = "GAZP",
+    CLASSCODE = "TQBR",
+    OPERATION = "B",
+    PRICE = "100.00",
+    QUANTITY = "10",
+  })
   assert_eq(getSentOrdersCount(), 1)
 end)
 

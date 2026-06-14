@@ -1,11 +1,7 @@
 function GetParamInfo(order, param)
   local value = getParamEx(order.SecurityInfo.class_code, order.SecurityInfo.code, param)
   if value == nil or value.result == "0" then
-    log.error(
-      "Параметр не найден.",
-      param,
-      order.Print()
-    )
+    log.error("Параметр не найден.", param, order.Print())
     return "0"
   end
   return value.param_value
@@ -63,7 +59,7 @@ function GetOrderVolumeMax(order, priceMin)
     limit = BondVolumeOrderMax * tonumber(koeff)
   end
 
--- Ограничение по лимиту
+  -- Ограничение по лимиту
   if limit > VolumeOrderLimit then
     limit = VolumeOrderLimit
   end
@@ -97,12 +93,7 @@ end
 function GetQuikOrders()
   local countOrders = getNumberOf("orders")
 
-  log.debug(
-    string.format(
-      "?????????? ???????: %d ??.",
-      countOrders
-    )
-  )
+  log.debug(string.format("?????????? ???????: %d ??.", countOrders))
   local ok, orders = pcall(function()
     return SearchItems("orders", 0, countOrders - 1, FindOrder, "flags, sec_code, class_code")
   end)
@@ -175,7 +166,7 @@ end
 
 --- Получение позиции по тикеру из depo_limits.
 function GetPosition(securityCode)
--- Проверка кэша
+  -- Проверка кэша
   if positionCache[securityCode] then
     return positionCache[securityCode]
   end
@@ -191,10 +182,7 @@ function GetPosition(securityCode)
         return getItem("depo_limits", positions[i])
       end)
       if ok2 and position and position.sec_code == securityCode then
-        log.debug(
-          "Найдена позиция. ",
-          securityCode
-        )
+        log.debug("Найдена позиция. ", securityCode)
         log.trace(json.encode(position))
         positionCache[securityCode] = position
         return position
@@ -255,10 +243,7 @@ function CheckOrder(order)
     or tonumber(order.Quantity) <= 0
     or order.Operation == ""
   then
-    log.error(
-      "Некорректные параметры ордера.",
-      order and order.Print() or "nil"
-    )
+    log.error("Некорректные параметры ордера.", order and order.Print() or "nil")
     return false, "Некорректные параметры ордера"
   end
 
@@ -268,11 +253,7 @@ function CheckOrder(order)
   if order:IsBuy() then
     local priceMin = tonumber(GetPriceMin(order))
     if priceMin ~= nil and priceMin > 0 and tonumber(order.Price) < priceMin then
-      local reason = string.format(
-        "price %s below PRICEMIN %s",
-        tostring(order.Price),
-        tostring(priceMin)
-      )
+      local reason = string.format("price %s below PRICEMIN %s", tostring(order.Price), tostring(priceMin))
       log.debug(reason .. " " .. order.Print())
       return false, reason
     end
@@ -317,7 +298,6 @@ function CheckOrder(order)
     local limit = LimitActuationOrderEdge
     if order:IsBond() and not order:IsOFZ() then
       limit = LimitActuationOrderBondEdge
-
     end
 
     if actuation ~= nil and tonumber(actuation) < tonumber(limit) then
@@ -363,7 +343,11 @@ function SetLimitOrdersWithError(trans)
   if error579 ~= nil then
     log.warn(
       "Ошибка (579) для "
-        .. " (qty=" .. tostring(trans.quantity) .. ", price=" .. tostring(trans.price) .. "): "
+        .. " (qty="
+        .. tostring(trans.quantity)
+        .. ", price="
+        .. tostring(trans.price)
+        .. "): "
         .. trans.result_msg
     )
     return
@@ -379,11 +363,17 @@ function SetLimitOrdersWithError(trans)
     local operation = "S"
     local order = Order:new(trans.sec_code)
     if order == nil then
-      log.error("Не удалось создать инструмент для исправления ордера", trans.sec_code)
+      log.error(
+        "Не удалось создать инструмент для исправления ордера",
+        trans.sec_code
+      )
       return
     end
     order:SetOperation(operation, maxPrice, trans.quantity)
-    log.info("Корректирующий ордер на продажу создан автоматически: " .. order.Print())
+    log.info(
+      "Корректирующий ордер на продажу создан автоматически: "
+        .. order.Print()
+    )
     local orders = {}
     table.insert(orders, order)
     SubmitOrders(orders)
@@ -391,7 +381,12 @@ function SetLimitOrdersWithError(trans)
   end
 
   -- Ошибка: Цена не находится в допустимых пределах для исполнения
-  local errorTest = string.find(trans.result_msg, "не находится в допустимых пределах для не", 1, true)
+  local errorTest = string.find(
+    trans.result_msg,
+    "не находится в допустимых пределах для не",
+    1,
+    true
+  )
   if errorTest ~= nil then
     local minPrice = string.match(trans.result_msg, "от (%d+%.?%d*)")
     if minPrice == nil then
@@ -400,7 +395,10 @@ function SetLimitOrdersWithError(trans)
     local operation = "B"
     local order = Order:new(trans.sec_code)
     if order == nil then
-      log.error("Не удалось создать инструмент для исправления ордера", trans.sec_code)
+      log.error(
+        "Не удалось создать инструмент для исправления ордера",
+        trans.sec_code
+      )
       return
     end
     order:SetOperation(operation, minPrice, 0)
@@ -411,9 +409,15 @@ function SetLimitOrdersWithError(trans)
   -- Ошибка: (133) Операция не может быть исполнена по рыночной цене
   local error133 = string.find(trans.result_msg, ": (" .. ERR_EXECUTION_REJECTED .. ")", 1, true)
   if error133 ~= nil then
-    log.warn("Ошибка (133) для "
-      .. " (qty=" .. tostring(trans.quantity) .. ", price=" .. tostring(trans.price) .. "): "
-      .. trans.result_msg)
+    log.warn(
+      "Ошибка (133) для "
+        .. " (qty="
+        .. tostring(trans.quantity)
+        .. ", price="
+        .. tostring(trans.price)
+        .. "): "
+        .. trans.result_msg
+    )
     return
   end
 

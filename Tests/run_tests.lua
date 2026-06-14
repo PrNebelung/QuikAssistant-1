@@ -932,7 +932,6 @@ test("LoadOrdersFromFile - edge ордер с увеличенным лимитом", function()
   restoreCSV()
 end)
 
-
 ---------------------------------------------
 -- Sell Edge проверки
 ---------------------------------------------
@@ -984,56 +983,68 @@ test("SubmitOrders - sell edge ордер с позицией", function()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - проверка операции в BUY файле (неверная операция)", function()
-  resetSendOrders()
-  clearTestData()
-  mockCSV({ { "Gazprom", "S", "GAZP", "100", "200.00" } })
-  local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 0, "0 ордеров (неверная операция)")
-  restoreCSV()
-end)
+test(
+  "LoadOrdersFromFile - проверка операции в BUY файле (неверная операция)",
+  function()
+    resetSendOrders()
+    clearTestData()
+    mockCSV({ { "Gazprom", "S", "GAZP", "100", "200.00" } })
+    local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
+    assert_eq(#orders, 0, "0 ордеров (неверная операция)")
+    restoreCSV()
+  end
+)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - проверка операции в SELL файле (неверная операция)", function()
-  resetSendOrders()
-  clearTestData()
-  mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" } })
-  local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-  assert_eq(#orders, 0, "0 ордеров (неверная операция)")
-  restoreCSV()
-end)
+test(
+  "LoadOrdersFromFile - проверка операции в SELL файле (неверная операция)",
+  function()
+    resetSendOrders()
+    clearTestData()
+    mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" } })
+    local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
+    assert_eq(#orders, 0, "0 ордеров (неверная операция)")
+    restoreCSV()
+  end
+)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - проверка операции в BUY файле (правильная операция)", function()
-  resetSendOrders()
-  mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" } })
-  local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 ордер (правильная операция)")
-  restoreCSV()
-end)
+test(
+  "LoadOrdersFromFile - проверка операции в BUY файле (правильная операция)",
+  function()
+    resetSendOrders()
+    mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" } })
+    local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
+    assert_eq(#orders, 1, "1 ордер (правильная операция)")
+    restoreCSV()
+  end
+)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - проверка операции в SELL файле (правильная операция)", function()
-  resetSendOrders()
-  mockCSV({ { "Gazprom", "S", "GAZP", "50", "250.00" } })
-  local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-  assert_eq(#orders, 1, "1 ордер (правильная операция)")
-  restoreCSV()
-end)
+test(
+  "LoadOrdersFromFile - проверка операции в SELL файле (правильная операция)",
+  function()
+    resetSendOrders()
+    mockCSV({ { "Gazprom", "S", "GAZP", "50", "250.00" } })
+    local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
+    assert_eq(#orders, 1, "1 ордер (правильная операция)")
+    restoreCSV()
+  end
+)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - проверка операции в SellOrders_Edge (неверная операция)", function()
-  resetSendOrders()
-  clearTestData()
-  addTestPosition("GAZP", 100, 250.00)
-  mockCSV({ { "Gazprom", "B", "GAZP", "10", "0.01" } })
-  local orders = LoadOrdersFromFile("TEST_SellOrders_Edge.csv")
-  assert_eq(#orders, 0, "0 ордеров (неверная операция в edge)")
-  restoreCSV()
-end)
-
-
-
+test(
+  "LoadOrdersFromFile - проверка операции в SellOrders_Edge (неверная операция)",
+  function()
+    resetSendOrders()
+    clearTestData()
+    addTestPosition("GAZP", 100, 250.00)
+    mockCSV({ { "Gazprom", "B", "GAZP", "10", "0.01" } })
+    local orders = LoadOrdersFromFile("TEST_SellOrders_Edge.csv")
+    assert_eq(#orders, 0, "0 ордеров (неверная операция в edge)")
+    restoreCSV()
+  end
+)
 
 ClearSecurityInfoCache()
 test("LoadOrdersFromFile - файл без BUY/SELL в имени (пропуск)", function()
@@ -1044,8 +1055,6 @@ test("LoadOrdersFromFile - файл без BUY/SELL в имени (пропуск)", function()
   assert_eq(#orders, 0, "0 ордеров (неизвестный файл)")
   restoreCSV()
 end)
-
-
 
 ---------------------------------------------
 -- Пробелы и логирование
@@ -1073,13 +1082,16 @@ test("LoadOrdersFromFile - пробел в тикере (трим)", function()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пробел в операции не превращает проверку BUY/SELL", function()
-  resetSendOrders()
-  mockCSV({ { "Gazprom", " B ", "GAZP", "100", "200.00" } })
-  local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 ордер (пробел триммен ок)")
-  restoreCSV()
-end)
+test(
+  "LoadOrdersFromFile - пробел в операции не превращает проверку BUY/SELL",
+  function()
+    resetSendOrders()
+    mockCSV({ { "Gazprom", " B ", "GAZP", "100", "200.00" } })
+    local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
+    assert_eq(#orders, 1, "1 ордер (пробел триммен ок)")
+    restoreCSV()
+  end
+)
 
 ClearSecurityInfoCache()
 test("LoadOrdersFromFile - пробелы во всех полях (трим)", function()
@@ -1114,13 +1126,16 @@ test("LoadOrdersFromFile - пробелы в тикере провоцируют проверку BUY/SELL", func
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пробелы в операции провоцируют проверку BUY/SELL", function()
-  resetSendOrders()
-  mockCSV({ { "Gazprom", " B ", "GAZP", "100", "200.00" } })
-  local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 ордер (пробелы в операции ок)")
-  restoreCSV()
-end)
+test(
+  "LoadOrdersFromFile - пробелы в операции провоцируют проверку BUY/SELL",
+  function()
+    resetSendOrders()
+    mockCSV({ { "Gazprom", " B ", "GAZP", "100", "200.00" } })
+    local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
+    assert_eq(#orders, 1, "1 ордер (пробелы в операции ок)")
+    restoreCSV()
+  end
+)
 
 ClearSecurityInfoCache()
 test("LoadOrdersFromFile - пробелы приводят к правильной проверке", function()

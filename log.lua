@@ -113,14 +113,7 @@ for i, x in ipairs(modes) do
     if Broker and Broker ~= "" and levels[x.name] >= levels["info"] then
       local fp = openLogFile()
       if fp then
-        local str = string.format(
-          "%-6s %s [%s] %s: %s\n",
-          nameupper,
-          os.date("%H:%M:%S"),
-          Broker,
-          lineinfo,
-          msg
-        )
+        local str = string.format("%-6s %s [%s] %s: %s\n", nameupper, os.date("%H:%M:%S"), Broker, lineinfo, msg)
         local ok, err = pcall(function()
           fp:write(str)
           fp:flush()
