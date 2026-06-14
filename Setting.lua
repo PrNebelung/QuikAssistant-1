@@ -27,22 +27,16 @@ BondVolumeOrderMax = 0
 VolumeOrderLimit = 200000
 --- ��������� �� ������� ������ � ��������
 VolumeOrderLimitUSD = 100
---- ��������� �� ������� ������ ����������� ����� � ������
-VolumeOrderLimitForeign = 70000
 
 --- ��������� ���������� �� ���� �����
 LimitActuationOrderEdge = 5
 --- ��������� ���������� �� ���� ����� ���������
 LimitActuationOrderBondEdge = 60
---- ��������� ���������� �� ���� ����� ����������� �����
-LimitActuationOrderForeignEdge = 30
 
 FileBuyOrder = ""
 FileSellOrder = ""
 FileBuyOrderEdge = ""
 FileBuyOrderBondsEdge = ""
-FileBuyOrderSpbEdge = ""
-FileBuyOrderRmUsdEdge = ""
 FileSellOrderEdge = ""
 
 function SetSettingFinam()

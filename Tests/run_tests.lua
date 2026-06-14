@@ -37,10 +37,8 @@ VolumeOrderMax = 11000
 BondVolumeOrderMax = 7000
 VolumeOrderLimit = 200000
 VolumeOrderLimitUSD = 100
-VolumeOrderLimitForeign = 70000
 LimitActuationOrderEdge = 5
 LimitActuationOrderBondEdge = 60
-LimitActuationOrderForeignEdge = 30
 
 local passed = 0
 local failed = 0

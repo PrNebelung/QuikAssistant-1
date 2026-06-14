@@ -294,10 +294,8 @@ _G.VolumeOrderMax = 11000
 _G.BondVolumeOrderMax = 7000
 _G.VolumeOrderLimit = 200000
 _G.VolumeOrderLimitUSD = 100
-_G.VolumeOrderLimitForeign = 70000
 _G.LimitActuationOrderEdge = 5
 _G.LimitActuationOrderBondEdge = 60
-_G.LimitActuationOrderForeignEdge = 30
 
 print("[MOCK] QUIK API �������� �������")
 
