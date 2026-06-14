@@ -289,7 +289,6 @@ _G.PRICE_DEVIATION_MULTIPLIER = 10
 _G.Broker = "TEST"
 _G.ClientCode = "10567"
 _G.AccountCode = "NL0011100043"
-_G.AccountCodeSpb = ""
 _G.FirmId = ""
 _G.VolumeOrderMax = 11000
 _G.BondVolumeOrderMax = 7000

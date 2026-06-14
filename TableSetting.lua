@@ -4,7 +4,6 @@ nameSettingServerTime = "Время сервера"
 nameSettingBroker = "Брокер"
 nameSettingClientCode = "Код клиента"
 nameSettingAccountCode = "Код счета"
-nameSettingAccountCodeSpb = "Код счета tarde_. иностранных"
 nameSettingVolumeOrderMax = "Максимальный размер суммы (рубли)"
 nameSettingFileBuyOrder = "Файл с заявками на покупку"
 nameSettingFileSellOrder = "Файл с заявками на продажу"
@@ -118,13 +117,6 @@ function SetAccountSetting(t)
   SetCell(t.t_id, row, 2, AccountCode)
   SetCell(t.t_id, row, 3, problem)
 
-  local row = FindSetting(t, nameSettingAccountCodeSpb)
-  if row == nil then
-    row = t:AddLine()
-  end
-
-  SetCell(t.t_id, row, 1, nameSettingAccountCodeSpb)
-  SetCell(t.t_id, row, 2, AccountCodeSpb)
   SetCell(t.t_id, row, 3, problem)
 
   local row = FindSetting(t, nameSettingVolumeOrderMax)

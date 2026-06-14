@@ -20,7 +20,6 @@ PRICE_DEVIATION_MULTIPLIER = 10
 Broker = ""
 ClientCode = ""
 AccountCode = ""
-AccountCodeSpb = ""
 FirmId = ""
 VolumeOrderMax = 0
 BondVolumeOrderMax = 0
