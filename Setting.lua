@@ -57,12 +57,10 @@ function SetSettingFinam()
   FirmId = "MC0061900000"
   VolumeOrderMin = 11000
   VolumeOrderMax = 70000
-  VolumeOrderLimitForeign = 50000
   BondVolumeOrderMax = 100000
   OFZVolumeOrderMax = 10000
   LimitActuationOrderEdge = 0
   LimitActuationOrderBondEdge = 50
-  LimitActuationOrderForeignEdge = 50
   VolumeOrderLimit = 120000
 end
 
@@ -70,7 +68,6 @@ function SetSettingVTB()
   Broker = "VTB"
   ClientCode = "386507"
   AccountCode = "L01-00000F00"
-  AccountCodeSpb = "VTBRM_CL"
   FirmId = "MC0003300000"
   VolumeOrderMin = 11000
   VolumeOrderMax = 20000
@@ -78,7 +75,6 @@ function SetSettingVTB()
   OFZVolumeOrderMax = 15000
   LimitActuationOrderEdge = 0
   LimitActuationOrderBondEdge = 30
-  LimitActuationOrderForeignEdge = 50
 end
 
 function SetSettingPSB()
@@ -99,7 +95,6 @@ function SetSettingRSHB()
   Broker = "RSHB"
   ClientCode = "496082"
   AccountCode = "L01+00000F00"
-  AccountCodeSpb = "VTBRM_CL"
   FirmId = "MC0134700000"
   VolumeOrderMin = 11000
   VolumeOrderMax = 20000
@@ -107,7 +102,6 @@ function SetSettingRSHB()
   OFZVolumeOrderMax = 15000
   LimitActuationOrderEdge = 0
   LimitActuationOrderBondEdge = 60
-  LimitActuationOrderForeignEdge = 50
 end
 
 function SetSettingTest()
@@ -154,7 +148,5 @@ function SetClientSetting()
   FileSellOrder = Broker .. "_SellOrders.csv"
   FileBuyOrderEdge = Broker .. "_BuyOrders_Edge.csv"
   FileBuyOrderBondsEdge = Broker .. "_BuyOrdersBonds_Edge.csv"
-  FileBuyOrderSpbEdge = Broker .. "_BuyOrdersSpb_Edge.csv"
-  FileBuyOrderRmUsdEdge = Broker .. "_BuyOrders_RmUSD_Edge.csv"
   FileSellOrderEdge = Broker .. "_SellOrders_Edge.csv"
 end

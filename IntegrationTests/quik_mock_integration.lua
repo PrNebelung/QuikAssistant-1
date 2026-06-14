@@ -340,7 +340,6 @@ _G.PRICE_DEVIATION_MULTIPLIER = 10
 _G.Broker = "TEST"
 _G.ClientCode = "10567"
 _G.AccountCode = "NL0011100043"
-_G.AccountCodeSpb = ""
 _G.FirmId = ""
 _G.VolumeOrderMin = 11000
 _G.VolumeOrderMax = 11000
@@ -348,10 +347,8 @@ _G.BondVolumeOrderMax = 7000
 _G.OFZVolumeOrderMax = 7000
 _G.VolumeOrderLimit = 200000
 _G.VolumeOrderLimitUSD = 100
-_G.VolumeOrderLimitForeign = 70000
 _G.LimitActuationOrderEdge = 5
 _G.LimitActuationOrderBondEdge = 60
-_G.LimitActuationOrderForeignEdge = 30
 
 -- ==========================================
 -- UI таблицы (заглушки для интеграционных тестов)

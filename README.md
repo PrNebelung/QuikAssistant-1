@@ -175,7 +175,7 @@ PriceInCurrency = Price × Nominal / 100
 lua Tests/run_tests.lua
 ```
 
-176 тестов: Order, CheckOrder, QuikFunction, TradeSave, TableConstructor, Sell Edge, валидация операций, тримминг пробелов.
+170 тестов: Order, CheckOrder, QuikFunction, TradeSave, TableConstructor, Sell Edge, валидация операций, тримминг пробелов.
 
 ### Интеграционные тесты
 
@@ -232,7 +232,6 @@ lua IntegrationTests/run_integration_tests.lua --broker=FINAM --session=evening
 | `Broker` | Имя брокера (используется в именах файлов) | `"VTB"`, `"FINAM"` |
 | `ClientCode` | Код клиента | `"386507"` |
 | `AccountCode` | Код торгового счёта | `"L01-00000F00"` |
-| `AccountCodeSpb` | Код счёта для SPB (если отличается) | `"VTBRM_CL"` |
 | `FirmId` | Код фирмы | `"MC0003300000"` |
 
 ### Лимиты объёма
@@ -244,8 +243,6 @@ lua IntegrationTests/run_integration_tests.lua --broker=FINAM --session=evening
 | `BondVolumeOrderMax` | Макс. объём покупки облигаций (RUB) | 100000 | 20000 | 100000 | 20000 |
 | `OFZVolumeOrderMax` | Макс. объём покупки ОФЗ (RUB) | 10000 | 15000 | 10000 | 15000 |
 | `VolumeOrderLimit` | Глобальный лимит объёма (RUB) | 120000 | 200000 | 120000 | 200000 |
-| `VolumeOrderLimitUSD` | Лимит для USD/SPB | 100 | 100 | 100 | 100 |
-| `VolumeOrderLimitForeign` | Лимит для иностранных бумаг (RUB) | 50000 | 70000 | 70000 | 70000 |
 
 ### Пороги срабатывания (отклонение от рынка)
 
@@ -253,7 +250,6 @@ lua IntegrationTests/run_integration_tests.lua --broker=FINAM --session=evening
 |----------|----------|-------|-----|-----|------|
 | `LimitActuationOrderEdge` | Мин. % отклонения для акций | 0% | 0% | 0% | 0% |
 | `LimitActuationOrderBondEdge` | Мин. % отклонения для облигаций | 50% | 30% | 0% | 60% |
-| `LimitActuationOrderForeignEdge` | Мин. % отклонения для иностранных | 50% | 50% | — | 50% |
 
 ### Корректировка цены
 
@@ -274,8 +270,6 @@ lua IntegrationTests/run_integration_tests.lua --broker=FINAM --session=evening
 | `FileBuyOrderEdge` | `{Broker}_BuyOrders_Edge.csv` | Покупка по PRICEMIN |
 | `FileSellOrderEdge` | `{Broker}_SellOrders_Edge.csv` | Продажа по PRICEMAX |
 | `FileBuyOrderBondsEdge` | `{Broker}_BuyOrdersBonds_Edge.csv` | Покупка облигаций edge |
-| `FileBuyOrderSpbEdge` | `{Broker}_BuyOrdersSpb_Edge.csv` | Покупка SPB edge |
-| `FileBuyOrderRmUsdEdge` | `{Broker}_BuyOrders_RmUSD_Edge.csv` | Покупка USD edge |
 
 ### Флаги и коды ошибок
 
@@ -297,7 +291,6 @@ function SetSettingMyBroker()
   Broker = "MYBROKER"
   ClientCode = "12345"              -- Код клиента
   AccountCode = "NL0011100043"      -- Код торгового счёта
-  AccountCodeSpb = ""               -- Счёт для SPB (если отличается)
   FirmId = "MC0000000000"           -- Код фирмы
 
   -- Лимиты объёма
@@ -305,13 +298,10 @@ function SetSettingMyBroker()
   BondVolumeOrderMax = 50000        -- Макс. объём покупки облигаций (RUB)
   OFZVolumeOrderMax = 20000         -- Макс. объём покупки ОФЗ (RUB)
   VolumeOrderLimit = 200000         -- Глобальный лимит объёма (RUB)
-  VolumeOrderLimitUSD = 100         -- Лимит для USD/SPB
-  VolumeOrderLimitForeign = 70000   -- Лимит для иностранных бумаг
 
   -- Пороги срабатывания (отклонение от рынка)
   LimitActuationOrderEdge = 5       -- Мин. % отклонения для акций
   LimitActuationOrderBondEdge = 60  -- Мин. % отклонения для облигаций
-  LimitActuationOrderForeignEdge = 30 -- Мин. % отклонения для иностранных
 end
 ```
 
@@ -384,16 +374,9 @@ end
 
 **Исправление**: в `SubmitOrders` порядок вызовов изменён на `CheckOrder` → `IsOrderExists`. Теперь цена корректируется до проверки на дубли, и sell-заявки корректно определяются как дубли.
 
-### Комментарий N_CloseAllOrder в вечерней сессии
+### ~~Комментарий N_CloseAllOrder в вечерней сессии~~ (исправлено)
 
-В `SubmittingOrders.lua:90-95` вызов `N_CloseAllOrder()` закомментирован:
-```lua
-if (os.time(TimeEveningStart) < timeCurrent) and not IsEveningTime then
-    -- if IsSentOrders then
-      -- N_CloseAllOrder()
-    -- end
-```
-При наступлении вечерней сессии `IsSentOrders` сбрасывается, но активные заявки **не отменяются**. Если это не intentional — нужно раскомментировать.
+Вызов `N_CloseAllOrder()` в вечерней сессии был закомментирован. Теперь отмена заявок работает во всех сессиях.
 
 ### ~~Проверка дублей по коду бумаги и операции~~ (исправлено)
 
@@ -402,7 +385,3 @@ if (os.time(TimeEveningStart) < timeCurrent) and not IsEveningTime then
 local key = order.SecurityCode .. " " .. order.Operation .. " " .. order:FormatQuantity() .. " " .. order:FormatPrice()
 ```
 Это позволяет корректно различать заявки на одну бумагу с разными параметрами.
-
-### Молчаливый пропуск ненайденного инструмента в GetUsdSecurityInfo
-
-`GetUsdSecurityInfo` (`Order.lua:52-64`) возвращает `nil` без логирования, если инструмент не найден ни в одном классе. Вызывающий код (`Order:new`) обрабатывает `nil`, но причина отказа невидима в логах.

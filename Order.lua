@@ -37,34 +37,11 @@ function GetSecurityInfo(securityCode)
 end
 
 --- Получение информации об инструменте в валюте (USD)
-function GetUsdSecurityInfo(securityCode)
-  local cacheKey = securityCode .. "_USD"
-  if securityInfoCache[cacheKey] then
-    return securityInfoCache[cacheKey]
-  end
-  for classCode in string.gmatch("TQCB,TQBD,TQBR,SPBXM,EQOB,TQIR,TQRD,TQOB,TQTF,TQPI,MTQR,", "(%P*),") do
-    local SecurityInfo = getSecurityInfo(classCode, securityCode)
-    if SecurityInfo ~= nil then
-      securityInfoCache[cacheKey] = SecurityInfo
-      return SecurityInfo
-    end
-  end
-  log.error(
-    "Инструмент не найден (USD): "
-      .. securityCode
-  )
-  return nil
-end
-
 --- Создание заявки
 function Order:new(securityCode)
   local obj = {}
 
-  if Broker == "VTB" then
-    obj.SecurityInfo = GetUsdSecurityInfo(securityCode)
-  else
-    obj.SecurityInfo = GetSecurityInfo(securityCode)
-  end
+  obj.SecurityInfo = GetSecurityInfo(securityCode)
 
   obj.SecurityCode = securityCode
   obj.Operation = ""
@@ -118,32 +95,13 @@ function Order:new(securityCode)
   end
 
   --- Проверка, является ли инструмент иностранной бумагой на СПБ
-  function obj:IsSpb()
-    if obj.SecurityInfo.class_code == "SPBXM" then
-      return true
-    end
-    return false
-  end
+
 
   --- Проверка, является ли инструмент иностранной
-  function obj:IsForeign()
-    if
-      obj.SecurityInfo.class_code == "SPBXM"
-      or obj.SecurityInfo.class_code == "FQBR"
-      or obj.SecurityInfo.class_code == "TQBD"
-    then
-      return true
-    end
-    return false
-  end
+
 
   --- Проверка, является ли инструмент в долларах
-  function obj:IsUsd()
-    if obj.SecurityInfo.class_code == "SPBXM" or obj.SecurityInfo.class_code == "TQBD" then
-      return true
-    end
-    return false
-  end
+
 
   --- Проверка, является ли операцией покупки
   function obj:IsBuy()

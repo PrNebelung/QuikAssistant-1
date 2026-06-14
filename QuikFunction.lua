@@ -61,10 +61,6 @@ function GetOrderVolumeMax(order, priceMin)
 
   if order:IsBond() then
     limit = BondVolumeOrderMax * tonumber(koeff)
-  elseif order:IsUsd() then
-    limit = VolumeOrderLimitUSD
-  elseif order:IsForeign() then
-    limit = VolumeOrderLimitForeign
   end
 
 -- Ограничение по лимиту
@@ -298,12 +294,7 @@ function CheckOrder(order)
   --- Проверка на превышение максимально допустимого объёма ордера для покупки
   if order:IsBuy() then
     local limit = VolumeOrderLimit
-    if order:IsSpb() then
-      limit = VolumeOrderLimitUSD
-    end
-    if order:IsUsd() then
-      limit = VolumeOrderLimitUSD
-    end
+
     if order:GetVolume() > limit then
       local reason = string.format(
         "volume %s %s exceeds limit %s",
@@ -326,8 +317,7 @@ function CheckOrder(order)
     local limit = LimitActuationOrderEdge
     if order:IsBond() and not order:IsOFZ() then
       limit = LimitActuationOrderBondEdge
-    elseif order:IsForeign() then
-      limit = LimitActuationOrderForeignEdge
+
     end
 
     if actuation ~= nil and tonumber(actuation) < tonumber(limit) then

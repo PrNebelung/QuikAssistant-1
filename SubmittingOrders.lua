@@ -324,9 +324,6 @@ function SubmitOrders(orders)
         table.insert(skipTickers[key], order.SecurityCode)
       else
       local clientAccountCode = AccountCode
-      if order:IsSpb() then
-        clientAccountCode = AccountCodeSpb
-      end
 
       local trans_id, error =
         N_SetLimitOrder(

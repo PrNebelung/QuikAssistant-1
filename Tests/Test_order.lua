@@ -52,7 +52,6 @@ assert(order.Price == 0)
 assert(order.GetVolume() == 0)
 assert(order.IsBond() == false, string.format("Облигация?: %s != %s", tostring(order.IsBond), tostring(false)))
 assert(order.IsOFZ() == false)
-assert(order.IsSpb() == false)
 assert(order.IsBuy() == false)
 assert(order.IsSell() == false)
 
@@ -175,7 +174,6 @@ assert(
   string.format("Облигация?: %s != %s", tostring(orderBond.IsBond), tostring(true))
 )
 assert(orderBond.IsOFZ() == false)
-assert(orderBond.IsSpb() == false)
 assert(orderBond.IsBuy() == false)
 assert(orderBond.IsSell() == false)
 
@@ -293,7 +291,6 @@ assert(
   string.format("Облигация?: %s != %s", tostring(orderSpb.IsBond), tostring(false))
 )
 assert(orderSpb.IsOFZ() == false)
-assert(orderSpb.IsSpb() == true)
 assert(orderSpb.IsBuy() == false)
 assert(orderSpb.IsSell() == false)
 
