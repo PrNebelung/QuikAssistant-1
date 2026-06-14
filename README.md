@@ -235,6 +235,80 @@ lua IntegrationTests/run_integration_tests.lua --broker=FINAM --session=evening
 | `LimitActuationOrderBondEdge` | Мин. отклонение от рынка (облигации) | 60% |
 | `PRICE_DEVIATION_MULTIPLIER` | Множитель корректировки цены | 10 |
 
+## Пример конфигурации
+
+### Настройка брокера (`Setting.lua`)
+
+```lua
+function SetSettingMyBroker()
+  Broker = "MYBROKER"
+  ClientCode = "12345"              -- Код клиента
+  AccountCode = "NL0011100043"      -- Код торгового счёта
+  AccountCodeSpb = ""               -- Счёт для SPB (если отличается)
+  FirmId = "MC0000000000"           -- Код фирмы
+
+  -- Лимиты объёма
+  VolumeOrderMax = 30000            -- Макс. объём покупки акций (RUB)
+  BondVolumeOrderMax = 50000        -- Макс. объём покупки облигаций (RUB)
+  OFZVolumeOrderMax = 20000         -- Макс. объём покупки ОФЗ (RUB)
+  VolumeOrderLimit = 200000         -- Глобальный лимит объёма (RUB)
+  VolumeOrderLimitUSD = 100         -- Лимит для USD/SPB
+  VolumeOrderLimitForeign = 70000   -- Лимит для иностранных бумаг
+
+  -- Пороги срабатывания (отклонение от рынка)
+  LimitActuationOrderEdge = 5       -- Мин. % отклонения для акций
+  LimitActuationOrderBondEdge = 60  -- Мин. % отклонения для облигаций
+  LimitActuationOrderForeignEdge = 30 -- Мин. % отклонения для иностранных
+end
+```
+
+### Подключение в `SetClientSetting()`
+
+```lua
+function SetClientSetting()
+  local userId = getInfoParam("USERID")
+
+  if userId == "171783" then
+    SetSettingFinam()
+  elseif userId == "49653" then
+    SetSettingVTB()
+  elseif userId == "12345" then       -- <-- ваш USERID
+    SetSettingMyBroker()
+  else
+    Broker = ""
+    ClientCode = ""
+    AccountCode = ""
+    VolumeOrderMax = 0
+  end
+
+  -- Файлы заявок формируются автоматически
+  FileBuyOrder = Broker .. "_BuyOrders.csv"
+  FileSellOrder = Broker .. "_SellOrders.csv"
+  FileBuyOrderEdge = Broker .. "_BuyOrders_Edge.csv"
+  FileSellOrderEdge = Broker .. "_SellOrders_Edge.csv"
+  FileBuyOrderBondsEdge = Broker .. "_BuyOrdersBonds_Edge.csv"
+end
+```
+
+### Пример CSV-файла (`Data/MYBROKER_BuyOrders.csv`)
+
+```csv
+-- Акции
+ГАЗПРОМ;B;GAZP;100;180.00
+Сбербанк;B;SBER;50;250.00
+Лукойл;B;LKOH;10;7000.00
+-- Облигации (закомментированы)
+--ОФЗ 26236;B;SU26236RMFS8;5;100.00
+```
+
+### Пример CSV-файла (`Data/MYBROKER_SellOrders_Edge.csv`)
+
+```csv
+-- Продажа по максимуму, количество из позиции
+ГАЗПРОМ;S;GAZP;1;0.01
+Сбербанк;S;SBER;1;0.01
+```
+
 ## Добавление нового брокера
 
 1. Добавить USERID в `Setting.lua` → `SetClientSetting()`
