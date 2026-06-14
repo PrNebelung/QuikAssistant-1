@@ -273,7 +273,7 @@ function EventCallbackTableSetting(t_id, msg, par1, par2)
       or param == nameSettingFileSellOrder
       or param == nameSettingFileBuyOrderEdge
       or param == nameSettingFileSellOrderEdge
-      or param == nameSettingFileBuyOrderBondsEdgeparam == nameSettingFileBuyOrderBondsEdge
+      or param == nameSettingFileBuyOrderBondsEdge
     then
       local file = getScriptPath() .. "//Data//" .. GetCell(t_id, row, 2).image
       local filename = GetCell(t_id, row, 2).image
