@@ -1,0 +1,4 @@
+-- Sell Edge orders for FINAM broker
+-- Format: Name;S;SecurityCode;1;0.001
+-- Quantity and price are calculated automatically from PRICEMAX and max volume
+-- Position check is validated before submission

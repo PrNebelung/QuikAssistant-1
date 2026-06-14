@@ -48,6 +48,7 @@ FileBuyOrderEdge = ""
 FileBuyOrderBondsEdge = ""
 FileBuyOrderSpbEdge = ""
 FileBuyOrderRmUsdEdge = ""
+FileSellOrderEdge = ""
 
 function SetSettingFinam()
   Broker = "FINAM"
@@ -155,4 +156,5 @@ function SetClientSetting()
   FileBuyOrderBondsEdge = Broker .. "_BuyOrdersBonds_Edge.csv"
   FileBuyOrderSpbEdge = Broker .. "_BuyOrdersSpb_Edge.csv"
   FileBuyOrderRmUsdEdge = Broker .. "_BuyOrders_RmUSD_Edge.csv"
+  FileSellOrderEdge = Broker .. "_SellOrders_Edge.csv"
 end

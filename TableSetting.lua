@@ -11,7 +11,8 @@ nameSettingFileSellOrder = "Файл с заявками на продажу"
 nameSettingFileBuyOrderEdge = "Файл с заявками на покупку на экстремумах"
 nameSettingFileBuyOrderBondsEdge =
   "Файл с заявками на покупку облигаций на экстремумах"
-nameSettingInAllAssets = "Все валюты активы"
+
+nameSettingFileSellOrderEdge = "Файл с заказами на продажу (настольчик)"nameSettingInAllAssets = "Все валюты активы"
 nameSettingAllAssets = "Активы в валюте"
 nameSettingProfitLoss = "Прибыль/убыток"
 nameSettingRateChange = "% Изменение"
@@ -247,6 +248,15 @@ function SetFileOrders(t)
 
   SetCell(t.t_id, row, 1, nameSettingFileBuyOrderBondsEdge)
   SetCell(t.t_id, row, 2, FileBuyOrderBondsEdge)
+
+  local row = FindSetting(t, nameSettingFileSellOrderEdge)
+  if row == nil then
+    row = t:AddLine()
+  end
+
+  SetCell(t.t_id, row, 1, nameSettingFileSellOrderEdge)
+  SetCell(t.t_id, row, 2, FileSellOrderEdge)
+  SetCell(t.t_id, row, 3, problem)
   SetCell(t.t_id, row, 3, problem)
 end
 
@@ -261,7 +271,8 @@ function EventCallbackTableSetting(t_id, msg, par1, par2)
       param == nameSettingFileBuyOrder
       or param == nameSettingFileSellOrder
       or param == nameSettingFileBuyOrderEdge
-      or param == nameSettingFileBuyOrderBondsEdge
+      or param == nameSettingFileSellOrderEdge
+      or param == nameSettingFileBuyOrderBondsEdgeparam == nameSettingFileBuyOrderBondsEdge
     then
       local file = getScriptPath() .. "//Data//" .. GetCell(t_id, row, 2).image
       local filename = GetCell(t_id, row, 2).image

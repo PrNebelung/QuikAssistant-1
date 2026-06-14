@@ -175,6 +175,17 @@ function SubmittingOrdersRun()
     stats.rejected = stats.rejected + s.rejected
     stats.duplicate = stats.duplicate + s.duplicate
 
+    if isSubmittingOrdersRun then
+      log.debug(string.format("2.8 Загрузка ордеров на продажу из файла edge %s", FileSellOrderEdge))
+      local orders = LoadOrdersFromFile(FileSellOrderEdge)
+      stats.loaded = stats.loaded + #orders
+      local s = SubmitOrders(orders)
+      stats.sent = stats.sent + s.sent
+      stats.rejected = stats.rejected + s.rejected
+      stats.duplicate = stats.duplicate + s.duplicate
+      sleep(1000)
+    end
+
     log.info(string.format("=== Цикл %d завершён: загружено=%d, отправлено=%d, отклонено=%d, дубликатов=%d ===",
       cycleCount, stats.loaded, stats.sent, stats.rejected, stats.duplicate))
 
@@ -208,7 +219,8 @@ end
 function LoadOrdersFromFile(fileName)
   local orders = {}
   local rows = getFromCSV(fileName)
-  local isEdge = fileName:find("_Edge")
+  local isFileSellEdge = fileName:find("_SellOrders_Edge")
+  local isEdge = fileName:find("_Edge") and not isFileSellEdge
   local isFileSpb = fileName:find("_BuyOrdersSpb_Edge")
   local isRmUsd = fileName:find("_BuyOrders_RmUSD_Edge")
 
@@ -216,12 +228,20 @@ function LoadOrdersFromFile(fileName)
     local securityName = row[1]
     local isComment = string.find(securityName, "--", 1, true)
     if (isComment == nil) then
-      local operation = row[2]
-      local securityCode = row[3]
+      local operation = string.match(row[2], "^%s*(.-)%s*$")
+      local securityCode = string.match(row[3], "^%s*(.-)%s*$")
       local quantity = tonumber(row[4])
       local price = tonumber(row[5])
 
-      if securityCode == nil or operation == nil then
+      local isBuyFile = fileName:find("[Bb][Uu][Yy]") ~= nil
+      local isSellFile = fileName:find("[Ss][Ee][Ll][Ll]") ~= nil
+      if isBuyFile and operation ~= "B" then
+        log.error(string.format("[SKIP] Несовпадение операции в файле BUY: ожидалась %s, нужно B [%s]", operation, securityCode))
+      elseif isSellFile and operation ~= "S" then
+        log.error(string.format("[SKIP] Несовпадение операции в файле SELL: ожидалась %s, нужно S [%s]", operation, securityCode))
+      elseif not isBuyFile and not isSellFile then
+        log.warn(string.format("[SKIP] Файл %s не содержит BUY/селл в имени, пропуск [%s]", fileName, securityCode))
+      elseif securityCode == nil or operation == nil then
         log.error("Некорректная строка в CSV:", json.encode(row))
       else
         local order = Order:new(securityCode)
@@ -239,7 +259,22 @@ function LoadOrdersFromFile(fileName)
             end
             local progressOrderVolumeMax = GetOrderVolumeMax(order, priceMin)
             order:SetQuantity(operation, priceMin, progressOrderVolumeMax)
-          elseif isEdge ~= nil then
+          elseif isFileSellEdge ~= nil then
+            local priceMax = GetPriceMax(order)
+            if tonumber(priceMax) == nil or tonumber(priceMax) == 0 then
+              log.warn("не удалось получить макс. цену для инстр. (прод.). " .. order:Print())
+            else
+              local progressOrderVolumeMax = GetOrderVolumeMax(order, priceMax)
+              local position = GetPosition(order.SecurityCode)
+              local positionQty = 0
+              if position ~= nil then
+                positionQty = tonumber(position.currentbal)
+              end
+              if positionQty > 0 then
+                order:SetQuantitySell(operation, priceMax, progressOrderVolumeMax, positionQty)
+              end
+            end
+                    elseif isEdge ~= nil then
             local priceMin = GetPriceMin(order)
             if tonumber(priceMin) == nil or tonumber(priceMin) == 0 then
               log.warn("не удалось получить мин. цен. для инстр., пропуск. " .. order:Print())
