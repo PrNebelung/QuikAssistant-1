@@ -11,33 +11,6 @@ nameColumnOrderNum = "Номер заявки с сервера брокера "
 
 tableOrdersControl = nil
 
---function main()
---  -- Основной цикл
---  while isRun do
---
---    if InitTableOrdersControl ~= nil then
---      InitTableOrdersControl();
---    end
---
---    sleep(1000);
---  end;
---end;
---
---
---function OnInit()
---
---  if InitTableOrdersControl ~= nil then
---    InitTableOrdersControl();
---  end
---
---end;
---
---
----- Функция обработки события завершения работы терминала
---function OnStop()
---  isRun = false;
---  tableOrdersControl:Delete();
---end;
 
 function CreateTableOrdersControl(t)
   t:AddColumn(nameColumnSecutityName, QTABLE_STRING_TYPE, 35)
