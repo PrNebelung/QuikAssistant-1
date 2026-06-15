@@ -84,4 +84,26 @@ document.addEventListener('DOMContentLoaded', () => {
     fileTypeSelect.addEventListener('change', loadOrders);
     
     loadOrders();
+
+    // Logs tab
+    const logOutput = document.getElementById('log-output');
+    const logBroker = document.getElementById('log-broker');
+    const refreshLogs = document.getElementById('refresh-logs');
+    
+    async function loadLogs() {
+        const broker = logBroker.value;
+        
+        try {
+            const response = await fetch(`/api/logs?broker=${broker}`);
+            const logs = await response.json();
+            
+            logOutput.textContent = logs.join('\n');
+            logOutput.scrollTop = logOutput.scrollHeight;
+        } catch (error) {
+            console.error('Error loading logs:', error);
+        }
+    }
+    
+    refreshLogs.addEventListener('click', loadLogs);
+    logBroker.addEventListener('change', loadLogs);
 });
