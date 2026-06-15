@@ -98,11 +98,7 @@ tr:hover {
     background: #16213e;
 }
 
-.disabled {
-    opacity: 0.5;
-}
-
-.disabled td {
+.disabled td:first-child {
     color: #666;
 }
 
