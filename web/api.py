@@ -88,6 +88,45 @@ def toggle_order(broker, isin):
     
     return jsonify({'success': True})
 
+ACTION_LOG_FILE = os.path.join(os.path.dirname(__file__), '..', 'Data', 'action_log.json')
+
+@api.route('/api/actionlog', methods=['GET'])
+def get_action_log():
+    """Get action log entries."""
+    if os.path.exists(ACTION_LOG_FILE):
+        with open(ACTION_LOG_FILE, 'r', encoding='utf-8') as f:
+            return jsonify(json.load(f))
+    return jsonify([])
+
+@api.route('/api/actionlog', methods=['POST'])
+def add_action_log():
+    """Add entry to action log."""
+    entry = request.json
+    entries = []
+    if os.path.exists(ACTION_LOG_FILE):
+        with open(ACTION_LOG_FILE, 'r', encoding='utf-8') as f:
+            entries = json.load(f)
+    
+    entries.append(entry)
+    
+    # Keep last 500 entries
+    if len(entries) > 500:
+        entries = entries[-500:]
+    
+    with open(ACTION_LOG_FILE, 'w', encoding='utf-8') as f:
+        json.dump(entries, f, ensure_ascii=False, indent=2)
+    
+    return jsonify({'success': True})
+
+@api.route('/api/actionlog', methods=['DELETE'])
+def clear_action_log():
+    """Clear action log."""
+    with open(ACTION_LOG_FILE, 'w', encoding='utf-8') as f:
+        json.dump([], f)
+    return jsonify({'success': True})
+
+import json
+
 LOG_DIR = os.path.join(os.path.dirname(__file__), '..', 'Log')
 
 import re

@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="sum-cell" data-isin="${order.isin}">${sum > 0 ? fmt(sum) : '-'}</td>
                     <td class="actions-cell">
                         <button class="btn-toggle ${order.enabled ? 'btn-enabled' : 'btn-disabled'}" data-isin="${order.isin}">${order.enabled ? 'Выкл' : 'Вкл'}</button>
-                        ${order.enabled ? `<button class="btn-save btn-hidden" data-isin="${order.isin}">Сохранить</button><button class="btn-cancel btn-hidden" data-isin="${order.isin}">Отмена</button>` : ''}
                         <button class="btn-delete" data-isin="${order.isin}">Удалить</button>
+                        ${order.enabled ? `<button class="btn-save btn-hidden" data-isin="${order.isin}">Сохранить</button><button class="btn-cancel btn-hidden" data-isin="${order.isin}">Отмена</button>` : ''}
                     </td>
                 </tr>`;
             }).join('');
@@ -131,17 +131,62 @@ document.addEventListener('DOMContentLoaded', () => {
     // Web log
     const webLogEntries = document.getElementById('web-log-entries');
     const clearLogBtn = document.getElementById('clear-log');
+    const exportLogBtn = document.getElementById('export-log');
+    let logEntries = [];
     
     function webLog(msg, level = 'info') {
         const time = new Date().toLocaleTimeString('ru-RU');
-        const entry = document.createElement('div');
-        entry.className = `log-entry log-${level}`;
-        entry.innerHTML = `<span class="log-time">${time}</span><span class="log-msg">${msg}</span>`;
-        webLogEntries.appendChild(entry);
+        const date = new Date().toLocaleDateString('ru-RU');
+        const entry = { time, date, msg, level };
+        logEntries.push(entry);
+        
+        const el = document.createElement('div');
+        el.className = `log-entry log-${level}`;
+        el.innerHTML = `<span class="log-time">${date} ${time}</span><span class="log-msg">${msg}</span>`;
+        webLogEntries.appendChild(el);
         webLogEntries.scrollTop = webLogEntries.scrollHeight;
+        
+        // Save to server
+        fetch('/api/actionlog', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(entry)
+        }).catch(() => {});
     }
     
-    clearLogBtn.addEventListener('click', () => { webLogEntries.innerHTML = ''; });
+    async function loadActionLog() {
+        try {
+            const response = await fetch('/api/actionlog');
+            const entries = await response.json();
+            logEntries = entries;
+            webLogEntries.innerHTML = entries.map(e => `
+                <div class="log-entry log-${e.level}">
+                    <span class="log-time">${e.date} ${e.time}</span>
+                    <span class="log-msg">${e.msg}</span>
+                </div>
+            `).join('');
+            webLogEntries.scrollTop = webLogEntries.scrollHeight;
+        } catch (e) {
+            console.error('Error loading log:', e);
+        }
+    }
+    
+    clearLogBtn.addEventListener('click', async () => {
+        await fetch('/api/actionlog', { method: 'DELETE' });
+        logEntries = [];
+        webLogEntries.innerHTML = '';
+    });
+    
+    exportLogBtn.addEventListener('click', () => {
+        const text = logEntries.map(e => `${e.date} ${e.time} [${e.level}] ${e.msg}`).join('\n');
+        const blob = new Blob([text], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `action_log_${new Date().toISOString().slice(0,10)}.txt`;
+        a.click();
+    });
+    
+    document.querySelector('[data-tab="actionlog"]').addEventListener('click', loadActionLog);
     
     async function toggleOrder(isin) {
         const broker = brokerSelect.value;
