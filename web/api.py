@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
 from csv_handler import get_csv_files, read_orders, write_orders, get_all_brokers
+import os
+import glob
 
 api = Blueprint('api', __name__)
 
@@ -66,3 +68,37 @@ def toggle_order(broker, isin):
         f.writelines(new_lines)
 
     return jsonify({'success': True})
+
+LOG_DIR = os.path.join(os.path.dirname(__file__), '..', 'Log')
+
+@api.route('/api/logs')
+def logs():
+    broker = request.args.get('broker', 'VTB')
+    log_dir = os.path.join(LOG_DIR, broker)
+    
+    if not os.path.exists(log_dir):
+        return jsonify([])
+    
+    log_files = sorted(glob.glob(os.path.join(log_dir, '*.log')), reverse=True)
+    if not log_files:
+        return jsonify([])
+    
+    latest_log = log_files[0]
+    entries = []
+    
+    with open(latest_log, 'r', encoding='utf-8', errors='replace') as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                entries.append(line)
+    
+    return jsonify(entries[-200:])  # Last 200 lines
+
+@api.route('/api/logs/list')
+def log_list():
+    brokers = []
+    if os.path.exists(LOG_DIR):
+        for broker_dir in os.listdir(LOG_DIR):
+            if os.path.isdir(os.path.join(LOG_DIR, broker_dir)):
+                brokers.append(broker_dir)
+    return jsonify(sorted(brokers))
