@@ -194,3 +194,83 @@ input[type="text"]::placeholder {
     white-space: normal;
     word-break: break-all;
 }
+
+h2 {
+    font-size: 1.25rem;
+    margin: 1.5rem 0 1rem;
+    color: #e94560;
+}
+
+h3 {
+    font-size: 1rem;
+    margin: 1rem 0 0.5rem;
+    color: #ccc;
+}
+
+.broker-card {
+    background: #16213e;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.broker-card h3 {
+    margin: 0 0 0.75rem;
+    color: #4fc3f7;
+    font-size: 1.1rem;
+}
+
+.broker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+}
+
+.broker-stat {
+    text-align: center;
+}
+
+.broker-stat .label {
+    font-size: 0.75rem;
+    color: #888;
+    margin-bottom: 0.25rem;
+}
+
+.broker-stat .value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #eee;
+}
+
+.broker-stat .value.money {
+    color: #4fc3f7;
+}
+
+.trade-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.trade-card {
+    background: #16213e;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.trade-card .label {
+    font-size: 0.75rem;
+    color: #888;
+}
+
+.trade-card .value {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #eee;
+    margin-top: 0.25rem;
+}
+
+.trade-card .value.positive { color: #4caf50; }
+.trade-card .value.negative { color: #e94560; }

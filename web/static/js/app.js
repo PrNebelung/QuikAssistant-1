@@ -86,22 +86,94 @@ document.addEventListener('DOMContentLoaded', () => {
     loadOrders();
 
     // Dashboard
-    async function loadStats() {
-        const broker = brokerSelect.value;
-        
+    const brokerStatsDiv = document.getElementById('broker-stats');
+    const tradeStatsDiv = document.getElementById('trade-stats');
+    const tradesTable = document.querySelector('#trades-table tbody');
+    const tradeSource = document.getElementById('trade-source');
+    const refreshTrades = document.getElementById('refresh-trades');
+    
+    function fmt(n) {
+        return n >= 1000000 ? (n/1000000).toFixed(1) + 'M' : n >= 1000 ? (n/1000).toFixed(1) + 'K' : Math.round(n);
+    }
+    
+    async function loadDashboard() {
         try {
-            const response = await fetch(`/api/stats?broker=${broker}`);
-            const stats = await response.json();
+            const response = await fetch('/api/stats/all');
+            const data = await response.json();
             
-            document.getElementById('stat-total').textContent = stats.total;
-            document.getElementById('stat-active').textContent = stats.active;
-            document.getElementById('stat-disabled').textContent = stats.disabled;
+            brokerStatsDiv.innerHTML = Object.entries(data.brokers).map(([broker, s]) => `
+                <div class="broker-card">
+                    <h3>${broker}</h3>
+                    <div class="broker-grid">
+                        <div class="broker-stat"><div class="label">Всего</div><div class="value">${s.total}</div></div>
+                        <div class="broker-stat"><div class="label">Активных</div><div class="value">${s.active}</div></div>
+                        <div class="broker-stat"><div class="label">Отключено</div><div class="value">${s.disabled}</div></div>
+                        <div class="broker-stat"><div class="label">Акции</div><div class="value">${s.stocks}</div></div>
+                        <div class="broker-stat"><div class="label">Облигации</div><div class="value">${s.bonds}</div></div>
+                        <div class="broker-stat"><div class="label">Сумма акций</div><div class="value money">${fmt(s.stocks_value)}</div></div>
+                        <div class="broker-stat"><div class="label">Сумма облигаций</div><div class="value money">${fmt(s.bonds_value)}</div></div>
+                    </div>
+                </div>
+            `).join('');
+            
+            const t = data.totals;
+            brokerStatsDiv.innerHTML += `
+                <div class="broker-card" style="border-left: 3px solid #e94560;">
+                    <h3>ИТОГО</h3>
+                    <div class="broker-grid">
+                        <div class="broker-stat"><div class="label">Всего</div><div class="value">${t.total}</div></div>
+                        <div class="broker-stat"><div class="label">Активных</div><div class="value">${t.active}</div></div>
+                        <div class="broker-stat"><div class="label">Акции</div><div class="value">${t.stocks}</div></div>
+                        <div class="broker-stat"><div class="label">Облигации</div><div class="value">${t.bonds}</div></div>
+                        <div class="broker-stat"><div class="label">Сумма акций</div><div class="value money">${fmt(t.stocks_value)}</div></div>
+                        <div class="broker-stat"><div class="label">Сумма облигаций</div><div class="value money">${fmt(t.bonds_value)}</div></div>
+                    </div>
+                </div>
+            `;
         } catch (error) {
-            console.error('Error loading stats:', error);
+            console.error('Error loading dashboard:', error);
         }
     }
     
-    document.querySelector('[data-tab="dashboard"]').addEventListener('click', loadStats);
+    async function loadTrades() {
+        const source = tradeSource.value;
+        try {
+            const response = await fetch(`/api/trades?source=${source}`);
+            const data = await response.json();
+            
+            tradeStatsDiv.innerHTML = `
+                <div class="trade-summary">
+                    <div class="trade-card"><div class="label">Всего сделок</div><div class="value">${data.total_trades}</div></div>
+                    <div class="trade-card"><div class="label">Оборот</div><div class="value money">${fmt(data.total_value)}</div></div>
+                    <div class="trade-card"><div class="label">Покупки</div><div class="value positive">${data.buys_count}</div></div>
+                    <div class="trade-card"><div class="label">Продажи</div><div class="value negative">${data.sells_count}</div></div>
+                    <div class="trade-card"><div class="label">Тикеров</div><div class="value">${data.unique_tickers}</div></div>
+                    <div class="trade-card"><div class="label">Период</div><div class="value" style="font-size:0.85rem">${data.date_range.first} — ${data.date_range.last}</div></div>
+                </div>
+            `;
+            
+            tradesTable.innerHTML = data.recent.map(t => `
+                <tr>
+                    <td>${t.datetime}</td>
+                    <td>${t.ticker}</td>
+                    <td>${t.qty > 0 ? 'Покупка' : 'Продажа'}</td>
+                    <td>${Math.abs(t.qty)}</td>
+                    <td>${t.price}</td>
+                    <td>${fmt(t.value)}</td>
+                    <td>${t.broker}</td>
+                </tr>
+            `).join('');
+        } catch (error) {
+            console.error('Error loading trades:', error);
+        }
+    }
+    
+    document.querySelector('[data-tab="dashboard"]').addEventListener('click', () => {
+        loadDashboard();
+        loadTrades();
+    });
+    tradeSource.addEventListener('change', loadTrades);
+    refreshTrades.addEventListener('click', loadTrades);
 
     // Logs tab
     const logsTable = document.querySelector('#logs-table tbody');

@@ -154,14 +154,23 @@ def log_list():
                 brokers.append(broker_dir)
     return jsonify(sorted(brokers))
 
+DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'Data')
+
+def is_bond(isin):
+    """Check if ISIN is a bond (starts with RU000A or SU)."""
+    return isin.startswith('RU000A') or isin.startswith('SU')
+
 @api.route('/api/stats')
 def stats():
+    """Get detailed order statistics per broker."""
     broker = request.args.get('broker', 'VTB')
     files = get_csv_files(broker)
     
-    total_orders = 0
-    active_orders = 0
-    disabled_orders = 0
+    result = {
+        'total': 0, 'active': 0, 'disabled': 0,
+        'stocks': 0, 'bonds': 0,
+        'stocks_value': 0, 'bonds_value': 0
+    }
     
     for filepath in files.values():
         if os.path.exists(filepath):
@@ -169,14 +178,158 @@ def stats():
                 for line in f:
                     line = line.strip()
                     if line and not line.startswith('----'):
-                        total_orders += 1
+                        result['total'] += 1
                         if line.startswith('--'):
-                            disabled_orders += 1
+                            result['disabled'] += 1
                         else:
-                            active_orders += 1
+                            result['active'] += 1
+                        
+                        parts = line.split(';')
+                        if len(parts) >= 5:
+                            isin = parts[2]
+                            try:
+                                qty = float(parts[3])
+                                price = float(parts[4])
+                                value = qty * price
+                            except:
+                                value = 0
+                            
+                            if is_bond(isin):
+                                result['bonds'] += 1
+                                result['bonds_value'] += value
+                            else:
+                                result['stocks'] += 1
+                                result['stocks_value'] += value
+    
+    return jsonify(result)
+
+@api.route('/api/stats/all')
+def stats_all():
+    """Get statistics for all brokers combined."""
+    brokers = get_all_brokers()
+    all_stats = {}
+    totals = {'total': 0, 'active': 0, 'disabled': 0, 'stocks': 0, 'bonds': 0, 'stocks_value': 0, 'bonds_value': 0}
+    
+    for broker in brokers:
+        files = get_csv_files(broker)
+        broker_stats = {'total': 0, 'active': 0, 'disabled': 0, 'stocks': 0, 'bonds': 0, 'stocks_value': 0, 'bonds_value': 0}
+        
+        for filepath in files.values():
+            if os.path.exists(filepath):
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    for line in f:
+                        line = line.strip()
+                        if line and not line.startswith('----'):
+                            broker_stats['total'] += 1
+                            if line.startswith('--'):
+                                broker_stats['disabled'] += 1
+                            else:
+                                broker_stats['active'] += 1
+                            
+                            parts = line.split(';')
+                            if len(parts) >= 5:
+                                isin = parts[2]
+                                try:
+                                    qty = float(parts[3])
+                                    price = float(parts[4])
+                                    value = qty * price
+                                except:
+                                    value = 0
+                                
+                                if is_bond(isin):
+                                    broker_stats['bonds'] += 1
+                                    broker_stats['bonds_value'] += value
+                                else:
+                                    broker_stats['stocks'] += 1
+                                    broker_stats['stocks_value'] += value
+        
+        all_stats[broker] = broker_stats
+        for key in totals:
+            totals[key] += broker_stats[key]
+    
+    return jsonify({'brokers': all_stats, 'totals': totals})
+
+def parse_trade(line):
+    """Parse a trade line: DATETIME;TICKER;QTY;PRICE;BROKER"""
+    parts = line.strip().split(';')
+    if len(parts) >= 5:
+        return {
+            'datetime': parts[0],
+            'ticker': parts[1],
+            'qty': float(parts[2]),
+            'price': float(parts[3]),
+            'broker': parts[4],
+            'value': abs(float(parts[2])) * float(parts[3])
+        }
+    return None
+
+@api.route('/api/trades')
+def trades():
+    """Get trade statistics."""
+    source = request.args.get('source', 'all')  # all, mytrades, or broker name
+    
+    trades_data = []
+    
+    if source == 'all' or source == 'mytrades':
+        mytrades_file = os.path.join(DATA_DIR, 'MyTrades.csv')
+        if os.path.exists(mytrades_file):
+            with open(mytrades_file, 'r', encoding='utf-8') as f:
+                for line in f:
+                    trade = parse_trade(line)
+                    if trade:
+                        trades_data.append(trade)
+    
+    if source != 'all' and source != 'mytrades':
+        trade_file = os.path.join(DATA_DIR, f'trades{source}.csv')
+        if os.path.exists(trade_file):
+            with open(trade_file, 'r', encoding='utf-8') as f:
+                for line in f:
+                    trade = parse_trade(line)
+                    if trade:
+                        trades_data.append(trade)
+    
+    if source == 'all':
+        for broker in get_all_brokers():
+            trade_file = os.path.join(DATA_DIR, f'trades{broker}.csv')
+            if os.path.exists(trade_file):
+                with open(trade_file, 'r', encoding='utf-8') as f:
+                    for line in f:
+                        trade = parse_trade(line)
+                        if trade:
+                            trades_data.append(trade)
+    
+    # Calculate statistics
+    total_trades = len(trades_data)
+    total_value = sum(t['value'] for t in trades_data)
+    buys = [t for t in trades_data if t['qty'] > 0]
+    sells = [t for t in trades_data if t['qty'] < 0]
+    
+    # Unique tickers
+    tickers = set(t['ticker'] for t in trades_data)
+    
+    # By broker
+    by_broker = {}
+    for t in trades_data:
+        b = t['broker']
+        if b not in by_broker:
+            by_broker[b] = {'count': 0, 'value': 0, 'tickers': set()}
+        by_broker[b]['count'] += 1
+        by_broker[b]['value'] += t['value']
+        by_broker[b]['tickers'].add(t['ticker'])
+    
+    for b in by_broker:
+        by_broker[b]['tickers'] = len(by_broker[b]['tickers'])
+    
+    # Date range
+    dates = [t['datetime'][:10] for t in trades_data if t['datetime']]
     
     return jsonify({
-        'total': total_orders,
-        'active': active_orders,
-        'disabled': disabled_orders
+        'total_trades': total_trades,
+        'total_value': round(total_value, 2),
+        'buys_count': len(buys),
+        'sells_count': len(sells),
+        'unique_tickers': len(tickers),
+        'date_range': {'first': min(dates) if dates else '', 'last': max(dates) if dates else ''},
+        'by_broker': by_broker,
+        'recent': trades_data[-20:]  # Last 20 trades
     })

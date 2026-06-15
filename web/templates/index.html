@@ -49,20 +49,36 @@
         </div>
         
         <div id="dashboard" class="tab-content">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Всего заявок</h3>
-                    <p id="stat-total">0</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Активных</h3>
-                    <p id="stat-active">0</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Отключено</h3>
-                    <p id="stat-disabled">0</p>
-                </div>
+            <h2>Заявки по брокерам</h2>
+            <div id="broker-stats"></div>
+            
+            <h2>Сделки</h2>
+            <div class="controls">
+                <select id="trade-source">
+                    <option value="all">Все источники</option>
+                    <option value="mytrades">MyTrades.csv</option>
+                    <option value="FINAM">tradesFinam.csv</option>
+                    <option value="VTB">tradesVTB.csv</option>
+                    <option value="PSB">tradesPSB.csv</option>
+                </select>
+                <button id="refresh-trades">Обновить</button>
             </div>
+            <div id="trade-stats"></div>
+            <h3>Последние сделки</h3>
+            <table id="trades-table">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Тикер</th>
+                        <th>Сторона</th>
+                        <th>Кол-во</th>
+                        <th>Цена</th>
+                        <th>Сумма</th>
+                        <th>Брокер</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
         
         <div id="logs" class="tab-content">
