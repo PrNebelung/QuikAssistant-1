@@ -87,10 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dashboard
     const brokerStatsDiv = document.getElementById('broker-stats');
-    const tradeStatsDiv = document.getElementById('trade-stats');
-    const tradesTable = document.querySelector('#trades-table tbody');
-    const tradeSource = document.getElementById('trade-source');
-    const refreshTrades = document.getElementById('refresh-trades');
     
     function fmt(n) {
         return n >= 1000000 ? (n/1000000).toFixed(1) + 'M' : n >= 1000 ? (n/1000).toFixed(1) + 'K' : Math.round(n);
@@ -135,15 +131,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    document.querySelector('[data-tab="dashboard"]').addEventListener('click', loadDashboard);
+
+    // Trades tab
+    const tradeStatsDiv = document.getElementById('trade-stats');
+    const tradeCountDiv = document.getElementById('trade-count');
+    const tradesTable = document.querySelector('#trades-table tbody');
+    const tradeSource = document.getElementById('trade-source');
+    const tradeDateFrom = document.getElementById('trade-date-from');
+    const tradeDateTo = document.getElementById('trade-date-to');
+    const tradeTicker = document.getElementById('trade-ticker');
+    const tradeSide = document.getElementById('trade-side');
+    const refreshTrades = document.getElementById('refresh-trades');
+    let currentSort = 'datetime';
+    let currentDir = 'desc';
+    
     async function loadTrades() {
-        const source = tradeSource.value;
+        const params = new URLSearchParams({
+            source: tradeSource.value,
+            sort: currentSort,
+            dir: currentDir
+        });
+        if (tradeDateFrom.value) params.set('date_from', tradeDateFrom.value);
+        if (tradeDateTo.value) params.set('date_to', tradeDateTo.value);
+        if (tradeTicker.value) params.set('ticker', tradeTicker.value);
+        if (tradeSide.value) params.set('side', tradeSide.value);
+        
         try {
-            const response = await fetch(`/api/trades?source=${source}`);
+            const response = await fetch(`/api/trades?${params}`);
             const data = await response.json();
             
             tradeStatsDiv.innerHTML = `
                 <div class="trade-summary">
-                    <div class="trade-card"><div class="label">Всего сделок</div><div class="value">${data.total_trades}</div></div>
+                    <div class="trade-card"><div class="label">Найдено сделок</div><div class="value">${data.total_trades}</div></div>
                     <div class="trade-card"><div class="label">Оборот</div><div class="value money">${fmt(data.total_value)}</div></div>
                     <div class="trade-card"><div class="label">Покупки</div><div class="value positive">${data.buys_count}</div></div>
                     <div class="trade-card"><div class="label">Продажи</div><div class="value negative">${data.sells_count}</div></div>
@@ -152,11 +172,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             
-            tradesTable.innerHTML = data.recent.map(t => `
+            tradeCountDiv.textContent = `Показано: ${data.trades.length} из ${data.total_trades}`;
+            
+            tradesTable.innerHTML = data.trades.map(t => `
                 <tr>
                     <td>${t.datetime}</td>
                     <td>${t.ticker}</td>
-                    <td>${t.qty > 0 ? 'Покупка' : 'Продажа'}</td>
+                    <td><span class="level-badge ${t.side === 'buy' ? 'level-INFO' : 'level-ERROR'}">${t.side === 'buy' ? 'Покупка' : 'Продажа'}</span></td>
                     <td>${Math.abs(t.qty)}</td>
                     <td>${t.price}</td>
                     <td>${fmt(t.value)}</td>
@@ -168,12 +190,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    document.querySelector('[data-tab="dashboard"]').addEventListener('click', () => {
-        loadDashboard();
-        loadTrades();
+    // Sort by column
+    document.querySelectorAll('#trades-table .sortable').forEach(th => {
+        th.addEventListener('click', () => {
+            const sort = th.dataset.sort;
+            if (currentSort === sort) {
+                currentDir = currentDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort = sort;
+                currentDir = 'desc';
+            }
+            document.querySelectorAll('#trades-table .sortable').forEach(h => h.textContent = h.textContent.replace(/[▲▾]/g, '▾'));
+            th.textContent = th.textContent.replace(/[▲▾]/g, currentDir === 'asc' ? '▲' : '▾');
+            loadTrades();
+        });
     });
+    
     tradeSource.addEventListener('change', loadTrades);
+    tradeDateFrom.addEventListener('change', loadTrades);
+    tradeDateTo.addEventListener('change', loadTrades);
+    tradeTicker.addEventListener('input', loadTrades);
+    tradeSide.addEventListener('change', loadTrades);
     refreshTrades.addEventListener('click', loadTrades);
+    
+    document.querySelector('[data-tab="trades"]').addEventListener('click', loadTrades);
 
     // Logs tab
     const logsTable = document.querySelector('#logs-table tbody');

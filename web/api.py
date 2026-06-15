@@ -265,62 +265,73 @@ def parse_trade(line):
 
 @api.route('/api/trades')
 def trades():
-    """Get trade statistics."""
-    source = request.args.get('source', 'all')  # all, mytrades, or broker name
+    """Get trades with filters and sorting."""
+    source = request.args.get('source', 'all')
+    date_from = request.args.get('date_from', '')
+    date_to = request.args.get('date_to', '')
+    ticker_filter = request.args.get('ticker', '').upper()
+    side_filter = request.args.get('side', '')
+    sort_by = request.args.get('sort', 'datetime')
+    sort_dir = request.args.get('dir', 'desc')
     
     trades_data = []
+    seen = set()  # Deduplicate
     
+    files_to_read = []
     if source == 'all' or source == 'mytrades':
         mytrades_file = os.path.join(DATA_DIR, 'MyTrades.csv')
         if os.path.exists(mytrades_file):
-            with open(mytrades_file, 'r', encoding='utf-8') as f:
-                for line in f:
-                    trade = parse_trade(line)
-                    if trade:
-                        trades_data.append(trade)
+            files_to_read.append(mytrades_file)
     
     if source != 'all' and source != 'mytrades':
         trade_file = os.path.join(DATA_DIR, f'trades{source}.csv')
         if os.path.exists(trade_file):
-            with open(trade_file, 'r', encoding='utf-8') as f:
-                for line in f:
-                    trade = parse_trade(line)
-                    if trade:
-                        trades_data.append(trade)
+            files_to_read.append(trade_file)
     
     if source == 'all':
         for broker in get_all_brokers():
             trade_file = os.path.join(DATA_DIR, f'trades{broker}.csv')
             if os.path.exists(trade_file):
-                with open(trade_file, 'r', encoding='utf-8') as f:
-                    for line in f:
-                        trade = parse_trade(line)
-                        if trade:
-                            trades_data.append(trade)
+                files_to_read.append(trade_file)
     
-    # Calculate statistics
+    for filepath in files_to_read:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            for line in f:
+                trade = parse_trade(line)
+                if trade:
+                    key = (trade['datetime'], trade['ticker'], trade['qty'], trade['price'])
+                    if key not in seen:
+                        seen.add(key)
+                        trade['side'] = 'buy' if trade['qty'] > 0 else 'sell'
+                        trades_data.append(trade)
+    
+    # Apply filters
+    if date_from:
+        trades_data = [t for t in trades_data if t['datetime'][:10] >= date_from]
+    if date_to:
+        trades_data = [t for t in trades_data if t['datetime'][:10] <= date_to]
+    if ticker_filter:
+        trades_data = [t for t in trades_data if ticker_filter in t['ticker'].upper()]
+    if side_filter:
+        trades_data = [t for t in trades_data if t['side'] == side_filter]
+    
+    # Sort
+    reverse = sort_dir == 'desc'
+    if sort_by == 'value':
+        trades_data.sort(key=lambda t: t['value'], reverse=reverse)
+    elif sort_by == 'qty':
+        trades_data.sort(key=lambda t: abs(t['qty']), reverse=reverse)
+    elif sort_by == 'price':
+        trades_data.sort(key=lambda t: t['price'], reverse=reverse)
+    elif sort_by in ('datetime', 'ticker', 'side', 'broker'):
+        trades_data.sort(key=lambda t: t.get(sort_by, ''), reverse=reverse)
+    
+    # Stats
     total_trades = len(trades_data)
     total_value = sum(t['value'] for t in trades_data)
-    buys = [t for t in trades_data if t['qty'] > 0]
-    sells = [t for t in trades_data if t['qty'] < 0]
-    
-    # Unique tickers
+    buys = [t for t in trades_data if t['side'] == 'buy']
+    sells = [t for t in trades_data if t['side'] == 'sell']
     tickers = set(t['ticker'] for t in trades_data)
-    
-    # By broker
-    by_broker = {}
-    for t in trades_data:
-        b = t['broker']
-        if b not in by_broker:
-            by_broker[b] = {'count': 0, 'value': 0, 'tickers': set()}
-        by_broker[b]['count'] += 1
-        by_broker[b]['value'] += t['value']
-        by_broker[b]['tickers'].add(t['ticker'])
-    
-    for b in by_broker:
-        by_broker[b]['tickers'] = len(by_broker[b]['tickers'])
-    
-    # Date range
     dates = [t['datetime'][:10] for t in trades_data if t['datetime']]
     
     return jsonify({
@@ -330,6 +341,5 @@ def trades():
         'sells_count': len(sells),
         'unique_tickers': len(tickers),
         'date_range': {'first': min(dates) if dates else '', 'last': max(dates) if dates else ''},
-        'by_broker': by_broker,
-        'recent': trades_data[-20:]  # Last 20 trades
+        'trades': trades_data
     })

@@ -13,6 +13,7 @@
             <button class="tab active" data-tab="orders">Заявки</button>
             <button class="tab" data-tab="dashboard">Дашборд</button>
             <button class="tab" data-tab="logs">Логи</button>
+            <button class="tab" data-tab="trades">Сделки</button>
             <button class="tab" data-tab="control">Управление</button>
         </nav>
     </header>
@@ -51,8 +52,9 @@
         <div id="dashboard" class="tab-content">
             <h2>Заявки по брокерам</h2>
             <div id="broker-stats"></div>
-            
-            <h2>Сделки</h2>
+        </div>
+        
+        <div id="trades" class="tab-content">
             <div class="controls">
                 <select id="trade-source">
                     <option value="all">Все источники</option>
@@ -61,20 +63,28 @@
                     <option value="VTB">tradesVTB.csv</option>
                     <option value="PSB">tradesPSB.csv</option>
                 </select>
+                <input type="date" id="trade-date-from" placeholder="С даты">
+                <input type="date" id="trade-date-to" placeholder="По дату">
+                <input type="text" id="trade-ticker" placeholder="Тикер...">
+                <select id="trade-side">
+                    <option value="">Все стороны</option>
+                    <option value="buy">Покупка</option>
+                    <option value="sell">Продажа</option>
+                </select>
                 <button id="refresh-trades">Обновить</button>
             </div>
             <div id="trade-stats"></div>
-            <h3>Последние сделки</h3>
+            <div id="trade-count"></div>
             <table id="trades-table">
                 <thead>
                     <tr>
-                        <th>Дата</th>
-                        <th>Тикер</th>
-                        <th>Сторона</th>
-                        <th>Кол-во</th>
-                        <th>Цена</th>
-                        <th>Сумма</th>
-                        <th>Брокер</th>
+                        <th class="sortable" data-sort="datetime">Дата ▾</th>
+                        <th class="sortable" data-sort="ticker">Тикер</th>
+                        <th class="sortable" data-sort="side">Сторона</th>
+                        <th class="sortable" data-sort="qty">Кол-во</th>
+                        <th class="sortable" data-sort="price">Цена</th>
+                        <th class="sortable" data-sort="value">Сумма</th>
+                        <th class="sortable" data-sort="broker">Брокер</th>
                     </tr>
                 </thead>
                 <tbody></tbody>

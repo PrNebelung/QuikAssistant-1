@@ -274,3 +274,30 @@ h3 {
 
 .trade-card .value.positive { color: #4caf50; }
 .trade-card .value.negative { color: #e94560; }
+
+.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.sortable:hover {
+    background: #1a4a8a;
+}
+
+#trade-count {
+    font-size: 0.875rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+}
+
+input[type="date"] {
+    padding: 0.5rem 1rem;
+    border: 1px solid #0f3460;
+    border-radius: 4px;
+    background: #16213e;
+    color: #eee;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
