@@ -136,12 +136,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Trades tab
     const tradeStatsDiv = document.getElementById('trade-stats');
     const tradeCountDiv = document.getElementById('trade-count');
-    const tradesTable = document.querySelector('#trades-table tbody');
+    const tradeGroupedDiv = document.getElementById('trade-grouped');
+    const tradesTable = document.querySelector('#trades-table');
+    const tradesTbody = document.querySelector('#trades-table tbody');
     const tradeSource = document.getElementById('trade-source');
     const tradeDateFrom = document.getElementById('trade-date-from');
     const tradeDateTo = document.getElementById('trade-date-to');
     const tradeTicker = document.getElementById('trade-ticker');
     const tradeSide = document.getElementById('trade-side');
+    const tradeGroup = document.getElementById('trade-group');
     const refreshTrades = document.getElementById('refresh-trades');
     let currentSort = 'datetime';
     let currentDir = 'desc';
@@ -156,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tradeDateTo.value) params.set('date_to', tradeDateTo.value);
         if (tradeTicker.value) params.set('ticker', tradeTicker.value);
         if (tradeSide.value) params.set('side', tradeSide.value);
+        if (tradeGroup.value) params.set('group', tradeGroup.value);
         
         try {
             const response = await fetch(`/api/trades?${params}`);
@@ -174,17 +178,55 @@ document.addEventListener('DOMContentLoaded', () => {
             
             tradeCountDiv.textContent = `Показано: ${data.trades.length} из ${data.total_trades}`;
             
-            tradesTable.innerHTML = data.trades.map(t => `
-                <tr>
-                    <td>${t.datetime}</td>
-                    <td>${t.ticker}</td>
-                    <td><span class="level-badge ${t.side === 'buy' ? 'level-INFO' : 'level-ERROR'}">${t.side === 'buy' ? 'Покупка' : 'Продажа'}</span></td>
-                    <td>${Math.abs(t.qty)}</td>
-                    <td>${t.price}</td>
-                    <td>${fmt(t.value)}</td>
-                    <td>${t.broker}</td>
-                </tr>
-            `).join('');
+            if (data.group_by && Object.keys(data.grouped).length > 0) {
+                tradesTable.style.display = 'none';
+                tradeGroupedDiv.style.display = 'block';
+                
+                if (data.group_by === 'date') {
+                    tradeGroupedDiv.innerHTML = `<table class="grouped-table">
+                        <thead><tr><th>Дата</th><th>Сделок</th><th>Покупки</th><th>Продажи</th><th>Тикеров</th><th>Сумма</th></tr></thead>
+                        <tbody>${Object.entries(data.grouped).map(([date, g]) => `
+                            <tr>
+                                <td><strong>${date}</strong></td>
+                                <td>${g.count}</td>
+                                <td class="positive">${g.buys}</td>
+                                <td class="negative">${g.sells}</td>
+                                <td>${g.tickers}</td>
+                                <td class="money">${fmt(g.value)}</td>
+                            </tr>
+                        `).join('')}</tbody></table>`;
+                } else if (data.group_by === 'ticker') {
+                    tradeGroupedDiv.innerHTML = `<table class="grouped-table">
+                        <thead><tr><th>Тикер</th><th>Сделок</th><th>Покупки</th><th>Продажи</th><th>Кол-во (нетто)</th><th>Сумма</th><th>Перв. дата</th><th>Посл. дата</th></tr></thead>
+                        <tbody>${Object.entries(data.grouped).map(([ticker, g]) => `
+                            <tr>
+                                <td><strong>${ticker}</strong></td>
+                                <td>${g.count}</td>
+                                <td class="positive">${g.buys}</td>
+                                <td class="negative">${g.sells}</td>
+                                <td class="${g.qty >= 0 ? 'positive' : 'negative'}">${g.qty > 0 ? '+' : ''}${g.qty}</td>
+                                <td class="money">${fmt(g.value)}</td>
+                                <td>${g.first_date}</td>
+                                <td>${g.last_date}</td>
+                            </tr>
+                        `).join('')}</tbody></table>`;
+                }
+            } else {
+                tradeGroupedDiv.style.display = 'none';
+                tradesTable.style.display = 'table';
+                
+                tradesTbody.innerHTML = data.trades.map(t => `
+                    <tr>
+                        <td>${t.datetime}</td>
+                        <td>${t.ticker}</td>
+                        <td><span class="level-badge ${t.side === 'buy' ? 'level-INFO' : 'level-ERROR'}">${t.side === 'buy' ? 'Покупка' : 'Продажа'}</span></td>
+                        <td>${Math.abs(t.qty)}</td>
+                        <td>${t.price}</td>
+                        <td>${fmt(t.value)}</td>
+                        <td>${t.broker}</td>
+                    </tr>
+                `).join('');
+            }
         } catch (error) {
             console.error('Error loading trades:', error);
         }
@@ -211,6 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tradeDateTo.addEventListener('change', loadTrades);
     tradeTicker.addEventListener('input', loadTrades);
     tradeSide.addEventListener('change', loadTrades);
+    tradeGroup.addEventListener('change', loadTrades);
     refreshTrades.addEventListener('click', loadTrades);
     
     document.querySelector('[data-tab="trades"]').addEventListener('click', loadTrades);

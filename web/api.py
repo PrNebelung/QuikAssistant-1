@@ -334,6 +334,49 @@ def trades():
     tickers = set(t['ticker'] for t in trades_data)
     dates = [t['datetime'][:10] for t in trades_data if t['datetime']]
     
+    # Grouping
+    group_by = request.args.get('group', '')
+    grouped = {}
+    
+    if group_by == 'date':
+        for t in trades_data:
+            key = t['datetime'][:10]
+            if key not in grouped:
+                grouped[key] = {'count': 0, 'value': 0, 'buys': 0, 'sells': 0, 'tickers': set()}
+            grouped[key]['count'] += 1
+            grouped[key]['value'] += t['value']
+            if t['side'] == 'buy':
+                grouped[key]['buys'] += 1
+            else:
+                grouped[key]['sells'] += 1
+            grouped[key]['tickers'].add(t['ticker'])
+        
+        for k in grouped:
+            grouped[k]['tickers'] = len(grouped[k]['tickers'])
+            grouped[k]['value'] = round(grouped[k]['value'], 2)
+        grouped = dict(sorted(grouped.items(), reverse=True))
+    
+    elif group_by == 'ticker':
+        for t in trades_data:
+            key = t['ticker']
+            if key not in grouped:
+                grouped[key] = {'count': 0, 'value': 0, 'buys': 0, 'sells': 0, 'qty': 0, 'dates': set()}
+            grouped[key]['count'] += 1
+            grouped[key]['value'] += t['value']
+            grouped[key]['qty'] += t['qty']
+            if t['side'] == 'buy':
+                grouped[key]['buys'] += 1
+            else:
+                grouped[key]['sells'] += 1
+            grouped[key]['dates'].add(t['datetime'][:10])
+        
+        for k in grouped:
+            grouped[k]['value'] = round(grouped[k]['value'], 2)
+            grouped[k]['first_date'] = min(grouped[k]['dates'])
+            grouped[k]['last_date'] = max(grouped[k]['dates'])
+            del grouped[k]['dates']
+        grouped = dict(sorted(grouped.items(), key=lambda x: x[1]['value'], reverse=True))
+    
     return jsonify({
         'total_trades': total_trades,
         'total_value': round(total_value, 2),
@@ -341,5 +384,7 @@ def trades():
         'sells_count': len(sells),
         'unique_tickers': len(tickers),
         'date_range': {'first': min(dates) if dates else '', 'last': max(dates) if dates else ''},
-        'trades': trades_data
+        'trades': trades_data,
+        'grouped': grouped,
+        'group_by': group_by
     })

@@ -301,3 +301,31 @@ input[type="date"] {
 input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
+
+.grouped-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+}
+
+.grouped-table th {
+    background: #0f3460;
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+.grouped-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid #0f3460;
+}
+
+.grouped-table tr:hover {
+    background: #16213e;
+}
+
+.grouped-table .positive { color: #4caf50; }
+.grouped-table .negative { color: #e94560; }
+.grouped-table .money { color: #4fc3f7; }

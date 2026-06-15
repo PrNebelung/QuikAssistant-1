@@ -71,10 +71,16 @@
                     <option value="buy">Покупка</option>
                     <option value="sell">Продажа</option>
                 </select>
+                <select id="trade-group">
+                    <option value="">Без группировки</option>
+                    <option value="date">По дате</option>
+                    <option value="ticker">По инструменту</option>
+                </select>
                 <button id="refresh-trades">Обновить</button>
             </div>
             <div id="trade-stats"></div>
             <div id="trade-count"></div>
+            <div id="trade-grouped"></div>
             <table id="trades-table">
                 <thead>
                     <tr>
