@@ -1,1 +1,4 @@
 Log/**/*.log
+__pycache__/
+*.pyc
+.claude/
