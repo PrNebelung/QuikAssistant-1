@@ -161,6 +161,28 @@ def log_list():
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'Data')
 
+from moex_api import get_instrument, get_all_instruments, refresh_instruments
+
+@api.route('/api/instruments')
+def instruments_list():
+    """Get all cached instruments."""
+    instruments = get_all_instruments()
+    return jsonify(instruments)
+
+@api.route('/api/instruments/<code>')
+def instrument_detail(code):
+    """Get instrument data by ticker or ISIN."""
+    data = get_instrument(code)
+    if data:
+        return jsonify(data)
+    return jsonify({'error': 'Not found'}), 404
+
+@api.route('/api/instruments/refresh', methods=['POST'])
+def instruments_refresh():
+    """Refresh instrument data from MOEX."""
+    data = refresh_instruments()
+    return jsonify({'success': True, 'count': len(data) - 1})
+
 def is_bond(isin):
     """Check if ISIN is a bond (starts with RU000A or SU)."""
     return isin.startswith('RU000A') or isin.startswith('SU')

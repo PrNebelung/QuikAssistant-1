@@ -14,6 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const brokerSelect = document.getElementById('broker-select');
     const fileTypeSelect = document.getElementById('file-type');
     const refreshBtn = document.getElementById('refresh-btn');
+    let instrumentsCache = {};
+    
+    async function loadInstruments() {
+        try {
+            const response = await fetch('/api/instruments');
+            instrumentsCache = await response.json();
+        } catch (e) {
+            console.error('Error loading instruments:', e);
+        }
+    }
     
     async function loadOrders() {
         const broker = brokerSelect.value;
@@ -23,19 +33,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`/api/orders/${broker}?type=${type}`);
             const orders = await response.json();
             
-            ordersTable.innerHTML = orders.map(order => `
+            ordersTable.innerHTML = orders.map(order => {
+                const inst = instrumentsCache[order.isin] || instrumentsCache[order.name] || {};
+                const lot = inst.lot || 1;
+                const price = parseFloat(order.price) || 0;
+                const qty = parseInt(order.qty) || 0;
+                const sum = price * qty;
+                
+                return `
                 <tr class="${order.enabled ? '' : 'disabled'}">
                     <td>${order.name}</td>
                     <td>${order.isin}</td>
                     <td>${order.side === 'B' ? 'Покупка' : 'Продажа'}</td>
+                    <td class="lot-cell">${lot}</td>
                     <td><input class="edit-input" type="number" value="${order.qty}" data-field="qty" ${order.enabled ? '' : 'disabled'}></td>
                     <td><input class="edit-input" type="number" step="0.01" value="${order.price}" data-field="price" ${order.enabled ? '' : 'disabled'}></td>
+                    <td class="sum-cell">${sum > 0 ? fmt(sum) : '-'}</td>
                     <td>
                         <button class="btn-toggle ${order.enabled ? 'btn-enabled' : 'btn-disabled'}" data-isin="${order.isin}">${order.enabled ? 'Выкл' : 'Вкл'}</button>
                         <button class="btn-save" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}>Сохранить</button>
                     </td>
-                </tr>
-            `).join('');
+                </tr>`;
+            }).join('');
             
             // Add event listeners
             document.querySelectorAll('.btn-toggle').forEach(btn => {
@@ -83,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     brokerSelect.addEventListener('change', loadOrders);
     fileTypeSelect.addEventListener('change', loadOrders);
     
-    loadOrders();
+    loadInstruments().then(loadOrders);
 
     // Dashboard
     const brokerStatsDiv = document.getElementById('broker-stats');

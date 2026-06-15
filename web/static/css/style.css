@@ -129,6 +129,18 @@ tr:hover {
     cursor: not-allowed;
 }
 
+.lot-cell {
+    text-align: center;
+    color: #4fc3f7;
+    font-weight: 600;
+}
+
+.sum-cell {
+    text-align: right;
+    color: #4caf50;
+    font-weight: 500;
+}
+
 pre {
     background: #16213e;
     padding: 1rem;
