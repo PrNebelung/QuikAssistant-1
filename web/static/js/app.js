@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const diff = price && currentPrice ? ((currentPrice - price) / price * 100).toFixed(1) : 0;
                 const diffClass = diff >= 0 ? 'positive' : 'negative';
                 
+                const maturity = inst.maturity || '';
+                
                 return `
                 <tr class="${order.enabled ? '' : 'disabled'}">
                     <td>${order.name}</td>
@@ -56,11 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td><input class="edit-input" type="number" value="${order.qty}" data-field="qty" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
                     <td><input class="edit-input" type="number" step="0.01" value="${order.price}" data-field="price" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
                     <td class="current-price">${currentPrice > 0 ? currentPrice : '-'} ${currentPrice > 0 ? `<span class="${diffClass}">(${diff}%)</span>` : ''}</td>
+                    <td class="maturity-cell">${maturity || '-'}</td>
                     <td class="sum-cell" data-isin="${order.isin}">${sum > 0 ? fmt(sum) : '-'}</td>
-                    <td>
+                    <td class="actions-cell">
                         <button class="btn-toggle ${order.enabled ? 'btn-enabled' : 'btn-disabled'}" data-isin="${order.isin}">${order.enabled ? 'Выкл' : 'Вкл'}</button>
-                        <button class="btn-save btn-hidden" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}>Сохранить</button>
-                        <button class="btn-cancel btn-hidden" data-isin="${order.isin}">Отмена</button>
+                        ${order.enabled ? `<button class="btn-save btn-hidden" data-isin="${order.isin}">Сохранить</button><button class="btn-cancel btn-hidden" data-isin="${order.isin}">Отмена</button>` : ''}
+                        <button class="btn-delete" data-isin="${order.isin}">Удалить</button>
                     </td>
                 </tr>`;
             }).join('');
@@ -84,6 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             document.querySelectorAll('.btn-cancel').forEach(btn => {
                 btn.addEventListener('click', () => cancelEdit(btn.dataset.isin));
+            });
+            
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.addEventListener('click', () => deleteOrder(btn.dataset.isin));
             });
             
             // Dynamic recalculation on input change
@@ -179,6 +186,20 @@ document.addEventListener('DOMContentLoaded', () => {
         // Recalculate sum
         row.querySelector('[data-field="price"]').dispatchEvent(new Event('input'));
         webLog(`Отменено: ${isin}`, 'info');
+    }
+    
+    async function deleteOrder(isin) {
+        if (!confirm(`Удалить заявку ${isin}?`)) return;
+        
+        const broker = brokerSelect.value;
+        const type = fileTypeSelect.value;
+        
+        await fetch(`/api/orders/${broker}/${isin}?type=${type}`, {
+            method: 'DELETE'
+        });
+        
+        webLog(`Удалено: ${isin}`, 'warn');
+        loadOrders();
     }
     
     refreshBtn.addEventListener('click', loadOrders);

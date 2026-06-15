@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from csv_handler import get_csv_files, read_orders, write_orders, get_all_brokers
+from csv_handler import get_csv_files, read_orders, write_orders, delete_order, get_all_brokers
 import os
 import glob
 
@@ -41,6 +41,20 @@ def update_order(broker, isin):
     if write_orders(filepath, orders):
         return jsonify({'success': True})
     return jsonify({'error': 'Write failed'}), 500
+
+@api.route('/api/orders/<broker>/<isin>', methods=['DELETE'])
+def delete_order_endpoint(broker, isin):
+    """Delete an order by ISIN."""
+    file_type = request.args.get('type', 'buy')
+    files = get_csv_files(broker)
+    
+    filepath = files.get(file_type)
+    if not filepath:
+        return jsonify({'error': 'Unknown file type'}), 400
+    
+    if delete_order(filepath, isin):
+        return jsonify({'success': True})
+    return jsonify({'error': 'Delete failed'}), 500
 
 @api.route('/api/orders/<broker>/<isin>/toggle', methods=['POST'])
 def toggle_order(broker, isin):

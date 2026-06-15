@@ -65,6 +65,21 @@ def write_orders(filepath: str, orders: List[Dict]) -> bool:
         print(f"Error writing CSV: {e}")
         return False
 
+def delete_order(filepath: str, isin: str) -> bool:
+    """Delete an order by ISIN from CSV file."""
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+        
+        new_lines = [line for line in lines if isin not in line]
+        
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.writelines(new_lines)
+        return True
+    except Exception as e:
+        print(f"Error deleting order: {e}")
+        return False
+
 def get_all_brokers() -> List[str]:
     """Get list of available brokers."""
     brokers = set()

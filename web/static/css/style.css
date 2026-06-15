@@ -181,6 +181,29 @@ tr:hover {
     background: #888 !important;
 }
 
+.btn-delete {
+    background: #c62828 !important;
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.btn-delete:hover {
+    background: #b71c1c !important;
+}
+
+.actions-cell {
+    white-space: nowrap;
+    display: flex;
+    gap: 0.25rem;
+}
+
+.maturity-cell {
+    color: #888;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
 .web-log {
     position: fixed;
     bottom: 0;
