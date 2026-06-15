@@ -24,15 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const orders = await response.json();
             
             ordersTable.innerHTML = orders.map(order => `
-                <tr class="${order.name.startsWith('--') ? 'disabled' : ''}">
+                <tr class="${order.enabled ? '' : 'disabled'}">
                     <td>${order.name}</td>
                     <td>${order.isin}</td>
                     <td>${order.side === 'B' ? 'Покупка' : 'Продажа'}</td>
-                    <td><input class="edit-input" type="number" value="${order.qty}" data-field="qty"></td>
-                    <td><input class="edit-input" type="number" step="0.01" value="${order.price}" data-field="price"></td>
+                    <td><input class="edit-input" type="number" value="${order.qty}" data-field="qty" ${order.enabled ? '' : 'disabled'}></td>
+                    <td><input class="edit-input" type="number" step="0.01" value="${order.price}" data-field="price" ${order.enabled ? '' : 'disabled'}></td>
                     <td>
-                        <button class="btn-toggle" data-isin="${order.isin}">Вкл/Выкл</button>
-                        <button class="btn-save" data-isin="${order.isin}">Сохранить</button>
+                        <button class="btn-toggle ${order.enabled ? 'btn-enabled' : 'btn-disabled'}" data-isin="${order.isin}">${order.enabled ? 'Выкл' : 'Вкл'}</button>
+                        <button class="btn-save" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}>Сохранить</button>
                     </td>
                 </tr>
             `).join('');

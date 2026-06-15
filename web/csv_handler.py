@@ -15,18 +15,29 @@ def get_csv_files(broker: str) -> Dict[str, str]:
     }
 
 def read_orders(filepath: str) -> List[Dict]:
-    """Read orders from CSV file."""
+    """Read orders from CSV file, including commented lines."""
     orders = []
     if not os.path.exists(filepath):
         return orders
     
     with open(filepath, 'r', encoding='utf-8') as f:
         for line_num, line in enumerate(f, 1):
-            line = line.strip()
-            if not line or line.startswith('--') or line.startswith('----'):
+            line = line.rstrip('\n\r')
+            stripped = line.strip()
+            if not stripped:
                 continue
             
-            parts = line.split(';')
+            # Check if line is a separator
+            if stripped.startswith('----'):
+                continue
+            
+            # Check if order is disabled (commented)
+            enabled = True
+            if stripped.startswith('--'):
+                enabled = False
+                stripped = stripped[2:].strip()
+            
+            parts = stripped.split(';')
             if len(parts) >= 5:
                 orders.append({
                     'line': line_num,
@@ -35,7 +46,8 @@ def read_orders(filepath: str) -> List[Dict]:
                     'isin': parts[2],
                     'qty': parts[3],
                     'price': parts[4],
-                    'raw': line
+                    'enabled': enabled,
+                    'raw': stripped
                 })
     return orders
 

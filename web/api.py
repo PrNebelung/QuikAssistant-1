@@ -47,26 +47,31 @@ def toggle_order(broker, isin):
     data = request.json
     file_type = data.get('type', 'buy')
     files = get_csv_files(broker)
-
+    
     filepath = files.get(file_type)
     if not filepath:
         return jsonify({'error': 'Unknown file type'}), 400
-
+    
     with open(filepath, 'r', encoding='utf-8') as f:
         lines = f.readlines()
-
+    
     new_lines = []
     for line in lines:
-        if isin in line:
-            if line.startswith('--'):
-                line = line[2:]
+        stripped = line.strip()
+        if isin in stripped:
+            # Remove existing -- prefix first
+            clean = stripped.lstrip('-').lstrip()
+            if stripped.startswith('--'):
+                # Was disabled, enable it
+                line = clean + '\n'
             else:
-                line = '--' + line
+                # Was enabled, disable it
+                line = '--' + clean + '\n'
         new_lines.append(line)
-
+    
     with open(filepath, 'w', encoding='utf-8') as f:
         f.writelines(new_lines)
-
+    
     return jsonify({'success': True})
 
 LOG_DIR = os.path.join(os.path.dirname(__file__), '..', 'Log')

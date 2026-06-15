@@ -102,6 +102,33 @@ tr:hover {
     opacity: 0.5;
 }
 
+.disabled td {
+    color: #666;
+}
+
+.btn-enabled {
+    background: #4caf50 !important;
+    color: #fff;
+}
+
+.btn-enabled:hover {
+    background: #388e3c !important;
+}
+
+.btn-disabled {
+    background: #e94560 !important;
+    color: #fff;
+}
+
+.btn-disabled:hover {
+    background: #c62828 !important;
+}
+
+.btn-save:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
 pre {
     background: #16213e;
     padding: 1rem;
