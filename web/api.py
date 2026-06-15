@@ -102,3 +102,30 @@ def log_list():
             if os.path.isdir(os.path.join(LOG_DIR, broker_dir)):
                 brokers.append(broker_dir)
     return jsonify(sorted(brokers))
+
+@api.route('/api/stats')
+def stats():
+    broker = request.args.get('broker', 'VTB')
+    files = get_csv_files(broker)
+    
+    total_orders = 0
+    active_orders = 0
+    disabled_orders = 0
+    
+    for filepath in files.values():
+        if os.path.exists(filepath):
+            with open(filepath, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('----'):
+                        total_orders += 1
+                        if line.startswith('--'):
+                            disabled_orders += 1
+                        else:
+                            active_orders += 1
+    
+    return jsonify({
+        'total': total_orders,
+        'active': active_orders,
+        'disabled': disabled_orders
+    })

@@ -85,6 +85,24 @@ document.addEventListener('DOMContentLoaded', () => {
     
     loadOrders();
 
+    // Dashboard
+    async function loadStats() {
+        const broker = brokerSelect.value;
+        
+        try {
+            const response = await fetch(`/api/stats?broker=${broker}`);
+            const stats = await response.json();
+            
+            document.getElementById('stat-total').textContent = stats.total;
+            document.getElementById('stat-active').textContent = stats.active;
+            document.getElementById('stat-disabled').textContent = stats.disabled;
+        } catch (error) {
+            console.error('Error loading stats:', error);
+        }
+    }
+    
+    document.querySelector('[data-tab="dashboard"]').addEventListener('click', loadStats);
+
     // Logs tab
     const logOutput = document.getElementById('log-output');
     const logBroker = document.getElementById('log-broker');
