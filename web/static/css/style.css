@@ -152,3 +152,45 @@ pre {
     font-weight: bold;
     color: #e94560;
 }
+
+input[type="text"] {
+    padding: 0.5rem 1rem;
+    border: 1px solid #0f3460;
+    border-radius: 4px;
+    background: #16213e;
+    color: #eee;
+    min-width: 200px;
+}
+
+input[type="text"]::placeholder {
+    color: #666;
+}
+
+.level-badge {
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.level-INFO { background: #0f3460; color: #4fc3f7; }
+.level-WARN { background: #f57f17; color: #fff; }
+.level-ERROR { background: #e94560; color: #fff; }
+.level-DEBUG { background: #333; color: #aaa; }
+
+#logs-table {
+    font-size: 0.875rem;
+}
+
+#logs-table td {
+    max-width: 600px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#logs-table tr:hover td {
+    white-space: normal;
+    word-break: break-all;
+}

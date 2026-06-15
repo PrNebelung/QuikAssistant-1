@@ -104,24 +104,66 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('[data-tab="dashboard"]').addEventListener('click', loadStats);
 
     // Logs tab
-    const logOutput = document.getElementById('log-output');
+    const logsTable = document.querySelector('#logs-table tbody');
     const logBroker = document.getElementById('log-broker');
+    const logDate = document.getElementById('log-date');
+    const logLevel = document.getElementById('log-level');
+    const logSearch = document.getElementById('log-search');
     const refreshLogs = document.getElementById('refresh-logs');
+    
+    async function loadLogDates() {
+        const broker = logBroker.value;
+        try {
+            const response = await fetch(`/api/logs/dates?broker=${broker}`);
+            const dates = await response.json();
+            logDate.innerHTML = dates.length
+                ? dates.map(d => `<option value="${d}">${d}</option>`).join('')
+                : '<option value="">Нет файлов</option>';
+        } catch (e) {
+            console.error('Error loading dates:', e);
+        }
+    }
     
     async function loadLogs() {
         const broker = logBroker.value;
+        const date = logDate.value;
+        const level = logLevel.value;
+        const search = logSearch.value;
         
         try {
-            const response = await fetch(`/api/logs?broker=${broker}`);
+            const params = new URLSearchParams({ broker });
+            if (date) params.set('date', date);
+            if (level) params.set('level', level);
+            if (search) params.set('search', search);
+            
+            const response = await fetch(`/api/logs?${params}`);
             const logs = await response.json();
             
-            logOutput.textContent = logs.join('\n');
-            logOutput.scrollTop = logOutput.scrollHeight;
+            logsTable.innerHTML = logs.map(entry => `
+                <tr>
+                    <td><span class="level-badge level-${entry.level}">${entry.level}</span></td>
+                    <td>${entry.time}</td>
+                    <td>${entry.file}:${entry.line}</td>
+                    <td title="${entry.raw}">${entry.message}</td>
+                </tr>
+            `).join('');
         } catch (error) {
             console.error('Error loading logs:', error);
         }
     }
     
-    refreshLogs.addEventListener('click', loadLogs);
-    logBroker.addEventListener('change', loadLogs);
+    logBroker.addEventListener('change', () => {
+        loadLogDates();
+        loadLogs();
+    });
+    logDate.addEventListener('change', loadLogs);
+    logLevel.addEventListener('change', loadLogs);
+    logSearch.addEventListener('input', loadLogs);
+    refreshLogs.addEventListener('click', () => {
+        loadLogDates();
+        loadLogs();
+    });
+    
+    loadLogDates();
+    loadLogs();
 });

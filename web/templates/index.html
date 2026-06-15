@@ -72,9 +72,29 @@
                     <option value="FINAM">FINAM</option>
                     <option value="PSB">PSB</option>
                 </select>
+                <select id="log-date">
+                    <option value="">Загрузка...</option>
+                </select>
+                <select id="log-level">
+                    <option value="">Все уровни</option>
+                    <option value="INFO">INFO</option>
+                    <option value="WARN">WARN</option>
+                    <option value="ERROR">ERROR</option>
+                </select>
+                <input type="text" id="log-search" placeholder="Поиск...">
                 <button id="refresh-logs">Обновить</button>
             </div>
-            <pre id="log-output"></pre>
+            <table id="logs-table">
+                <thead>
+                    <tr>
+                        <th>Уровень</th>
+                        <th>Время</th>
+                        <th>Файл</th>
+                        <th>Сообщение</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
         
         <div id="control" class="tab-content">
