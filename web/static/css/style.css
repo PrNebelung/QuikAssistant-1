@@ -141,6 +141,14 @@ tr:hover {
     font-weight: 500;
 }
 
+.current-price {
+    text-align: right;
+    font-size: 0.875rem;
+}
+
+.current-price .positive { color: #4caf50; }
+.current-price .negative { color: #e94560; }
+
 pre {
     background: #16213e;
     padding: 1rem;

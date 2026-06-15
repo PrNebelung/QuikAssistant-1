@@ -43,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const actualPrice = isBond && facevalue ? facevalue * (price / 100) : price;
                 const sum = actualPrice * qty * lot;
                 
+                const currentPrice = inst.price || 0;
+                const diff = price && currentPrice ? ((currentPrice - price) / price * 100).toFixed(1) : 0;
+                const diffClass = diff >= 0 ? 'positive' : 'negative';
+                
                 return `
                 <tr class="${order.enabled ? '' : 'disabled'}">
                     <td>${order.name}</td>
@@ -51,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="lot-cell">${lot}</td>
                     <td><input class="edit-input" type="number" value="${order.qty}" data-field="qty" ${order.enabled ? '' : 'disabled'}></td>
                     <td><input class="edit-input" type="number" step="0.01" value="${order.price}" data-field="price" ${order.enabled ? '' : 'disabled'}></td>
+                    <td class="current-price">${currentPrice > 0 ? currentPrice : '-'} ${currentPrice > 0 ? `<span class="${diffClass}">(${diff}%)</span>` : ''}</td>
                     <td class="sum-cell">${sum > 0 ? fmt(sum) : '-'}</td>
                     <td>
                         <button class="btn-toggle ${order.enabled ? 'btn-enabled' : 'btn-disabled'}" data-isin="${order.isin}">${order.enabled ? 'Выкл' : 'Вкл'}</button>
