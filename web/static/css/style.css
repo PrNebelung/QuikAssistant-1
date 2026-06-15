@@ -329,3 +329,41 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .grouped-table .positive { color: #4caf50; }
 .grouped-table .negative { color: #e94560; }
 .grouped-table .money { color: #4fc3f7; }
+
+.group-row {
+    cursor: pointer;
+}
+
+.group-row:hover {
+    background: #1a4a8a !important;
+}
+
+.expand-icon {
+    width: 20px;
+    text-align: center;
+    color: #888;
+}
+
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #0d1b2a;
+    margin: 0.25rem 0;
+}
+
+.detail-table th {
+    background: #0f3460;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    font-size: 0.8rem;
+}
+
+.detail-table td {
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid #0f3460;
+    font-size: 0.85rem;
+}
+
+.detail-table tr:hover {
+    background: #16213e;
+}

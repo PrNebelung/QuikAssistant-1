@@ -182,11 +182,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 tradesTable.style.display = 'none';
                 tradeGroupedDiv.style.display = 'block';
                 
+                const renderDetailTrades = (trades) => `
+                    <table class="detail-table">
+                        <thead><tr><th>Дата</th><th>Тикер</th><th>Сторона</th><th>Кол-во</th><th>Цена</th><th>Сумма</th><th>Брокер</th></tr></thead>
+                        <tbody>${trades.map(t => `
+                            <tr>
+                                <td>${t.datetime}</td>
+                                <td>${t.ticker}</td>
+                                <td><span class="level-badge ${t.side === 'buy' ? 'level-INFO' : 'level-ERROR'}">${t.side === 'buy' ? 'Покупка' : 'Продажа'}</span></td>
+                                <td>${Math.abs(t.qty)}</td>
+                                <td>${t.price}</td>
+                                <td class="money">${fmt(t.value)}</td>
+                                <td>${t.broker}</td>
+                            </tr>
+                        `).join('')}</tbody>
+                    </table>`;
+                
                 if (data.group_by === 'date') {
                     tradeGroupedDiv.innerHTML = `<table class="grouped-table">
-                        <thead><tr><th>Дата</th><th>Сделок</th><th>Покупки</th><th>Продажи</th><th>Тикеров</th><th>Сумма</th></tr></thead>
+                        <thead><tr><th></th><th>Дата</th><th>Сделок</th><th>Покупки</th><th>Продажи</th><th>Тикеров</th><th>Сумма</th></tr></thead>
                         <tbody>${Object.entries(data.grouped).map(([date, g]) => `
-                            <tr>
+                            <tr class="group-row" data-key="${date}">
+                                <td class="expand-icon">▸</td>
                                 <td><strong>${date}</strong></td>
                                 <td>${g.count}</td>
                                 <td class="positive">${g.buys}</td>
@@ -194,12 +211,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td>${g.tickers}</td>
                                 <td class="money">${fmt(g.value)}</td>
                             </tr>
+                            <tr class="detail-row" style="display:none" data-for="${date}">
+                                <td colspan="7">${renderDetailTrades(data.trades.filter(t => t.datetime.startsWith(date)))}</td>
+                            </tr>
                         `).join('')}</tbody></table>`;
                 } else if (data.group_by === 'ticker') {
                     tradeGroupedDiv.innerHTML = `<table class="grouped-table">
-                        <thead><tr><th>Тикер</th><th>Сделок</th><th>Покупки</th><th>Продажи</th><th>Кол-во (нетто)</th><th>Сумма</th><th>Перв. дата</th><th>Посл. дата</th></tr></thead>
+                        <thead><tr><th></th><th>Тикер</th><th>Сделок</th><th>Покупки</th><th>Продажи</th><th>Кол-во (нетто)</th><th>Сумма</th><th>Перв. дата</th><th>Посл. дата</th></tr></thead>
                         <tbody>${Object.entries(data.grouped).map(([ticker, g]) => `
-                            <tr>
+                            <tr class="group-row" data-key="${ticker}">
+                                <td class="expand-icon">▸</td>
                                 <td><strong>${ticker}</strong></td>
                                 <td>${g.count}</td>
                                 <td class="positive">${g.buys}</td>
@@ -209,8 +230,26 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td>${g.first_date}</td>
                                 <td>${g.last_date}</td>
                             </tr>
+                            <tr class="detail-row" style="display:none" data-for="${ticker}">
+                                <td colspan="8">${renderDetailTrades(data.trades.filter(t => t.ticker === ticker))}</td>
+                            </tr>
                         `).join('')}</tbody></table>`;
                 }
+                
+                document.querySelectorAll('.group-row').forEach(row => {
+                    row.addEventListener('click', () => {
+                        const key = row.dataset.key;
+                        const detail = document.querySelector(`.detail-row[data-for="${key}"]`);
+                        const icon = row.querySelector('.expand-icon');
+                        if (detail.style.display === 'none') {
+                            detail.style.display = 'table-row';
+                            icon.textContent = '▾';
+                        } else {
+                            detail.style.display = 'none';
+                            icon.textContent = '▸';
+                        }
+                    });
+                });
             } else {
                 tradeGroupedDiv.style.display = 'none';
                 tradesTable.style.display = 'table';
