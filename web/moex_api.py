@@ -61,8 +61,8 @@ def fetch_stock_data(board='TQBR'):
             
             md = next((m for m in marketdata if m.get('SECID') == ticker), {})
             
-            lot_size = sec.get('LotSize') or md.get('LOTSIZE') or 1
-            last_price = md.get('LAST') or md.get('LASTPRICE') or 0
+            lot_size = sec.get('LOTSIZE') or md.get('LOTSIZE') or 1
+            last_price = md.get('LAST') or md.get('LASTPRICE') or sec.get('PREVPRICE') or 0
             
             result[ticker] = {
                 'lot': int(lot_size) if lot_size else 1,
@@ -112,13 +112,13 @@ def fetch_bond_data(board='TQOB'):
             
             md = next((m for m in marketdata if m.get('SECID') == ticker), {})
             
-            last_price = md.get('LAST') or md.get('LASTPRICE') or 0
+            last_price = md.get('LAST') or md.get('LASTPRICE') or sec.get('PREVPRICE') or 0
             coupon = sec.get('COUPONVALUE') or md.get('COUPONVALUE') or 0
             maturity = sec.get('MATDATE') or ''
             yield_pct = sec.get('YIELDCLOSE') or md.get('YIELDCLOSE') or 0
             
             result[ticker] = {
-                'lot': int(sec.get('LotSize', 1) or 1),
+                'lot': int(sec.get('LOTSIZE', 1) or 1),
                 'price': float(last_price) if last_price else 0,
                 'board': board,
                 'name': sec.get('SHORTNAME', ''),
