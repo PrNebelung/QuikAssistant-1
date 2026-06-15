@@ -83,14 +83,14 @@ def fetch_stock_data(board='TQBR'):
 def fetch_bond_data(board='TQOB'):
     """Fetch bond data including maturity and coupon info."""
     url = f"{BASE_URL}/engines/stock/markets/bonds/boards/{board}/securities.json"
-    params = {'iss.meta': 'off', 'limit': 100}
+    params = {'iss.meta': 'off', 'limit': 500}
     
     result = {}
     start = 0
     
     while True:
         try:
-            resp = requests.get(url, params={**params, 'start': start}, timeout=10)
+            resp = requests.get(url, params={**params, 'start': start}, timeout=15)
             data = resp.json()
         except Exception as e:
             print(f"MOEX API error: {e}")
@@ -133,7 +133,7 @@ def fetch_bond_data(board='TQOB'):
         if len(marketdata) < params['limit']:
             break
         start += params['limit']
-        time.sleep(0.1)
+        time.sleep(0.2)
     
     return result
 

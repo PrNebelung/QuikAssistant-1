@@ -52,13 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 return `
                 <tr class="${order.enabled ? '' : 'disabled'}">
                     <td>${order.name}</td>
+                    <td class="maturity-cell">${maturity || ''}</td>
                     <td>${order.isin}</td>
                     <td>${order.side === 'B' ? 'Покупка' : 'Продажа'}</td>
                     <td class="lot-cell">${lot}</td>
                     <td><input class="edit-input" type="number" value="${order.qty}" data-field="qty" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
                     <td><input class="edit-input" type="number" step="0.01" value="${order.price}" data-field="price" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
                     <td class="current-price">${currentPrice > 0 ? currentPrice : '-'} ${currentPrice > 0 ? `<span class="${diffClass}">(${diff}%)</span>` : ''}</td>
-                    <td class="maturity-cell">${maturity || '-'}</td>
                     <td class="sum-cell" data-isin="${order.isin}">${sum > 0 ? fmt(sum) : '-'}</td>
                     <td class="actions-cell">
                         <button class="btn-toggle ${order.enabled ? 'btn-enabled' : 'btn-disabled'}" data-isin="${order.isin}">${order.enabled ? 'Выкл' : 'Вкл'}</button>
