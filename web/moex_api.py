@@ -137,20 +137,36 @@ def fetch_bond_data(board='TQOB'):
     
     return result
 
+STOCK_BOARDS = ['TQBR', 'TQPI', 'MTQR', 'FQBR', 'TQTF']
+BOND_BOARDS = ['TQCB', 'TQOB', 'TQRD', 'EQOB', 'TQIR']
+ALL_BOARDS = ['TQCB', 'TQBR', 'EQOB', 'TQIR', 'TQRD', 'TQOB', 'FQBR', 'TQTF', 'TQPI', 'MTQR']
+
 def refresh_instruments(boards=None):
-    """Refresh instrument cache from MOEX."""
+    """Refresh instrument cache from MOEX, trying multiple boards."""
     if boards is None:
-        boards = ['TQBR', 'TQOB']
+        boards = ALL_BOARDS
     
     cache = _load_cache()
     cache['updated'] = time.time()
     
     for board in boards:
-        if board in ('TQBR', 'TQNE', 'TQPI'):
-            data = fetch_stock_data(board)
-        else:
-            data = fetch_bond_data(board)
-        cache.update(data)
+        try:
+            if board in STOCK_BOARDS:
+                data = fetch_stock_data(board)
+            else:
+                data = fetch_bond_data(board)
+            
+            # Only update if new data has price, or entry doesn't exist yet
+            for ticker, info in data.items():
+                if ticker not in cache:
+                    cache[ticker] = info
+                elif info.get('price', 0) > 0:
+                    cache[ticker] = info
+                elif info.get('lot', 0) > 0 and cache[ticker].get('lot', 0) == 0:
+                    cache[ticker]['lot'] = info['lot']
+        except Exception as e:
+            print(f"Error fetching board {board}: {e}")
+            continue
     
     _save_cache(cache)
     return cache
