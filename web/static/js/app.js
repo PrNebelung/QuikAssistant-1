@@ -38,7 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const lot = inst.lot || 1;
                 const price = parseFloat(order.price) || 0;
                 const qty = parseInt(order.qty) || 0;
-                const sum = price * qty * lot;
+                const facevalue = inst.facevalue || 0;
+                const isBond = order.isin.startsWith('SU') || order.isin.startsWith('RU000A');
+                const actualPrice = isBond && facevalue ? facevalue * (price / 100) : price;
+                const sum = actualPrice * qty * lot;
                 
                 return `
                 <tr class="${order.enabled ? '' : 'disabled'}">
