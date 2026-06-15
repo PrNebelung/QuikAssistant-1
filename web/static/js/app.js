@@ -180,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
         row.querySelector('[data-field="price"]').dispatchEvent(new Event('input'));
         webLog(`Отменено: ${isin}`, 'info');
     }
-    }
     
     refreshBtn.addEventListener('click', loadOrders);
     brokerSelect.addEventListener('change', loadOrders);
