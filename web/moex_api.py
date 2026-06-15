@@ -1,8 +1,12 @@
-"""MOEX ISS API client for instrument data."""
+"""MOEX ISS API client for instrument data - loads only instruments from CSV files."""
 import os
 import json
 import time
 import requests
+import sys
+
+sys.path.insert(0, os.path.dirname(__file__))
+from csv_handler import read_orders, get_csv_files, get_all_brokers
 
 BASE_URL = "https://iss.moex.com/iss"
 CACHE_DIR = os.path.join(os.path.dirname(__file__), '..', 'Data')
@@ -29,144 +33,133 @@ def _parse_iss_response(data):
             result.append(dict(zip(columns, row)))
     return result
 
-def fetch_stock_data(board='TQBR'):
-    """Fetch lot size and last price for all stocks on a board."""
-    url = f"{BASE_URL}/engines/stock/markets/shares/boards/{board}/securities.json"
-    params = {'iss.meta': 'off', 'limit': 100}
+def get_all_isins_from_csv():
+    """Collect all ISINs/tickers from all broker CSV files."""
+    isins = set()
+    for broker in get_all_brokers():
+        files = get_csv_files(broker)
+        for filepath in files.values():
+            if os.path.exists(filepath):
+                for order in read_orders(filepath):
+                    isins.add(order['isin'])
+    return isins
+
+def fetch_instrument_data(secid):
+    """Fetch data for a single instrument from MOEX."""
+    url = f"{BASE_URL}/securities/{secid}.json"
+    try:
+        resp = requests.get(url, params={'iss.meta': 'off'}, timeout=10)
+        d = resp.json()
+    except Exception as e:
+        print(f"  Error fetching {secid}: {e}")
+        return None
     
-    result = {}
-    start = 0
+    # Get description data
+    desc_raw = d.get('description', {})
+    desc_rows = _parse_iss_response(desc_raw)
     
-    while True:
+    info = {}
+    for row in desc_rows:
+        key = row.get('name', '')
+        val = row.get('value', '')
+        if key == 'SHORTNAME':
+            info['name'] = val
+        elif key == 'ISIN':
+            info['isin'] = val
+        elif key == 'FACEVALUE':
+            info['facevalue'] = float(val) if val else 0
+        elif key == 'MATDATE':
+            info['maturity'] = val
+        elif key == 'COUPONVALUE':
+            info['coupon'] = float(val) if val else 0
+    
+    # Get board data to find where it trades
+    boards_raw = d.get('boards', {})
+    boards_rows = _parse_iss_response(boards_raw)
+    
+    board_ids = []
+    for row in boards_rows:
+        if row.get('is_traded') == 1:
+            board_ids.append(row.get('boardid', ''))
+    
+    # Try to get price from boards
+    price = 0
+    lot = 1
+    for board in board_ids[:3]:  # Try first 3 boards
         try:
-            resp = requests.get(url, params={**params, 'start': start}, timeout=10)
-            data = resp.json()
-        except Exception as e:
-            print(f"MOEX API error: {e}")
-            break
-        
-        md_raw = data.get('marketdata', {})
-        sec_raw = data.get('securities', {})
-        
-        marketdata = _parse_iss_response(md_raw)
-        securities = _parse_iss_response(sec_raw)
-        
-        if not marketdata:
-            break
-        
-        for sec in securities:
-            ticker = sec.get('SECID', '')
-            if not ticker:
+            if board.startswith('TQ') or board.startswith('EQ') or board.startswith('FQ'):
+                # Stock or bond board
+                market = 'bonds' if 'OB' in board or 'CB' in board or 'RD' in board else 'shares'
+                url2 = f"{BASE_URL}/engines/stock/markets/{market}/boards/{board}/securities.json"
+                resp2 = requests.get(url2, params={'iss.meta': 'off', 'limit': 500}, timeout=10)
+                d2 = resp2.json()
+                
+                md_rows = _parse_iss_response(d2.get('marketdata', {}))
+                sec_rows = _parse_iss_response(d2.get('securities', {}))
+                
+                for sec in sec_rows:
+                    if sec.get('SECID') == secid:
+                        lot = sec.get('LOTSIZE', 1) or 1
+                        break
+                
+                for md in md_rows:
+                    if md.get('SECID') == secid:
+                        price = md.get('LAST') or md.get('PREVPRICE') or 0
+                        if price:
+                            break
+                
+                if price:
+                    break
+        except:
+            continue
+    
+    if not price and info.get('maturity'):
+        # Try to get price from marketdata boards
+        for board in ['TQCB', 'TQOB', 'TQRD']:
+            try:
+                market = 'bonds'
+                url2 = f"{BASE_URL}/engines/stock/markets/{market}/boards/{board}/securities.json"
+                resp2 = requests.get(url2, params={'iss.meta': 'off', 'limit': 500}, timeout=10)
+                d2 = resp2.json()
+                
+                md_rows = _parse_iss_response(d2.get('marketdata', {}))
+                for md in md_rows:
+                    if md.get('SECID') == secid:
+                        price = md.get('LAST') or md.get('PREVPRICE') or 0
+                        if price:
+                            break
+                
+                if price:
+                    break
+            except:
                 continue
-            
-            md = next((m for m in marketdata if m.get('SECID') == ticker), {})
-            
-            lot_size = sec.get('LOTSIZE') or md.get('LOTSIZE') or 1
-            last_price = md.get('LAST') or md.get('LASTPRICE') or sec.get('PREVPRICE') or 0
-            
-            result[ticker] = {
-                'lot': int(lot_size) if lot_size else 1,
-                'price': float(last_price) if last_price else 0,
-                'board': board,
-                'name': sec.get('SHORTNAME', ''),
-                'isin': sec.get('ISIN', ''),
-                'facevalue': sec.get('FACEVALUE', 0),
-            }
-        
-        if len(marketdata) < params['limit']:
-            break
-        start += params['limit']
-        time.sleep(0.1)
     
-    return result
+    info['price'] = float(price) if price else 0
+    info['lot'] = int(lot) if lot else 1
+    
+    return info if info.get('name') else None
 
-def fetch_bond_data(board='TQOB'):
-    """Fetch bond data including maturity and coupon info."""
-    url = f"{BASE_URL}/engines/stock/markets/bonds/boards/{board}/securities.json"
-    params = {'iss.meta': 'off', 'limit': 500}
-    
-    result = {}
-    start = 0
-    
-    while True:
-        try:
-            resp = requests.get(url, params={**params, 'start': start}, timeout=15)
-            data = resp.json()
-        except Exception as e:
-            print(f"MOEX API error: {e}")
-            break
-        
-        md_raw = data.get('marketdata', {})
-        sec_raw = data.get('securities', {})
-        
-        marketdata = _parse_iss_response(md_raw)
-        securities = _parse_iss_response(sec_raw)
-        
-        if not marketdata:
-            break
-        
-        for sec in securities:
-            ticker = sec.get('SECID', '')
-            if not ticker:
-                continue
-            
-            md = next((m for m in marketdata if m.get('SECID') == ticker), {})
-            
-            last_price = md.get('LAST') or md.get('LASTPRICE') or sec.get('PREVPRICE') or 0
-            coupon = sec.get('COUPONVALUE') or md.get('COUPONVALUE') or 0
-            maturity = sec.get('MATDATE') or ''
-            yield_pct = sec.get('YIELDCLOSE') or md.get('YIELDCLOSE') or 0
-            
-            result[ticker] = {
-                'lot': int(sec.get('LOTSIZE', 1) or 1),
-                'price': float(last_price) if last_price else 0,
-                'board': board,
-                'name': sec.get('SHORTNAME', ''),
-                'isin': sec.get('ISIN', ''),
-                'facevalue': sec.get('FACEVALUE', 0),
-                'coupon': float(coupon) if coupon else 0,
-                'maturity': maturity,
-                'yield': float(yield_pct) if yield_pct else 0,
-                'accrued': md.get('ACCRUEDINT', 0),
-            }
-        
-        if len(marketdata) < params['limit']:
-            break
-        start += params['limit']
-        time.sleep(0.2)
-    
-    return result
-
-STOCK_BOARDS = ['TQBR', 'TQPI', 'MTQR', 'FQBR', 'TQTF']
-BOND_BOARDS = ['TQCB', 'TQOB', 'TQRD', 'EQOB', 'TQIR']
-ALL_BOARDS = ['TQCB', 'TQBR', 'EQOB', 'TQIR', 'TQRD', 'TQOB', 'FQBR', 'TQTF', 'TQPI', 'MTQR']
-
-def refresh_instruments(boards=None):
-    """Refresh instrument cache from MOEX, trying multiple boards."""
-    if boards is None:
-        boards = ALL_BOARDS
-    
+def refresh_instruments():
+    """Refresh instrument cache - only instruments from CSV files."""
     cache = _load_cache()
     cache['updated'] = time.time()
     
-    for board in boards:
-        try:
-            if board in STOCK_BOARDS:
-                data = fetch_stock_data(board)
-            else:
-                data = fetch_bond_data(board)
-            
-            # Only update if new data has price, or entry doesn't exist yet
-            for ticker, info in data.items():
-                if ticker not in cache:
-                    cache[ticker] = info
-                elif info.get('price', 0) > 0:
-                    cache[ticker] = info
-                elif info.get('lot', 0) > 0 and cache[ticker].get('lot', 0) == 0:
-                    cache[ticker]['lot'] = info['lot']
-        except Exception as e:
-            print(f"Error fetching board {board}: {e}")
-            continue
+    isins = get_all_isins_from_csv()
+    print(f"Found {len(isins)} instruments in CSV files")
+    
+    for i, isin in enumerate(isins):
+        if isin in cache and cache[isin].get('price', 0) > 0:
+            continue  # Skip if already have price
+        
+        print(f"  [{i+1}/{len(isins)}] Fetching {isin}...", end=' ')
+        data = fetch_instrument_data(isin)
+        if data:
+            cache[isin] = data
+            print(f"OK - {data.get('name', '')} price={data.get('price', 0)}")
+        else:
+            print("not found")
+        
+        time.sleep(0.1)  # Rate limit
     
     _save_cache(cache)
     return cache
@@ -175,7 +168,6 @@ def get_instrument(isin_or_ticker):
     """Get instrument data from cache."""
     cache = _load_cache()
     
-    # Check if cache is expired
     if time.time() - cache.get('updated', 0) > CACHE_TTL:
         return None
     
