@@ -59,10 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="sum-cell" data-isin="${order.isin}">${sum > 0 ? fmt(sum) : '-'}</td>
                     <td>
                         <button class="btn-toggle ${order.enabled ? 'btn-enabled' : 'btn-disabled'}" data-isin="${order.isin}">${order.enabled ? 'Выкл' : 'Вкл'}</button>
-                        <button class="btn-save" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}>Сохранить</button>
+                        <button class="btn-save btn-hidden" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}>Сохранить</button>
+                        <button class="btn-cancel btn-hidden" data-isin="${order.isin}">Отмена</button>
                     </td>
                 </tr>`;
             }).join('');
+            
+            // Store original values for cancel
+            document.querySelectorAll('#orders-table tr').forEach(row => {
+                const qtyInput = row.querySelector('[data-field="qty"]');
+                const priceInput = row.querySelector('[data-field="price"]');
+                if (qtyInput) row.dataset.origQty = qtyInput.value;
+                if (priceInput) row.dataset.origPrice = priceInput.value;
+            });
             
             // Add event listeners
             document.querySelectorAll('.btn-toggle').forEach(btn => {
@@ -71,6 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             document.querySelectorAll('.btn-save').forEach(btn => {
                 btn.addEventListener('click', () => saveOrder(btn.dataset.isin));
+            });
+            
+            document.querySelectorAll('.btn-cancel').forEach(btn => {
+                btn.addEventListener('click', () => cancelEdit(btn.dataset.isin));
             });
             
             // Dynamic recalculation on input change
@@ -82,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const priceInput = row.querySelector('[data-field="price"]');
                     const sumCell = row.querySelector('.sum-cell');
                     const saveBtn = row.querySelector('.btn-save');
+                    const cancelBtn = row.querySelector('.btn-cancel');
                     
                     const qty = parseInt(qtyInput.value) || 0;
                     const price = parseFloat(priceInput.value) || 0;
@@ -98,13 +112,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Mark as edited
                     row.classList.add('edited');
                     saveBtn.classList.add('btn-edited');
-                    saveBtn.disabled = false;
+                    saveBtn.classList.remove('btn-hidden');
+                    cancelBtn.classList.remove('btn-hidden');
                 });
             });
         } catch (error) {
             console.error('Error loading orders:', error);
         }
     }
+    
+    // Web log
+    const webLogEntries = document.getElementById('web-log-entries');
+    const clearLogBtn = document.getElementById('clear-log');
+    
+    function webLog(msg, level = 'info') {
+        const time = new Date().toLocaleTimeString('ru-RU');
+        const entry = document.createElement('div');
+        entry.className = `log-entry log-${level}`;
+        entry.innerHTML = `<span class="log-time">${time}</span><span class="log-msg">${msg}</span>`;
+        webLogEntries.appendChild(entry);
+        webLogEntries.scrollTop = webLogEntries.scrollHeight;
+    }
+    
+    clearLogBtn.addEventListener('click', () => { webLogEntries.innerHTML = ''; });
     
     async function toggleOrder(isin) {
         const broker = brokerSelect.value;
@@ -116,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({ type })
         });
         
+        webLog(`Переключено: ${isin}`, 'info');
         loadOrders();
     }
     
@@ -132,10 +163,23 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({ type, qty, price })
         });
         
-        row.classList.remove('edited');
-        row.querySelector('.btn-save').classList.remove('btn-edited');
-        
+        webLog(`Сохранено: ${isin} — qty=${qty}, price=${price}`, 'success');
         loadOrders();
+    }
+    
+    function cancelEdit(isin) {
+        const row = document.querySelector(`[data-isin="${isin}"]`).closest('tr');
+        row.querySelector('[data-field="qty"]').value = row.dataset.origQty;
+        row.querySelector('[data-field="price"]').value = row.dataset.origPrice;
+        row.classList.remove('edited');
+        row.querySelector('.btn-save').classList.add('btn-hidden');
+        row.querySelector('.btn-save').classList.remove('btn-edited');
+        row.querySelector('.btn-cancel').classList.add('btn-hidden');
+        
+        // Recalculate sum
+        row.querySelector('[data-field="price"]').dispatchEvent(new Event('input'));
+        webLog(`Отменено: ${isin}`, 'info');
+    }
     }
     
     refreshBtn.addEventListener('click', loadOrders);
