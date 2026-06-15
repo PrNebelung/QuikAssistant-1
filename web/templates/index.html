@@ -2,9 +2,73 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuikAssistant</title>
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <h1>QuikAssistant Web Interface</h1>
+    <header>
+        <h1>QuikAssistant</h1>
+        <nav>
+            <button class="tab active" data-tab="orders">Заявки</button>
+            <button class="tab" data-tab="dashboard">Дашборд</button>
+            <button class="tab" data-tab="logs">Логи</button>
+            <button class="tab" data-tab="control">Управление</button>
+        </nav>
+    </header>
+    
+    <main>
+        <div id="orders" class="tab-content active">
+            <div class="controls">
+                <select id="broker-select">
+                    <option value="VTB">VTB</option>
+                    <option value="FINAM">FINAM</option>
+                    <option value="PSB">PSB</option>
+                </select>
+                <select id="file-type">
+                    <option value="buy">Покупка</option>
+                    <option value="buy_edge">Покупка (Edge)</option>
+                    <option value="buy_bonds">Облигации</option>
+                    <option value="sell">Продажа</option>
+                </select>
+                <button id="refresh-btn">Обновить</button>
+            </div>
+            <table id="orders-table">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>ISIN</th>
+                        <th>Сторона</th>
+                        <th>Кол-во</th>
+                        <th>Цена</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <div id="dashboard" class="tab-content">
+            <p>Дашборд (в разработке)</p>
+        </div>
+        
+        <div id="logs" class="tab-content">
+            <div class="controls">
+                <select id="log-broker">
+                    <option value="VTB">VTB</option>
+                    <option value="FINAM">FINAM</option>
+                    <option value="PSB">PSB</option>
+                </select>
+                <button id="refresh-logs">Обновить</button>
+            </div>
+            <pre id="log-output"></pre>
+        </div>
+        
+        <div id="control" class="tab-content">
+            <p>Управление (в разработке)</p>
+        </div>
+    </main>
+    
+    <script src="/static/js/app.js"></script>
 </body>
 </html>

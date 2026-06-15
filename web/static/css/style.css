@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #1a1a2e;
+    color: #eee;
+}
+
+header {
+    background: #16213e;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #0f3460;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+nav {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tab {
+    background: #0f3460;
+    color: #eee;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.tab:hover {
+    background: #1a4a8a;
+}
+
+.tab.active {
+    background: #e94560;
+}
+
+main {
+    padding: 2rem;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+select, button {
+    padding: 0.5rem 1rem;
+    border: 1px solid #0f3460;
+    border-radius: 4px;
+    background: #16213e;
+    color: #eee;
+}
+
+button {
+    cursor: pointer;
+    background: #0f3460;
+}
+
+button:hover {
+    background: #1a4a8a;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #0f3460;
+}
+
+th {
+    background: #16213e;
+    font-weight: 600;
+}
+
+tr:hover {
+    background: #16213e;
+}
+
+.disabled {
+    opacity: 0.5;
+}
+
+pre {
+    background: #16213e;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.edit-input {
+    width: 80px;
+    padding: 0.25rem;
+    background: #0f3460;
+    border: 1px solid #1a4a8a;
+    color: #eee;
+    border-radius: 2px;
+}
+
+.btn-toggle {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
