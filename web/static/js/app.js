@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const lot = inst.lot || 1;
                 const price = parseFloat(order.price) || 0;
                 const qty = parseInt(order.qty) || 0;
-                const sum = price * qty;
+                const sum = price * qty * lot;
                 
                 return `
                 <tr class="${order.enabled ? '' : 'disabled'}">
