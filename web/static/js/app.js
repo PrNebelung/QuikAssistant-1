@@ -53,10 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${order.isin}</td>
                     <td>${order.side === 'B' ? 'Покупка' : 'Продажа'}</td>
                     <td class="lot-cell">${lot}</td>
-                    <td><input class="edit-input" type="number" value="${order.qty}" data-field="qty" ${order.enabled ? '' : 'disabled'}></td>
-                    <td><input class="edit-input" type="number" step="0.01" value="${order.price}" data-field="price" ${order.enabled ? '' : 'disabled'}></td>
+                    <td><input class="edit-input" type="number" value="${order.qty}" data-field="qty" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
+                    <td><input class="edit-input" type="number" step="0.01" value="${order.price}" data-field="price" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
                     <td class="current-price">${currentPrice > 0 ? currentPrice : '-'} ${currentPrice > 0 ? `<span class="${diffClass}">(${diff}%)</span>` : ''}</td>
-                    <td class="sum-cell">${sum > 0 ? fmt(sum) : '-'}</td>
+                    <td class="sum-cell" data-isin="${order.isin}">${sum > 0 ? fmt(sum) : '-'}</td>
                     <td>
                         <button class="btn-toggle ${order.enabled ? 'btn-enabled' : 'btn-disabled'}" data-isin="${order.isin}">${order.enabled ? 'Выкл' : 'Вкл'}</button>
                         <button class="btn-save" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}>Сохранить</button>
@@ -71,6 +71,35 @@ document.addEventListener('DOMContentLoaded', () => {
             
             document.querySelectorAll('.btn-save').forEach(btn => {
                 btn.addEventListener('click', () => saveOrder(btn.dataset.isin));
+            });
+            
+            // Dynamic recalculation on input change
+            document.querySelectorAll('#orders-table .edit-input').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const isin = e.target.dataset.isin;
+                    const row = e.target.closest('tr');
+                    const qtyInput = row.querySelector('[data-field="qty"]');
+                    const priceInput = row.querySelector('[data-field="price"]');
+                    const sumCell = row.querySelector('.sum-cell');
+                    const saveBtn = row.querySelector('.btn-save');
+                    
+                    const qty = parseInt(qtyInput.value) || 0;
+                    const price = parseFloat(priceInput.value) || 0;
+                    
+                    const inst = instrumentsCache[isin] || {};
+                    const lot = inst.lot || 1;
+                    const facevalue = inst.facevalue || 0;
+                    const isBond = isin.startsWith('SU') || isin.startsWith('RU000A');
+                    const actualPrice = isBond && facevalue ? facevalue * (price / 100) : price;
+                    const sum = actualPrice * qty * lot;
+                    
+                    sumCell.textContent = sum > 0 ? fmt(sum) : '-';
+                    
+                    // Mark as edited
+                    row.classList.add('edited');
+                    saveBtn.classList.add('btn-edited');
+                    saveBtn.disabled = false;
+                });
             });
         } catch (error) {
             console.error('Error loading orders:', error);
@@ -102,6 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type, qty, price })
         });
+        
+        row.classList.remove('edited');
+        row.querySelector('.btn-save').classList.remove('btn-edited');
         
         loadOrders();
     }

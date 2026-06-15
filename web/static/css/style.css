@@ -149,6 +149,25 @@ tr:hover {
 .current-price .positive { color: #4caf50; }
 .current-price .negative { color: #e94560; }
 
+.edited {
+    background: #1a3a1a !important;
+}
+
+.edited td {
+    border-bottom-color: #4caf50;
+}
+
+.btn-edited {
+    background: #ff9800 !important;
+    color: #fff;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
 pre {
     background: #16213e;
     padding: 1rem;
