@@ -1,19 +1,19 @@
--- Unit-пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ Order
--- пїЅпїЅпїЅпїЅпїЅпїЅ: lua Tests/run_tests.lua
+-- Unit-тесты для класса Order
+-- Запуск: lua Tests/run_tests.lua
 
--- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ UTF-8 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ Windows
+-- Отключаем UTF-8 вывод для корректной работы в Windows
 os.execute("chcp 65001 >nul 2>&1")
 
--- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ QUIK API
+-- Подмена для QUIK API
 dofile("Tests/quik_mock.lua")
 
--- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+-- Инициализация необходимых модулей
 dofile("Order.lua")
 dofile("QuikFunction.lua")
 dofile("TradeSave.lua")
 dofile("TableConstructor.lua")
 
--- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ N_SetLimitOrder пїЅпїЅ SubmittingOrders
+-- Мок для N_SetLimitOrder из SubmittingOrders
 _G.N_SetLimitOrder = function(clientAccountCode, clientCode, classCode, secCode, operation, price, quantity)
   table.insert(tables.orders, {
     sec_code = secCode,
@@ -32,7 +32,7 @@ _G.sleep = function(ms) end
 
 dofile("SubmittingOrders.lua")
 
--- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ require("Setting")
+-- Автоматическая загрузка зависимых модулей через require("Setting")
 VolumeOrderMax = 11000
 BondVolumeOrderMax = 7000
 VolumeOrderLimit = 200000
@@ -50,7 +50,7 @@ local function assert_eq(actual, expected, msg)
   else
     failed = failed + 1
     local err = string.format(
-      "FAIL: %s (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s)",
+      "FAIL: %s (ожидалось: %s, получено: %s)",
       msg or "",
       tostring(expected),
       tostring(actual)
@@ -65,7 +65,7 @@ local function assert_true(value, msg)
     passed = passed + 1
   else
     failed = failed + 1
-    local err = string.format("FAIL: %s (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: true, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s)", msg or "", tostring(value))
+    local err = string.format("FAIL: %s (ожидалось: true, получено: %s)", msg or "", tostring(value))
     table.insert(errors, err)
     print("  " .. err)
   end
@@ -76,7 +76,7 @@ local function assert_false(value, msg)
     passed = passed + 1
   else
     failed = failed + 1
-    local err = string.format("FAIL: %s (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: false, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: %s)", msg or "", tostring(value))
+    local err = string.format("FAIL: %s (ожидалось: false, получено: %s)", msg or "", tostring(value))
     table.insert(errors, err)
     print("  " .. err)
   end
@@ -88,72 +88,72 @@ local function test(name, func)
 end
 
 ---------------------------------------------
--- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ Order
+-- Тестирование класса Order
 ---------------------------------------------
-print("=== пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ Order ===")
+print("=== Тестирование класса Order ===")
 
 ClearSecurityInfoCache()
 test("SecurityCode", function()
   local order = Order:new("GAZP")
-  assert_eq(order.SecurityCode, "GAZP", "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(order.SecurityCode, "GAZP", "Код бумаги")
 end)
 
 ClearSecurityInfoCache()
-test("SecurityInfo пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SecurityInfo заполнен", function()
   local order = Order:new("GAZP")
   local expected = getSecurityInfo("TQBR", "GAZP")
-  assert_eq(order.SecurityInfo.name, expected.name, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(order.SecurityInfo.short_name, expected.short_name, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ")
-  assert_eq(order.SecurityInfo.code, "GAZP", "пїЅпїЅпїЅ")
+  assert_eq(order.SecurityInfo.name, expected.name, "Полное название")
+  assert_eq(order.SecurityInfo.short_name, expected.short_name, "Сокращенное название")
+  assert_eq(order.SecurityInfo.code, "GAZP", "Код")
   assert_eq(order.SecurityInfo.isin_code, "RU0007661625", "ISIN")
-  assert_eq(order.SecurityInfo.class_code, "TQBR", "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(order.SecurityInfo.face_value, 5, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(order.SecurityInfo.face_unit, "SUR", "пїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(order.SecurityInfo.scale, 2, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(order.SecurityInfo.min_price_step, 0.01, "пїЅпїЅпїЅ. пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ")
-  assert_eq(order.SecurityInfo.lot_size, 10, "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ")
+  assert_eq(order.SecurityInfo.class_code, "TQBR", "Класс бумаги")
+  assert_eq(order.SecurityInfo.face_value, 5, "Номинал")
+  assert_eq(order.SecurityInfo.face_unit, "SUR", "Валюта")
+  assert_eq(order.SecurityInfo.scale, 2, "Точность")
+  assert_eq(order.SecurityInfo.min_price_step, 0.01, "Мин. шаг цены")
+  assert_eq(order.SecurityInfo.lot_size, 10, "Размер лота")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("Не облигация", function()
   local order = Order:new("GAZP")
-  assert_true(order:IsBond() == false, "GAZP пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(order:IsBond() == false, "GAZP не облигация")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Buy пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", function()
+test("Установка Buy для акции", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
-  assert_eq(order.Operation, "B", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(order.Price, 200.00, "пїЅпїЅпїЅпїЅ")
-  assert_eq(order.Quantity, 100, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(order.Operation, "B", "Операция")
+  assert_eq(order.Price, 200.00, "Цена")
+  assert_eq(order.Quantity, 100, "Количество")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Sell", function()
+test("Установка Sell", function()
   local order = Order:new("GAZP")
   order:SetOperation("S", 250.00, 50)
-  assert_eq(order.Operation, "S", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(order.Price, 250.00, "пїЅпїЅпїЅпїЅ")
-  assert_eq(order.Quantity, 50, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(order.Operation, "S", "Операция")
+  assert_eq(order.Price, 250.00, "Цена")
+  assert_eq(order.Quantity, 50, "Количество")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ", function()
+test("ОФЗ - определение облигации", function()
   local order = Order:new("RU000A102RN7")
-  assert_eq(order.SecurityInfo.class_code, "TQOB", "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ TQOB")
-  assert_true(order:IsBond(), "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_true(order:IsOFZ(), "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ")
+  assert_eq(order.SecurityInfo.class_code, "TQOB", "Класс бумаги TQOB")
+  assert_true(order:IsBond(), "Определена облигация")
+  assert_true(order:IsOFZ(), "Определена ОФЗ")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("Облигация - номинал", function()
   local order = Order:new("RU000A102RN7")
-  assert_eq(order.SecurityInfo.face_value, 1000.00, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(order.SecurityInfo.face_value, 1000.00, "Номинал облигации")
 end)
 
 ClearSecurityInfoCache()
-test("SPB - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ", function()
+test("SPB - определение класса", function()
   local order = Order:new("ADBE_SPB")
 end)
 
@@ -161,9 +161,9 @@ ClearSecurityInfoCache()
 test("SetOperation", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
-  assert_eq(order.Operation, "B", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ B")
+  assert_eq(order.Operation, "B", "Операция B")
   order:SetOperation("S", 250.00, 50)
-  assert_eq(order.Operation, "S", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ S")
+  assert_eq(order.Operation, "S", "Операция S")
 end)
 
 ClearSecurityInfoCache()
@@ -171,14 +171,14 @@ test("SetQuantity", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   order:SetQuantity("B", 200.00, 200)
-  assert_true(order.Quantity > 0, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ > 0")
+  assert_true(order.Quantity > 0, "Количество > 0")
 end)
 
 ClearSecurityInfoCache()
 test("SetPriceMin", function()
   local order = Order:new("GAZP")
   order:SetPriceMin("B")
-  assert_true(order.Price > 0, "пїЅпїЅпїЅпїЅ > 0 пїЅпїЅпїЅпїЅпїЅ SetPriceMin")
+  assert_true(order.Price > 0, "Цена > 0 после SetPriceMin")
 end)
 
 ClearSecurityInfoCache()
@@ -186,14 +186,14 @@ test("Clear", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   order:Clear()
-  assert_eq(order.Operation, "", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Clear")
+  assert_eq(order.Operation, "", "Операция после Clear")
 end)
 
 ClearSecurityInfoCache()
 test("FormatPrice", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.123, 100)
-  assert_eq(order:FormatPrice(), "200.12", "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ GAZP (scale=2)")
+  assert_eq(order:FormatPrice(), "200.12", "Формат цены GAZP (scale=2)")
 end)
 
 ClearSecurityInfoCache()
@@ -202,30 +202,30 @@ test("GetPriceRound", function()
   order:SetOperation("B", 200.123, 100)
   order:SetPriceMin("B")
   order:GetPriceRound()
-  assert_true(order.Price > 0, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ > 0")
+  assert_true(order.Price > 0, "Минимальная цена > 0")
 end)
 
 ClearSecurityInfoCache()
 test("IsExceptionFromLimitActuation", function()
   local order = Order:new("GAZP")
-  assert_true(order:IsExceptionFromLimitActuation(), "GAZP - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(order:IsExceptionFromLimitActuation(), "GAZP - исключение")
   local order2 = Order:new("LKOH")
-  assert_false(order2:IsExceptionFromLimitActuation(), "LKOH - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_false(order2:IsExceptionFromLimitActuation(), "LKOH - не исключение")
 end)
 
 ClearSecurityInfoCache()
-test("GetVolume пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ", function()
+test("GetVolume для акции", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
-  assert_true(order:GetVolume() > 0, "пїЅпїЅпїЅпїЅпїЅ > 0")
+  assert_true(order:GetVolume() > 0, "Объем > 0")
 end)
 
 ClearSecurityInfoCache()
 test("GetPriceInCurrency", function()
   local order = Order:new("GAZP")
-  assert_eq(order:GetPriceInCurrency(100), 100, "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(order:GetPriceInCurrency(100), 100, "Цена акции в валюте")
   local bond = Order:new("RU000A102RN7")
-  assert_eq(bond:GetPriceInCurrency(100), 1000, "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(bond:GetPriceInCurrency(100), 1000, "Цена облигации в валюте")
 end)
 
 ClearSecurityInfoCache()
@@ -233,10 +233,10 @@ test("IsBuy/IsSell", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   assert_true(order:IsBuy(), "IsBuy")
-  assert_false(order:IsSell(), "пїЅпїЅ IsSell")
+  assert_false(order:IsSell(), "Не IsSell")
   order:SetOperation("S", 250.00, 50)
   assert_true(order:IsSell(), "IsSell")
-  assert_false(order:IsBuy(), "пїЅпїЅ IsBuy")
+  assert_false(order:IsBuy(), "Не IsBuy")
 end)
 
 ClearSecurityInfoCache()
@@ -244,42 +244,42 @@ test("Print", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   local str = order:Print()
-  assert_true(str ~= nil and #str > 0, "Print пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(str ~= nil and #str > 0, "Print возвращает строку")
 end)
 
 ---------------------------------------------
--- Edge Cases пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+-- Edge Cases и дополнительные тесты
 ---------------------------------------------
-print("\n=== Edge Cases пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ ===")
+print("\n=== Edge Cases и дополнительные тесты ===")
 
 ClearSecurityInfoCache()
-test("Order:new пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("Order:new с несуществующей бумагой", function()
   local order = Order:new("ZZZZZ")
-  assert_true(order == nil, "nil пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(order == nil, "nil для несуществующей бумаги")
 end)
 
 ClearSecurityInfoCache()
-test("SetOperation пїЅ price = 0", function()
+test("SetOperation с price = 0", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 0, 100)
-  assert_true(order.Price > 0, "пїЅпїЅпїЅпїЅ becomes min_price_step")
+  assert_true(order.Price > 0, "price becomes min_price_step")
 end)
 
 ClearSecurityInfoCache()
-test("SetQuantity пїЅ nil пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SetQuantity с nil количеством", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   order:SetQuantity("B", nil, 200)
-  assert_true(order.Quantity >= 0, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ >= 0")
+  assert_true(order.Quantity >= 0, "Количество >= 0")
   order:SetQuantity("B", 200.00, nil)
-  assert_true(order.Quantity >= 0, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ >= 0 пїЅпїЅпїЅ nil quantityMax")
+  assert_true(order.Quantity >= 0, "Количество >= 0 для nil quantityMax")
 end)
 
 ClearSecurityInfoCache()
-test("SetQuantity пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SetQuantity для продажи", function()
   local order = Order:new("RU000A102RN7")
   order:SetOperation("B", 95.00, 1)
-  assert_true(order.Quantity > 0, "пїЅпїЅпїЅпїЅпїЅ > 0 пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(order.Quantity > 0, "Объем > 0 для продажи")
 end)
 
 ClearSecurityInfoCache()
@@ -288,150 +288,150 @@ test("GetPriceRound edge cases", function()
   order:SetOperation("B", 200.123, 100)
   order:SetPriceMin("B")
   order:GetPriceRound()
-  assert_true(order.Price > 0, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ > 0")
+  assert_true(order.Price > 0, "Минимальная цена > 0")
 end)
 
 ClearSecurityInfoCache()
 test("GetVolume edge cases", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 0, 100)
-  assert_true(order:GetVolume() > 0, "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ")
+  assert_true(order:GetVolume() > 0, "Объем для нулевой суммы")
   order:Clear()
   order:SetOperation("B", 200.00, 0)
-  assert_true(order:GetVolume() >= 0, "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(order:GetVolume() >= 0, "Объем для нулевого количества")
 end)
 
 ClearSecurityInfoCache()
 test("FormatPrice edge cases", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 0, 100)
-  assert_eq(order:FormatPrice(), "0.01", "пїЅпїЅпїЅпїЅ = min_price_step")
+  assert_eq(order:FormatPrice(), "0.01", "Цена = min_price_step")
 end)
 
 ClearSecurityInfoCache()
 test("FormatQuantity edge cases", function()
   local order = Order:new("GAZP")
-  assert_eq(order:FormatQuantity(0), "0", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ = 0")
-  assert_eq(order:FormatQuantity(4), "0.0000", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ = 1 пїЅпїЅпїЅ scale 4")
+  assert_eq(order:FormatQuantity(0), "0", "Количество = 0")
+  assert_eq(order:FormatQuantity(4), "0.0000", "Количество = 1 для scale 4")
 end)
 
 ClearSecurityInfoCache()
-test("Clear пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("Clear сохраняет информацию", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   order:Clear()
-  assert_eq(order.SecurityInfo.code, "GAZP", "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Clear")
+  assert_eq(order.SecurityInfo.code, "GAZP", "Код бумаги после Clear")
 end)
 
 ClearSecurityInfoCache()
-test("IsBuy/IsSell пїЅпїЅпїЅ nil пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("IsBuy/IsSell для nil операции", function()
   local order = Order:new("GAZP")
-  assert_false(order:IsBuy(), "IsBuy пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_false(order:IsBuy(), "IsBuy для пустой операции")
 end)
 
 ---------------------------------------------
--- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ edge cases
+-- Дополнительные edge cases
 ---------------------------------------------
-print("\n=== пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ edge cases ===")
+print("\n=== Дополнительные edge cases ===")
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ GAZP", function()
+test("Копирование объекта GAZP", function()
   local order1 = Order:new("GAZP")
   local order2 = Order:new("GAZP")
-  assert_eq(order1.SecurityCode, order2.SecurityCode, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ")
+  assert_eq(order1.SecurityCode, order2.SecurityCode, "Одинаковый код")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ", function()
+test("Последовательные операции - акция", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
-  assert_true(order:IsBuy(), "Buy пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(order:IsBuy(), "Buy определена")
   order:SetOperation("S", 250.00, 50)
-  assert_true(order:IsSell(), "Sell пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(order:IsSell(), "Sell определена")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("Проверка после создания - пустой", function()
   local order = Order:new("GAZP")
-  assert_eq(order.Operation, "", "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(order.Quantity, 0, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(order.Price, 0, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ")
+  assert_eq(order.Operation, "", "Пустая операция")
+  assert_eq(order.Quantity, 0, "Нулевое количество")
+  assert_eq(order.Price, 0, "Нулевая цена")
 end)
 
 ClearSecurityInfoCache()
-test("SPB пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SPB класс бумаги определен", function()
   local order = Order:new("ADBE_SPB")
-  assert_eq(order.SecurityInfo.class_code, "SPBXM", "пїЅпїЅпїЅпїЅпїЅ SPBXM")
+  assert_eq(order.SecurityInfo.class_code, "SPBXM", "Класс SPBXM")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅ = 0.01 * 100 * 10", function()
+test("Объем = 0.01 * 100 * 10", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 0, 100)
-  assert_eq(order:GetVolume(), 10, "пїЅпїЅпїЅпїЅпїЅ = 0.01 * 100 * 10 = 10")
+  assert_eq(order:GetVolume(), 10, "Объем = 0.01 * 100 * 10 = 10")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ GAZP", function()
+test("Форматирование цены GAZP", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.123, 100)
-  assert_eq(order:FormatPrice(), "200.12", "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ")
+  assert_eq(order:FormatPrice(), "200.12", "Формат цены")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("Форматирование количества", function()
   local order = Order:new("GAZP")
-  assert_eq(order:FormatQuantity(4), "0.0000", "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(order:FormatQuantity(4), "0.0000", "Формат количества")
 end)
 
 ClearSecurityInfoCache()
-test("Print пїЅ SetPriceMin", function()
+test("Print и SetPriceMin", function()
   local order = Order:new("GAZP")
   order:SetPriceMin("B")
   local str = order:Print()
-  assert_true(str ~= nil and #str > 0, "Print пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(str ~= nil and #str > 0, "Print работает")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ", function()
+test("Полная информация облигации - ОФЗ", function()
   local order = Order:new("RU000A102RN7")
-  assert_true(order:IsBond(), "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_true(order:IsOFZ(), "пїЅпїЅпїЅ")
-  assert_eq(order.SecurityInfo.face_value, 1000.00, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(order:IsBond(), "Облигация")
+  assert_true(order:IsOFZ(), "ОФЗ")
+  assert_eq(order.SecurityInfo.face_value, 1000.00, "Номинал")
 end)
 
 ClearSecurityInfoCache()
-test("IsExceptionFromLimitActuation - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("IsExceptionFromLimitActuation - список бумаг", function()
   local order = Order:new("GAZP")
-  assert_true(order:IsExceptionFromLimitActuation(), "GAZP - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(order:IsExceptionFromLimitActuation(), "GAZP - исключение")
 end)
 
 ClearSecurityInfoCache()
-test("GetPriceRound - пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ", function()
+test("GetPriceRound - цена кратна шагу", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   order:SetPriceMin("B")
   order:GetPriceRound()
-  assert_true(order.Price > 0, "пїЅпїЅпїЅпїЅ = n * step пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(order.Price > 0, "Цена = n * step после округления")
 end)
 
 ClearSecurityInfoCache()
-test("GetVolume - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ edge cases", function()
+test("GetVolume - дополнительные edge cases", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 1)
-  assert_true(order:GetVolume() > 0, "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1")
+  assert_true(order:GetVolume() > 0, "Объем для количества 1")
 end)
 
 ClearSecurityInfoCache()
-test("SetQuantity - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SetQuantity - корректное количество", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   order:SetQuantity("B", 200.00, 200)
-  assert_true(order.Quantity > 0, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ > 0")
+  assert_true(order.Quantity > 0, "Количество > 0")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("Инициализация модуля", function()
   local order = Order:new("GAZP")
   assert_eq(order:FormatQuantity(4), "0.0000", "FormatQuantity")
   local order2 = Order:new("GAZP")
@@ -440,30 +440,30 @@ test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅп
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("Корректность структуры данных", function()
   local order = Order:new("GAZP")
-  assert_true(order.SecurityInfo ~= nil, "SecurityInfo пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(order.SecurityInfo ~= nil, "SecurityInfo существует")
 end)
 
 ---------------------------------------------
--- QuikFunction пїЅпїЅпїЅпїЅпїЅ
+-- QuikFunction тесты
 ---------------------------------------------
-print("\n=== QuikFunction пїЅпїЅпїЅпїЅпїЅ ===")
+print("\n=== QuikFunction тесты ===")
 
 test("GetOperation, IsOrderExecuted, FindOrder", function()
   assert_eq(GetOperation(FLAG_ACTIVE | FLAG_SELL), "S", "GetOperation sell")
   assert_eq(GetOperation(FLAG_ACTIVE), "B", "GetOperation buy")
-  assert_false(IsOrderExecuted(FLAG_EXECUTED), "IsOrderExecuted пїЅпїЅпїЅ executed")
-  assert_false(IsOrderExecuted(FLAG_ACTIVE), "IsOrderExecuted пїЅпїЅпїЅ active")
+  assert_false(IsOrderExecuted(FLAG_EXECUTED), "IsOrderExecuted для executed")
+  assert_false(IsOrderExecuted(FLAG_ACTIVE), "IsOrderExecuted для active")
 end)
 
-test("TradeSave - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("TradeSave - корректная работа", function()
   assert_true((FLAG_EXECUTED & FLAG_EXECUTED) > 0, "FLAG_EXECUTED")
   assert_true((FLAG_ACTIVE & FLAG_ACTIVE) > 0, "FLAG_ACTIVE")
   assert_true((FLAG_SELL & FLAG_SELL) > 0, "FLAG_SELL")
 end)
 
-test("TableConstructor пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("TableConstructor работает", function()
   assert_eq(comma_value(1000), "1 000", "comma_value")
   assert_eq(round(1.5), 2, "round")
 end)
@@ -477,27 +477,27 @@ end)
 test("GetOrderVolumeMax", function()
   local order = Order:new("GAZP")
   local vol = GetOrderVolumeMax(order, 200)
-  assert_true(vol > 0, "пїЅпїЅпїЅпїЅпїЅ > 0")
+  assert_true(vol > 0, "Объем > 0")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ", function()
+test("Количество - акция", function()
   local order = Order:new("RU000A102RN7")
   local vol = GetOrderVolumeMax(order, 90)
-  assert_true(vol > 0, "пїЅпїЅпїЅпїЅпїЅ > 0")
+  assert_true(vol > 0, "Объем > 0")
 end)
 
 ClearSecurityInfoCache()
-test("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ", function()
+test("Максимальное количество - акция", function()
   local order = Order:new("ADBE_SPB")
   local vol = GetOrderVolumeMax(order, 400)
-  assert_true(vol > 0, "пїЅпїЅпїЅпїЅпїЅ > 0")
+  assert_true(vol > 0, "Объем > 0")
 end)
 
 ---------------------------------------------
--- SubmittingOrders пїЅпїЅпїЅпїЅпїЅ
+-- SubmitingOrders тесты
 ---------------------------------------------
-print("\n=== SubmittingOrders пїЅпїЅпїЅпїЅпїЅ ===")
+print("\n=== SubmitingOrders тесты ===")
 
 local function resetSendOrders()
   sendOrders = {}
@@ -516,75 +516,75 @@ test("GetDedupKey", function()
 end)
 
 ClearSecurityInfoCache()
-test("IsSendOrder - пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("IsSendOrder - не отправлен", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
-  assert_eq(IsSendOrder(order), false, "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(IsSendOrder(order), false, "Нет в списке отправленных")
 end)
 
 ClearSecurityInfoCache()
-test("IsSendOrder - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("IsSendOrder - отправлен", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   sendOrdersSet[order:GetDedupKey()] = true
-  assert_eq(IsSendOrder(order), true, "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(IsSendOrder(order), true, "Есть в списке отправленных")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SubmitOrders - корректная отправка ордера", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.sent, 1, "1 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(stats.rejected, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(stats.duplicate, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(stats.sent, 1, "1 ордер отправлен")
+  assert_eq(stats.rejected, 0, "0 отклонено")
+  assert_eq(stats.duplicate, 0, "0 дубликатов")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ IsSendOrder", function()
+test("SubmitOrders - проверка по IsSendOrder", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   SubmitOrders({ order })
   local stats = SubmitOrders({ order })
-  assert_eq(stats.sent, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(stats.duplicate, 1, "1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(stats.sent, 0, "0 ордеров отправлено")
+  assert_eq(stats.duplicate, 1, "1 дубликат")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ IsOrderExists", function()
+test("SubmitOrders - проверка по IsOrderExists", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   addTestOrder("GAZP", "TQBR", FLAG_ACTIVE, 1, 100, 200.00, 100, 0)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.sent, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅ пїЅ QUIK")
-  assert_eq(stats.duplicate, 1, "1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(stats.sent, 0, "0 отправлено - есть в QUIK")
+  assert_eq(stats.duplicate, 1, "1 дубликат")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: QUIK > sendOrders", function()
+test("SubmitOrders - приоритет: QUIK > sendOrders", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   addTestOrder("GAZP", "TQBR", FLAG_ACTIVE, 1, 100, 200.00, 100, 0)
   sendOrdersSet[order:GetDedupKey()] = true
   local stats = SubmitOrders({ order })
-  assert_eq(stats.duplicate, 1, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ")
-  assert_eq(stats.sent, 0, "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(stats.duplicate, 1, "Дубликат обнаружен первым")
+  assert_eq(stats.sent, 0, "Не отправлено")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ CheckOrder", function()
+test("SubmitOrders - проверка CheckOrder", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 0, 0)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.rejected, 1, "1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(stats.sent, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(stats.rejected, 1, "1 отклонено")
+  assert_eq(stats.sent, 0, "0 отправлено")
 end)
 
 ClearSecurityInfoCache()
@@ -613,19 +613,19 @@ test("CheckOrder - UseFileParams + price below PRICEMIN", function()
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SubmitOrders - отправка списка", function()
   resetSendOrders()
   local order1 = Order:new("GAZP")
   order1:SetOperation("B", 200.00, 100)
   local order2 = Order:new("LKOH")
   order2:SetOperation("B", 5000.00, 10)
   local stats = SubmitOrders({ order1, order2 })
-  assert_eq(stats.sent, 2, "2 пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(stats.rejected, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(stats.sent, 2, "2 ордера отправлены")
+  assert_eq(stats.rejected, 0, "0 отклонено")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SubmitOrders - смешанный список", function()
   resetSendOrders()
   local order1 = Order:new("GAZP")
   order1:SetOperation("B", 200.00, 100)
@@ -634,23 +634,23 @@ test("SubmitOrders - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", function()
   local order3 = Order:new("LKOH")
   order3:SetOperation("B", 0, 0)
   local stats = SubmitOrders({ order1, order2, order3 })
-  assert_eq(stats.sent, 1, "1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(stats.rejected, 1, "1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(stats.duplicate, 1, "1 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(stats.sent, 1, "1 отправлено")
+  assert_eq(stats.rejected, 1, "1 отклонено")
+  assert_eq(stats.duplicate, 1, "1 дубликат")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - sendOrdersSet пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SubmitOrders - sendOrdersSet заполнен", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   SubmitOrders({ order })
-  assert_eq(sendOrdersSet[order:GetDedupKey()], true, "пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(#sendOrders, 1, "1 пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ sendOrders")
+  assert_eq(sendOrdersSet[order:GetDedupKey()], true, "Есть в списке")
+  assert_eq(#sendOrders, 1, "1 в массиве sendOrders")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SubmitOrders - пустой список", function()
   resetSendOrders()
   local savedGetParamEx = getParamEx
   getParamEx = function(class_code, sec_code, param)
@@ -668,34 +668,34 @@ test("SubmitOrders - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
   local order = Order:new("RU000A102RN7")
   order:SetOperation("B", 95.00, 1)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.sent, 1, "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(stats.sent, 1, "Ордер отправлен корректно")
   getParamEx = savedGetParamEx
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SubmitOrders - баг с дубликатом", function()
   resetSendOrders()
   addTestPosition("GAZP", 50, 250.00)
   local order = Order:new("GAZP")
   order:SetOperation("S", 200.00, 10)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.sent, 1, "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(stats.sent, 1, "Ордер отправлен один раз")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SubmitOrders - ошибка для несуществующего ордера", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("S", 200.00, 10)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.rejected, 1, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(stats.sent, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(stats.rejected, 1, "Отклонено - нет ордера")
+  assert_eq(stats.sent, 0, "0 отправлено")
 end)
 
 ---------------------------------------------
--- LoadOrdersFromFile пїЅпїЅпїЅпїЅпїЅ
+-- LoadOrdersFromFile тесты
 ---------------------------------------------
-print("\n=== LoadOrdersFromFile пїЅпїЅпїЅпїЅпїЅ ===")
+print("\n=== LoadOrdersFromFile тесты ===")
 
 local originalGetFromCSV = getFromCSV
 
@@ -710,88 +710,88 @@ local function restoreCSV()
 end
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ buy пїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - базовый buy файл", function()
   mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(orders[1].SecurityCode, "GAZP", "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(orders[1].Operation, "B", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(orders[1].Quantity, 100, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(orders[1].Price, 200.00, "пїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 ордер загружен")
+  assert_eq(orders[1].SecurityCode, "GAZP", "Код бумаги")
+  assert_eq(orders[1].Operation, "B", "Операция")
+  assert_eq(orders[1].Quantity, 100, "Количество")
+  assert_eq(orders[1].Price, 200.00, "Цена")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - multiple ордеров", function()
   mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" }, { "Lukoil", "B", "LKOH", "10", "7000.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 2, "2 пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 2, "2 ордера загружены")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - облигации", function()
   mockCSV({
     { "-- header", "B", "GAZP", "100", "200.00" },
     { "Gazprom", "B", "GAZP", "100", "200.00" },
     { "-- footer", "B", "GAZP", "50", "250.00" },
   })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ (2 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)")
+  assert_eq(#orders, 1, "1 ордер (2 облигации отфильтрованы)")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - неизвестные бумаги", function()
   unknownSecurities = {}
   mockCSV({ { "Unknown", "B", "ZZZZZ", "100", "200.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ)")
-  assert_true(unknownSecurities["ZZZZZ"] ~= nil, "ZZZZZ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ unknownSecurities")
-  assert_eq(unknownSecurities["ZZZZZ"], "Unknown", "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 0, "0 ордеров (неизвестная бумага)")
+  assert_true(unknownSecurities["ZZZZZ"] ~= nil, "ZZZZZ добавлена в unknownSecurities")
+  assert_eq(unknownSecurities["ZZZZZ"], "Unknown", "Название бумаги по умолчанию")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅ CSV", function()
+test("LoadOrdersFromFile - пустой CSV", function()
   mockCSV({})
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ CSV")
+  assert_eq(#orders, 0, "0 ордеров в пустом CSV")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - sell пїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - sell файл", function()
   mockCSV({ { "Gazprom", "S", "GAZP", "50", "250.00" } })
   local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-  assert_eq(#orders, 1, "1 sell пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(orders[1].Operation, "S", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ S")
+  assert_eq(#orders, 1, "1 sell ордер загружен")
+  assert_eq(orders[1].Operation, "S", "Операция S")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - облигация", function()
   mockCSV({ { "OFZ", "B", "RU000A102RN7", "1", "95.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_true(orders[1]:IsBond(), "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 ордер облигация")
+  assert_true(orders[1]:IsBond(), "Облигация")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - edge пїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - edge файл", function()
   mockCSV({ { "Gazprom", "B", "GAZP", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders_Edge.csv")
-  assert_eq(#orders, 1, "1 edge пїЅпїЅпїЅпїЅпїЅ")
-  assert_true(orders[1].Quantity > 0, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 edge ордер")
+  assert_true(orders[1].Quantity > 0, "Количество рассчитано")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - edge пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - edge облигации", function()
   mockCSV({ { "OFZ", "B", "RU000A102RN7", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrdersBonds_Edge.csv")
-  assert_eq(#orders, 1, "1 edge пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 edge ордер облигации")
   restoreCSV()
 end)
 
@@ -799,7 +799,7 @@ ClearSecurityInfoCache()
 test("LoadOrdersFromFile - SPB edge", function()
   mockCSV({ { "Foreign", "B", "ADBE_SPB", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrdersSpb_Edge.csv")
-  assert_eq(#orders, 1, "1 SPB пїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 SPB ордер")
   restoreCSV()
 end)
 
@@ -807,12 +807,12 @@ ClearSecurityInfoCache()
 test("LoadOrdersFromFile - RmUSD edge", function()
   mockCSV({ { "Foreign", "B", "ADBE_SPB", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders_RmUSD_Edge.csv")
-  assert_eq(#orders, 1, "1 RmUSD пїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 RmUSD ордер")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - неизвестные бумаги", function()
   mockCSV({
     { "-- header", "B", "GAZP", "100", "200.00" },
     { "Gazprom", "B", "GAZP", "100", "200.00" },
@@ -821,22 +821,22 @@ test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ", func
     { "Gazprom2", "B", "GAZP", "200", "300.00" },
   })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 3, "3 пїЅпїЅпїЅпїЅпїЅпїЅ (2 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)")
+  assert_eq(#orders, 3, "3 ордера (2 неизвестные отфильтрованы)")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - SPB пїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - SPB файл", function()
   mockCSV({ { "Foreign", "B", "ADBE_SPB", "10", "400.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 SPB пїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 SPB ордер")
   restoreCSV()
 end)
 
 local originalGetParamEx = getParamEx
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - edge пїЅ priceMin=0 (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)", function()
+test("LoadOrdersFromFile - edge с priceMin=0 (пропуск)", function()
   getParamEx = function(class_code, sec_code, param)
     if param == "PRICEMIN" then
       return { result = "1", param_value = "0" }
@@ -854,26 +854,26 @@ test("LoadOrdersFromFile - edge пїЅ priceMin=0 (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)", functio
   end
   mockCSV({ { "Gazprom", "B", "GAZP", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders_Edge.csv")
-  assert_eq(#orders, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (priceMin=0, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)")
+  assert_eq(#orders, 0, "0 ордеров (priceMin=0, пропуск)")
   getParamEx = originalGetParamEx
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - edge пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - edge ордер с лимитом", function()
   local savedLimit = VolumeOrderLimit
   VolumeOrderLimit = 50000
   mockCSV({ { "Gazprom", "B", "GAZP", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders_Edge.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 ордер")
   local volume = orders[1]:GetVolume()
-  assert_true(volume <= VolumeOrderLimit, "пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_true(volume <= VolumeOrderLimit, "Объем в лимите")
   VolumeOrderLimit = savedLimit
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - edge пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ koeff", function()
+test("LoadOrdersFromFile - edge с большим koeff", function()
   getParamEx = function(class_code, sec_code, param)
     if param == "PRICEMIN" then
       return { result = "1", param_value = "100.0" }
@@ -891,14 +891,14 @@ test("LoadOrdersFromFile - edge пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ koeff", function()
   end
   mockCSV({ { "Gazprom", "B", "GAZP", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders_Edge.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ")
-  assert_true(orders[1].Quantity > 0, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ koeff")
+  assert_eq(#orders, 1, "1 ордер")
+  assert_true(orders[1].Quantity > 0, "Количество рассчитано с koeff")
   getParamEx = originalGetParamEx
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - edge пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - edge ордер с ограниченным количеством", function()
   local savedLimit = VolumeOrderLimit
   local savedMax = VolumeOrderMax
   VolumeOrderMax = 500000
@@ -920,9 +920,9 @@ test("LoadOrdersFromFile - edge пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅп
   end
   mockCSV({ { "Gazprom", "B", "GAZP", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders_Edge.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 ордер")
   local volume = orders[1]:GetVolume()
-  assert_true(volume <= VolumeOrderLimit, "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ")
+  assert_true(volume <= VolumeOrderLimit, "Объем не превышен")
   VolumeOrderLimit = savedLimit
   VolumeOrderMax = savedMax
   getParamEx = originalGetParamEx
@@ -930,229 +930,229 @@ test("LoadOrdersFromFile - edge пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅп
 end)
 
 ---------------------------------------------
--- Sell Edge пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+-- Sell Edge тесты
 ---------------------------------------------
-print("\n=== Sell Edge пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ===")
+print("\n=== Sell Edge тесты ===")
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - sell edge пїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - sell edge файл", function()
   resetSendOrders()
   addTestPosition("GAZP", 100, 250.00)
   mockCSV({ { "Gazprom", "S", "GAZP", "10", "0.01" } })
   local orders = LoadOrdersFromFile("TEST_SellOrders_Edge.csv")
-  assert_eq(#orders, 1, "1 sell edge пїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(orders[1].Operation, "S", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ S")
-  assert_true(orders[1].Quantity > 0, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ > 0")
-  assert_true(orders[1].Price > 0, "пїЅпїЅпїЅпїЅ > 0")
+  assert_eq(#orders, 1, "1 sell edge ордер")
+  assert_eq(orders[1].Operation, "S", "Операция S")
+  assert_true(orders[1].Quantity > 0, "Количество > 0")
+  assert_true(orders[1].Price > 0, "Цена > 0")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - sell edge пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - sell edge без позиции", function()
   resetSendOrders()
   clearTestData()
   mockCSV({ { "Gazprom", "S", "GAZP", "10", "0.01" } })
   local orders = LoadOrdersFromFile("TEST_SellOrders_Edge.csv")
-  assert_eq(#orders, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)")
+  assert_eq(#orders, 0, "0 ордеров (нет позиции)")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - sell edge пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - sell edge автоматическое количество", function()
   resetSendOrders()
   clearTestData()
   addTestPosition("GAZP", 1, 250.00)
   mockCSV({ { "Gazprom", "S", "GAZP", "10", "0.01" } })
   local orders = LoadOrdersFromFile("TEST_SellOrders_Edge.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)")
-  assert_eq(orders[1].Quantity, 1, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ = пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (1)")
+  assert_eq(#orders, 1, "1 ордер (автоматическое количество позиции)")
+  assert_eq(orders[1].Quantity, 1, "Количество = позиция (1)")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - sell edge пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("SubmitOrders - sell edge ордер отправлен", function()
   resetSendOrders()
   addTestPosition("GAZP", 50, 250.00)
   local order = Order:new("GAZP")
   order:SetOperation("S", 300.00, 10)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.sent, 1, "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(stats.sent, 1, "Ордер отправлен")
 end)
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ BUY пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)",
+  "LoadOrdersFromFile - проверка операции в BUY файле (неверная операция)",
   function()
     resetSendOrders()
     clearTestData()
     mockCSV({ { "Gazprom", "S", "GAZP", "100", "200.00" } })
     local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-    assert_eq(#orders, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)")
+    assert_eq(#orders, 0, "0 ордеров (неверная операция)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ SELL пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)",
+  "LoadOrdersFromFile - проверка операции в SELL файле (неверная операция)",
   function()
     resetSendOrders()
     clearTestData()
     mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" } })
     local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-    assert_eq(#orders, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)")
+    assert_eq(#orders, 0, "0 ордеров (неверная операция)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ BUY пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)",
+  "LoadOrdersFromFile - проверка операции в BUY файле (недопустимая операция)",
   function()
     resetSendOrders()
     mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" } })
     local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-    assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)")
+    assert_eq(#orders, 1, "1 ордер (недопустимая операция)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ SELL пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)",
+  "LoadOrdersFromFile - проверка операции в SELL файле (недопустимая операция)",
   function()
     resetSendOrders()
     mockCSV({ { "Gazprom", "S", "GAZP", "50", "250.00" } })
     local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-    assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)")
+    assert_eq(#orders, 1, "1 ордер (недопустимая операция)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ SellOrders_Edge (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)",
+  "LoadOrdersFromFile - проверка операции в SellOrders_Edge (неверная операция)",
   function()
     resetSendOrders()
     clearTestData()
     addTestPosition("GAZP", 100, 250.00)
     mockCSV({ { "Gazprom", "B", "GAZP", "10", "0.01" } })
     local orders = LoadOrdersFromFile("TEST_SellOrders_Edge.csv")
-    assert_eq(#orders, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ edge)")
+    assert_eq(#orders, 0, "0 ордеров (неверная операция в edge)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ BUY/SELL пїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)", function()
+test("LoadOrdersFromFile - файл без BUY/SELL в имени (пропуск)", function()
   resetSendOrders()
   clearTestData()
   mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" } })
   local orders = LoadOrdersFromFile("TEST_Orders.csv")
-  assert_eq(#orders, 0, "0 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ)")
+  assert_eq(#orders, 0, "0 ордеров (недопустимый файл)")
   restoreCSV()
 end)
 
 ---------------------------------------------
--- пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+-- Порядок и приоритеты
 ---------------------------------------------
-print("\n=== пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ ===")
+print("\n=== Порядок и приоритеты ===")
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅ)", function()
+test("LoadOrdersFromFile - приоритет по сумме (вечер)", function()
   resetSendOrders()
   mockCSV({ { "Gazprom", " B ", "GAZP", "100", "200.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(orders[1].Operation, "B", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 ордер")
+  assert_eq(orders[1].Operation, "B", "Операция приоритета")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅ)", function()
+test("LoadOrdersFromFile - приоритет по коду (вечер)", function()
   resetSendOrders()
   mockCSV({ { "Gazprom", "B", " GAZP ", "100", "200.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(orders[1].SecurityCode, "GAZP", "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 ордер")
+  assert_eq(orders[1].SecurityCode, "GAZP", "Приоритет бумаги")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ BUY/SELL",
+  "LoadOrdersFromFile - приоритет по сумме с недопустимым оператором BUY/SELL",
   function()
     resetSendOrders()
     mockCSV({ { "Gazprom", " B ", "GAZP", "100", "200.00" } })
     local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-    assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ)")
+    assert_eq(#orders, 1, "1 ордер (приоритет выше оператора)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅ)", function()
+test("LoadOrdersFromFile - обработка по коду (вечер)", function()
   resetSendOrders()
   mockCSV({ { " Gazprom ", " B ", " GAZP ", " 100 ", " 200.00 " } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(orders[1].Operation, "B", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(orders[1].SecurityCode, "GAZP", "пїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 ордер")
+  assert_eq(orders[1].Operation, "B", "Операция")
+  assert_eq(orders[1].SecurityCode, "GAZP", "Бумага")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅ)", function()
+test("LoadOrdersFromFile - обработка с лимитом (вечер)", function()
   resetSendOrders()
   clearTestData()
   addTestPosition("GAZP", 100, 250.00)
   mockCSV({ { "Gazprom", " S ", " GAZP ", " 10 ", " 0.01 " } })
   local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(orders[1].Operation, "S", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
+  assert_eq(#orders, 1, "1 ордер")
+  assert_eq(orders[1].Operation, "S", "Операция")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ BUY/SELL", function()
+test("LoadOrdersFromFile - обработка по сумме недопустимый оператор BUY/SELL", function()
   resetSendOrders()
   mockCSV({ { "Gazprom", "B", " GAZP ", "100", "200.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ)")
+  assert_eq(#orders, 1, "1 ордер (приоритет выше оператора)")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ BUY/SELL",
+  "LoadOrdersFromFile - обработка по коду недопустимый оператор BUY/SELL",
   function()
     resetSendOrders()
     mockCSV({ { "Gazprom", " B ", "GAZP", "100", "200.00" } })
     local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-    assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ)")
+    assert_eq(#orders, 1, "1 ордер (приоритет выше оператора)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", function()
+test("LoadOrdersFromFile - обработка продаж с автоматическим количеством", function()
   resetSendOrders()
   clearTestData()
   addTestPosition("GAZP", 100, 250.00)
   mockCSV({ { "Gazprom", " S ", " GAZP ", " 10 ", " 0.01 " } })
   local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-  assert_eq(#orders, 1, "1 пїЅпїЅпїЅпїЅпїЅ")
-  assert_eq(orders[1].Operation, "S", "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ S")
+  assert_eq(#orders, 1, "1 ордер")
+  assert_eq(orders[1].Operation, "S", "Операция S")
   restoreCSV()
 end)
 
 ---------------------------------------------
--- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+-- Результаты
 ---------------------------------------------
 print("\n" .. string.rep("=", 40))
-print(string.format("пїЅпїЅпїЅпїЅпїЅ: %d пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, %d пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", passed, failed))
+print(string.format("Результат: %d пройдено, %d провалено", passed, failed))
 if #errors > 0 then
-  print("\nпїЅпїЅпїЅпїЅпїЅпїЅ:")
+  print("\nОшибки:")
   for _, err in ipairs(errors) do
     print("  " .. err)
   end
