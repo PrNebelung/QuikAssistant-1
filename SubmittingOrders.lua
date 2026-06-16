@@ -427,6 +427,17 @@ function TradeClosePosition(trade)
   end
 
   local price = GetPriceMax(order)
+  if tonumber(price) == nil or tonumber(price) == 0 then
+    sleep(500)
+    price = GetPriceMax(order)
+  end
+  if tonumber(price) == nil or tonumber(price) == 0 then
+    log.warn(
+      "Ќе удалось получить макс. возм. цен. дл€ прод., пропущена. (PRICEMAX). "
+        .. order:Print()
+    )
+    return
+  end
 
   log.info(
     "—оздаем за€вку на продажу дл€ закрыти€ позиции ",
@@ -434,6 +445,7 @@ function TradeClosePosition(trade)
   )
 
   order:SetOperation(operation, price, quantity)
+  order.UseFileParams = true
   table.insert(orders, order)
 
   SubmitOrders(orders)
