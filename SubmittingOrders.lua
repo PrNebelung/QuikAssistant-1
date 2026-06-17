@@ -419,6 +419,7 @@ end
 
 --- «акрытие позиции по сделке дл€ закрыти€
 function TradeClosePosition(trade)
+  if trade.buy_sell ~= "B" then return end
   local orders = {}
   local operation = "S"
   local securityCode = trade.seccode
