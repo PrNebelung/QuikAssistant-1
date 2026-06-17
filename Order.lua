@@ -195,7 +195,7 @@ function Order:new(securityCode)
     if price ~= nil and tonumber(price) > 0 and positionQty ~= nil and tonumber(positionQty) > 0 and obj:IsSell() then
       obj.Price = tonumber(price)
       obj:GetPriceRound()
-      obj.Quantity = tonumber(positionQty)
+      obj.Quantity = math.floor(tonumber(positionQty) / tonumber(obj.SecurityInfo.lot_size))
     else
       obj.Quantity = 0
     end
