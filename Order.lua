@@ -190,28 +190,12 @@ function Order:new(securityCode)
     end
   end
 
-  function obj:SetQuantitySell(operation, price, quantityMax, positionQty)
+  function obj:SetQuantitySell(operation, price, positionQty)
     obj.Operation = operation
-    if price ~= nil and tonumber(price) > 0 and quantityMax ~= nil and tonumber(quantityMax) > 0 and obj:IsSell() then
+    if price ~= nil and tonumber(price) > 0 and positionQty ~= nil and tonumber(positionQty) > 0 and obj:IsSell() then
       obj.Price = tonumber(price)
       obj:GetPriceRound()
-
-      if obj:IsBond() then
-        local priceRub = obj:GetPriceInCurrency(price)
-        obj.Quantity = math.floor(tonumber(quantityMax) / tonumber(priceRub) / tonumber(obj.SecurityInfo.lot_size))
-      else
-        obj.Quantity = math.floor(tonumber(quantityMax) / tonumber(obj.Price) / tonumber(obj.SecurityInfo.lot_size))
-      end
-
-      if positionQty ~= nil and tonumber(positionQty) > 0 then
-        if obj.Quantity > tonumber(positionQty) then
-          obj.Quantity = tonumber(positionQty)
-        end
-      end
-
-      if obj.Quantity <= 0 then
-        obj.Quantity = 0
-      end
+      obj.Quantity = tonumber(positionQty)
     else
       obj.Quantity = 0
     end

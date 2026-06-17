@@ -294,14 +294,18 @@ function LoadOrdersFromFile(fileName)
                   .. order:Print()
               )
             else
-              local progressOrderVolumeMax = GetOrderVolumeMax(order, priceMax)
               local position = GetPosition(order.SecurityCode)
               local positionQty = 0
               if position ~= nil then
                 positionQty = tonumber(position.currentbal)
               end
               if positionQty > 0 then
-                order:SetQuantitySell(operation, priceMax, progressOrderVolumeMax, positionQty)
+                order:SetQuantitySell(operation, priceMax, positionQty)
+                order.UseFileParams = true
+              else
+                log.error(
+                  string.format("[SKIP] Позиция не найдена или равна нулю [%s]", order.SecurityCode)
+                )
               end
             end
           elseif isEdge ~= nil then
