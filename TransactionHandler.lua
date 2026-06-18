@@ -95,7 +95,7 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
     order:SetOperation(operation, maxPrice, trans.quantity)
     log.info(
       "Auto-recover sell order at max price: "
-        .. order.Print()
+        .. order:Print()
     )
     local orders = {}
     table.insert(orders, order)
@@ -124,7 +124,7 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
       return
     end
     order:SetOperation(operation, minPrice, 0)
-    log.info("Auto-recover buy order at min price: " .. order.Print())
+    log.info("Auto-recover buy order at min price: " .. order:Print())
     return
   end
 

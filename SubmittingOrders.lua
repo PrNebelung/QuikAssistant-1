@@ -376,7 +376,7 @@ function SubmitOrders(orders)
         )
         if error ~= "" then
           stats.rejected = stats.rejected + 1
-          log.error("Не удалось отправить заявку в QUIK: ", error, order.Print())
+          log.error("Не удалось отправить заявку в QUIK: ", error, order:Print())
         else
           stats.sent = stats.sent + 1
           log.info(

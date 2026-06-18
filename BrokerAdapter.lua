@@ -41,7 +41,7 @@ end
 function BrokerAdapter.GetParamInfo(order, param)
   local value = getParamEx(order.SecurityInfo.class_code, order.SecurityInfo.code, param)
   if value == nil or value.result == "0" then
-    log.error("Parameter not found.", param, order.Print())
+    log.error("Parameter not found.", param, order:Print())
     return "0"
   end
   return value.param_value

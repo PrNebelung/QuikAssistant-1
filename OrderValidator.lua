@@ -81,7 +81,7 @@ local function checkNotNil(order)
     or tonumber(order.Quantity) <= 0
     or order.Operation == ""
   then
-    log.error("Invalid order parameters.", order and order.Print() or "nil")
+    log.error("Invalid order parameters.", order and order:Print() or "nil")
     return false, "Invalid order parameters"
   end
   return true, ""
@@ -92,7 +92,7 @@ local function checkPriceBelowPricemin(order)
   local priceMin = tonumber(MarketData.GetPriceMin(order))
   if priceMin ~= nil and priceMin > 0 and tonumber(order.Price) < priceMin then
     local reason = string.format("price %s below PRICEMIN %s", tostring(order.Price), tostring(priceMin))
-    log.debug(reason .. " " .. order.Print())
+    log.debug(reason .. " " .. order:Print())
     return false, reason
   end
   return true, ""
@@ -154,7 +154,7 @@ local function checkBondPriceLimit(order)
       "bond price exceeds 100%% (price: %s%%)",
       tostring(order.Price)
     )
-    log.warn(reason .. " " .. order.Print())
+    log.warn(reason .. " " .. order:Print())
     return false, reason
   end
   return true, ""
@@ -168,7 +168,7 @@ local function checkAvgPositionPrice(order)
       "buy price exceeds average position price %s",
       string.format("%.2f", position.wa_position_price)
     )
-    log.warn(reason .. " " .. order.Print())
+    log.warn(reason .. " " .. order:Print())
     return false, reason
   end
   return true, ""
