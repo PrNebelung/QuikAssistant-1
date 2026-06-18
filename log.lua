@@ -110,16 +110,28 @@ for i, x in ipairs(modes) do
 
     -- Output to log file (INFO and above only)
     if Broker and Broker ~= "" and levels[x.name] >= levels["info"] then
+      local str = string.format("%-6s %s [%s] %s: %s\n", nameupper, os.date("%H:%M:%S"), Broker, lineinfo, msg)
       local fp = openLogFile()
+      if not fp then
+        logFileHandle = nil
+        logFilePath = nil
+        fp = openLogFile()
+      end
       if fp then
-        local str = string.format("%-6s %s [%s] %s: %s\n", nameupper, os.date("%H:%M:%S"), Broker, lineinfo, msg)
-        local ok, err = pcall(function()
+        local ok = pcall(function()
           fp:write(str)
           fp:flush()
         end)
         if not ok then
           logFileHandle = nil
           logFilePath = nil
+          fp = openLogFile()
+          if fp then
+            pcall(function()
+              fp:write(str)
+              fp:flush()
+            end)
+          end
         end
       end
     end

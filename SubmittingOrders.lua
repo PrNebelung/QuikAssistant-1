@@ -422,7 +422,7 @@ function TradeClosePosition(trade)
   if trade.buy_sell ~= "B" then return end
   local orders = {}
   local operation = "S"
-  local securityCode = trade.seccode
+  local securityCode = trade.sec_code
   local quantity = tonumber(trade.qty)
   local order = Order:new(securityCode)
 
