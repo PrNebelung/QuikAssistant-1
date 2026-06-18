@@ -38,25 +38,4 @@ Config.SessionMorning = { hour = 7, min = 0, sec = 30 }
 Config.SessionMain = { hour = 10, min = 0, sec = 30 }
 Config.SessionEvening = { hour = 19, min = 2, sec = 10 }
 
--- ==========================================
--- Apply Settings from Setting module
--- ==========================================
-function Config.ApplyBrokerSettings()
-  Config.Broker = Broker
-  Config.ClientCode = ClientCode
-  Config.AccountCode = AccountCode
-  Config.FirmId = FirmId
-  Config.VolumeOrderMax = VolumeOrderMax
-  Config.BondVolumeOrderMax = BondVolumeOrderMax
-  Config.VolumeOrderLimit = VolumeOrderLimit
-  Config.VolumeOrderLimitUSD = VolumeOrderLimitUSD or 100
-  Config.LimitActuationOrderEdge = LimitActuationOrderEdge
-  Config.LimitActuationOrderBondEdge = LimitActuationOrderBondEdge
-  Config.FileBuyOrder = FileBuyOrder
-  Config.FileSellOrder = FileSellOrder
-  Config.FileBuyOrderEdge = FileBuyOrderEdge
-  Config.FileBuyOrderBondsEdge = FileBuyOrderBondsEdge
-  Config.FileSellOrderEdge = FileSellOrderEdge
-end
-
 return Config

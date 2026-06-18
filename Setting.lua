@@ -9,81 +9,78 @@ require("TableSetting")
 _initConstants()
 
 --- Настройки ордеров
-Broker = ""
-ClientCode = ""
-AccountCode = ""
-FirmId = ""
-VolumeOrderMax = 0
-BondVolumeOrderMax = 0
---- Настройки по сумме ордера
-VolumeOrderLimit = 200000
---- Настройки по сумме ордера и количеству
-VolumeOrderLimitUSD = 100
-
---- Множитель количества для продажи
-LimitActuationOrderEdge = 5
---- Множитель количества для продажи облигаций
-LimitActuationOrderBondEdge = 60
-
-FileBuyOrder = ""
-FileSellOrder = ""
-FileBuyOrderEdge = ""
-FileBuyOrderBondsEdge = ""
-FileSellOrderEdge = ""
 
 function SetSettingFinam()
-  Broker = "FINAM"
-  ClientCode = "0734A/0734A"
-  AccountCode = "L01+00000F00"
-  FirmId = "MC0061900000"
-  VolumeOrderMax = 70000
-  BondVolumeOrderMax = 100000
-  LimitActuationOrderEdge = 0
-  LimitActuationOrderBondEdge = 50
-  VolumeOrderLimit = 120000
+  Config.Broker = "FINAM"
+  Config.ClientCode = "0734A/0734A"
+  Config.AccountCode = "L01+00000F00"
+  Config.FirmId = "MC0061900000"
+  Config.VolumeOrderMax = 70000
+  Config.BondVolumeOrderMax = 100000
+  Config.LimitActuationOrderEdge = 0
+  Config.LimitActuationOrderBondEdge = 50
+  Config.VolumeOrderLimit = 120000
 end
 
+-- Backward-compatible global wrappers
+function _initSettingGlobals()
+  Broker = Config.Broker
+  ClientCode = Config.ClientCode
+  AccountCode = Config.AccountCode
+  FirmId = Config.FirmId
+  VolumeOrderMax = Config.VolumeOrderMax
+  BondVolumeOrderMax = Config.BondVolumeOrderMax
+  VolumeOrderLimit = Config.VolumeOrderLimit
+  VolumeOrderLimitUSD = Config.VolumeOrderLimitUSD
+  LimitActuationOrderEdge = Config.LimitActuationOrderEdge
+  LimitActuationOrderBondEdge = Config.LimitActuationOrderBondEdge
+  FileBuyOrder = Config.FileBuyOrder
+  FileSellOrder = Config.FileSellOrder
+  FileBuyOrderEdge = Config.FileBuyOrderEdge
+  FileBuyOrderBondsEdge = Config.FileBuyOrderBondsEdge
+  FileSellOrderEdge = Config.FileSellOrderEdge
+end
 function SetSettingVTB()
-  Broker = "VTB"
-  ClientCode = "386507"
-  AccountCode = "L01-00000F00"
-  FirmId = "MC0003300000"
-  VolumeOrderMax = 20000
-  BondVolumeOrderMax = 20000
-  LimitActuationOrderEdge = 0
-  LimitActuationOrderBondEdge = 30
+  Config.Broker = "VTB"
+  Config.ClientCode = "386507"
+  Config.AccountCode = "L01-00000F00"
+  Config.FirmId = "MC0003300000"
+  Config.VolumeOrderMax = 20000
+  Config.BondVolumeOrderMax = 20000
+  Config.LimitActuationOrderEdge = 0
+  Config.LimitActuationOrderBondEdge = 30
 end
 
 function SetSettingPSB()
-  Broker = "PSB"
-  ClientCode = "40200"
-  AccountCode = "L01+00000F00"
-  FirmId = "MC0038600000"
-  VolumeOrderMax = 50000
-  BondVolumeOrderMax = 100000
-  LimitActuationOrderEdge = 0
-  LimitActuationOrderBondEdge = 0
-  VolumeOrderLimit = 120000
+  Config.Broker = "PSB"
+  Config.ClientCode = "40200"
+  Config.AccountCode = "L01+00000F00"
+  Config.FirmId = "MC0038600000"
+  Config.VolumeOrderMax = 50000
+  Config.BondVolumeOrderMax = 100000
+  Config.LimitActuationOrderEdge = 0
+  Config.LimitActuationOrderBondEdge = 0
+  Config.VolumeOrderLimit = 120000
 end
 
 function SetSettingRSHB()
-  Broker = "RSHB"
-  ClientCode = "496082"
-  AccountCode = "L01+00000F00"
-  FirmId = "MC0134700000"
-  VolumeOrderMax = 20000
-  BondVolumeOrderMax = 20000
-  LimitActuationOrderEdge = 0
-  LimitActuationOrderBondEdge = 60
+  Config.Broker = "RSHB"
+  Config.ClientCode = "496082"
+  Config.AccountCode = "L01+00000F00"
+  Config.FirmId = "MC0134700000"
+  Config.VolumeOrderMax = 20000
+  Config.BondVolumeOrderMax = 20000
+  Config.LimitActuationOrderEdge = 0
+  Config.LimitActuationOrderBondEdge = 60
 end
 
 function SetSettingTest()
-  Broker = "TEST"
-  ClientCode = "10567"
-  AccountCode = "NL0011100043"
-  FirmId = ""
-  VolumeOrderMax = 11000
-  BondVolumeOrderMax = 7000
+  Config.Broker = "TEST"
+  Config.ClientCode = "10567"
+  Config.AccountCode = "NL0011100043"
+  Config.FirmId = ""
+  Config.VolumeOrderMax = 11000
+  Config.BondVolumeOrderMax = 7000
 end
 
 --- Временные ограничения для ордеров
@@ -105,17 +102,16 @@ function SetClientSetting()
   if settingFunc then
     settingFunc()
   else
-    Broker = ""
-    ClientCode = ""
-    AccountCode = ""
-    VolumeOrderMax = 0
+    Config.Broker = ""
+    Config.ClientCode = ""
+    Config.AccountCode = ""
+    Config.VolumeOrderMax = 0
   end
 
-  FileBuyOrder = Broker .. "_BuyOrders.csv"
-  FileSellOrder = Broker .. "_SellOrders.csv"
-  FileBuyOrderEdge = Broker .. "_BuyOrders_Edge.csv"
-  FileBuyOrderBondsEdge = Broker .. "_BuyOrdersBonds_Edge.csv"
-  FileSellOrderEdge = Broker .. "_SellOrders_Edge.csv"
+  Config.FileBuyOrder = Config.Broker .. "_BuyOrders.csv"
+  Config.FileSellOrder = Config.Broker .. "_SellOrders.csv"
+  Config.FileBuyOrderEdge = Config.Broker .. "_BuyOrders_Edge.csv"
+  Config.FileBuyOrderBondsEdge = Config.Broker .. "_BuyOrdersBonds_Edge.csv"
+  Config.FileSellOrderEdge = Config.Broker .. "_SellOrders_Edge.csv"
 
-  Config.ApplyBrokerSettings()
 end
