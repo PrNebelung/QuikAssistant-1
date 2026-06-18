@@ -66,7 +66,12 @@ function OrderValidator.AdjustPrice(order)
   end
 end
 
-function OrderValidator.CheckOrder(order)
+-- ==========================================
+-- Chain of checks pattern
+-- Each check returns: true, "" on pass; false, reason on fail
+-- ==========================================
+
+local function checkNotNil(order)
   if
     order == nil
     or order.Price == nil
@@ -79,88 +84,113 @@ function OrderValidator.CheckOrder(order)
     log.error("Invalid order parameters.", order and order.Print() or "nil")
     return false, "Invalid order parameters"
   end
+  return true, ""
+end
+
+local function checkPriceBelowPricemin(order)
+  if not order:IsBuy() then return true, "" end
+  local priceMin = tonumber(MarketData.GetPriceMin(order))
+  if priceMin ~= nil and priceMin > 0 and tonumber(order.Price) < priceMin then
+    local reason = string.format("price %s below PRICEMIN %s", tostring(order.Price), tostring(priceMin))
+    log.debug(reason .. " " .. order.Print())
+    return false, reason
+  end
+  return true, ""
+end
+
+local function checkPositionForSell(order)
+  if not order:IsSell() then return true, "" end
+  local position = PositionService.GetPosition(order.SecurityCode)
+  if position == nil or tonumber(position.currentbal) < tonumber(order.Quantity) then
+    local reason = string.format(
+      "insufficient position for sell (have: %s, need: %s)",
+      tostring(position and position.currentbal or 0),
+      tostring(order.Quantity)
+    )
+    return false, reason
+  end
+  return true, ""
+end
+
+local function checkVolumeLimit(order)
+  if not order:IsBuy() then return true, "" end
+  local limit = Config.VolumeOrderLimit
+  if order:GetVolume() > limit then
+    local reason = string.format(
+      "volume %s %s exceeds limit %s",
+      tostring(order:GetVolume()),
+      order.SecurityInfo.face_unit,
+      tostring(limit)
+    )
+    order:Clear()
+    return false, reason
+  end
+  return true, ""
+end
+
+local function checkActuation(order)
+  if not order:IsBuy() then return true, "" end
+  if order:IsExceptionFromLimitActuation() then return true, "" end
 
   local priceLast = MarketData.GetPriceLast(order)
+  local actuation = (tonumber(priceLast) - tonumber(order.Price)) / tonumber(order.Price) * 100
+  local limit = Config.LimitActuationOrderEdge
+  if order:IsBond() and not order:IsOFZ() then
+    limit = Config.LimitActuationOrderBondEdge
+  end
 
-  if order:IsBuy() then
-    local priceMin = tonumber(MarketData.GetPriceMin(order))
-    if priceMin ~= nil and priceMin > 0 and tonumber(order.Price) < priceMin then
-      local reason = string.format("price %s below PRICEMIN %s", tostring(order.Price), tostring(priceMin))
-      log.debug(reason .. " " .. order.Print())
+  if actuation ~= nil and tonumber(actuation) < tonumber(limit) then
+    local reason = string.format("actuation %.2f%% below limit %s%%", actuation, tostring(limit))
+    return false, reason
+  end
+  return true, ""
+end
+
+local function checkBondPriceLimit(order)
+  if not order:IsBuy() or not order:IsBond() then return true, "" end
+  local nominal = 100.0
+  if tonumber(order.Price) > tonumber(nominal) then
+    local reason = string.format(
+      "bond price exceeds 100%% (price: %s%%)",
+      tostring(order.Price)
+    )
+    log.warn(reason .. " " .. order.Print())
+    return false, reason
+  end
+  return true, ""
+end
+
+local function checkAvgPositionPrice(order)
+  if not order:IsBuy() or order:IsBond() then return true, "" end
+  local position = PositionService.GetPosition(order.SecurityCode)
+  if position ~= nil and tonumber(position.wa_position_price) < tonumber(order.Price) then
+    local reason = string.format(
+      "buy price exceeds average position price %s",
+      string.format("%.2f", position.wa_position_price)
+    )
+    log.warn(reason .. " " .. order.Print())
+    return false, reason
+  end
+  return true, ""
+end
+
+local checkChain = {
+  checkNotNil,
+  checkPriceBelowPricemin,
+  checkPositionForSell,
+  checkVolumeLimit,
+  checkActuation,
+  checkBondPriceLimit,
+  checkAvgPositionPrice,
+}
+
+function OrderValidator.CheckOrder(order)
+  for _, check in ipairs(checkChain) do
+    local passed, reason = check(order)
+    if not passed then
       return false, reason
     end
   end
-
-  if order:IsSell() then
-    local position = PositionService.GetPosition(order.SecurityCode)
-    if position == nil or tonumber(position.currentbal) < tonumber(order.Quantity) then
-      local reason = string.format(
-        "insufficient position for sell (have: %s, need: %s)",
-        tostring(position and position.currentbal or 0),
-        tostring(order.Quantity)
-      )
-      return false, reason
-    end
-  end
-
-  if order:IsBuy() then
-    local limit = Config.VolumeOrderLimit
-
-    if order:GetVolume() > limit then
-      local reason = string.format(
-        "volume %s %s exceeds limit %s",
-        tostring(order:GetVolume()),
-        order.SecurityInfo.face_unit,
-        tostring(limit)
-      )
-      order:Clear()
-      return false, reason
-    end
-  end
-
-  if order:IsBuy() then
-    if order:IsExceptionFromLimitActuation() then
-      return true, ""
-    end
-
-    local actuation = (tonumber(priceLast) - tonumber(order.Price)) / tonumber(order.Price) * 100
-    local limit = Config.LimitActuationOrderEdge
-    if order:IsBond() and not order:IsOFZ() then
-      limit = Config.LimitActuationOrderBondEdge
-    end
-
-    if actuation ~= nil and tonumber(actuation) < tonumber(limit) then
-      local reason = string.format("actuation %.2f%% below limit %s%%", actuation, tostring(limit))
-      return false, reason
-    end
-  end
-
-  if order:IsBuy() then
-    if order:IsBond() then
-      local nominal = 100.0
-      if tonumber(order.Price) > tonumber(nominal) then
-        local reason = string.format(
-          "bond price exceeds 100%% (price: %s%%)",
-          tostring(order.Price)
-        )
-        log.warn(reason .. " " .. order.Print())
-        return false, reason
-      end
-    end
-  end
-
-  if order:IsBuy() and not order:IsBond() then
-    local position = PositionService.GetPosition(order.SecurityCode)
-    if position ~= nil and tonumber(position.wa_position_price) < tonumber(order.Price) then
-      local reason = string.format(
-        "buy price exceeds average position price %s",
-        string.format("%.2f", position.wa_position_price)
-      )
-      log.warn(reason .. " " .. order.Print())
-      return false, reason
-    end
-  end
-
   return true, ""
 end
 
