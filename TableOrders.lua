@@ -76,8 +76,8 @@ function UpdateTableOrdersControl(t, order)
   local priceLast = GetPriceCurrent(order.class_code, order.sec_code)
   local operation = GetOrderOperation(order)
   local actuation = (tonumber(priceLast) - tonumber(order.price)) / tonumber(order.price) * 100
-  local lcResult = BrokerAdapter.GetParamEx(order.class_code, order.sec_code, "LASTCHANGE")
-  local lastChange = lcResult and lcResult.param_value or 0
+  local lastChange = BrokerAdapter.GetParamEx(order.class_code, order.sec_code, "LASTCHANGE")
+  lastChange = lastChange or 0
 
   local row = FindRow(t, order.order_num)
   if row == nil then
@@ -123,11 +123,9 @@ function ClearTableOrdersControl()
 end
 
 function GetPriceCurrent(classCode, secCode)
-  local lastResult = BrokerAdapter.GetParamEx(classCode, secCode, "LAST")
-  local priceLast = lastResult and lastResult.param_value or "0"
-  if tonumber(priceLast) == 0 then
-    local prevResult = BrokerAdapter.GetParamEx(classCode, secCode, "PREVPRICE")
-    priceLast = prevResult and prevResult.param_value or "0"
+  local priceLast = BrokerAdapter.GetParamEx(classCode, secCode, "LAST")
+  if priceLast == nil or tonumber(priceLast) == 0 then
+    priceLast = BrokerAdapter.GetParamEx(classCode, secCode, "PREVPRICE")
   end
-  return priceLast
+  return priceLast or "0"
 end
