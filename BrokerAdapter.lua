@@ -39,9 +39,6 @@ function BrokerAdapter.GetParamEx(classCode, secCode, param)
 end
 
 function BrokerAdapter.GetParamInfo(order, param)
-  local dbg_class = order.SecurityInfo.class_code or "nil"
-  local dbg_code = order.SecurityInfo.code or "nil"
-  log.error(string.format("DEBUG GetParamInfo: class_code=%s code=%s param=%s", dbg_class, dbg_code, param))
   local value = getParamEx(order.SecurityInfo.class_code, order.SecurityInfo.code, param)
   if value == nil or value.result == "0" then
     log.error("Parameter not found.", param, order.Print())
