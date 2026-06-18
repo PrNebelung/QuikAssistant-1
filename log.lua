@@ -15,6 +15,7 @@ log.level = "trace"
 
 local logFileHandle = nil
 local logFilePath = nil
+local logFileFailed = false
 
 local modes = {
   { name = "trace", color = "\27[34m" },
@@ -118,21 +119,36 @@ for i, x in ipairs(modes) do
         fp = openLogFile()
       end
       if fp then
+<<<<<<< HEAD
         local ok = pcall(function()
+=======
+        logFileFailed = false
+        local str = string.format("%-6s %s [%s] %s: %s\n", nameupper, os.date("%H:%M:%S"), Broker, lineinfo, msg)
+        local ok, err = pcall(function()
+>>>>>>> 6206a634c724a6eaf0cba800e638256db0132501
           fp:write(str)
           fp:flush()
         end)
         if not ok then
           logFileHandle = nil
           logFilePath = nil
+<<<<<<< HEAD
           fp = openLogFile()
           if fp then
             pcall(function()
               fp:write(str)
               fp:flush()
             end)
+=======
+          if not logFileFailed then
+            logFileFailed = true
+            print(string.format("[LOG] FAILED to write log file: %s", tostring(err)))
+>>>>>>> 6206a634c724a6eaf0cba800e638256db0132501
           end
         end
+      elseif not logFileFailed then
+        logFileFailed = true
+        print(string.format("[LOG] WARNING: Cannot open log file for broker %s. Log messages will only appear in console.", Broker))
       end
     end
   end
