@@ -92,6 +92,7 @@ log.usecolor = false
 require("TableConstructor")
 require("TableSetting")
 require("Setting")
+local Config = require("Config")
 require("FileFunction")
 require("Order")
 require("QuikFunction")
@@ -116,10 +117,10 @@ N_LastTradeNum = 0
 -- Определяем брокера через QUIK API (как в реальном запуске)
 SetClientSetting()
 
-print(string.format("Брокер определён: %s", Broker))
-print(string.format("Код клиента: %s", ClientCode))
-print(string.format("Код счета: %s", AccountCode))
-print(string.format("Фирма: %s", FirmId))
+print(string.format("Брокер определён: %s", Config.Broker))
+print(string.format("Код клиента: %s", Config.ClientCode))
+print(string.format("Код счета: %s", Config.AccountCode))
+print(string.format("Фирма: %s", Config.FirmId))
 print(string.format("Файл покупок: %s", FileBuyOrder))
 print(string.format("Файл продаж: %s", FileSellOrder))
 print(string.format("Файл покупок (edge): %s", FileBuyOrderEdge))
@@ -266,8 +267,8 @@ local allOrders = {}
 local fileOrders = {}
 
 -- Загрузка покупок
-print("1. Файл покупок: " .. FileBuyOrder)
-local buyOrders = LoadOrdersFromFile(FileBuyOrder)
+print("1. Файл покупок: " .. Config.FileBuyOrder)
+local buyOrders = LoadOrdersFromFile(Config.FileBuyOrder)
 fileOrders.buy = buyOrders
 print(string.format("   Загружено: %d заявок", #buyOrders))
 for i, order in ipairs(buyOrders) do
@@ -286,8 +287,8 @@ end
 print("")
 
 -- Загрузка покупок облигаций (edge)
-print("2. Файл покупок облигаций (edge): " .. FileBuyOrderBondsEdge)
-local bondOrders = LoadOrdersFromFile(FileBuyOrderBondsEdge)
+print("2. Файл покупок облигаций (edge): " .. Config.FileBuyOrderBondsEdge)
+local bondOrders = LoadOrdersFromFile(Config.FileBuyOrderBondsEdge)
 fileOrders.bonds = bondOrders
 print(string.format("   Загружено: %d заявок", #bondOrders))
 for i, order in ipairs(bondOrders) do
@@ -306,8 +307,8 @@ end
 print("")
 
 -- Загрузка покупок (edge)
-print("3. Файл покупок (edge): " .. FileBuyOrderEdge)
-local edgeOrders = LoadOrdersFromFile(FileBuyOrderEdge)
+print("3. Файл покупок (edge): " .. Config.FileBuyOrderEdge)
+local edgeOrders = LoadOrdersFromFile(Config.FileBuyOrderEdge)
 fileOrders.edge = edgeOrders
 print(string.format("   Загружено: %d заявок", #edgeOrders))
 for i, order in ipairs(edgeOrders) do
@@ -326,8 +327,8 @@ end
 print("")
 
 -- Загрузка продаж
-print("4. Файл продаж: " .. FileSellOrder)
-local sellOrders = LoadOrdersFromFile(FileSellOrder)
+print("4. Файл продаж: " .. Config.FileSellOrder)
+local sellOrders = LoadOrdersFromFile(Config.FileSellOrder)
 fileOrders.sell = sellOrders
 print(string.format("   Загружено: %d заявок", #sellOrders))
 for i, order in ipairs(sellOrders) do
