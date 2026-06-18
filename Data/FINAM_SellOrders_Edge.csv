@@ -1,4 +1,15 @@
--- Sell Edge orders for FINAM broker
--- Format: Name;S;SecurityCode;1;0.001
--- Quantity and price are calculated automatically from PRICEMAX and max volume
--- Position check is validated before submission
+--iАстра ао;S;ASTR;1;0.1
+--ЭсЭфАй ао;S;SFIN;1;0.1
+--Русагро;S;RAGR;1;0.1
+--НКХП ао;S;NKHP;1;0.1
+--ЕвроТранс;S;EUTR;1;0.1
+--ГТМ ао;S;GTRK;1;0.1
+--М.видео;S;MVID;1;0.1
+--СамарЭн-ап;S;SAGOP;1;0.1
+--iИВА;S;IVAT;1;0.1
+--РуссНфт ао;S;RNFT;1;0.1
+--Юнипро ао;S;UPRO;1;0.1
+--ПИК ао;S;PIKK;1;0.1
+--ИНАРКТИКА;S;AQUA;1;0.1
+--Ростел -ап;S;RTKMP;1;0.1
+--МКПАО ВК;S;VKCO;1;0.1
