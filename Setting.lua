@@ -98,27 +98,23 @@ function SetSettingTest()
 end
 
 --- Временные ограничения для ордеров
+BrokerRegistry = {
+  ["171783"] = SetSettingFinam,
+  ["49653"] = SetSettingVTB,
+  ["34146"] = SetSettingPSB,
+  ["48640"] = SetSettingRSHB,
+  ["119330"] = SetSettingTest,
+}
+
 function SetClientSetting()
-  -- Проверка времени для отправки заявок в QUIK
   if ClearSecurityInfoCache then
     ClearSecurityInfoCache()
   end
   local userId = BrokerAdapter.GetInfoParam("USERID")
-  local problem = ""
-  if userId == nil or userId == "" then
-    problem = "ID параметра не найден"
-  end
 
-  if userId == "171783" then
-    SetSettingFinam()
-  elseif userId == "49653" then
-    SetSettingVTB()
-  elseif userId == "34146" then
-    SetSettingPSB()
-  elseif userId == "48640" then
-    SetSettingRSHB()
-  elseif userId == "119330" then
-    SetSettingTest()
+  local settingFunc = BrokerRegistry[userId]
+  if settingFunc then
+    settingFunc()
   else
     Broker = ""
     ClientCode = ""
