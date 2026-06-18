@@ -1,7 +1,7 @@
 local BrokerAdapter = require("BrokerAdapter")
 
-nameColumnSecutityName = "Наименование инструмента"
-nameColumnSecutityCode = "Код бумаги (тикер)"
+nameColumnSecurityName = "Наименование инструмента"
+nameColumnSecurityCode = "Код бумаги (тикер)"
 nameColumnOperation = "Операция"
 nameColumnPriceLast = "Последняя цена"
 nameColumnOrderPrice = "Цена заявки"
@@ -15,8 +15,8 @@ tableOrdersControl = nil
 
 
 function CreateTableOrdersControl(t)
-  t:AddColumn(nameColumnSecutityName, QTABLE_STRING_TYPE, 35)
-  t:AddColumn(nameColumnSecutityCode, QTABLE_STRING_TYPE, 20)
+  t:AddColumn(nameColumnSecurityName, QTABLE_STRING_TYPE, 35)
+  t:AddColumn(nameColumnSecurityCode, QTABLE_STRING_TYPE, 20)
   t:AddColumn(nameColumnOperation, QTABLE_STRING_TYPE, 10)
   t:AddColumn(nameColumnActuation, QTABLE_DOUBLE_TYPE, 10)
   t:AddColumn(nameColumnPriceLast, QTABLE_DOUBLE_TYPE, 20)

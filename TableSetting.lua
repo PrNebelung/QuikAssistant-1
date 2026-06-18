@@ -250,7 +250,6 @@ function SetFileOrders(t)
   SetCell(t.t_id, row, 1, nameSettingFileSellOrderEdge)
   SetCell(t.t_id, row, 2, FileSellOrderEdge)
   SetCell(t.t_id, row, 3, problem)
-  SetCell(t.t_id, row, 3, problem)
 end
 
 function EventCallbackTableSetting(t_id, msg, par1, par2)
