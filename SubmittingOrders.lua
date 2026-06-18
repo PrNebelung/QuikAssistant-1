@@ -45,19 +45,19 @@ function Initialization()
   SetClientSetting()
 
   TimeMainStart = os.date("!*t", os.time())
-  TimeMainStart.hour = 10
-  TimeMainStart.min = 0
-  TimeMainStart.sec = 30
+  TimeMainStart.hour = Config.SessionMain.hour
+  TimeMainStart.min = Config.SessionMain.min
+  TimeMainStart.sec = Config.SessionMain.sec
 
   TimeMorningStart = os.date("!*t", os.time())
-  TimeMorningStart.hour = 7
-  TimeMorningStart.min = 0
-  TimeMorningStart.sec = 30
+  TimeMorningStart.hour = Config.SessionMorning.hour
+  TimeMorningStart.min = Config.SessionMorning.min
+  TimeMorningStart.sec = Config.SessionMorning.sec
 
   TimeEveningStart = os.date("!*t", os.time())
-  TimeEveningStart.hour = 19
-  TimeEveningStart.min = 2
-  TimeEveningStart.sec = 10
+  TimeEveningStart.hour = Config.SessionEvening.hour
+  TimeEveningStart.min = Config.SessionEvening.min
+  TimeEveningStart.sec = Config.SessionEvening.sec
 
   IsSentOrders = false
   IsSendingOrders = false
