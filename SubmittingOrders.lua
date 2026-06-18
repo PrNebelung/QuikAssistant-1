@@ -140,10 +140,10 @@ function SubmittingOrdersRun()
       log.debug(
         string.format(
           "2.2 Отправка заявок на покупку облигаций edge %s",
-          Config.Config.FileBuyOrderBondsEdge
+          Config.FileBuyOrderBondsEdge
         )
       )
-      local orders = LoadOrdersFromFile(Config.Config.FileBuyOrderBondsEdge)
+      local orders = LoadOrdersFromFile(Config.FileBuyOrderBondsEdge)
       stats.loaded = stats.loaded + #orders
       local s = SubmitOrders(orders)
       stats.sent = stats.sent + s.sent
@@ -153,11 +153,11 @@ function SubmittingOrdersRun()
     end
 
     if isSubmittingOrdersRun then
-      local orders = LoadOrdersFromFile(Config.Config.FileBuyOrderEdge)
+      local orders = LoadOrdersFromFile(Config.FileBuyOrderEdge)
       log.debug(
         string.format(
           "2.3 Отправка заявок на покупку по файлу edge %s",
-          Config.Config.FileBuyOrderEdge
+          Config.FileBuyOrderEdge
         )
       )
       stats.loaded = stats.loaded + #orders
@@ -182,10 +182,10 @@ function SubmittingOrdersRun()
       log.debug(
         string.format(
           "2.8 Отправка заявок на продажу по файлу edge %s",
-          Config.Config.FileSellOrderEdge
+          Config.FileSellOrderEdge
         )
       )
-      local orders = LoadOrdersFromFile(Config.Config.FileSellOrderEdge)
+      local orders = LoadOrdersFromFile(Config.FileSellOrderEdge)
       stats.loaded = stats.loaded + #orders
       local s = SubmitOrders(orders)
       stats.sent = stats.sent + s.sent

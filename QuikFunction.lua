@@ -33,7 +33,7 @@ function GetPricePrev(order)
 end
 
 -- Коэффициент корректировки объёма ордера, если последняя не активирована или не исполнена
-function GetKoeffConfig.VolumeOrderMax(order, priceMin)
+function GetKoeffVolumeOrderMax(order, priceMin)
   local priceLast = GetPriceLast(order)
   if tonumber(priceMin) == nil or tonumber(priceMin) == 0 or tonumber(priceLast) == nil then
     return 1
@@ -50,11 +50,11 @@ end
 --- Для инструментов BondVolumeOrderMax умножается на коэффициент.
 --- Для инструментов в SPB - берём лимиты в долларах.
 function GetOrderVolumeMax(order, priceMin)
-  local koeff = GetKoeffConfig.VolumeOrderMax(order, priceMin)
+  local koeff = GetKoeffVolumeOrderMax(order, priceMin)
   local limit = Config.VolumeOrderMax
 
   if order:IsBond() then
-    limit = BondConfig.VolumeOrderMax * tonumber(koeff)
+    limit = Config.BondVolumeOrderMax * tonumber(koeff)
   end
 
   -- Ограничение по лимиту

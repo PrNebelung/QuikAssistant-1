@@ -40,6 +40,15 @@ VolumeOrderLimitUSD = 100
 LimitActuationOrderEdge = 5
 LimitActuationOrderBondEdge = 60
 
+
+-- Config setup for tests
+local Config = require("Config")
+Config.VolumeOrderMax = VolumeOrderMax
+Config.BondVolumeOrderMax = BondVolumeOrderMax
+Config.VolumeOrderLimit = VolumeOrderLimit
+Config.VolumeOrderLimitUSD = VolumeOrderLimitUSD
+Config.LimitActuationOrderEdge = LimitActuationOrderEdge
+Config.LimitActuationOrderBondEdge = LimitActuationOrderBondEdge
 local passed = 0
 local failed = 0
 local errors = {}

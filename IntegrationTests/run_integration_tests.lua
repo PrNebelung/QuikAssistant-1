@@ -50,7 +50,7 @@ end
 -- 2. Настройка путей
 -- ==========================================
 
-package.path = "C:\\Users\\Dexter\\source\\repos\\QuikAssistant\\?.lua;" .. package.path
+package.path = "./?.lua;../?.lua/;" .. package.path
 
 -- ==========================================
 -- 3. Загрузка мока и настроек брокера
