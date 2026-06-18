@@ -37,34 +37,7 @@ function OrderValidator.GetOrderVolumeMax(order, priceMin)
   return limit
 end
 
-function OrderValidator.AdjustPrice(order)
-  if order == nil or order.Price == nil or order.Operation == nil then
-    return
-  end
-
-  if order.UseFileParams then
-    return
-  end
-
-  local priceLast = MarketData.GetPriceLast(order)
-
-  if order:IsBuy() then
-    if tonumber(priceLast) < tonumber(order.Price) and tonumber(priceLast) ~= 0 then
-      order.Price = priceLast - PRICE_DEVIATION_MULTIPLIER * order.SecurityInfo.min_price_step
-    end
-    local priceMin = tonumber(MarketData.GetPriceMin(order))
-    if priceMin ~= nil and priceMin > 0 and tonumber(order.Price) < priceMin then
-      order.Price = priceMin
-      order:GetPriceRound()
-    end
-  end
-
-  if order:IsSell() then
-    if tonumber(priceLast) > tonumber(order.Price) and tonumber(priceLast) ~= 0 then
-      order.Price = priceLast + PRICE_DEVIATION_MULTIPLIER * order.SecurityInfo.min_price_step
-    end
-  end
-end
+require("PriceAdjuster")
 
 -- ==========================================
 -- Chain of checks pattern
@@ -207,9 +180,7 @@ function ClearVolumeWarnedTickers()
   OrderValidator.ClearVolumeWarnedTickers()
 end
 
-function AdjustPrice(order)
-  OrderValidator.AdjustPrice(order)
-end
+
 
 function CheckOrder(order)
   return OrderValidator.CheckOrder(order)
