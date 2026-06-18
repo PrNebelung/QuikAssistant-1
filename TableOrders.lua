@@ -113,12 +113,7 @@ function GetOrderOperation(order)
   if order == nil then
     return ""
   end
-
-  if (order.flags & FLAG_SELL) > 0 then
-    return "S"
-  else
-    return "B"
-  end
+  return GetOperation(order.flags)
 end
 
 function ClearTableOrdersControl()
