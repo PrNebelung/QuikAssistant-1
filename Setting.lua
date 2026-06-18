@@ -1,23 +1,12 @@
+local Constants = require("Constants")
 local BrokerAdapter = require("BrokerAdapter")
 local Config = require("Config")
 
 require("TableSetting")
 
 --- Путь к папке данных QUIK
-FLAG_ACTIVE = 0x1
-FLAG_EXECUTED = 0x2
-FLAG_SELL = 0x4
-
---- Путь к папке отчетов QUIK
-ERR_PRICE_TOO_LOW = 579
-ERR_PRICE_TOO_HIGH = 580
-ERR_EXECUTION_REJECTED = 133
-
---- Настройки подключения
-TRANS_STATUS_COMPLETED = 3
-
---- Множитель для отклонения цен
-PRICE_DEVIATION_MULTIPLIER = 10
+-- Initialize constants from Constants module
+_initConstants()
 
 --- Настройки ордеров
 Broker = ""

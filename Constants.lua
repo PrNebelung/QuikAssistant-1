@@ -1,0 +1,39 @@
+local Constants = {}
+
+-- ==========================================
+-- Order Flags (QUIK)
+-- ==========================================
+Constants.FLAG_ACTIVE = 0x1
+Constants.FLAG_EXECUTED = 0x2
+Constants.FLAG_SELL = 0x4
+
+-- ==========================================
+-- Error Codes (QUIK)
+-- ==========================================
+Constants.ERR_PRICE_TOO_LOW = 579
+Constants.ERR_PRICE_TOO_HIGH = 580
+Constants.ERR_EXECUTION_REJECTED = 133
+
+-- ==========================================
+-- Transaction Status
+-- ==========================================
+Constants.TRANS_STATUS_COMPLETED = 3
+
+-- ==========================================
+-- Price Adjustment
+-- ==========================================
+Constants.PRICE_DEVIATION_MULTIPLIER = 10
+
+-- Global wrappers for backward compatibility
+function _initConstants()
+  FLAG_ACTIVE = Constants.FLAG_ACTIVE
+  FLAG_EXECUTED = Constants.FLAG_EXECUTED
+  FLAG_SELL = Constants.FLAG_SELL
+  ERR_PRICE_TOO_LOW = Constants.ERR_PRICE_TOO_LOW
+  ERR_PRICE_TOO_HIGH = Constants.ERR_PRICE_TOO_HIGH
+  ERR_EXECUTION_REJECTED = Constants.ERR_EXECUTION_REJECTED
+  TRANS_STATUS_COMPLETED = Constants.TRANS_STATUS_COMPLETED
+  PRICE_DEVIATION_MULTIPLIER = Constants.PRICE_DEVIATION_MULTIPLIER
+end
+
+return Constants
