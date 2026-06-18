@@ -281,3 +281,5 @@ function EventCallbackTableSetting(t_id, msg, par1, par2)
     end
   end
 end
+
+return TableSetting

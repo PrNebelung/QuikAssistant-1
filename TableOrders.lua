@@ -129,3 +129,5 @@ function GetPriceCurrent(classCode, secCode)
   end
   return priceLast or "0"
 end
+
+return TableOrders

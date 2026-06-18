@@ -218,3 +218,5 @@ function format_num(amount, decimal, prefix, neg_prefix)
 
   return formatted
 end
+
+return TableConstructor
