@@ -11,30 +11,15 @@ end
 -- ==========================================
 -- Кэш информации о инструментах
 -- ==========================================
-local securityInfoCache = {}
+local BrokerAdapter = require("BrokerAdapter")
 
 function ClearSecurityInfoCache()
-  securityInfoCache = {}
+  BrokerAdapter.ClearSecurityInfoCache()
 end
 
---- Получение информации об инструменте по коду бумаги
 function GetSecurityInfo(securityCode)
-  if securityInfoCache[securityCode] then
-    return securityInfoCache[securityCode]
-  end
-  for classCode in string.gmatch("TQCB,TQBR,SPBXM,EQOB,TQIR,TQRD,TQOB,FQBR,TQTF,TQPI,MTQR,", "(%P*),") do
-    local SecurityInfo = getSecurityInfo(classCode, securityCode)
-    if SecurityInfo ~= nil then
-      securityInfoCache[securityCode] = SecurityInfo
-      return SecurityInfo
-    end
-  end
-  log.error("Инструмент не найден: " .. securityCode)
-  return nil
+  return BrokerAdapter.GetSecurityInfo(securityCode)
 end
-
---- Получение информации об инструменте в валюте (USD)
---- Создание заявки
 function Order:new(securityCode)
   local obj = {}
 

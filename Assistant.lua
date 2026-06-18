@@ -2,10 +2,12 @@ require("SubmittingOrders")
 require("TableConstructor")
 require("TradeSave")
 
+local BrokerAdapter = require("BrokerAdapter")
+
 json = require("json")
 
 function N_OnInit()
-  if isConnected() == 0 then
+  if not BrokerAdapter.IsConnected() then
     log.error("N_OnInit() ошибка подключения к серверу")
     return
   end
@@ -19,7 +21,7 @@ end
 
 -- Основной цикл обработки заявок, выполняется в цикле while в главной функции
 function N_OnMainLoop()
-  if isConnected() == 0 then
+  if not BrokerAdapter.IsConnected() then
     log.error("N_OnMainLoop() ошибка подключения к серверу")
     return
   end
@@ -170,7 +172,7 @@ function N_SetLimitOrder(
   log.trace(json.encode(Transaction))
 
   local ok, Res = pcall(function()
-    return sendTransaction(Transaction)
+    return BrokerAdapter.SendTransaction(Transaction)
   end)
   if not ok then
     Res = "Ошибка sendTransaction: " .. tostring(Res)
@@ -213,7 +215,7 @@ function N_CloseAllOrder()
           ORDER_KEY = tostring(item.order_num),
         }
         pcall(function()
-          sendTransaction(transaction)
+          BrokerAdapter.SendTransaction(transaction)
         end)
       end
     end

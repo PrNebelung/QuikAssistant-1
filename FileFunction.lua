@@ -1,3 +1,5 @@
+local BrokerAdapter = require("BrokerAdapter")
+
 ---------------------------------------------------------------------------
 -- Функции для работы с файлами
 --
@@ -10,7 +12,7 @@ local csv = require("csv")
 
 function getFromCSV(nameFileCSV)
   local result = {}
-  local path = getScriptPath() .. "//Data//" .. nameFileCSV
+  local path = BrokerAdapter.GetScriptPath() .. "//Data//" .. nameFileCSV
   local fileCSV = csv.open(path)
 
   if fileCSV ~= nil then

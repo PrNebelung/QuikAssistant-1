@@ -1,3 +1,5 @@
+local BrokerAdapter = require("BrokerAdapter")
+
 --Сохранение сделки в лог и в файл истории сделок
 function TradeSave(trade)
   local Operation = ""
@@ -21,7 +23,7 @@ function TradeSave(trade)
     .. Broker
     .. "\n"
 
-  local fp, err = io.open(getScriptPath() .. "//Data//MyTrades.csv", "a+")
+  local fp, err = io.open(BrokerAdapter.GetScriptPath() .. "//Data//MyTrades.csv", "a+")
   if not fp then
     log.error("Не удалось открыть MyTrades.csv: " .. tostring(err))
     return

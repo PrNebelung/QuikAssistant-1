@@ -3,6 +3,7 @@ require("FileFunction")
 require("Order")
 require("QuikFunction")
 require("TableOrders")
+local Config = require("Config")
 
 --- Время начала утреннего цикла
 TimeMainStart = nil
@@ -124,9 +125,9 @@ function SubmittingOrdersRun()
 
     if isSubmittingOrdersRun then
       log.debug(
-        string.format("2.1 Отправка заявок на покупку по файлу %s", FileBuyOrder)
+        string.format("2.1 Отправка заявок на покупку по файлу %s", Config.FileBuyOrder)
       )
-      local orders = LoadOrdersFromFile(FileBuyOrder)
+      local orders = LoadOrdersFromFile(Config.FileBuyOrder)
       stats.loaded = stats.loaded + #orders
       local s = SubmitOrders(orders)
       stats.sent = stats.sent + s.sent
@@ -139,10 +140,10 @@ function SubmittingOrdersRun()
       log.debug(
         string.format(
           "2.2 Отправка заявок на покупку облигаций edge %s",
-          FileBuyOrderBondsEdge
+          Config.Config.FileBuyOrderBondsEdge
         )
       )
-      local orders = LoadOrdersFromFile(FileBuyOrderBondsEdge)
+      local orders = LoadOrdersFromFile(Config.Config.FileBuyOrderBondsEdge)
       stats.loaded = stats.loaded + #orders
       local s = SubmitOrders(orders)
       stats.sent = stats.sent + s.sent
@@ -152,11 +153,11 @@ function SubmittingOrdersRun()
     end
 
     if isSubmittingOrdersRun then
-      local orders = LoadOrdersFromFile(FileBuyOrderEdge)
+      local orders = LoadOrdersFromFile(Config.Config.FileBuyOrderEdge)
       log.debug(
         string.format(
           "2.3 Отправка заявок на покупку по файлу edge %s",
-          FileBuyOrderEdge
+          Config.Config.FileBuyOrderEdge
         )
       )
       stats.loaded = stats.loaded + #orders
@@ -168,9 +169,9 @@ function SubmittingOrdersRun()
     end
 
     log.debug(
-      string.format("2.7 Отправка заявок на продажу по файлу %s", FileSellOrder)
+      string.format("2.7 Отправка заявок на продажу по файлу %s", Config.FileSellOrder)
     )
-    local orders = LoadOrdersFromFile(FileSellOrder)
+    local orders = LoadOrdersFromFile(Config.FileSellOrder)
     stats.loaded = stats.loaded + #orders
     local s = SubmitOrders(orders)
     stats.sent = stats.sent + s.sent
@@ -181,10 +182,10 @@ function SubmittingOrdersRun()
       log.debug(
         string.format(
           "2.8 Отправка заявок на продажу по файлу edge %s",
-          FileSellOrderEdge
+          Config.Config.FileSellOrderEdge
         )
       )
-      local orders = LoadOrdersFromFile(FileSellOrderEdge)
+      local orders = LoadOrdersFromFile(Config.Config.FileSellOrderEdge)
       stats.loaded = stats.loaded + #orders
       local s = SubmitOrders(orders)
       stats.sent = stats.sent + s.sent

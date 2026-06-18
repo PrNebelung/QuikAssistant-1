@@ -1,3 +1,6 @@
+local BrokerAdapter = require("BrokerAdapter")
+local Config = require("Config")
+
 require("TableSetting")
 
 --- Путь к папке данных QUIK
@@ -100,7 +103,7 @@ function SetClientSetting()
   if ClearSecurityInfoCache then
     ClearSecurityInfoCache()
   end
-  local userId = getInfoParam("USERID")
+  local userId = BrokerAdapter.GetInfoParam("USERID")
   local problem = ""
   if userId == nil or userId == "" then
     problem = "ID параметра не найден"
@@ -128,4 +131,6 @@ function SetClientSetting()
   FileBuyOrderEdge = Broker .. "_BuyOrders_Edge.csv"
   FileBuyOrderBondsEdge = Broker .. "_BuyOrdersBonds_Edge.csv"
   FileSellOrderEdge = Broker .. "_SellOrders_Edge.csv"
+
+  Config.ApplyBrokerSettings()
 end

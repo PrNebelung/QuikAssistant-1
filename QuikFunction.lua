@@ -1,13 +1,8 @@
+local BrokerAdapter = require("BrokerAdapter")
+local Config = require("Config")
+
 function GetParamInfo(order, param)
-  local dbg_class = order.SecurityInfo.class_code or "nil"
-  local dbg_code = order.SecurityInfo.code or "nil"
-  log.error(string.format("DEBUG GetParamInfo: class_code=%s code=%s param=%s", dbg_class, dbg_code, param))
-  local value = getParamEx(order.SecurityInfo.class_code, order.SecurityInfo.code, param)
-  if value == nil or value.result == "0" then
-    log.error("Параметр не найден.", param, order.Print())
-    return "0"
-  end
-  return value.param_value
+  return BrokerAdapter.GetParamInfo(order, param)
 end
 
 --- Получение последней цены
@@ -38,7 +33,7 @@ function GetPricePrev(order)
 end
 
 -- Коэффициент корректировки объёма ордера, если последняя не активирована или не исполнена
-function GetKoeffVolumeOrderMax(order, priceMin)
+function GetKoeffConfig.VolumeOrderMax(order, priceMin)
   local priceLast = GetPriceLast(order)
   if tonumber(priceMin) == nil or tonumber(priceMin) == 0 or tonumber(priceLast) == nil then
     return 1
@@ -55,16 +50,16 @@ end
 --- Для инструментов BondVolumeOrderMax умножается на коэффициент.
 --- Для инструментов в SPB - берём лимиты в долларах.
 function GetOrderVolumeMax(order, priceMin)
-  local koeff = GetKoeffVolumeOrderMax(order, priceMin)
-  local limit = VolumeOrderMax
+  local koeff = GetKoeffConfig.VolumeOrderMax(order, priceMin)
+  local limit = Config.VolumeOrderMax
 
   if order:IsBond() then
-    limit = BondVolumeOrderMax * tonumber(koeff)
+    limit = BondConfig.VolumeOrderMax * tonumber(koeff)
   end
 
   -- Ограничение по лимиту
-  if limit > VolumeOrderLimit then
-    limit = VolumeOrderLimit
+  if limit > Config.VolumeOrderLimit then
+    limit = Config.VolumeOrderLimit
   end
 
   return limit
@@ -94,55 +89,39 @@ end
 
 --- Поиск в QUIK для получения всех активных инструментов для синхронизации позиций
 function GetQuikOrders()
-  local countOrders = getNumberOf("orders")
-
-  log.debug(string.format("?????????? ???????: %d ??.", countOrders))
-  local ok, orders = pcall(function()
-    return SearchItems("orders", 0, countOrders - 1, FindOrder, "flags, sec_code, class_code")
-  end)
-  if ok and orders ~= nil then
-    for i = 1, #orders do
-      local ok2, order = pcall(function()
-        return getItem("orders", orders[i])
-      end)
-      if ok2 and order then
-        OnOrder(order)
-      end
+  local orderIndices = BrokerAdapter.SearchOrders(FindOrder, "flags, sec_code, class_code")
+  log.debug(string.format("Active orders: %d items.", #orderIndices))
+  for i = 1, #orderIndices do
+    local order = BrokerAdapter.GetOrder(orderIndices[i])
+    if order then
+      OnOrder(order)
     end
   end
 end
 
 -- Проверяем существование ордеров в QUIK на инструменты, отправленные за этот интервал времени ордеров
 function IsOrderExists(newOrder)
-  local countOrders = getNumberOf("orders")
+  local orderIndices = BrokerAdapter.SearchOrders(FindOrder, "flags, sec_code, class_code")
+  for i = 1, #orderIndices do
+    local order = BrokerAdapter.GetOrder(orderIndices[i])
+    if order then
+      local operation
+      if (order.flags & FLAG_SELL) > 0 then
+        operation = "S"
+      else
+        operation = "B"
+      end
 
-  local ok, orders = pcall(function()
-    return SearchItems("orders", 0, countOrders - 1, FindOrder, "flags, sec_code, class_code")
-  end)
-  if ok and orders ~= nil then
-    for i = 1, #orders do
-      local ok2, order = pcall(function()
-        return getItem("orders", orders[i])
-      end)
-      if ok2 and order then
-        local operation
-        if (order.flags & FLAG_SELL) > 0 then
-          operation = "S"
-        else
-          operation = "B"
-        end
-
-        if
-          order.sec_code == newOrder.SecurityCode
-          and operation == newOrder.Operation
-          and string.format("%." .. newOrder.SecurityInfo.scale .. "f", tonumber(order.price)) == string.format(
-            "%." .. newOrder.SecurityInfo.scale .. "f",
-            tonumber(newOrder.Price)
-          )
-          and ((order.flags & FLAG_ACTIVE) > 0 or IsOrderExecuted(order.flags))
-        then
-          return true
-        end
+      if
+        order.sec_code == newOrder.SecurityCode
+        and operation == newOrder.Operation
+        and string.format("%." .. newOrder.SecurityInfo.scale .. "f", tonumber(order.price)) == string.format(
+          "%." .. newOrder.SecurityInfo.scale .. "f",
+          tonumber(newOrder.Price)
+        )
+        and ((order.flags & FLAG_ACTIVE) > 0 or IsOrderExecuted(order.flags))
+      then
+        return true
       end
     end
   end
@@ -169,33 +148,23 @@ end
 
 --- Получение позиции по тикеру из depo_limits.
 function GetPosition(securityCode)
-  -- Проверка кэша
   if positionCache[securityCode] then
     return positionCache[securityCode]
   end
 
-  local countPositions = getNumberOf("depo_limits")
-
-  local ok, positions = pcall(function()
-    return SearchItems("depo_limits", 0, countPositions - 1, FindPosition, "limit_kind, currentbal")
-  end)
-  if ok and positions ~= nil then
-    for i = 1, #positions do
-      local ok2, position = pcall(function()
-        return getItem("depo_limits", positions[i])
-      end)
-      if ok2 and position and position.sec_code == securityCode then
-        log.debug("Найдена позиция. ", securityCode)
-        log.trace(json.encode(position))
-        positionCache[securityCode] = position
-        return position
-      end
+  local positionIndices = BrokerAdapter.SearchPositions(FindPosition, "limit_kind, currentbal")
+  for i = 1, #positionIndices do
+    local position = BrokerAdapter.GetPosition(positionIndices[i])
+    if position and position.sec_code == securityCode then
+      log.debug("Position found. ", securityCode)
+      log.trace(json.encode(position))
+      positionCache[securityCode] = position
+      return position
     end
   end
 
   return nil
 end
-
 local volumeWarnedTickers = {}
 
 function ClearVolumeWarnedTickers()
@@ -277,7 +246,7 @@ function CheckOrder(order)
 
   --- Проверка на превышение максимально допустимого объёма ордера для покупки
   if order:IsBuy() then
-    local limit = VolumeOrderLimit
+    local limit = Config.VolumeOrderLimit
 
     if order:GetVolume() > limit then
       local reason = string.format(
@@ -298,9 +267,9 @@ function CheckOrder(order)
     end
 
     local actuation = (tonumber(priceLast) - tonumber(order.Price)) / tonumber(order.Price) * 100
-    local limit = LimitActuationOrderEdge
+    local limit = Config.LimitActuationOrderEdge
     if order:IsBond() and not order:IsOFZ() then
-      limit = LimitActuationOrderBondEdge
+      limit = Config.LimitActuationOrderBondEdge
     end
 
     if actuation ~= nil and tonumber(actuation) < tonumber(limit) then

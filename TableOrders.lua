@@ -1,3 +1,5 @@
+local BrokerAdapter = require("BrokerAdapter")
+
 nameColumnSecutityName = "Наименование инструмента"
 nameColumnSecutityCode = "Код бумаги (тикер)"
 nameColumnOperation = "Операция"
@@ -43,11 +45,11 @@ function RefreshTableOrdersControl()
     ShowTableOrdersControl(tableOrdersControl)
   end
 
-  local countOrders = getNumberOf("orders")
-  local orders = SearchItems("orders", 0, countOrders - 1, FindOrder, "flags, sec_code, class_code")
+  local countOrders = BrokerAdapter.GetNumberOfOrders()
+  local orders = BrokerAdapter.SearchOrders(FindOrder, "flags, sec_code, class_code")
   if orders ~= nil then
     for i = 1, #orders do
-      local order = getItem("orders", orders[i])
+      local order = BrokerAdapter.GetOrder(orders[i])
       UpdateTableOrdersControl(tableOrdersControl, order)
     end
   end
@@ -74,7 +76,7 @@ function UpdateTableOrdersControl(t, order)
   local priceLast = GetPriceCurrent(order.class_code, order.sec_code)
   local operation = GetOrderOperation(order)
   local actuation = (tonumber(priceLast) - tonumber(order.price)) / tonumber(order.price) * 100
-  local lcResult = getParamEx(order.class_code, order.sec_code, "LASTCHANGE")
+  local lcResult = BrokerAdapter.GetParamEx(order.class_code, order.sec_code, "LASTCHANGE")
   local lastChange = lcResult and lcResult.param_value or 0
 
   local row = FindRow(t, order.order_num)
@@ -126,10 +128,10 @@ function ClearTableOrdersControl()
 end
 
 function GetPriceCurrent(classCode, secCode)
-  local lastResult = getParamEx(classCode, secCode, "LAST")
+  local lastResult = BrokerAdapter.GetParamEx(classCode, secCode, "LAST")
   local priceLast = lastResult and lastResult.param_value or "0"
   if tonumber(priceLast) == 0 then
-    local prevResult = getParamEx(classCode, secCode, "PREVPRICE")
+    local prevResult = BrokerAdapter.GetParamEx(classCode, secCode, "PREVPRICE")
     priceLast = prevResult and prevResult.param_value or "0"
   end
   return priceLast
