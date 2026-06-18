@@ -131,7 +131,6 @@ end
 -- Функция обработки ответа сервера на отправленную транзакцию
 function OnTransReply(trans_reply)
   -- Если она обработана в таблице, то пропускаем
-  --  if trans_reply.brokerref:find('N_'..SEC_CODE) == nil then return end
   -- Поиск ответа в таблице по номеру транзакции
   for i, TransReply in ipairs(N_TransReplies) do
     -- Если данный ответ уже есть в таблице по номеру транзакции
@@ -156,7 +155,6 @@ end
 -- Функция обработки ответа сервера на исполнение/изменение заявки на экране
 function OnOrder(order)
   -- Если она обработана в таблице, то пропускаем
-  --  if order.brokerref:find('N_'..SEC_CODE) == nil then return end
   -- Поиск заявки в таблице
   for i, Order in ipairs(N_Orders) do
     -- Если заявка уже существует в таблице
@@ -185,7 +183,6 @@ end
 -- Функция обработки ответа сервера на исполнение/изменение сделки на экране
 function OnTrade(trade)
   -- Если она обработана в таблице, то пропускаем
-  --  if trade.brokerref:find('N_'..SEC_CODE) == nil then return end
   -- Поиск сделки в таблице
   for i, Trade in ipairs(N_Trades) do
     -- Если номер сделки уже существует в таблице
