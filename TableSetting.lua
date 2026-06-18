@@ -1,30 +1,30 @@
 require("TableConstructor")
 
-nameSettingServerTime = "Время сервера"
-nameSettingBroker = "Брокер"
-nameSettingClientCode = "Код клиента"
-nameSettingAccountCode = "Код счета"
-nameSettingVolumeOrderMax = "Максимальный размер суммы (рубли)"
-nameSettingFileBuyOrder = "Файл с заявками на покупку"
-nameSettingFileSellOrder = "Файл с заявками на продажу"
-nameSettingFileBuyOrderEdge = "Файл с заявками на покупку на экстремумах"
+nameSettingServerTime = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
+nameSettingBroker = "пїЅпїЅпїЅпїЅпїЅпїЅ"
+nameSettingClientCode = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
+nameSettingAccountCode = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ"
+nameSettingVolumeOrderMax = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅ)"
+nameSettingFileBuyOrder = "пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
+nameSettingFileSellOrder = "пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
+nameSettingFileBuyOrderEdge = "пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 nameSettingFileBuyOrderBondsEdge =
-  "Файл с заявками на покупку облигаций на экстремумах"
+  "пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
-nameSettingFileSellOrderEdge = "Файл с заказами на продажу (настольчик)"
-nameSettingInAllAssets = "Все валюты активы"
-nameSettingAllAssets = "Активы в валюте"
-nameSettingProfitLoss = "Прибыль/убыток"
-nameSettingRateChange = "% Изменение"
-nameSettingIndexMOEX = "Индекс мосбиржи"
+nameSettingFileSellOrderEdge = "пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)"
+nameSettingInAllAssets = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ"
+nameSettingAllAssets = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ"
+nameSettingProfitLoss = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅ"
+nameSettingRateChange = "% пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
+nameSettingIndexMOEX = "пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
 
 tableSetting = nil
 
 function CreateTableSetting(t)
-  t:AddColumn("Параметр", QTABLE_STRING_TYPE, 40)
-  t:AddColumn("Значение", QTABLE_STRING_TYPE, 30)
-  t:AddColumn("Комментарий", QTABLE_STRING_TYPE, 50)
-  t:SetCaption("Настройки")
+  t:AddColumn("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", QTABLE_STRING_TYPE, 40)
+  t:AddColumn("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", QTABLE_STRING_TYPE, 30)
+  t:AddColumn("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", QTABLE_STRING_TYPE, 50)
+  t:SetCaption("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
   SetTableNotificationCallback(t.t_id, EventCallbackTableSetting)
 end
 
@@ -60,7 +60,7 @@ end
 function FindSetting(t, setting)
   local rows, cols = t:GetSize()
   for i = 1, rows do
-    local tabl = t:GetValue(i, "Параметр")
+    local tabl = t:GetValue(i, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
     if tabl.image == setting then
       return i
     end
@@ -72,9 +72,9 @@ function SetServerTime(t)
   local serverTime = getInfoParam("SERVERTIME")
   local problem = ""
   if serverTime == nil or serverTime == "" then
-    problem = "Время сервера не получено"
+    problem = "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
   else
-    problem = "Работает QUIK"
+    problem = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ QUIK"
   end
 
   local row = FindSetting(t, nameSettingServerTime)
@@ -96,7 +96,7 @@ function SetAccountSetting(t)
   end
 
   SetCell(t.t_id, row, 1, nameSettingBroker)
-  SetCell(t.t_id, row, 2, AlignRight(Broker, 50))
+  SetCell(t.t_id, row, 2, AlignRight(Config.Broker, 50))
   SetCell(t.t_id, row, 3, problem)
 
   local row = FindSetting(t, nameSettingClientCode)
@@ -105,7 +105,7 @@ function SetAccountSetting(t)
   end
 
   SetCell(t.t_id, row, 1, nameSettingClientCode)
-  SetCell(t.t_id, row, 2, ClientCode)
+  SetCell(t.t_id, row, 2, Config.ClientCode)
   SetCell(t.t_id, row, 3, problem)
 
   local row = FindSetting(t, nameSettingAccountCode)
@@ -114,7 +114,7 @@ function SetAccountSetting(t)
   end
 
   SetCell(t.t_id, row, 1, nameSettingAccountCode)
-  SetCell(t.t_id, row, 2, AccountCode)
+  SetCell(t.t_id, row, 2, Config.AccountCode)
   SetCell(t.t_id, row, 3, problem)
 
   SetCell(t.t_id, row, 3, problem)
@@ -125,7 +125,7 @@ function SetAccountSetting(t)
   end
 
   SetCell(t.t_id, row, 1, nameSettingVolumeOrderMax)
-  SetCell(t.t_id, row, 2, tostring(VolumeOrderMax))
+  SetCell(t.t_id, row, 2, tostring(Config.VolumeOrderMax))
   SetCell(t.t_id, row, 3, problem)
 end
 
@@ -134,10 +134,10 @@ function AlignRight(text, n)
 end
 
 function SetPortfolioInfo(t)
-  local portfolio = getPortfolioInfoEx(FirmId, ClientCode, 0)
+  local portfolio = getPortfolioInfoEx(Config.FirmId, Config.ClientCode, 0)
   local problem = ""
   if portfolio == nil then
-    problem = "Информация по портфелю не получена"
+    problem = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
     log.error(problem)
     return
   end
@@ -196,11 +196,11 @@ function GetSettingValue(t, param)
   local row = FindSetting(t, param)
 
   if row ~= nil then
-    local value = t:GetValue(row, "Значение")
+    local value = t:GetValue(row, "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
     return value.image
   end
 
-  log.error(string.format("Параметр настройки %s не найден!", param))
+  log.error(string.format("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ %s пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ!", param))
   return nil
 end
 
@@ -213,7 +213,7 @@ function SetFileOrders(t)
   end
 
   SetCell(t.t_id, row, 1, nameSettingFileBuyOrder)
-  SetCell(t.t_id, row, 2, FileBuyOrder)
+  SetCell(t.t_id, row, 2, Config.FileBuyOrder)
   SetCell(t.t_id, row, 3, problem)
 
   local row = FindSetting(t, nameSettingFileSellOrder)
@@ -222,7 +222,7 @@ function SetFileOrders(t)
   end
 
   SetCell(t.t_id, row, 1, nameSettingFileSellOrder)
-  SetCell(t.t_id, row, 2, FileSellOrder)
+  SetCell(t.t_id, row, 2, Config.FileSellOrder)
   SetCell(t.t_id, row, 3, problem)
 
   local row = FindSetting(t, nameSettingFileBuyOrderEdge)
@@ -231,7 +231,7 @@ function SetFileOrders(t)
   end
 
   SetCell(t.t_id, row, 1, nameSettingFileBuyOrderEdge)
-  SetCell(t.t_id, row, 2, FileBuyOrderEdge)
+  SetCell(t.t_id, row, 2, Config.FileBuyOrderEdge)
   SetCell(t.t_id, row, 3, problem)
 
   local row = FindSetting(t, nameSettingFileBuyOrderBondsEdge)
@@ -240,7 +240,7 @@ function SetFileOrders(t)
   end
 
   SetCell(t.t_id, row, 1, nameSettingFileBuyOrderBondsEdge)
-  SetCell(t.t_id, row, 2, FileBuyOrderBondsEdge)
+  SetCell(t.t_id, row, 2, Config.FileBuyOrderBondsEdge)
 
   local row = FindSetting(t, nameSettingFileSellOrderEdge)
   if row == nil then
@@ -248,7 +248,7 @@ function SetFileOrders(t)
   end
 
   SetCell(t.t_id, row, 1, nameSettingFileSellOrderEdge)
-  SetCell(t.t_id, row, 2, FileSellOrderEdge)
+  SetCell(t.t_id, row, 2, Config.FileSellOrderEdge)
   SetCell(t.t_id, row, 3, problem)
 end
 
@@ -272,7 +272,7 @@ function EventCallbackTableSetting(t_id, msg, par1, par2)
         local file = getScriptPath() .. "//Data//" .. filename
         os.execute('start "" notepad.exe "' .. file .. '"')
       else
-        log.error("Недопустимое имя файла: " .. tostring(filename))
+        log.error("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ: " .. tostring(filename))
       end
     end
 
