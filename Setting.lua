@@ -114,4 +114,5 @@ function SetClientSetting()
   Config.FileBuyOrderBondsEdge = Config.Broker .. "_BuyOrdersBonds_Edge.csv"
   Config.FileSellOrderEdge = Config.Broker .. "_SellOrders_Edge.csv"
 
+  _initSettingGlobals()
 end
