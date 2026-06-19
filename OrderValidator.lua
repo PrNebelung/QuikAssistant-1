@@ -4,7 +4,6 @@
 --- срабатывание, цена облигации, средняя цена позиции.
 --- Также содержит логику расчёта максимального объёма ордера.
 
-
 local Config = require("Config")
 local MarketData = require("MarketData")
 local PositionService = require("PositionService")
@@ -47,7 +46,6 @@ function OrderValidator.GetOrderVolumeMax(order, priceMin)
 
   return limit
 end
-
 
 -- ==========================================
 -- Цепочка проверок
@@ -199,8 +197,6 @@ end
 function ClearVolumeWarnedTickers()
   OrderValidator.ClearVolumeWarnedTickers()
 end
-
-
 
 --- Глобальная обёртка для OrderValidator.CheckOrder.
 function CheckOrder(order)

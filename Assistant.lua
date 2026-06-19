@@ -145,7 +145,9 @@ end
 local limitOrderRecursionDepth = 0
 local LIMIT_ORDER_MAX_RECURSION = 3
 
---- Отправка лимитного ордера в QUIK. Формирует транзакцию, отправляет через BrokerAdapter, обрабатывает ошибки. Возвращает (transId, error).
+--- Отправка лимитного ордера в QUIK.
+--- Формирует транзакцию, отправляет через BrokerAdapter,
+--- обрабатывает ошибки. Возвращает (transId, error).
 function N_SetLimitOrder(
   accountCode,
   clientCode,
