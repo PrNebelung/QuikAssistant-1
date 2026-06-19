@@ -93,9 +93,11 @@ function main()
 
     for i, Trade in ipairs(N_Trades) do
       if N_Trades[i].order_num ~= nil then
+        local matched = false
         for j, Order in ipairs(N_Orders) do
           if N_Trades[i].order_num == N_Orders[j].order_num then
             N_Trades[i].trans_id = N_Orders[j].trans_id
+            matched = true
             if N_OnNewTrade ~= nil then
               N_OnNewTrade(N_Trades[i])
             end
@@ -114,6 +116,11 @@ function main()
               break
             end
           end
+        end
+        if not matched and N_Trades[i].buy_sell == "B" then
+          TradeClosePosition(N_Trades[i])
+          N_LastTradeNum = N_Trades[i].trade_num
+          tradesToRemove[N_Trades[i].trade_num] = true
         end
       end
     end
