@@ -11,7 +11,7 @@ local Config = require("Config")
 require("TableSetting")
 
 --- Путь к папке данных QUIK
--- Initialize constants from Constants module
+-- Инициализация констант из модуля Constants
 _initConstants()
 
 --- Настройки ордеров
@@ -28,7 +28,8 @@ function SetSettingFinam()
   Config.VolumeOrderLimit = 120000
 end
 
--- Backward-compatible global wrappers
+-- Глобальные обёртки для обратной совместимости
+--- Копирует значения Config.* в глобальные переменные (Broker, ClientCode и др.) для обратной совместимости.
 function _initSettingGlobals()
   Broker = Config.Broker
   ClientCode = Config.ClientCode
@@ -46,6 +47,7 @@ function _initSettingGlobals()
   FileBuyOrderBondsEdge = Config.FileBuyOrderBondsEdge
   FileSellOrderEdge = Config.FileSellOrderEdge
 end
+--- Устанавливает параметры для брокера VTB: код клиента, счёт, фирма, лимиты.
 function SetSettingVTB()
   Config.Broker = "VTB"
   Config.ClientCode = "386507"
@@ -57,6 +59,7 @@ function SetSettingVTB()
   Config.LimitActuationOrderBondEdge = 30
 end
 
+--- Устанавливает параметры для брокера PSB: код клиента, счёт, фирма, лимиты.
 function SetSettingPSB()
   Config.Broker = "PSB"
   Config.ClientCode = "40200"
@@ -69,6 +72,7 @@ function SetSettingPSB()
   Config.VolumeOrderLimit = 120000
 end
 
+--- Устанавливает параметры для брокера RSHB: код клиента, счёт, фирма, лимиты.
 function SetSettingRSHB()
   Config.Broker = "RSHB"
   Config.ClientCode = "496082"
@@ -80,6 +84,7 @@ function SetSettingRSHB()
   Config.LimitActuationOrderBondEdge = 60
 end
 
+--- Устанавливает параметры для тестового брокера: код клиента, счёт, лимиты.
 function SetSettingTest()
   Config.Broker = "TEST"
   Config.ClientCode = "10567"
@@ -98,6 +103,7 @@ BrokerRegistry = {
   ["119330"] = SetSettingTest,
 }
 
+--- Автоматически определяет брокера по USERID, вызывает настройку, формирует имена CSV, копирует в глобалы.
 function SetClientSetting()
   if ClearSecurityInfoCache then
     ClearSecurityInfoCache()

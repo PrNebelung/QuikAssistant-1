@@ -119,6 +119,7 @@ function SubmittingOrdersRun()
   IsSendingOrders = true
   cycleCount = cycleCount + 1
 
+  --- —брасывает флаг IsSendingOrders при завершении или ошибке отправки.
   local function ensureSendingReset()
     IsSendingOrders = false
   end

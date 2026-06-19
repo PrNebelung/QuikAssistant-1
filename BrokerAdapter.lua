@@ -7,16 +7,18 @@
 local BrokerAdapter = {}
 
 -- ==========================================
--- Security Info
+-- Информация об инструментах
 -- ==========================================
 
 local CLASS_CODES = "TQCB,TQBR,SPBXM,EQOB,TQIR,TQRD,TQOB,FQBR,TQTF,TQPI,MTQR,"
 local securityInfoCache = {}
 
+--- Очищает кеш информации об инструментах.
 function BrokerAdapter.ClearSecurityInfoCache()
   securityInfoCache = {}
 end
 
+--- Получает информацию об инструменте. Ищет по списку классов. Кеширует результат.
 function BrokerAdapter.GetSecurityInfo(securityCode)
   if securityInfoCache[securityCode] then
     return securityInfoCache[securityCode]
@@ -33,9 +35,10 @@ function BrokerAdapter.GetSecurityInfo(securityCode)
 end
 
 -- ==========================================
--- Market Data
+-- Рыночные данные
 -- ==========================================
 
+--- Получает параметр инструмента (LAST, PRICEMIN, PRICEMAX и др.). Возвращает значение или nil.
 function BrokerAdapter.GetParamEx(classCode, secCode, param)
   local value = getParamEx(classCode, secCode, param)
   if value == nil or value.result == "0" then
@@ -44,6 +47,7 @@ function BrokerAdapter.GetParamEx(classCode, secCode, param)
   return value.param_value
 end
 
+--- Получает параметр инструмента из объекта Order. Логирует ошибку если не найден. Возвращает "0" по умолчанию.
 function BrokerAdapter.GetParamInfo(order, param)
   local value = getParamEx(order.SecurityInfo.class_code, order.SecurityInfo.code, param)
   if value == nil or value.result == "0" then
@@ -54,13 +58,15 @@ function BrokerAdapter.GetParamInfo(order, param)
 end
 
 -- ==========================================
--- Orders
+-- Ордера
 -- ==========================================
 
+--- Возвращает количество ордеров в QUIK.
 function BrokerAdapter.GetNumberOfOrders()
   return getNumberOf("orders")
 end
 
+--- Ищет ордера по фильтру. Возвращает массив индексов.
 function BrokerAdapter.SearchOrders(filterFunc, params)
   local count = BrokerAdapter.GetNumberOfOrders()
   if count <= 0 then return {} end
@@ -73,6 +79,7 @@ function BrokerAdapter.SearchOrders(filterFunc, params)
   return {}
 end
 
+--- Получает ордер по индексу из QUIK.
 function BrokerAdapter.GetOrder(index)
   local ok, order = pcall(function()
     return getItem("orders", index)
@@ -82,13 +89,15 @@ function BrokerAdapter.GetOrder(index)
 end
 
 -- ==========================================
--- Positions (depo_limits)
+-- Позиции (депо-лимиты)
 -- ==========================================
 
+--- Возвращает количество депо-лимитов в QUIK.
 function BrokerAdapter.GetNumberOfPositions()
   return getNumberOf("depo_limits")
 end
 
+--- Ищет позиции по фильтру. Возвращает массив индексов.
 function BrokerAdapter.SearchPositions(filterFunc, params)
   local count = BrokerAdapter.GetNumberOfPositions()
   if count <= 0 then return {} end
@@ -101,6 +110,7 @@ function BrokerAdapter.SearchPositions(filterFunc, params)
   return {}
 end
 
+--- Получает позицию по индексу из QUIK.
 function BrokerAdapter.GetPosition(index)
   local ok, position = pcall(function()
     return getItem("depo_limits", index)
@@ -110,9 +120,10 @@ function BrokerAdapter.GetPosition(index)
 end
 
 -- ==========================================
--- Transactions
+-- Транзакции
 -- ==========================================
 
+--- Отправляет транзакцию в QUIK. Возвращает пустую строку при успехе или текст ошибки.
 function BrokerAdapter.SendTransaction(transaction)
   local ok, result = pcall(function()
     return sendTransaction(transaction)
@@ -124,25 +135,29 @@ function BrokerAdapter.SendTransaction(transaction)
 end
 
 -- ==========================================
--- Connection & Info
+-- Подключение и информация
 -- ==========================================
 
+--- Возвращает true если QUIK подключён к серверу.
 function BrokerAdapter.IsConnected()
   return isConnected() == 1
 end
 
+--- Получает информационный параметр QUIK (USERID, SERVERTIME и др.).
 function BrokerAdapter.GetInfoParam(param)
   return getInfoParam(param)
 end
 
+--- Получает информацию о портфеле (активы, прибыль/убыток).
 function BrokerAdapter.GetPortfolioInfo(firmId, clientCode)
   return getPortfolioInfoEx(firmId, clientCode, 0)
 end
 
 -- ==========================================
--- File System
+-- Файловая система
 -- ==========================================
 
+--- Возвращает путь к скрипту QUIK.
 function BrokerAdapter.GetScriptPath()
   return getScriptPath()
 end

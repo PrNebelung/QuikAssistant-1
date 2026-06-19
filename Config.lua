@@ -6,7 +6,7 @@
 local Config = {}
 
 -- ==========================================
--- Broker Settings
+-- Параметры брокера
 -- ==========================================
 Config.Broker = ""
 Config.ClientCode = ""
@@ -14,7 +14,7 @@ Config.AccountCode = ""
 Config.FirmId = ""
 
 -- ==========================================
--- Volume Limits
+-- Лимиты объёмов
 -- ==========================================
 Config.VolumeOrderMax = 0
 Config.BondVolumeOrderMax = 0
@@ -22,13 +22,13 @@ Config.VolumeOrderLimit = 200000
 Config.VolumeOrderLimitUSD = 100
 
 -- ==========================================
--- Actuation Thresholds
+-- Пороговые значения срабатывания
 -- ==========================================
 Config.LimitActuationOrderEdge = 5
 Config.LimitActuationOrderBondEdge = 60
 
 -- ==========================================
--- Order Files
+-- Файлы ордеров
 -- ==========================================
 Config.FileBuyOrder = ""
 Config.FileSellOrder = ""
@@ -37,7 +37,7 @@ Config.FileBuyOrderBondsEdge = ""
 Config.FileSellOrderEdge = ""
 
 -- ==========================================
--- Session Times (UTC)
+-- Расписание сессий (UTC)
 -- ==========================================
 Config.SessionMorning = { hour = 7, min = 0, sec = 30 }
 Config.SessionMain = { hour = 10, min = 0, sec = 30 }

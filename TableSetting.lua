@@ -27,6 +27,7 @@ nameSettingIndexMOEX = "Индекс мосбиржи"
 
 tableSetting = nil
 
+--- Создаёт колонки таблицы настроек (параметр, значение, описание).
 function CreateTableSetting(t)
   t:AddColumn("Параметр", QTABLE_STRING_TYPE, 40)
   t:AddColumn("Значение", QTABLE_STRING_TYPE, 30)
@@ -35,11 +36,13 @@ function CreateTableSetting(t)
   SetTableNotificationCallback(t.t_id, EventCallbackTableSetting)
 end
 
+--- Показывает таблицу настроек и устанавливает позицию.
 function ShowTableSetting(t)
   t:Show()
   t:SetPosition(1, 420, 680, 320)
 end
 
+--- Обновляет таблицу: создаёт при первом вызове, восстанавливает если закрыта.
 function UpdateTableSetting()
   if tableSetting == nil then
     tableSetting = QTable.new()
@@ -53,17 +56,20 @@ function UpdateTableSetting()
   end
 end
 
+--- Заполняет таблицу начальными данными: время сервера, аккаунт, файлы ордеров.
 function SetDataToTableSetting(t)
   SetServerTime(t)
   SetAccountSetting(t)
   SetFileOrders(t)
 end
 
+--- Обновляет динамические данные: время сервера, портфель.
 function RefreshDataToTableSetting(t)
   SetServerTime(t)
   SetPortfolioInfo(t)
 end
 
+--- Ищет строку в таблице по имени параметра.
 function FindSetting(t, setting)
   local rows, cols = t:GetSize()
   for i = 1, rows do
@@ -75,6 +81,7 @@ function FindSetting(t, setting)
   return nil
 end
 
+--- Устанавливает время сервера QUIK в таблице.
 function SetServerTime(t)
   local serverTime = getInfoParam("SERVERTIME")
   local problem = ""
@@ -94,6 +101,7 @@ function SetServerTime(t)
   SetCell(t.t_id, row, 3, problem)
 end
 
+--- Устанавливает настройки брокера в таблице: имя, код клиента, код счёта, лимит.
 function SetAccountSetting(t)
   local problem = ""
 
@@ -136,10 +144,12 @@ function SetAccountSetting(t)
   SetCell(t.t_id, row, 3, problem)
 end
 
+--- Выравнивает текст по правому краю добавлением пробелов.
 function AlignRight(text, n)
   return string.rep(" ", n - string.len(text)) .. text
 end
 
+--- Устанавливает информацию о портфеле: активы, прибыль/убыток, % изменения, индекс MOEX.
 function SetPortfolioInfo(t)
   local portfolio = getPortfolioInfoEx(Config.FirmId, Config.ClientCode, 0)
   local problem = ""
@@ -199,6 +209,7 @@ function SetPortfolioInfo(t)
   SetCell(t.t_id, row, 3, problem)
 end
 
+--- Получает значение параметра из таблицы по имени.
 function GetSettingValue(t, param)
   local row = FindSetting(t, param)
 
@@ -211,6 +222,7 @@ function GetSettingValue(t, param)
   return nil
 end
 
+--- Устанавливает имена CSV-файлов ордеров в таблице.
 function SetFileOrders(t)
   local problem = ""
 
@@ -259,6 +271,7 @@ function SetFileOrders(t)
   SetCell(t.t_id, row, 3, problem)
 end
 
+--- Обработчик событий таблицы: двойной клик по файлу — открывает в Notepad.
 function EventCallbackTableSetting(t_id, msg, par1, par2)
   local row = par1
   local col = par2
@@ -284,7 +297,6 @@ function EventCallbackTableSetting(t_id, msg, par1, par2)
     end
 
     if param == nameSettingServerTime then
-      --CloseQuik();
     end
   end
 end

@@ -12,6 +12,7 @@ local BrokerAdapter = require("BrokerAdapter")
 
 json = require("json")
 
+--- Инициализация ассистента. Проверяет подключение к брокеру, очищает кеш, инициализирует настройки и таблицы.
 function N_OnInit()
   if not BrokerAdapter.IsConnected() then
     log.error("N_OnInit() ошибка подключения к серверу")
@@ -26,6 +27,7 @@ function N_OnInit()
 end
 
 -- Основной цикл обработки заявок, выполняется в цикле while в главной функции
+--- Основной цикл. Проверяет подключение, вызывает SubmittingOrders(), обновляет таблицы настроек и ордеров.
 function N_OnMainLoop()
   if not BrokerAdapter.IsConnected() then
     log.error("N_OnMainLoop() ошибка подключения к серверу")
@@ -37,6 +39,7 @@ function N_OnMainLoop()
 end
 
 -- Обработчик остановки скрипта
+--- Остановка. Удаляет таблицы интерфейса, логирует завершение.
 function N_OnStop()
   -- Удаление окон таблиц
   tableSetting:Delete()
@@ -45,12 +48,14 @@ function N_OnStop()
   log.debug("N_OnStop() завершение работы скрипта")
 end
 
+--- Закрытие. Логирует закрытие ассистента.
 function N_OnClose()
   -- Удаление окон таблиц
   log.debug("N_OnClose() закрытие соединения")
 end
 
 -- Обработчик ошибки отправки транзакции
+--- Обработка ошибки отправки транзакции. Помечает ордер с ошибкой, логирует детали.
 function N_OnTransSendError(trans)
   SetLimitOrdersWithError(trans)
   log.debug(
@@ -63,6 +68,7 @@ function N_OnTransSendError(trans)
 end
 
 -- Обработчик ошибки исполнения транзакции
+--- Обработка ошибки исполнения транзакции. Помечает ордер, логирует код ошибки, цену, количество.
 function N_OnTransExecutionError(trans)
   -- Обработка ошибок для повторной отправки заявки (если это возможно)
   SetLimitOrdersWithError(trans)
@@ -83,12 +89,14 @@ function N_OnTransExecutionError(trans)
 end
 
 -- Обработчик успешного исполнения транзакции
+--- Обработка успешной транзакции. Логирует подтверждение.
 function N_OnTransOK(trans)
   log.debug("N_OnTransOK() транзакция " .. trans.trans_id .. " успешно исполнена")
   log.trace(json.encode(trans))
 end
 
 -- Обработчик новой заявки
+--- Обработка нового ордера. Логирует номер, транзакцию, бумагу, цену, количество.
 function N_OnNewOrder(order)
   log.debug(
     "N_OnNewOrder() создана новая заявка №"
@@ -106,6 +114,7 @@ function N_OnNewOrder(order)
 end
 
 -- Обработчик заявки, которая частично исполнилась
+--- Обработка частичного исполнения ордера. Логирует количество исполненного.
 function N_OnExecutionOrder(order)
   log.debug(
     "N_OnExecutionOrder() исполнение заявки №"
@@ -119,6 +128,7 @@ function N_OnExecutionOrder(order)
 end
 
 -- Обработчик новой сделки
+--- Обработка новой сделки. Сохраняет сделку в файл, закрывает позицию, логирует цену и количество.
 function N_OnNewTrade(trade)
   -- Сохранение сделки в файл
   TradeSave(trade)
@@ -144,6 +154,7 @@ local limitOrderRecursionDepth = 0
 local LIMIT_ORDER_MAX_RECURSION = 3
 
 -- Функция отправки ограничительной заявки на биржу
+--- Отправка лимитного ордера в QUIK. Формирует транзакцию, отправляет через BrokerAdapter, обрабатывает ошибки. Возвращает (transId, error).
 function N_SetLimitOrder(
   accountCode,
   clientCode,

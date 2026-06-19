@@ -7,30 +7,31 @@
 local Constants = {}
 
 -- ==========================================
--- Order Flags (QUIK)
+-- Флаги ордеров QUIK
 -- ==========================================
 Constants.FLAG_ACTIVE = 0x1
 Constants.FLAG_EXECUTED = 0x2
 Constants.FLAG_SELL = 0x4
 
 -- ==========================================
--- Error Codes (QUIK)
+-- Коды ошибок QUIK
 -- ==========================================
 Constants.ERR_PRICE_TOO_LOW = 579
 Constants.ERR_PRICE_TOO_HIGH = 580
 Constants.ERR_EXECUTION_REJECTED = 133
 
 -- ==========================================
--- Transaction Status
+-- Статусы транзакций
 -- ==========================================
 Constants.TRANS_STATUS_COMPLETED = 3
 
 -- ==========================================
--- Price Adjustment
+-- Корректировка цен
 -- ==========================================
 Constants.PRICE_DEVIATION_MULTIPLIER = 10
 
--- Global wrappers for backward compatibility
+-- Глобальные обёртки для обратной совместимости
+--- Копирует значения Constants.* в глобальные переменные (FLAG_ACTIVE и др.) для обратной совместимости.
 function _initConstants()
   FLAG_ACTIVE = Constants.FLAG_ACTIVE
   FLAG_EXECUTED = Constants.FLAG_EXECUTED

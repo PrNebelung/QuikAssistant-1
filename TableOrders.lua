@@ -20,6 +20,7 @@ nameColumnOrderNum = "Номер заявки с сервера брокера "
 tableOrdersControl = nil
 
 
+--- Создаёт колонки таблицы ордеров (название, код, операция, актуализация, цена, объём и т.д.).
 function CreateTableOrdersControl(t)
   t:AddColumn(nameColumnSecurityName, QTABLE_STRING_TYPE, 35)
   t:AddColumn(nameColumnSecurityCode, QTABLE_STRING_TYPE, 20)
@@ -35,11 +36,13 @@ function CreateTableOrdersControl(t)
   t:SetCaption("Управление заявками")
 end
 
+--- Показывает таблицу ордеров и устанавливает позицию на экране.
 function ShowTableOrdersControl(t)
   t:Show()
   t:SetPosition(700, 1, 1200, 925)
 end
 
+--- Обновляет таблицу: создаёт при первом вызове, восстанавливает если закрыта, заполняет данными из QUIK.
 function RefreshTableOrdersControl()
   if tableOrdersControl == nil then
     tableOrdersControl = QTable.new()
@@ -61,6 +64,7 @@ function RefreshTableOrdersControl()
   end
 end
 
+--- Ищет строку в таблице по номеру ордера.
 function FindRow(t, orderNum)
   if orderNum ~= nil then
     local rows, cols = t:GetSize()
@@ -74,6 +78,7 @@ function FindRow(t, orderNum)
   return nil
 end
 
+--- Обновляет или добавляет строку для ордера с цветовой индикацией.
 function UpdateTableOrdersControl(t, order)
   local secInfo = GetSecurityInfo(order.sec_code)
   if secInfo == nil then
@@ -115,6 +120,7 @@ function UpdateTableOrdersControl(t, order)
   end
 end
 
+--- Возвращает операцию ордера ("B"/"S") по флагам.
 function GetOrderOperation(order)
   if order == nil then
     return ""
@@ -122,12 +128,14 @@ function GetOrderOperation(order)
   return GetOperation(order.flags)
 end
 
+--- Очищает таблицу ордеров.
 function ClearTableOrdersControl()
   if tableOrdersControl ~= nil then
     tableOrdersControl:Clear()
   end
 end
 
+--- Получает текущую цену: LAST или PREVPRICE если LAST = 0.
 function GetPriceCurrent(classCode, secCode)
   local priceLast = BrokerAdapter.GetParamEx(classCode, secCode, "LAST")
   if priceLast == nil or tonumber(priceLast) == 0 then

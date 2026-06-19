@@ -16,20 +16,22 @@ math.round = function(num, idp)
 end
 
 -- ==========================================
--- Security Info Cache
+-- Кеш информации об инструментах
 -- ==========================================
 local BrokerAdapter = require("BrokerAdapter")
 
+--- Очищает кеш информации об инструментах (делегирует в BrokerAdapter).
 function ClearSecurityInfoCache()
   BrokerAdapter.ClearSecurityInfoCache()
 end
 
+--- Получает информацию об инструменте по коду (делегирует в BrokerAdapter).
 function GetSecurityInfo(securityCode)
   return BrokerAdapter.GetSecurityInfo(securityCode)
 end
 
 -- ==========================================
--- Exception tickers (configurable)
+-- Список исключений (настраиваемый)
 -- ==========================================
 local exceptionTickers = {}
 for secCode in string.gmatch("ENPG,RTKM,MTSS,NKNCP,UPRO,MGTSP,IRAO,MAGN,TGKA,GAZP,AFLT,ELFV,SMLT,SNGS,ALRS,MGNT,HYDR,VTBR,FEES,MVID,SGZH,AQUA,STSB,IVAT,UPRO,VKCO,", "(%P*),") do
@@ -37,7 +39,7 @@ for secCode in string.gmatch("ENPG,RTKM,MTSS,NKNCP,UPRO,MGTSP,IRAO,MAGN,TGKA,GAZ
 end
 
 -- ==========================================
--- Bond class codes
+-- Коды классов облигаций
 -- ==========================================
 local bondClassCodes = {}
 for classCode in string.gmatch("TQCB,EQOB,TQIR,TQRD,TQOB,", "(%P*),") do
@@ -45,52 +47,63 @@ for classCode in string.gmatch("TQCB,EQOB,TQIR,TQRD,TQOB,", "(%P*),") do
 end
 
 -- ==========================================
--- Order Methods (on metatable, not per-instance)
+-- Методы ордера (на метатаблице)
 -- ==========================================
 
+--- Возвращает true если тикер в списке исключений проверки срабатывания.
 function Order:IsExceptionFromLimitActuation()
   return exceptionTickers[self.SecurityCode] == true
 end
 
+--- Возвращает true если инструмент — облигация (по коду класса).
 function Order:IsBond()
   return bondClassCodes[self.SecurityInfo.class_code] == true
 end
 
+--- Возвращает true если инструмент — ОФЗ (класс TQOB).
 function Order:IsOFZ()
   return self.SecurityInfo.class_code == "TQOB"
 end
 
+--- Возвращает true если инструмент — ETF (класс TQTF).
 function Order:IsEtf()
   return self.SecurityInfo.class_code == "TQTF"
 end
 
+--- Возвращает true если операция = "B" (покупка).
 function Order:IsBuy()
   return self.Operation ~= nil and self.Operation == "B"
 end
 
+--- Возвращает true если операция = "S" (продажа).
 function Order:IsSell()
   return self.Operation ~= nil and self.Operation == "S"
 end
 
+--- Обнуляет операцию, количество и цену.
 function Order:Clear()
   self.Operation = ""
   self.Quantity = 0
   self.Price = 0
 end
 
+--- Форматирует цену в строку с нужным количеством знаков после запятой (по scale).
 function Order:FormatPrice()
   return string.format("%." .. self.SecurityInfo.scale .. "f", tonumber(self.Price))
 end
 
+--- Форматирует количество в строку с n знаками после запятой (по умолчанию 0).
 function Order:FormatQuantity(n)
   local n = (n or 0)
   return string.format("%." .. n .. "f", self.Quantity)
 end
 
+--- Возвращает ключ дедупликации: "код операция количество цена".
 function Order:GetDedupKey()
   return self.SecurityInfo.code .. " " .. self.Operation .. " " .. self:FormatQuantity() .. " " .. self:FormatPrice()
 end
 
+--- Конвертирует цену облигации из процентов в рубли (умножает на номинал/100).
 function Order:GetPriceInCurrency(price)
   if self:IsBond() then
     local nominal = self.SecurityInfo.face_value
@@ -100,6 +113,7 @@ function Order:GetPriceInCurrency(price)
   end
 end
 
+--- Устанавливает операцию, цену и количество. Округляет цену.
 function Order:SetOperation(operation, price, quantity)
   self.Operation = operation
   self.Quantity = quantity
@@ -115,6 +129,7 @@ function Order:SetOperation(operation, price, quantity)
   end
 end
 
+--- Устанавливает минимальную цену для покупки (1 лот по min_price_step) или нулевую для продажи.
 function Order:SetPriceMin(operation)
   self.Operation = operation
   if self:IsBuy() then
@@ -126,6 +141,7 @@ function Order:SetPriceMin(operation)
   end
 end
 
+--- Рассчитывает количество лотов исходя из цены и максимального объёма. Для облигаций учитывает номинал.
 function Order:SetQuantity(operation, price, quantityMax)
   self.Operation = operation
   if price ~= nil and tonumber(price) > 0 and quantityMax ~= nil and tonumber(quantityMax) > 0 and self:IsBuy() then
@@ -147,6 +163,7 @@ function Order:SetQuantity(operation, price, quantityMax)
   end
 end
 
+--- Рассчитывает количество для продажи по текущей позиции.
 function Order:SetQuantitySell(operation, price, positionQty)
   self.Operation = operation
   if price ~= nil and tonumber(price) > 0 and positionQty ~= nil and tonumber(positionQty) > 0 and self:IsSell() then
@@ -158,6 +175,7 @@ function Order:SetQuantitySell(operation, price, positionQty)
   end
 end
 
+--- Рассчитывает объём ордера в валюте (количество * цена * лот).
 function Order:GetVolume()
   local priceInCurrency = 0
   if self:IsBond() then
@@ -168,6 +186,7 @@ function Order:GetVolume()
   return tonumber(self.Quantity) * tonumber(priceInCurrency) * tonumber(self.SecurityInfo.lot_size)
 end
 
+--- Округляет цену до шага цены: ceil для покупки, floor для продажи.
 function Order:GetPriceRound()
   local price = math.round(self.Price, self.SecurityInfo.scale)
 
@@ -185,6 +204,7 @@ function Order:GetPriceRound()
   self.Price = price
 end
 
+--- Возвращает строковое представление ордера для логирования.
 function Order:Print()
   return string.format(
     "[Instrument: %s; Code: %s; Class: %s; Operation: %s; Price: %f; Quantity: %f; Volume: %f;]",
@@ -199,9 +219,10 @@ function Order:Print()
 end
 
 -- ==========================================
--- Constructor
+-- Конструктор
 -- ==========================================
 
+--- Конструктор ордера. Получает информацию об инструменте из QUIK. Возвращает nil если инструмент не найден.
 function Order:new(securityCode)
   local obj = {}
   setmetatable(obj, self)

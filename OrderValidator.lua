@@ -13,10 +13,12 @@ local OrderValidator = {}
 
 local volumeWarnedTickers = {}
 
+--- Очищает список тикеров с предупреждением об объёме.
 function OrderValidator.ClearVolumeWarnedTickers()
   volumeWarnedTickers = {}
 end
 
+--- Рассчитывает коэффициент максимального объёма на основе разницы LAST и PRICEMIN.
 function OrderValidator.GetKoeffVolumeOrderMax(order, priceMin)
   local priceLast = MarketData.GetPriceLast(order)
   if tonumber(priceMin) == nil or tonumber(priceMin) == 0 or tonumber(priceLast) == nil then
@@ -29,6 +31,7 @@ function OrderValidator.GetKoeffVolumeOrderMax(order, priceMin)
   return 1
 end
 
+--- Рассчитывает максимальный объём ордера с учётом коэффициента и лимитов.
 function OrderValidator.GetOrderVolumeMax(order, priceMin)
   local koeff = OrderValidator.GetKoeffVolumeOrderMax(order, priceMin)
   local limit = Config.VolumeOrderMax
@@ -47,10 +50,11 @@ end
 require("PriceAdjuster")
 
 -- ==========================================
--- Chain of checks pattern
--- Each check returns: true, "" on pass; false, reason on fail
+-- Цепочка проверок
+-- Каждая проверка возвращает: true, "" при успехе; false, причина при отклонении
 -- ==========================================
 
+--- Проверка: обязательные поля ордера (цена, количество, операция) не пустые и > 0.
 local function checkNotNil(order)
   if
     order == nil
@@ -67,6 +71,7 @@ local function checkNotNil(order)
   return true, ""
 end
 
+--- Проверка: цена покупки не ниже минимальной цены стакана (PRICEMIN).
 local function checkPriceBelowPricemin(order)
   if not order:IsBuy() then return true, "" end
   local priceMin = tonumber(MarketData.GetPriceMin(order))
@@ -78,6 +83,7 @@ local function checkPriceBelowPricemin(order)
   return true, ""
 end
 
+--- Проверка: наличие достаточной позиции для продажи.
 local function checkPositionForSell(order)
   if not order:IsSell() then return true, "" end
   local position = PositionService.GetPosition(order.SecurityCode)
@@ -92,6 +98,7 @@ local function checkPositionForSell(order)
   return true, ""
 end
 
+--- Проверка: объём ордера не превышает установленный лимит.
 local function checkVolumeLimit(order)
   if not order:IsBuy() then return true, "" end
   local limit = Config.VolumeOrderLimit
@@ -108,6 +115,7 @@ local function checkVolumeLimit(order)
   return true, ""
 end
 
+--- Проверка: процент срабатывания (разница LAST и цены ордера) не ниже порога.
 local function checkActuation(order)
   if not order:IsBuy() then return true, "" end
   if order:IsExceptionFromLimitActuation() then return true, "" end
@@ -126,6 +134,7 @@ local function checkActuation(order)
   return true, ""
 end
 
+--- Проверка: цена облигации не превышает 100%% номинала.
 local function checkBondPriceLimit(order)
   if not order:IsBuy() or not order:IsBond() then return true, "" end
   local nominal = 100.0
@@ -140,6 +149,7 @@ local function checkBondPriceLimit(order)
   return true, ""
 end
 
+--- Проверка: цена покупки не выше средней цены текущей позиции.
 local function checkAvgPositionPrice(order)
   if not order:IsBuy() or order:IsBond() then return true, "" end
   local position = PositionService.GetPosition(order.SecurityCode)
@@ -164,6 +174,7 @@ local checkChain = {
   checkAvgPositionPrice,
 }
 
+--- Запускает цепочку проверок ордера. Возвращает (true, "") при успехе или (false, причина) при отклонении.
 function OrderValidator.CheckOrder(order)
   for _, check in ipairs(checkChain) do
     local passed, reason = check(order)
@@ -174,21 +185,25 @@ function OrderValidator.CheckOrder(order)
   return true, ""
 end
 
--- Global wrappers for backward compatibility
+-- Глобальные обёртки для обратной совместимости
+--- Глобальная обёртка для OrderValidator.GetKoeffVolumeOrderMax.
 function GetKoeffVolumeOrderMax(order, priceMin)
   return OrderValidator.GetKoeffVolumeOrderMax(order, priceMin)
 end
 
+--- Глобальная обёртка для OrderValidator.GetOrderVolumeMax.
 function GetOrderVolumeMax(order, priceMin)
   return OrderValidator.GetOrderVolumeMax(order, priceMin)
 end
 
+--- Глобальная обёртка для OrderValidator.ClearVolumeWarnedTickers.
 function ClearVolumeWarnedTickers()
   OrderValidator.ClearVolumeWarnedTickers()
 end
 
 
 
+--- Глобальная обёртка для OrderValidator.CheckOrder.
 function CheckOrder(order)
   return OrderValidator.CheckOrder(order)
 end

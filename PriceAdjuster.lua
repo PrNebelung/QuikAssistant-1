@@ -9,6 +9,7 @@ local Constants = require("Constants")
 
 local PriceAdjuster = {}
 
+--- Корректирует цену ордера. Для покупки: если LAST < цена, снижает на 10 шагов; если цена < PRICEMIN, ставит PRICEMIN. Для продажи: если LAST > цена, повышает на 10 шагов. Не трогает цены из файла.
 function PriceAdjuster.AdjustPrice(order)
   if order == nil or order.Price == nil or order.Operation == nil then
     return
@@ -38,6 +39,7 @@ function PriceAdjuster.AdjustPrice(order)
   end
 end
 
+--- Глобальная обёртка для PriceAdjuster.AdjustPrice.
 function AdjustPrice(order)
   PriceAdjuster.AdjustPrice(order)
 end

@@ -31,12 +31,14 @@ local modes = {
   { name = "fatal", color = "\27[35m" },
 }
 
+--- Формирует путь к файлу лога: /Log/<Broker>/<дата>.log.
 local function getLogFile()
   local datetime = os.date("*t", os.time())
   local broker = Broker or ""
   return string.format("/Log/%s/%04d-%02d-%02d.log", broker, datetime.year, datetime.month, datetime.day)
 end
 
+--- Открывает файл лога для записи. Переоткрывает если изменился день или брокер.
 local function openLogFile()
   local filePath = getLogFile()
   if logFilePath == filePath and logFileHandle then
@@ -56,11 +58,12 @@ local function openLogFile()
   return nil
 end
 
+--- Извлекает имя файла из полного пути для логирования.
 local function makeRelativePath(path)
   if not path or path == "" then
     return path
   end
-  -- Always extract just the filename
+  -- Извлекает имя файла из полного пути
   local filename = path:match("([^/\\]+)$")
   return filename or path
 end
@@ -92,7 +95,7 @@ end
 for i, x in ipairs(modes) do
   local nameupper = x.name:upper()
   log[x.name] = function(...)
-    -- Return early if we're below the log level
+    -- Ранний возврат если уровень лога ниже порога
     if i < levels[log.level] then
       return
     end
@@ -101,7 +104,7 @@ for i, x in ipairs(modes) do
     local info = debug.getinfo(2, "Sl")
     local lineinfo = makeRelativePath(tostring(info.short_src)) .. ":" .. info.currentline
 
-    -- Output to console
+    -- Вывод в консоль
     print(
       string.format(
         "%s[%-6s%s]%s %s: %s",
@@ -114,7 +117,7 @@ for i, x in ipairs(modes) do
       )
     )
 
-    -- Output to log file (INFO and above only)
+    -- Вывод в файл лога (только INFO и выше)
     if Broker and Broker ~= "" and levels[x.name] >= levels["info"] then
       local str = string.format("%-6s %s [%s] %s: %s\n", nameupper, os.date("%H:%M:%S"), Broker, lineinfo, msg)
       local fp = openLogFile()
@@ -144,6 +147,7 @@ for i, x in ipairs(modes) do
   end
 end
 
+--- Закрывает файл лога.
 function log.close()
   if logFileHandle then
     pcall(function()

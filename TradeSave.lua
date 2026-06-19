@@ -6,6 +6,7 @@
 local BrokerAdapter = require("BrokerAdapter")
 
 --Сохранение сделки в лог и в файл истории сделок
+--- Записывает сделку в файл MyTrades.csv: дата, время, код, операция, количество, цена, брокер.
 function TradeSave(trade)
   local Operation = ""
   if (trade.flags & FLAG_EXECUTED) ~= 0 then

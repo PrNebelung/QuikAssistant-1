@@ -8,13 +8,12 @@ local BrokerAdapter = require("BrokerAdapter")
 ---------------------------------------------------------------------------
 -- Функции для работы с файлами
 --
--- @author Nebelung (Nebelung.Programming@mail.ru)
 --
--- @copyright 2021 Nebelung Project
 ---------------------------------------------------------------------------
 
 local csv = require("csv")
 
+--- Читает CSV-файл из папки Data, возвращает массив строк.
 function getFromCSV(nameFileCSV)
   local result = {}
   local path = BrokerAdapter.GetScriptPath() .. "//Data//" .. nameFileCSV
