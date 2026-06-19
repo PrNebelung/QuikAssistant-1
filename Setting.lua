@@ -1,3 +1,9 @@
+--- Настройки брокеров и инициализация конфигурации.
+--- Содержит функции SetSettingVTB, SetSettingPSB, SetSettingFinam и др.
+--- для заполнения Config параметрами конкретного брокера.
+--- Реализует автодетект брокера по USERID через BrokerRegistry.
+
+
 local Constants = require("Constants")
 local BrokerAdapter = require("BrokerAdapter")
 local Config = require("Config")

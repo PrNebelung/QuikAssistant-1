@@ -1,3 +1,9 @@
+--- Основная логика торгового ассистента.
+--- Определяет callback-функции обработки событий QUIK (N_OnInit, N_OnMainLoop,
+--- N_OnStop и др.), отправку лимитных ордеров через N_SetLimitOrder,
+--- обработку ошибок транзакций и закрытие всех активных ордеров.
+
+
 require("SubmittingOrders")
 require("TableConstructor")
 require("TradeSave")

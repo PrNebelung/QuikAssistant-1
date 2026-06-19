@@ -1,3 +1,9 @@
+--- Адаптер для взаимодействия с QUIK API.
+--- Инкапсулирует все вызовы функций QUIK: getSecurityInfo, getParamEx,
+--- SearchItems, getItem, sendTransaction, isConnected и др.
+--- Единая точка доступа к брокерскому API с кешированием.
+
+
 local BrokerAdapter = {}
 
 -- ==========================================

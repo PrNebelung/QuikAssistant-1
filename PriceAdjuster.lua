@@ -1,3 +1,9 @@
+--- Корректировщик цен ордеров.
+--- Автоматически корректирует цену покупки/продажи относительно
+--- последней цены (LAST) и минимального шага цены (PRICEMIN).
+--- Не изменяет цены, заданные из файла (UseFileParams).
+
+
 local MarketData = require("MarketData")
 local Constants = require("Constants")
 

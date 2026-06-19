@@ -1,3 +1,9 @@
+--- Точка входа скрипта QUIK.
+--- Загружает модули, определяет глобальные переменные состояния,
+--- реализует главный цикл обработки событий (транзакции, ордера, сделки)
+--- и callback-функции QUIK (OnInit, OnStop, OnOrder, OnTrade, OnTransReply).
+
+
 package.path = getScriptPath() .. "\\?.lua;"
 
 require("Assistant")

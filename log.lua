@@ -7,6 +7,12 @@
 -- under the terms of the MIT license. See LICENSE for details.
 --
 
+--- Модуль логирования (log).
+--- Реализует уровни TRACE/DEBUG/INFO/WARN/ERROR/FATAL.
+--- INFO и выше пишутся в файл Log/<Broker>/<дата>.log,
+--- все уровни выводятся в консоль QUIK.
+
+
 local log = { _version = "0.1.0" }
 
 log.usecolor = true
