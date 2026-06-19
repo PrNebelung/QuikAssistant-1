@@ -9,7 +9,10 @@ dofile("Tests/quik_mock.lua")
 
 -- Инициализация необходимых модулей
 dofile("Order.lua")
-dofile("QuikFunction.lua")
+require("MarketData")
+require("PositionService")
+require("OrderValidator")
+require("TransactionHandler")
 dofile("TradeSave.lua")
 dofile("TableConstructor.lua")
 
@@ -455,9 +458,9 @@ test("Корректность структуры данных", function()
 end)
 
 ---------------------------------------------
--- QuikFunction тесты
+-- TransactionHandler / OrderValidator тесты
 ---------------------------------------------
-print("\n=== QuikFunction тесты ===")
+print("\n=== TransactionHandler / OrderValidator тесты ===")
 
 test("GetOperation, IsOrderExecuted, FindOrder", function()
   assert_eq(GetOperation(FLAG_ACTIVE | FLAG_SELL), "S", "GetOperation sell")

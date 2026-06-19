@@ -7,7 +7,10 @@
 require("Setting")
 require("FileFunction")
 require("Order")
-require("QuikFunction")
+require("MarketData")
+require("PositionService")
+require("OrderValidator")
+require("TransactionHandler")
 require("TableOrders")
 local Config = require("Config")
 
