@@ -73,6 +73,7 @@ function main()
       local ExecutionCount = N_Orders[i].qty - N_Orders[i].balance
       -- ≈сли ещЄ есть лоты дл€ исполнени€,
       -- и количество исполненных лотов изменилось
+      if
         (N_Orders[i].last_execution_count == nil or N_Orders[i].last_execution_count ~= ExecutionCount)
         and ExecutionCount > 0
       then
