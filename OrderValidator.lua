@@ -8,6 +8,7 @@
 local Config = require("Config")
 local MarketData = require("MarketData")
 local PositionService = require("PositionService")
+require("PriceAdjuster")
 
 local OrderValidator = {}
 
@@ -47,7 +48,6 @@ function OrderValidator.GetOrderVolumeMax(order, priceMin)
   return limit
 end
 
-require("PriceAdjuster")
 
 -- ==========================================
 -- Цепочка проверок
@@ -185,7 +185,6 @@ function OrderValidator.CheckOrder(order)
   return true, ""
 end
 
--- Глобальные обёртки для обратной совместимости
 --- Глобальная обёртка для OrderValidator.GetKoeffVolumeOrderMax.
 function GetKoeffVolumeOrderMax(order, priceMin)
   return OrderValidator.GetKoeffVolumeOrderMax(order, priceMin)

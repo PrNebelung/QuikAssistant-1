@@ -37,7 +37,6 @@ function MarketData.GetPricePrev(order)
   return MarketData.GetParamInfo(order, "PREVPRICE")
 end
 
--- Глобальные обёртки для обратной совместимости
 --- Глобальная обёртка для MarketData.GetParamInfo (обратная совместимость).
 function GetParamInfo(order, param)
   return MarketData.GetParamInfo(order, param)

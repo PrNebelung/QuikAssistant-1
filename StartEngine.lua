@@ -135,7 +135,6 @@ function main()
   end
 end
 
--- Функция обработки ответа сервера на отправленную транзакцию
 --- Callback QUIK. Вызывается при ответе на транзакцию. Обновляет N_TransReplies.
 function OnTransReply(trans_reply)
   -- Если она обработана в таблице, то пропускаем
@@ -160,7 +159,6 @@ function OnTransReply(trans_reply)
   end
 end
 
--- Функция обработки ответа сервера на исполнение/изменение заявки на экране
 --- Callback QUIK. Вызывается при создании или обновлении ордера. Обновляет N_Orders.
 function OnOrder(order)
   -- Если она обработана в таблице, то пропускаем
@@ -189,7 +187,6 @@ function OnOrder(order)
   end
 end
 
--- Функция обработки ответа сервера на исполнение/изменение сделки на экране
 --- Callback QUIK. Вызывается при исполнении сделки. Обновляет N_Trades.
 function OnTrade(trade)
   -- Если она обработана в таблице, то пропускаем
@@ -221,7 +218,6 @@ function OnInit()
   end
 end
 
--- Функция обработки события завершения работы терминала
 --- Callback QUIK. Вызывается при остановке скрипта. Устанавливает isRun = false, вызывает N_OnStop().
 function OnStop()
   isRun = false

@@ -43,7 +43,6 @@ function PositionService.GetPosition(securityCode)
   return nil
 end
 
--- Глобальные обёртки для обратной совместимости
 --- Глобальная обёртка для PositionService.FindPosition.
 function FindPosition(limit_kind, currentbal)
   return PositionService.FindPosition(limit_kind, currentbal)

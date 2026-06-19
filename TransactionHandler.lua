@@ -158,7 +158,6 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
   log.error(json.encode(trans))
 end
 
--- Глобальные обёртки для обратной совместимости
 --- Глобальная обёртка для TransactionHandler.GetOperation.
 function GetOperation(flags)
   return TransactionHandler.GetOperation(flags)

@@ -30,7 +30,6 @@ Constants.TRANS_STATUS_COMPLETED = 3
 -- ==========================================
 Constants.PRICE_DEVIATION_MULTIPLIER = 10
 
--- Глобальные обёртки для обратной совместимости
 --- Копирует значения Constants.* в глобальные переменные (FLAG_ACTIVE и др.) для обратной совместимости.
 function _initConstants()
   FLAG_ACTIVE = Constants.FLAG_ACTIVE

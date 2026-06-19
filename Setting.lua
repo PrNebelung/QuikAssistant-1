@@ -28,7 +28,6 @@ function SetSettingFinam()
   Config.VolumeOrderLimit = 120000
 end
 
--- Глобальные обёртки для обратной совместимости
 --- Копирует значения Config.* в глобальные переменные (Broker, ClientCode и др.) для обратной совместимости.
 function _initSettingGlobals()
   Broker = Config.Broker
