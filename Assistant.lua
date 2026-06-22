@@ -55,7 +55,7 @@ end
 --- Обработка ошибки отправки транзакции. Помечает ордер с ошибкой, логирует детали.
 function N_OnTransSendError(trans)
   SetLimitOrdersWithError(trans)
-  log.debug(
+  log.warn(
     "N_OnTransSendError() ошибка отправки транзакции "
       .. trans.trans_id
       .. ": "
@@ -68,7 +68,7 @@ end
 function N_OnTransExecutionError(trans)
   -- Обработка ошибок для повторной отправки заявки (если это возможно)
   SetLimitOrdersWithError(trans)
-  log.debug(
+  log.warn(
     "N_OnTransExecutionError() ошибка исполнения транзакции "
       .. trans.trans_id
       .. ": "
