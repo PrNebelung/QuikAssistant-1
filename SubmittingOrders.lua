@@ -462,7 +462,37 @@ function TradeClosePosition(trade)
 
   order:SetOperation(operation, price, quantity)
   order.UseFileParams = true
-  table.insert(orders, order)
 
-  SubmitOrders(orders)
+  local clientAccountCode = AccountCode
+
+  local trans_id, err = N_SetLimitOrder(
+    clientAccountCode,
+    ClientCode,
+    order.SecurityInfo.class_code,
+    order.SecurityInfo.code,
+    order.Operation,
+    order:FormatPrice(),
+    order:FormatQuantity()
+  )
+  if err ~= "" then
+    log.error("Reverse sell order failed: ", err, order:Print())
+  else
+    log.info(
+      string.format(
+        "  [SEND-REVERSE] %s %s %s qty=%s price=%s",
+        order.Operation,
+        order.SecurityCode,
+        order.SecurityInfo.class_code,
+        order:FormatQuantity(),
+        order:FormatPrice()
+      )
+    )
+    local logOrder = {}
+    logOrder.SecurityCode = order.SecurityInfo.code
+    logOrder.Operation = order.Operation
+    logOrder.Quantity = order:FormatQuantity()
+    logOrder.Price = order:FormatPrice()
+    table.insert(sendOrders, logOrder)
+    sendOrdersSet[order:GetDedupKey()] = true
+  end
 end
