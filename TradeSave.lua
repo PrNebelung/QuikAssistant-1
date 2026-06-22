@@ -8,10 +8,12 @@ local BrokerAdapter = require("BrokerAdapter")
 --���������� ������ � ��� � � ���� ������� ������
 --- ���������� ������ � ���� MyTrades.csv: ����, �����, ���, ��������, ����������, ����, ������.
 function TradeSave(trade)
+  local isSell = (trade.buy_sell == "S") or ((trade.flags & FLAG_SELL) > 0)
   local Operation = ""
-  if trade.buy_sell == "S" then
+  if isSell then
     Operation = "-"
   end
+  log.debug(string.format("TradeSave: sec=%s buy_sell=%s flags=%s isSell=%s qty=%s", trade.sec_code, tostring(trade.buy_sell), tostring(trade.flags), tostring(isSell), trade.qty))
 
   local TradeLine = os.date("%Y-%m-%d")
     .. " "
