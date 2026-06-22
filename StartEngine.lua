@@ -27,6 +27,7 @@ N_LastTradeNum = 0 -- Последний номер сделки, которая была обработана и сохранен
 function main()
   -- Основной цикл
   while isRun do
+    local loopOk, loopErr = pcall(function()
     -- Вызов основного цикла работы скрипта, если он существует
     if N_OnMainLoop ~= nil then
       N_OnMainLoop()
@@ -143,6 +144,11 @@ function main()
     end
 
     sleep(1000)
+    end) -- pcall
+    if not loopOk then
+      log.error("Main loop error: " .. tostring(loopErr))
+      sleep(5000)
+    end
   end
 end
 
