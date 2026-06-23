@@ -1,29 +1,29 @@
---- Универсальный конструктор таблиц QUIK (QTable).
---- Реализует класс QTable с методами добавления колонок,
---- строк, позиционирования окна, окраски ячеек,
---- а также утилиты форматирования чисел.
+--- Обёртка для таблиц QUIK (QTable).
+--- Предоставляет удобный QTable с управлением колонками,
+--- цветом, форматированным выводом, событиями мыши,
+--- и вспомогательными функциями форматирования.
 
 
 EventTable = {
-  [QTABLE_LBUTTONDOWN] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
-  [QTABLE_RBUTTONDOWN] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
-  [QTABLE_LBUTTONDBLCLK] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
-  [QTABLE_RBUTTONDBLCLK] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
-  [QTABLE_SELCHANGED] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
-  [QTABLE_CHAR] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
-  [QTABLE_VKEY] = "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
-  [QTABLE_CONTEXTMENU] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
-  [QTABLE_MBUTTONDOWN] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ",
-  [QTABLE_MBUTTONDBLCLK] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
-  [QTABLE_LBUTTONUP] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
-  [QTABLE_RBUTTONUP] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
-  [QTABLE_CLOSE] = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ",
+  [QTABLE_LBUTTONDOWN] = "Нажатие левой кнопки мыши",
+  [QTABLE_RBUTTONDOWN] = "Нажатие правой кнопки мыши",
+  [QTABLE_LBUTTONDBLCLK] = "Двойной щелчок",
+  [QTABLE_RBUTTONDBLCLK] = "Двойной щелчок правой",
+  [QTABLE_SELCHANGED] = "Изменение выделения",
+  [QTABLE_CHAR] = "Нажатие клавиши",
+  [QTABLE_VKEY] = "Код виртуальной клавиши",
+  [QTABLE_CONTEXTMENU] = "Контекстное меню",
+  [QTABLE_MBUTTONDOWN] = "Нажатие на среднюю кнопку мыши",
+  [QTABLE_MBUTTONDBLCLK] = "Двойной щелчок",
+  [QTABLE_LBUTTONUP] = "Отпускание левой кнопки мыши",
+  [QTABLE_RBUTTONUP] = "Отпускание правой кнопки мыши",
+  [QTABLE_CLOSE] = "Закрытие окна",
 }
 
 QTable = {}
 QTable.__index = QTable
 
---- Создаёт новый экземпляр таблицы QUIK. Возвращает объект QTable или nil.
+--- Создаёт новую таблицу QUIK. Возвращает объект QTable или nil.
 function QTable.new()
   local t_id = AllocTable()
   if t_id ~= nil then
@@ -49,17 +49,17 @@ function QTable:Show()
   self.created = true
 end
 
---- Возвращает true если окно таблицы закрыто.
+--- Возвращает true если окно закрыто пользователем.
 function QTable:IsClosed()
   return IsWindowClosed(self.t_id)
 end
 
---- Уничтожает таблицу.
+--- Удаляет таблицу.
 function QTable:Delete()
   DestroyTable(self.t_id)
 end
 
---- Возвращает заголовок окна.
+--- Получение текущего заголовка.
 function QTable:GetCaption()
   if IsWindowClosed(self.t_id) then
     return self.caption
@@ -68,7 +68,7 @@ function QTable:GetCaption()
   end
 end
 
---- Устанавливает заголовок окна.
+--- Установка нового заголовка.
 function QTable:SetCaption(s)
   self.caption = s
   if not IsWindowClosed(self.t_id) then
@@ -76,7 +76,7 @@ function QTable:SetCaption(s)
   end
 end
 
---- Добавляет колонку: имя, тип (STRING/DOUBLE/INT64), ширина, опциональная функция форматирования.
+--- Добавление колонки: имя, тип (STRING/DOUBLE/INT64), ширина, необязательная функция форматирования.
 function QTable:AddColumn(name, c_type, width, ff)
   local col_desc = {}
   self.curr_col = self.curr_col + 1
@@ -87,12 +87,12 @@ function QTable:AddColumn(name, c_type, width, ff)
   AddColumn(self.t_id, self.curr_col, name, true, c_type, width)
 end
 
---- Очищает все строки таблицы.
+--- Очистка всех строк таблицы.
 function QTable:Clear()
   Clear(self.t_id)
 end
 
---- Устанавливает значение ячейки по номеру строки и имени колонки.
+--- Установка значения ячейки по номеру строки и имени колонки.
 function QTable:SetValue(row, col_name, data)
   local col_ind = self.columns[col_name].id or nil
   if col_ind == nil then
@@ -118,7 +118,7 @@ function QTable:GetSize()
   return GetTableSize(self.t_id)
 end
 
---- Получает значение ячейки. Возвращает таблицу {image=значение}.
+--- Получение значения ячейки. Возвращает объект {image=изображение}.
 function QTable:GetValue(row, name)
   local t = {}
   local col_ind = self.columns[name].id
@@ -129,7 +129,7 @@ function QTable:GetValue(row, name)
   return t
 end
 
---- Устанавливает позицию и размер окна таблицы.
+--- Установка позиции и размеров окна таблицы.
 function QTable:SetPosition(x, y, dx, dy)
   return SetWindowPos(self.t_id, x, y, dx, dy)
 end
@@ -140,30 +140,30 @@ function QTable:GetPosition()
   return top, left, right - left, bottom - top
 end
 
---- Окрашивает ячейку в красный.
+--- Установка цвета в красный.
 function QTable:Red(row, col)
   SetColor(self.t_id, row, col, RGB(255, 0, 0), RGB(0, 0, 0), RGB(255, 0, 0), RGB(0, 0, 0))
 end
---- Окрашивает ячейку в жёлтый.
+--- Установка цвета в жёлтый.
 function QTable:Yellow(row, col)
   SetColor(self.t_id, row, col, RGB(240, 240, 0), RGB(0, 0, 0), RGB(240, 240, 0), RGB(0, 0, 0))
 end
---- Окрашивает ячейку в зелёный.
+--- Установка цвета в зелёный.
 function QTable:Green(row, col)
   SetColor(self.t_id, row, col, RGB(0, 200, 0), RGB(0, 0, 0), RGB(0, 200, 0), RGB(0, 0, 0))
 end
---- Сбрасывает цвет ячейки на стандартный.
+--- Сброс цвета ячейки на стандартный.
 function QTable:Default(row, col)
   SetColor(self.t_id, row, col, QTABLE_DEFAULT_COLOR, QTABLE_DEFAULT_COLOR, QTABLE_DEFAULT_COLOR, QTABLE_DEFAULT_COLOR)
 end
 
--- Из sam_lie
--- Совместимость с Lua 5.0 и 5.1.
+-- от sam_lie
+-- Адаптировано под Lua 5.0 и 5.1.
 
 ---============================================================
--- добавление разделителя тысяч
+-- Вспомогательные функции
 --
---- Форматирует число с разделителем тысяч (пробел).
+--- Форматирование числа с разделителем разрядов (пробел).
 function comma_value(amount)
   local formatted = amount
   while true do
@@ -176,17 +176,17 @@ function comma_value(amount)
 end
 
 
---- Округляет число до decimal знаков. Делегирует в math.round.
+--- Округление числа до decimal знаков. Использует math.round.
 function round(val, decimal)
   return math.round(val, decimal)
 end
 
 --===================================================================
--- форматирует число с разделителем тысяч
--- и округлением до заданного количества знаков
+-- Форматирование числа с разделителем разрядов
+-- на основании исходного форматирования числа
 --
 --
---- Форматирует число: разделитель тысяч, десятичная часть, префикс, знак для отрицательных.
+--- Форматирование числа: количество знаков, десятичные, префикс, отрицательный префикс.
 function format_num(amount, decimal, prefix, neg_prefix)
   local str_amount, formatted, famount, remain
 
@@ -199,19 +199,19 @@ function format_num(amount, decimal, prefix, neg_prefix)
 
   remain = math.round(math.abs(amount) - famount, decimal)
 
-  -- добавление разделителя тысяч
+  -- Форматирование целой части
   formatted = comma_value(famount)
 
-  -- добавление дробной части
+  -- Форматирование дробной части
   if decimal > 0 then
     remain = string.sub(tostring(remain), 3)
     formatted = formatted .. "." .. remain .. string.rep("0", decimal - string.len(remain))
   end
 
-  -- добавление префикса
+  -- Добавление префикса
   formatted = (prefix or "") .. formatted
 
-  -- форматирование отрицательных значений
+  -- Обработка отрицательного значения
   if amount < 0 then
     if neg_prefix == "()" then
       formatted = "(" .. formatted .. ")"

@@ -6,7 +6,9 @@ All `.lua` files in this project use **Windows-1251 (cp1251)** encoding.
 
 ### DO NOT use the Edit tool directly on `.lua` files with Russian text.
 
-The Edit tool writes UTF-8, which breaks cp1251 files. Instead:
+**Why this matters:** The Edit tool writes UTF-8 by default. When UTF-8 Cyrillic (2 bytes per char) is written to a cp1251 file (1 byte per char), the text becomes garbled. In git it shows as `?` (0x3f bytes). The corruption is **irrecoverable** — the original Russian text is lost forever.
+
+Instead:
 
 ### Safe editing workflow:
 
@@ -154,10 +156,11 @@ for i, line in enumerate(text.split(chr(10))[:20], 1):
 
 ### Prevention
 
-- **Never** open cp1251 `.lua` files in a UTF-8 editor and save them
-- **Never** use the Edit tool on lines with Russian text
-- Always use `cp1251_wrapper.py` for modifications
+- **NEVER** open cp1251 `.lua` files in a UTF-8 editor and save them
+- **NEVER** use the Edit tool on `.lua` files that contain ANY Russian/Cyrillic text
+- **ALWAYS** use `cp1251_wrapper.py` for modifications to `.lua` files
 - Run `python cp1251_wrapper.py check_all` after any encoding-related changes
+- When in doubt: `python cp1251_wrapper.py check_all` FIRST, before editing
 
 ## Architecture Notes
 
