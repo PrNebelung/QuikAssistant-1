@@ -43,6 +43,9 @@ IsEveningTime = false
 sendOrders = {}
 sendOrdersSet = {}
 
+-- Cumulative stats across all cycles
+local cumStats = { loaded = 0, sent = 0, rejected = 0, duplicate = 0 }
+
 -- Счётчик циклов
 local cycleCount = 0
 
@@ -106,6 +109,37 @@ function SubmittingOrders()
 end
 
 --- Запуск процесса отправки заявок.
+--- ???????? ???? ???????? ?????? ???? ?????? ????????¬ ?????????.
+local marketDataWaited = false
+function WaitForMarketData()
+  if marketDataWaited then return end
+  marketDataWaited = true
+
+  local sampleSecurities = {
+    { classCode = "TQBR", secCode = "GAZP" },
+    { classCode = "TQBR", secCode = "SBER" },
+    { classCode = "TQOB", secCode = "SU26245RMFS9" },
+  }
+  local maxRetries = 30
+  local retryInterval = 2
+
+  for retry = 1, maxRetries do
+    for _, sample in ipairs(sampleSecurities) do
+      local value = getParamEx(sample.classCode, sample.secCode, "LAST")
+      if value ~= nil and value.result == "1" and tonumber(value.param_value) > 0 then
+        log.info(string.format("Market data loaded (checked %s, retry %d)", sample.secCode, retry))
+        return true
+      end
+    end
+    if retry % 5 == 0 then
+      log.info(string.format("Waiting for market data... (retry %d/%d)", retry, maxRetries))
+    end
+    sleep(retryInterval * 1000)
+  end
+  log.warn("Market data not fully loaded after waiting, proceeding anyway")
+  return false
+end
+
 function SubmittingOrdersRun()
   if IsSendingOrders then
     return
@@ -115,6 +149,11 @@ function SubmittingOrdersRun()
 
   IsSendingOrders = true
   cycleCount = cycleCount + 1
+
+  -- Wait for market data on first cycle
+  if cycleCount == 1 then
+    WaitForMarketData()
+  end
 
   --- Сброс флага IsSendingOrders для безопасного завершения при ошибке.
   local function ensureSendingReset()
@@ -198,6 +237,12 @@ function SubmittingOrdersRun()
       sleep(1000)
     end
 
+    -- Update cumulative stats
+    cumStats.loaded = cumStats.loaded + stats.loaded
+    cumStats.sent = cumStats.sent + stats.sent
+    cumStats.rejected = cumStats.rejected + stats.rejected
+    cumStats.duplicate = cumStats.duplicate + stats.duplicate
+
     log.info(
       string.format(
         "=== Цикл %d итог: загружено=%d, отправлено=%d, отклонено=%d, дубликатов=%d ===",
@@ -232,6 +277,13 @@ function SubmittingOrdersRun()
   if not ok then
     log.error("Ошибка в процессе отправки: " .. tostring(err))
   end
+
+
+  -- Cumulative summary across all cycles
+  log.info(string.format(
+    "=== Total after %d cycles: loaded=%d, sent=%d, rejected=%d, duplicate=%d ===",
+    cycleCount, cumStats.loaded, cumStats.sent, cumStats.rejected, cumStats.duplicate
+  ))
 
   IsSentOrders = true
 
