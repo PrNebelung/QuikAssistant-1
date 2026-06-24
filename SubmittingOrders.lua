@@ -476,7 +476,8 @@ end
 
 --- Обработка сделки для закрытия позиции
 function TradeClosePosition(trade)
-  if trade.buy_sell ~= "B" then return end
+  local isBuy = (trade.buy_sell == "B") or (trade.buy_sell == nil and (trade.flags & FLAG_SELL) == 0)
+  if not isBuy then return end
   local orders = {}
   local operation = "S"
   local securityCode = trade.sec_code
