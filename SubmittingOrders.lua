@@ -106,16 +106,7 @@ function SubmittingOrders()
     end
   end
 
-  local currentSessionEnabled = false
-  if IsEveningTime then
-    currentSessionEnabled = Config.SessionEveningEnabled
-  elseif IsMainTime then
-    currentSessionEnabled = Config.SessionMainEnabled
-  elseif IsMorningTime then
-    currentSessionEnabled = Config.SessionMorningEnabled
-  end
-
-  if not IsSentOrders and currentSessionEnabled then
+  if not IsSentOrders then
     if os.time(TimeMorningStart) < timeCurrent then
       SubmittingOrdersRun()
     end
