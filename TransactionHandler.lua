@@ -63,7 +63,7 @@ function TransactionHandler.IsOrderExists(newOrder)
           "%." .. newOrder.SecurityInfo.scale .. "f",
           tonumber(newOrder.Price)
         )
-        and (order.flags & FLAG_ACTIVE) > 0
+        and ((order.flags & FLAG_ACTIVE) > 0 or (order.flags & FLAG_EXECUTED) > 0)
       then
         return true
       end
