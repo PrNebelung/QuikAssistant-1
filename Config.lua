@@ -43,4 +43,9 @@ Config.SessionMorning = { hour = 7, min = 0, sec = 30 }
 Config.SessionMain = { hour = 10, min = 0, sec = 30 }
 Config.SessionEvening = { hour = 19, min = 2, sec = 10 }
 
+-- Session submission toggles
+Config.SessionMorningEnabled = true
+Config.SessionMainEnabled = true
+Config.SessionEveningEnabled = true
+
 return Config

@@ -84,7 +84,9 @@ function SubmittingOrders()
 
   if (os.time(TimeMorningStart) < timeCurrent) and not IsMorningTime then
     IsMorningTime = true
-    IsSentOrders = false
+    if Config.SessionMorningEnabled then
+      IsSentOrders = false
+    end
   end
 
   if (os.time(TimeMainStart) < timeCurrent) and not IsMainTime then
@@ -92,12 +94,16 @@ function SubmittingOrders()
       N_CloseAllOrder()
     end
     IsMainTime = true
-    IsSentOrders = false
+    if Config.SessionMainEnabled then
+      IsSentOrders = false
+    end
   end
 
   if (os.time(TimeEveningStart) < timeCurrent) and not IsEveningTime then
     IsEveningTime = true
-    IsSentOrders = false
+    if Config.SessionEveningEnabled then
+      IsSentOrders = false
+    end
   end
 
   if not IsSentOrders then

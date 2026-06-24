@@ -26,6 +26,9 @@ function SetSettingFinam()
   Config.LimitActuationOrderEdge = 0
   Config.LimitActuationOrderBondEdge = 50
   Config.VolumeOrderLimit = 120000
+  Config.SessionMorningEnabled = false
+  Config.SessionMainEnabled = true
+  Config.SessionEveningEnabled = false
 end
 
 --- Копирует значения Config.* в глобальные переменные (Broker, ClientCode и др.) для обратной совместимости.
@@ -45,6 +48,9 @@ function _initSettingGlobals()
   FileBuyOrderEdge = Config.FileBuyOrderEdge
   FileBuyOrderBondsEdge = Config.FileBuyOrderBondsEdge
   FileSellOrderEdge = Config.FileSellOrderEdge
+  SessionMorningEnabled = Config.SessionMorningEnabled
+  SessionMainEnabled = Config.SessionMainEnabled
+  SessionEveningEnabled = Config.SessionEveningEnabled
 end
 --- Устанавливает параметры для брокера VTB: код клиента, счёт, фирма, лимиты.
 function SetSettingVTB()
@@ -56,6 +62,9 @@ function SetSettingVTB()
   Config.BondVolumeOrderMax = 20000
   Config.LimitActuationOrderEdge = 0
   Config.LimitActuationOrderBondEdge = 30
+  Config.SessionMorningEnabled = false
+  Config.SessionMainEnabled = true
+  Config.SessionEveningEnabled = false
 end
 
 --- Устанавливает параметры для брокера PSB: код клиента, счёт, фирма, лимиты.
@@ -69,6 +78,9 @@ function SetSettingPSB()
   Config.LimitActuationOrderEdge = 0
   Config.LimitActuationOrderBondEdge = 0
   Config.VolumeOrderLimit = 120000
+  Config.SessionMorningEnabled = false
+  Config.SessionMainEnabled = true
+  Config.SessionEveningEnabled = false
 end
 
 --- Устанавливает параметры для брокера RSHB: код клиента, счёт, фирма, лимиты.
@@ -81,6 +93,9 @@ function SetSettingRSHB()
   Config.BondVolumeOrderMax = 20000
   Config.LimitActuationOrderEdge = 0
   Config.LimitActuationOrderBondEdge = 60
+  Config.SessionMorningEnabled = false
+  Config.SessionMainEnabled = true
+  Config.SessionEveningEnabled = false
 end
 
 --- Устанавливает параметры для тестового брокера: код клиента, счёт, лимиты.
@@ -91,6 +106,9 @@ function SetSettingTest()
   Config.FirmId = ""
   Config.VolumeOrderMax = 11000
   Config.BondVolumeOrderMax = 7000
+  Config.SessionMorningEnabled = false
+  Config.SessionMainEnabled = true
+  Config.SessionEveningEnabled = false
 end
 
 --- Временные ограничения для ордеров
