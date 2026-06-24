@@ -59,6 +59,10 @@ function TransactionHandler.IsOrderExists(newOrder)
       if
         order.sec_code == newOrder.SecurityCode
         and operation == newOrder.Operation
+        and string.format("%." .. newOrder.SecurityInfo.scale .. "f", tonumber(order.price)) == string.format(
+          "%." .. newOrder.SecurityInfo.scale .. "f",
+          tonumber(newOrder.Price)
+        )
         and (order.flags & FLAG_ACTIVE) > 0
       then
         return true
