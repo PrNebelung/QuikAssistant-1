@@ -93,18 +93,26 @@ function main()
     local repliesToRemove = {}
 
     for i, Trade in ipairs(N_Trades) do
+      TradeSave(N_Trades[i])
+      TradeClosePosition(N_Trades[i])
+      N_LastTradeNum = N_Trades[i].trade_num
+      tradesToRemove[N_Trades[i].trade_num] = true
+
+      log.debug(
+        "N_OnNewTrade() новая сделка №"
+          .. N_Trades[i].trade_num
+          .. " по транзакции №"
+          .. tostring(N_Trades[i].trans_id)
+          .. " по цене "
+          .. N_Trades[i].price
+          .. " кол-во "
+          .. N_Trades[i].qty
+      )
+      log.trace(json.encode(N_Trades[i]))
+
       if N_Trades[i].order_num ~= nil then
-        local matched = false
         for j, Order in ipairs(N_Orders) do
           if N_Trades[i].order_num == N_Orders[j].order_num then
-            N_Trades[i].trans_id = N_Orders[j].trans_id
-            matched = true
-            if N_OnNewTrade ~= nil then
-              N_OnNewTrade(N_Trades[i])
-            end
-            N_LastTradeNum = N_Trades[i].trade_num
-            tradesToRemove[N_Trades[i].trade_num] = true
-
             if N_Orders[j].last_execution_count ~= nil and N_Orders[j].last_execution_count == N_Orders[j].qty then
               N_LastTransID = N_Orders[j].trans_id
               ordersToRemove[N_Orders[j].order_num] = true
@@ -117,12 +125,6 @@ function main()
               break
             end
           end
-        end
-        local tradeIsBuy = (N_Trades[i].buy_sell == "B") or (N_Trades[i].buy_sell == nil and (N_Trades[i].flags & FLAG_SELL) == 0)
-        if not matched and tradeIsBuy then
-          TradeClosePosition(N_Trades[i])
-          N_LastTradeNum = N_Trades[i].trade_num
-          tradesToRemove[N_Trades[i].trade_num] = true
         end
       end
     end
