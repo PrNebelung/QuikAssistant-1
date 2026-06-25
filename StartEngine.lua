@@ -120,6 +120,7 @@ function main()
         end
         local tradeIsBuy = (N_Trades[i].buy_sell == "B") or (N_Trades[i].buy_sell == nil and (N_Trades[i].flags & FLAG_SELL) == 0)
         if not matched and tradeIsBuy then
+          TradeSave(N_Trades[i])
           TradeClosePosition(N_Trades[i])
           N_LastTradeNum = N_Trades[i].trade_num
           tradesToRemove[N_Trades[i].trade_num] = true
