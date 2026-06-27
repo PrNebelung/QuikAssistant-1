@@ -296,6 +296,22 @@ def instruments_refresh():
     data = refresh_instruments()
     return jsonify({'success': True, 'count': len(data) - 1})
 
+@api.route('/api/instruments/refresh-prices', methods=['POST'])
+def instruments_refresh_prices():
+    """Fast refresh: update only prices from MOEX boards (no metadata fetch)."""
+    from moex_api import _batch_fetch_prices, _load_cache, _save_cache
+    import time
+    cache = _load_cache()
+    prices = _batch_fetch_prices()
+    updated = 0
+    for isin, price in prices.items():
+        if isin in cache:
+            cache[isin]['price'] = price
+            updated += 1
+    cache['updated'] = time.time()
+    _save_cache(cache)
+    return jsonify({'success': True, 'updated': updated, 'total': len(prices)})
+
 def is_bond(isin):
     """Check if ISIN is a bond (starts with RU000A or SU)."""
     return isin.startswith('RU000A') or isin.startswith('SU')

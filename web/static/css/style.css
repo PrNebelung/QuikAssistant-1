@@ -535,3 +535,46 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .detail-table tr:hover {
     background: #16213e;
 }
+
+.control-card {
+    background: #16213e;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.control-card h3 {
+    color: #4fc3f7;
+    margin: 0 0 0.5rem;
+}
+
+.control-card p {
+    color: #888;
+    margin: 0 0 1rem;
+    font-size: 0.875rem;
+}
+
+.btn-control {
+    padding: 0.6rem 1.5rem;
+    background: #0f3460;
+    color: #eee;
+    border: 1px solid #1a4a8a;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-control:hover {
+    background: #1a4a8a;
+}
+
+.btn-control:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.control-status {
+    margin-left: 1rem;
+    font-size: 0.875rem;
+    color: #4caf50;
+}

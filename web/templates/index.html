@@ -143,7 +143,19 @@
         </div>
         
         <div id="control" class="tab-content">
-            <p>Управление (в разработке)</p>
+            <h2>Управление</h2>
+            <div class="control-card">
+                <h3>Обновление цен</h3>
+                <p>Быстрое обновление текущих цен для всех инструментов в кэше (акции + облигации) напрямую с MOEX.</p>
+                <button id="refresh-prices-btn" class="btn-control">Обновить цены</button>
+                <span id="refresh-prices-status" class="control-status"></span>
+            </div>
+            <div class="control-card">
+                <h3>Полное обновление кэша</h3>
+                <p>Полное обновление метаданных и цен всех инструментов из CSV-файлов. Медленнее, ~1-2 минуты.</p>
+                <button id="refresh-all-btn" class="btn-control">Полное обновление</button>
+                <span id="refresh-all-status" class="control-status"></span>
+            </div>
         </div>
     </main>
     

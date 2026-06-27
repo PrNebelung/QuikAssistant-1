@@ -618,6 +618,46 @@ document.addEventListener('DOMContentLoaded', () => {
     loadLogDates();
     loadLogs();
 
+    // Control tab
+    const refreshPricesBtn = document.getElementById('refresh-prices-btn');
+    const refreshPricesStatus = document.getElementById('refresh-prices-status');
+    const refreshAllBtn = document.getElementById('refresh-all-btn');
+    const refreshAllStatus = document.getElementById('refresh-all-status');
+
+    refreshPricesBtn.addEventListener('click', async () => {
+        refreshPricesBtn.disabled = true;
+        refreshPricesStatus.textContent = 'Обновление...';
+        refreshPricesStatus.style.color = '#ff9800';
+        try {
+            const res = await fetch('/api/instruments/refresh-prices', { method: 'POST' });
+            const data = await res.json();
+            refreshPricesStatus.textContent = `Готово: обновлено ${data.updated} из ${data.total} инструментов`;
+            refreshPricesStatus.style.color = '#4caf50';
+            loadInstruments();
+        } catch (e) {
+            refreshPricesStatus.textContent = 'Ошибка обновления';
+            refreshPricesStatus.style.color = '#e94560';
+        }
+        refreshPricesBtn.disabled = false;
+    });
+
+    refreshAllBtn.addEventListener('click', async () => {
+        refreshAllBtn.disabled = true;
+        refreshAllStatus.textContent = 'Полное обновление (~1-2 мин)...';
+        refreshAllStatus.style.color = '#ff9800';
+        try {
+            const res = await fetch('/api/instruments/refresh', { method: 'POST' });
+            const data = await res.json();
+            refreshAllStatus.textContent = `Готово: ${data.count} инструментов`;
+            refreshAllStatus.style.color = '#4caf50';
+            loadInstruments();
+        } catch (e) {
+            refreshAllStatus.textContent = 'Ошибка обновления';
+            refreshAllStatus.style.color = '#e94560';
+        }
+        refreshAllBtn.disabled = false;
+    });
+
     window.undoAction = async function(btn) {
         const index = parseInt(btn.dataset.index);
         const response = await fetch('/api/actionlog');
