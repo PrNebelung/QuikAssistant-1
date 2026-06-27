@@ -89,7 +89,7 @@ def toggle_order(broker, isin):
     
     return jsonify({'success': True})
 
-ACTION_LOG_FILE = os.path.join(os.path.dirname(__file__), '..', 'Data', 'action_log.json')
+ACTION_LOG_FILE = os.path.join(os.path.dirname(__file__), 'action_log.json')
 
 @api.route('/api/actionlog', methods=['GET'])
 def get_action_log():

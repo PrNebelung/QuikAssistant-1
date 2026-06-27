@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from csv_handler import read_orders, get_csv_files, get_all_brokers
 
 BASE_URL = "https://iss.moex.com/iss"
-CACHE_DIR = os.path.join(os.path.dirname(__file__), '..', 'Data')
+CACHE_DIR = os.path.dirname(__file__)
 CACHE_FILE = os.path.join(CACHE_DIR, 'instruments_cache.json')
 CACHE_TTL = 3600  # 1 hour
 

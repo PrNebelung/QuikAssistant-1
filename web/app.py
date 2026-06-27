@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.register_blueprint(api)
 
 # Auto-refresh instrument cache on startup if stale
-cache_file = os.path.join(os.path.dirname(__file__), '..', 'Data', 'instruments_cache.json')
+cache_file = os.path.join(os.path.dirname(__file__), 'instruments_cache.json')
 cache = _load_cache()
 cache_age = time.time() - cache.get('updated', 0)
 if not os.path.exists(cache_file) or cache_age > CACHE_TTL:
