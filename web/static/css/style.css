@@ -244,11 +244,13 @@ tr:hover {
 }
 
 .log-container {
+    width: 100%;
     max-height: 500px;
     overflow-y: auto;
     background: #0d1b2a;
     border-radius: 4px;
     padding: 0.5rem;
+    box-sizing: border-box;
 }
 
 .log-entry {
