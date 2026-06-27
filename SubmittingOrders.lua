@@ -148,8 +148,8 @@ end
 function SubmittingOrdersRun()
   if IsSendingOrders then
     return
-  if not Config.BrokerEnabled then log.warn('Broker disabled, skipping order submission'); return end
   end
+  if not Config.BrokerEnabled then log.warn('Broker disabled, skipping order submission'); return end
 
   local isSubmittingOrdersRun = true
 
