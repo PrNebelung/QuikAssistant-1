@@ -8,7 +8,7 @@ local BrokerAdapter = require("BrokerAdapter")
 local Config = require("Config")
 
 require("TableSetting")
-local SettingsManager = require('SettingsManager')
+local SettingsManager = require("SettingsManager")
 
 --- Кэш: какой USERID соответствует какому брокеру
 BrokerUserMap = {

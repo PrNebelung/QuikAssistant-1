@@ -12,7 +12,6 @@
 --- INFO и выше записываются в файл Log/<Broker>/<дата>.log,
 --- для отладки используются цвета в консоли QUIK.
 
-
 local log = { _version = "0.1.0" }
 
 log.usecolor = true

@@ -9,7 +9,7 @@
 _G.getScriptPath = function()
   local info = debug.getinfo(1, "S")
   local src = info.source
-  if src and src:sub(1,1) == "@" then
+  if src and src:sub(1, 1) == "@" then
     src = src:sub(2)
   end
   local idx = src:find("QuikAssistant", 1, true)

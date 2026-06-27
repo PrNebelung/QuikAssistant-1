@@ -23,7 +23,7 @@ _G.message = function(text) end
 
 local securities = {
   GAZP = {
-    name = "\"Газпром\" (пАО) рн",
+    name = '"Газпром" (пАО) рн',
     short_name = "Газпром рн",
     code = "GAZP",
     isin_code = "RU0007661625",
@@ -65,7 +65,7 @@ local securities = {
     lot_size = 1,
   },
   LKOH = {
-    name = "\"Сбербанк\" (ПАО) рн",
+    name = '"Сбербанк" (ПАО) рн',
     short_name = "Сбербанк рн",
     code = "LKOH",
     isin_code = "RU0009029458",

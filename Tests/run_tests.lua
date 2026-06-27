@@ -42,7 +42,6 @@ VolumeOrderLimit = 200000
 LimitActuationOrderEdge = 5
 LimitActuationOrderBondEdge = 60
 
-
 -- Config setup for tests
 local Config = require("Config")
 Config.VolumeOrderMax = VolumeOrderMax
@@ -1124,13 +1123,16 @@ test("LoadOrdersFromFile - обработка с лимитом (вечер)", function()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - обработка по сумме недопустимый оператор BUY/SELL", function()
-  resetSendOrders()
-  mockCSV({ { "Gazprom", "B", " GAZP ", "100", "200.00" } })
-  local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 ордер (приоритет выше оператора)")
-  restoreCSV()
-end)
+test(
+  "LoadOrdersFromFile - обработка по сумме недопустимый оператор BUY/SELL",
+  function()
+    resetSendOrders()
+    mockCSV({ { "Gazprom", "B", " GAZP ", "100", "200.00" } })
+    local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
+    assert_eq(#orders, 1, "1 ордер (приоритет выше оператора)")
+    restoreCSV()
+  end
+)
 
 ClearSecurityInfoCache()
 test(
@@ -1145,16 +1147,19 @@ test(
 )
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - обработка продаж с автоматическим количеством", function()
-  resetSendOrders()
-  clearTestData()
-  addTestPosition("GAZP", 100, 250.00)
-  mockCSV({ { "Gazprom", " S ", " GAZP ", " 10 ", " 0.01 " } })
-  local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-  assert_eq(#orders, 1, "1 ордер")
-  assert_eq(orders[1].Operation, "S", "Операция S")
-  restoreCSV()
-end)
+test(
+  "LoadOrdersFromFile - обработка продаж с автоматическим количеством",
+  function()
+    resetSendOrders()
+    clearTestData()
+    addTestPosition("GAZP", 100, 250.00)
+    mockCSV({ { "Gazprom", " S ", " GAZP ", " 10 ", " 0.01 " } })
+    local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
+    assert_eq(#orders, 1, "1 ордер")
+    assert_eq(orders[1].Operation, "S", "Операция S")
+    restoreCSV()
+  end
+)
 
 ---------------------------------------------
 -- Результаты

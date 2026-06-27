@@ -3,7 +3,6 @@
 --- количества, операции, проверки типа инструмента (акция/облигация/ETF),
 --- округления цен, расчёта объёма и форматирования для отправки в QUIK.
 
-
 Order = {}
 Order.__index = Order
 
@@ -34,7 +33,12 @@ end
 -- Список исключений (настраиваемый)
 -- ==========================================
 local exceptionTickers = {}
-for secCode in string.gmatch("ENPG,RTKM,MTSS,NKNCP,UPRO,MGTSP,IRAO,MAGN,TGKA,GAZP,AFLT,ELFV,SMLT,SNGS,ALRS,MGNT,HYDR,VTBR,FEES,MVID,SGZH,AQUA,STSB,IVAT,UPRO,VKCO,", "(%P*),") do
+for secCode in
+  string.gmatch(
+    "ENPG,RTKM,MTSS,NKNCP,UPRO,MGTSP,IRAO,MAGN,TGKA,GAZP,AFLT,ELFV,SMLT,SNGS,ALRS,MGNT,HYDR,VTBR,FEES,MVID,SGZH,AQUA,STSB,IVAT,UPRO,VKCO,",
+    "(%P*),"
+  )
+do
   exceptionTickers[secCode] = true
 end
 

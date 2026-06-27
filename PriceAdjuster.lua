@@ -3,7 +3,6 @@
 --- последней цены (LAST) и минимального шага цены (PRICEMIN).
 --- Ќе измен€ет цены, заданные из файла (UseFileParams).
 
-
 local MarketData = require("MarketData")
 local Constants = require("Constants")
 

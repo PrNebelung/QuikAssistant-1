@@ -3,7 +3,6 @@
 --- цветом, форматированным выводом, событиями мыши,
 --- и вспомогательными функциями форматирования.
 
-
 EventTable = {
   [QTABLE_LBUTTONDOWN] = "Нажатие левой кнопки мыши",
   [QTABLE_RBUTTONDOWN] = "Нажатие правой кнопки мыши",
@@ -174,7 +173,6 @@ function comma_value(amount)
   end
   return formatted
 end
-
 
 --- Округление числа до decimal знаков. Использует math.round.
 function round(val, decimal)

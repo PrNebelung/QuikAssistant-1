@@ -3,7 +3,6 @@
 --- название, код, операция, актуализация, цена, объём,
 --- номер ордера с цветовой индикацией.
 
-
 local BrokerAdapter = require("BrokerAdapter")
 
 nameColumnSecurityName = "Наименование инструмента"
@@ -18,7 +17,6 @@ nameColumnLastChange = "% Изменение от предыдущей"
 nameColumnOrderNum = "Номер заявки с сервера брокера "
 
 tableOrdersControl = nil
-
 
 --- Создаёт колонки таблицы ордеров (название, код, операция, актуализация, цена, объём и т.д.).
 function CreateTableOrdersControl(t)

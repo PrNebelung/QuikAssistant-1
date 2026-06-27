@@ -2,7 +2,6 @@
 --- Сохраняет информацию о исполненных заявках
 --- (тикер, операция, количество, цена) в файл MyTrades.csv.
 
-
 local BrokerAdapter = require("BrokerAdapter")
 
 --Сохранение сделок в файл и в таблицу заявок
@@ -13,7 +12,16 @@ function TradeSave(trade)
   if isSell then
     Operation = "-"
   end
-  log.debug(string.format("TradeSave: sec=%s buy_sell=%s flags=%s isSell=%s qty=%s", trade.sec_code, tostring(trade.buy_sell), tostring(trade.flags), tostring(isSell), trade.qty))
+  log.debug(
+    string.format(
+      "TradeSave: sec=%s buy_sell=%s flags=%s isSell=%s qty=%s",
+      trade.sec_code,
+      tostring(trade.buy_sell),
+      tostring(trade.flags),
+      tostring(isSell),
+      trade.qty
+    )
+  )
 
   local TradeLine = os.date("%Y-%m-%d")
     .. " "

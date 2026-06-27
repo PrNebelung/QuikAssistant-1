@@ -3,7 +3,6 @@
 --- SearchItems, getItem, sendTransaction, isConnected и др.
 --- Единая точка доступа к брокерскому API с кешированием.
 
-
 local BrokerAdapter = {}
 
 -- ==========================================
@@ -69,7 +68,9 @@ end
 --- Ищет ордера по фильтру. Возвращает массив индексов.
 function BrokerAdapter.SearchOrders(filterFunc, params)
   local count = BrokerAdapter.GetNumberOfOrders()
-  if count <= 0 then return {} end
+  if count <= 0 then
+    return {}
+  end
   local ok, orders = pcall(function()
     return SearchItems("orders", 0, count - 1, filterFunc, params)
   end)
@@ -84,7 +85,9 @@ function BrokerAdapter.GetOrder(index)
   local ok, order = pcall(function()
     return getItem("orders", index)
   end)
-  if ok then return order end
+  if ok then
+    return order
+  end
   return nil
 end
 
@@ -100,7 +103,9 @@ end
 --- Ищет позиции по фильтру. Возвращает массив индексов.
 function BrokerAdapter.SearchPositions(filterFunc, params)
   local count = BrokerAdapter.GetNumberOfPositions()
-  if count <= 0 then return {} end
+  if count <= 0 then
+    return {}
+  end
   local ok, positions = pcall(function()
     return SearchItems("depo_limits", 0, count - 1, filterFunc, params)
   end)
@@ -115,7 +120,9 @@ function BrokerAdapter.GetPosition(index)
   local ok, position = pcall(function()
     return getItem("depo_limits", index)
   end)
-  if ok then return position end
+  if ok then
+    return position
+  end
   return nil
 end
 

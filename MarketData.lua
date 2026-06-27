@@ -3,7 +3,6 @@
 --- GetPricePrev для получения текущей, минимальной, максимальной
 --- и предыдущей цены инструмента.
 
-
 local BrokerAdapter = require("BrokerAdapter")
 
 local MarketData = {}

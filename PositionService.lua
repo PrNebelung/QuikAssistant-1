@@ -3,7 +3,6 @@
 --- определение текущей позиции по коду инструмента
 --- и очистку кеша позиций.
 
-
 local BrokerAdapter = require("BrokerAdapter")
 
 local PositionService = {}

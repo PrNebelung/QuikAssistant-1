@@ -71,7 +71,9 @@ end
 
 --- Проверка: цена покупки не ниже минимальной цены стакана (PRICEMIN).
 local function checkPriceBelowPricemin(order)
-  if not order:IsBuy() then return true, "" end
+  if not order:IsBuy() then
+    return true, ""
+  end
   local priceMin = tonumber(MarketData.GetPriceMin(order))
   if priceMin ~= nil and priceMin > 0 and tonumber(order.Price) < priceMin then
     local reason = string.format("price %s below PRICEMIN %s", tostring(order.Price), tostring(priceMin))
@@ -83,7 +85,9 @@ end
 
 --- Проверка: наличие достаточной позиции для продажи.
 local function checkPositionForSell(order)
-  if not order:IsSell() then return true, "" end
+  if not order:IsSell() then
+    return true, ""
+  end
   local position = PositionService.GetPosition(order.SecurityCode)
   if position == nil or tonumber(position.currentbal) < tonumber(order.Quantity) then
     local reason = string.format(
@@ -98,7 +102,9 @@ end
 
 --- Проверка: объём ордера не превышает установленный лимит.
 local function checkVolumeLimit(order)
-  if not order:IsBuy() then return true, "" end
+  if not order:IsBuy() then
+    return true, ""
+  end
   local limit = Config.VolumeOrderLimit
   if order:GetVolume() > limit then
     local reason = string.format(
@@ -115,8 +121,12 @@ end
 
 --- Проверка: процент срабатывания (разница LAST и цены ордера) не ниже порога.
 local function checkActuation(order)
-  if not order:IsBuy() then return true, "" end
-  if order:IsExceptionFromLimitActuation() then return true, "" end
+  if not order:IsBuy() then
+    return true, ""
+  end
+  if order:IsExceptionFromLimitActuation() then
+    return true, ""
+  end
 
   local priceLast = MarketData.GetPriceLast(order)
   local actuation = (tonumber(priceLast) - tonumber(order.Price)) / tonumber(order.Price) * 100
@@ -134,13 +144,12 @@ end
 
 --- Проверка: цена облигации не превышает 100%% номинала.
 local function checkBondPriceLimit(order)
-  if not order:IsBuy() or not order:IsBond() then return true, "" end
+  if not order:IsBuy() or not order:IsBond() then
+    return true, ""
+  end
   local nominal = 100.0
   if tonumber(order.Price) > tonumber(nominal) then
-    local reason = string.format(
-      "bond price exceeds 100%% (price: %s%%)",
-      tostring(order.Price)
-    )
+    local reason = string.format("bond price exceeds 100%% (price: %s%%)", tostring(order.Price))
     log.warn(reason .. " " .. order:Print())
     return false, reason
   end
@@ -149,13 +158,13 @@ end
 
 --- Проверка: цена покупки не выше средней цены текущей позиции.
 local function checkAvgPositionPrice(order)
-  if not order:IsBuy() or order:IsBond() then return true, "" end
+  if not order:IsBuy() or order:IsBond() then
+    return true, ""
+  end
   local position = PositionService.GetPosition(order.SecurityCode)
   if position ~= nil and tonumber(position.wa_position_price) < tonumber(order.Price) then
-    local reason = string.format(
-      "buy price exceeds average position price %s",
-      string.format("%.2f", position.wa_position_price)
-    )
+    local reason =
+      string.format("buy price exceeds average position price %s", string.format("%.2f", position.wa_position_price))
     log.warn(reason .. " " .. order:Print())
     return false, reason
   end

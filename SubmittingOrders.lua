@@ -3,7 +3,6 @@
 --- проверяет их, корректирует цены и отправляет в QUIK.
 --- Управляет таймерами сессий для автоматической работы.
 
-
 require("Setting")
 require("FileFunction")
 require("Order")
@@ -116,7 +115,9 @@ end
 --- Запуск процесса отправки заявок.
 local marketDataWaited = false
 function WaitForMarketData()
-  if marketDataWaited then return end
+  if marketDataWaited then
+    return
+  end
   marketDataWaited = true
 
   local sampleSecurities = {
@@ -131,12 +132,20 @@ function WaitForMarketData()
     for _, sample in ipairs(sampleSecurities) do
       local value = getParamEx(sample.classCode, sample.secCode, "LAST")
       if value ~= nil and value.result == "1" and tonumber(value.param_value) > 0 then
-        log.info(string.format("Рыночные данные загружены (%s, попытка %d)", sample.secCode, retry))
+        log.info(
+          string.format(
+            "Рыночные данные загружены (%s, попытка %d)",
+            sample.secCode,
+            retry
+          )
+        )
         return true
       end
     end
     if retry % 5 == 0 then
-      log.info(string.format("Ожидание рыночных данных... (попытка %d/%d)", retry, maxRetries))
+      log.info(
+        string.format("Ожидание рыночных данных... (попытка %d/%d)", retry, maxRetries)
+      )
     end
     sleep(retryInterval * 1000)
   end
@@ -148,7 +157,10 @@ function SubmittingOrdersRun()
   if IsSendingOrders then
     return
   end
-  if not Config.BrokerEnabled then log.warn('Брокер отключен, пропуск выставления заявок'); return end
+  if not Config.BrokerEnabled then
+    log.warn("Брокер отключен, пропуск выставления заявок")
+    return
+  end
 
   local isSubmittingOrdersRun = true
 
@@ -283,12 +295,17 @@ function SubmittingOrdersRun()
     log.error("Ошибка в процессе отправки: " .. tostring(err))
   end
 
-
   -- Cumulative summary across all cycles
-  log.info(string.format(
-    "=== Total after %d cycles: loaded=%d, sent=%d, rejected=%d, duplicate=%d ===",
-    cycleCount, cumStats.loaded, cumStats.sent, cumStats.rejected, cumStats.duplicate
-  ))
+  log.info(
+    string.format(
+      "=== Total after %d cycles: loaded=%d, sent=%d, rejected=%d, duplicate=%d ===",
+      cycleCount,
+      cumStats.loaded,
+      cumStats.sent,
+      cumStats.rejected,
+      cumStats.duplicate
+    )
+  )
 
   IsSentOrders = true
 
@@ -365,9 +382,7 @@ function LoadOrdersFromFile(fileName)
                 order:SetQuantitySell(operation, priceMax, positionQty)
                 order.UseFileParams = true
               else
-                log.error(
-                  string.format("[SKIP] Нет позиции для продажи [%s]", order.SecurityCode)
-                )
+                log.error(string.format("[SKIP] Нет позиции для продажи [%s]", order.SecurityCode))
               end
             end
           elseif isEdge ~= nil then
@@ -463,7 +478,12 @@ function SubmitOrders(orders)
   end
 
   if stats.duplicate > 0 then
-    log.debug(string.format("  [SKIP] %d заявок: уже в QUIK или отправлены на этой сессии", stats.duplicate))
+    log.debug(
+      string.format(
+        "  [SKIP] %d заявок: уже в QUIK или отправлены на этой сессии",
+        stats.duplicate
+      )
+    )
   end
   for reason, count in pairs(skipReasons) do
     local tickers = skipTickers[reason] or {}
@@ -482,7 +502,9 @@ end
 --- Обработка сделки для закрытия позиции
 function TradeClosePosition(trade)
   local isBuy = (trade.buy_sell == "B") or (trade.buy_sell == nil and (trade.flags & FLAG_SELL) == 0)
-  if not isBuy then return end
+  if not isBuy then
+    return
+  end
   local orders = {}
   local operation = "S"
   local securityCode = trade.sec_code
@@ -507,10 +529,7 @@ function TradeClosePosition(trade)
     return
   end
 
-  log.info(
-    "Формируем заявку на продажу для закрытия позиции ",
-    order:Print()
-  )
+  log.info("Формируем заявку на продажу для закрытия позиции ", order:Print())
 
   order:SetOperation(operation, price, quantity)
   order.UseFileParams = true

@@ -3,7 +3,6 @@
 --- получает список активных ордеров, обрабатывает ошибки транзакций
 --- (579, 580, 133) с автоматическим восстановлением.
 
-
 local BrokerAdapter = require("BrokerAdapter")
 
 local TransactionHandler = {}
@@ -59,10 +58,8 @@ function TransactionHandler.IsOrderExists(newOrder)
       if
         order.sec_code == newOrder.SecurityCode
         and operation == newOrder.Operation
-        and string.format("%." .. newOrder.SecurityInfo.scale .. "f", tonumber(order.price)) == string.format(
-          "%." .. newOrder.SecurityInfo.scale .. "f",
-          tonumber(newOrder.Price)
-        )
+        and string.format("%." .. newOrder.SecurityInfo.scale .. "f", tonumber(order.price))
+          == string.format("%." .. newOrder.SecurityInfo.scale .. "f", tonumber(newOrder.Price))
       then
         return true
       end
@@ -97,29 +94,18 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
     local operation = "S"
     local order = Order:new(trans.sec_code)
     if order == nil then
-      log.error(
-        "Cannot create order for auto-recover",
-        trans.sec_code
-      )
+      log.error("Cannot create order for auto-recover", trans.sec_code)
       return
     end
     order:SetOperation(operation, maxPrice, trans.quantity)
-    log.info(
-      "Auto-recover sell order at max price: "
-        .. order:Print()
-    )
+    log.info("Auto-recover sell order at max price: " .. order:Print())
     local orders = {}
     table.insert(orders, order)
     SubmitOrders(orders)
     return
   end
 
-  local errorTest = string.find(
-    trans.result_msg,
-    "not compliant with min price for this security",
-    1,
-    true
-  )
+  local errorTest = string.find(trans.result_msg, "not compliant with min price for this security", 1, true)
   if errorTest ~= nil then
     local minPrice = string.match(trans.result_msg, "ot %d+%.?%d*")
     if minPrice == nil then
@@ -128,10 +114,7 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
     local operation = "B"
     local order = Order:new(trans.sec_code)
     if order == nil then
-      log.error(
-        "Cannot create order for auto-recover",
-        trans.sec_code
-      )
+      log.error("Cannot create order for auto-recover", trans.sec_code)
       return
     end
     order:SetOperation(operation, minPrice, 0)
