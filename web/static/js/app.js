@@ -662,8 +662,8 @@ document.addEventListener('DOMContentLoaded', () => {
         volumeOrderMax: 0, bondVolumeOrderMax: 0,
         volumeOrderLimit: 200000, volumeOrderLimitUSD: 100,
         limitActuationOrderEdge: 5, limitActuationOrderBondEdge: 60,
-        sessionMorningEnabled: true, sessionMainEnabled: true, sessionEveningEnabled: true,
-        brokerEnabled: true,
+        sessionMorningEnabled: false, sessionMainEnabled: false, sessionEveningEnabled: false,
+        brokerEnabled: false,
         sessionMorningHour: 7, sessionMorningMin: 0, sessionMorningSec: 30,
         sessionMainHour: 10, sessionMainMin: 0, sessionMainSec: 30,
         sessionEveningHour: 19, sessionEveningMin: 2, sessionEveningSec: 10,
@@ -723,9 +723,15 @@ document.addEventListener('DOMContentLoaded', () => {
                             <input type="time" step="1" data-key="${f.key}" value="${timeToHMS(h, m, s)}">
                         </div>`;
                     }
+                    if (f.type === 'number') {
+                        return `<div class="settings-row">
+                            <label>${f.label}</label>
+                            <input type="text" inputmode="numeric" data-key="${f.key}" value="${val}">
+                        </div>`;
+                    }
                     return `<div class="settings-row">
                         <label>${f.label}</label>
-                        <input type="text" inputmode="numeric" data-key="${f.key}" value="${val}">
+                        <input type="text" data-key="${f.key}" value="${val}">
                     </div>`;
                 }).join('')}
             </div>

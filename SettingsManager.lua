@@ -1,6 +1,6 @@
 --- Модуль управления настройками через JSON-файл.
 --- Формат settings.json: { "VTB": {...}, "PSB": {...}, ... }
---- Каждый брокер — отдельный блок настроек.
+--- Каждый брокер - отдельный блок настроек.
 
 local json = require("json")
 local Config = require("Config")
@@ -18,10 +18,10 @@ local defaults = {
     volumeOrderLimitUSD = 100,
     limitActuationOrderEdge = 5,
     limitActuationOrderBondEdge = 60,
-    sessionMorningEnabled = true,
-    sessionMainEnabled = true,
-    sessionEveningEnabled = true,
-    brokerEnabled = true,
+    sessionMorningEnabled = false,
+    sessionMainEnabled = false,
+    sessionEveningEnabled = false,
+    brokerEnabled = false,
     sessionMorningHour = 7,
     sessionMorningMin = 0,
     sessionMorningSec = 30,
@@ -33,7 +33,6 @@ local defaults = {
     sessionEveningSec = 10,
 }
 
---- Чтение всего файла settings.json
 function SettingsManager.LoadAll()
     local f = io.open(SETTINGS_FILE, "r")
     if f == nil then return {} end
@@ -48,7 +47,6 @@ function SettingsManager.LoadAll()
     return data
 end
 
---- Запись всего файла settings.json
 function SettingsManager.SaveAll(data)
     local f = io.open(SETTINGS_FILE, "w")
     if f == nil then
@@ -60,7 +58,6 @@ function SettingsManager.SaveAll(data)
     return true
 end
 
---- Получение настроек конкретного брокера с дефолтами
 function SettingsManager.GetBroker(brokerName)
     local all = SettingsManager.LoadAll()
     local broker = all[brokerName] or {}
@@ -71,15 +68,24 @@ function SettingsManager.GetBroker(brokerName)
     return result
 end
 
---- Сохранение настроек конкретного брокера
 function SettingsManager.SaveBroker(brokerName, data)
     local all = SettingsManager.LoadAll()
     all[brokerName] = data
     return SettingsManager.SaveAll(all)
 end
 
---- Применение настроек брокера к Config
 function SettingsManager.ApplyBroker(brokerName)
+    local all = SettingsManager.LoadAll()
+    if not all[brokerName] then
+        log.warn("No settings for broker " .. brokerName .. ", disabling")
+        Config.Broker = brokerName
+        Config.BrokerEnabled = false
+        Config.SessionMorningEnabled = false
+        Config.SessionMainEnabled = false
+        Config.SessionEveningEnabled = false
+        return
+    end
+
     local s = SettingsManager.GetBroker(brokerName)
 
     Config.Broker = brokerName
