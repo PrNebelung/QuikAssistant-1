@@ -3,8 +3,6 @@ __pycache__/
 *.pyc
 .claude/
 
-# Generated / user-specific files
+# Generated files
 web/instruments_cache.json
 web/action_log.json
-settings.json
-Data/
