@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    let ordersSortBy = 'name';
+    let ordersSortBy = null;
     let ordersSortDir = 'asc';
 
     async function loadOrders() {
@@ -66,24 +66,25 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Sort
-            const reverse = ordersSortDir === 'desc';
-            orders.sort((a, b) => {
-                let va, vb;
-                switch (ordersSortBy) {
-                    case 'name': va = a.name; vb = b.name; break;
-                    case 'maturity': va = a.maturity; vb = b.maturity; break;
-                    case 'isin': va = a.isin; vb = b.isin; break;
-                    case 'side': va = a.side; vb = b.side; break;
-                    case 'lot': va = a.lot; vb = b.lot; break;
-                    case 'qty': va = parseInt(a.qty)||0; vb = parseInt(b.qty)||0; break;
-                    case 'price': va = parseFloat(a.price)||0; vb = parseFloat(b.price)||0; break;
-                    case 'currentPrice': va = a.currentPrice; vb = b.currentPrice; break;
-                    case 'sum': va = a.sum; vb = b.sum; break;
-                    default: va = a.name; vb = b.name;
-                }
-                if (typeof va === 'string') return reverse ? vb.localeCompare(va) : va.localeCompare(vb);
-                return reverse ? vb - va : va - vb;
-            });
+            if (ordersSortBy) {
+                const reverse = ordersSortDir === 'desc';
+                orders.sort((a, b) => {
+                    let va, vb;
+                    switch (ordersSortBy) {
+                        case 'name': va = a.name; vb = b.name; break;
+                        case 'maturity': va = a.maturity; vb = b.maturity; break;
+                        case 'isin': va = a.isin; vb = b.isin; break;
+                        case 'side': va = a.side; vb = b.side; break;
+                        case 'lot': va = a.lot; vb = b.lot; break;
+                        case 'qty': va = parseInt(a.qty)||0; vb = parseInt(b.qty)||0; break;
+                        case 'price': va = parseFloat(a.price)||0; vb = parseFloat(b.price)||0; break;
+                        case 'currentPrice': va = a.currentPrice; vb = b.currentPrice; break;
+                        case 'sum': va = a.sum; vb = b.sum; break;
+                    }
+                    if (typeof va === 'string') return reverse ? vb.localeCompare(va) : va.localeCompare(vb);
+                    return reverse ? vb - va : va - vb;
+                });
+            }
 
             ordersTable.innerHTML = orders.map(order => {
                 const inst = instrumentsCache[order.isin] || instrumentsCache[order.name] || {};
