@@ -658,7 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allSettings = {};
     let activeBroker = '';
-    const brokerOrder = ['FINAM', 'VTB', 'PSB', 'RSHB', 'TEST'];
+    const brokerOrder = ['FINAM', 'VTB', 'PSB', 'RSHB'];
 
     const settingsFields = [
         { group: 'Брокер', fields: [
