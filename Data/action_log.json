@@ -604,5 +604,61 @@
       "old_qty": "1",
       "old_price": "1"
     }
+  },
+  {
+    "time": "16:08:08",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26250RMFS9 — qty=122, price=82",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26250RMFS9",
+      "old_qty": "117",
+      "old_price": "85"
+    }
+  },
+  {
+    "time": "16:14:27",
+    "date": "27.06.2026",
+    "msg": "Сохранено: AFKS — qty=1250, price=0.8",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "AFKS",
+      "old_qty": "125",
+      "old_price": "0.8"
+    }
+  },
+  {
+    "time": "16:14:42",
+    "date": "27.06.2026",
+    "msg": "Сохранено: GCHE — qty=58, price=1700",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "GCHE",
+      "old_qty": "58",
+      "old_price": "1700"
+    }
+  },
+  {
+    "time": "16:15:01",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26246RMFS7 — qty=122, price=82",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26246RMFS7",
+      "old_qty": "120",
+      "old_price": "82"
+    }
   }
 ]

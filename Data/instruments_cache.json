@@ -1,19 +1,19 @@
 {
-  "updated": 1782561506.9059033,
+  "updated": 1782565479.1374786,
   "RU000A10DJH8": {
     "name": "ПКТ 2P1",
     "isin": "RU000A10DJH8",
     "maturity": "2029-11-15",
     "facevalue": 1000.0,
     "coupon": 39.87,
-    "price": 104.37,
+    "price": 103.27,
     "lot": 1
   },
   "UGLD": {
     "name": "ЮГК",
     "isin": "RU000A0JPP37",
     "facevalue": 0.001,
-    "price": 0.6084,
+    "price": 0.5816,
     "lot": 1000
   },
   "RU000A107W71": {
@@ -29,7 +29,7 @@
     "name": "Красэсб ап",
     "isin": "RU000A0HMLZ8",
     "facevalue": 0.02,
-    "price": 22.2,
+    "price": 20.36,
     "lot": 100
   },
   "RU000A10C8C0": {
@@ -38,7 +38,7 @@
     "maturity": "2029-02-10",
     "facevalue": 1000.0,
     "coupon": 11.47,
-    "price": 100.27,
+    "price": 99.5,
     "lot": 1
   },
   "RU000A10AZG2": {
@@ -47,7 +47,7 @@
     "maturity": "2028-02-12",
     "facevalue": 1000.0,
     "coupon": 23.01,
-    "price": 110.22,
+    "price": 101.84,
     "lot": 1
   },
   "RU000A106ZL5": {
@@ -56,7 +56,7 @@
     "maturity": "2030-09-20",
     "facevalue": 1000.0,
     "coupon": 13.17,
-    "price": 97.54,
+    "price": 96.4,
     "lot": 1
   },
   "RU000A107G55": {
@@ -74,7 +74,7 @@
     "maturity": "2032-01-05",
     "facevalue": 1000.0,
     "coupon": 74.05,
-    "price": 100.69,
+    "price": 100.51,
     "lot": 1
   },
   "RU000A1026H0": {
@@ -92,14 +92,14 @@
     "maturity": "2027-07-15",
     "facevalue": 1000.0,
     "coupon": 16.44,
-    "price": 103.24,
+    "price": 101.5,
     "lot": 1
   },
   "WTCM": {
     "name": "ЦМТ ао",
     "isin": "RU0008137070",
     "facevalue": 1.0,
-    "price": 13.18,
+    "price": 12.44,
     "lot": 100
   },
   "RU000A103DT2": {
@@ -108,7 +108,7 @@
     "maturity": "2026-07-08",
     "facevalue": 1000.0,
     "coupon": 26.8,
-    "price": 99.5,
+    "price": 99.38,
     "lot": 1
   },
   "RU000A109KL1": {
@@ -117,14 +117,14 @@
     "maturity": "2027-09-20",
     "facevalue": 1000.0,
     "coupon": 12.32,
-    "price": 99.92,
+    "price": 100.0,
     "lot": 1
   },
   "KZOS": {
     "name": "ОргСинт ао",
     "isin": "RU0009089825",
     "facevalue": 1.0,
-    "price": 57.7,
+    "price": 52.1,
     "lot": 10
   },
   "RU000A10B4A4": {
@@ -156,7 +156,7 @@
     "maturity": "2032-12-03",
     "facevalue": 299.97,
     "coupon": 3.33,
-    "price": 99.46,
+    "price": 98.26,
     "lot": 1
   },
   "RU000A109AU3": {
@@ -165,14 +165,14 @@
     "maturity": "2028-02-22",
     "facevalue": 1000.0,
     "coupon": 0.0,
-    "price": 6.2,
+    "price": 6.72,
     "lot": 1
   },
   "AKRN": {
     "name": "Акрон",
     "isin": "RU0009028674",
     "facevalue": 5.0,
-    "price": 18056.0,
+    "price": 15898.0,
     "lot": 1
   },
   "RU000A10BRN3": {
@@ -181,21 +181,21 @@
     "maturity": "2030-05-14",
     "facevalue": 1000.0,
     "coupon": 15.62,
-    "price": 83.98,
+    "price": 82.93,
     "lot": 1
   },
   "TATN": {
     "name": "Татнфт 3ао",
     "isin": "RU0009033591",
     "facevalue": 1.0,
-    "price": 577.0,
+    "price": 495.3,
     "lot": 1
   },
   "VKCO": {
     "name": "МКПАО \"ВК\"",
     "isin": "RU000A106YF0",
     "facevalue": 0.00045,
-    "price": 241.7,
+    "price": 196.0,
     "lot": 1
   },
   "RU000A10AST0": {
@@ -204,14 +204,14 @@
     "maturity": "2030-12-31",
     "facevalue": 854.0,
     "coupon": 16.68,
-    "price": 106.0,
+    "price": 105.73,
     "lot": 1
   },
   "PHOR": {
     "name": "ФосАгро ао",
     "isin": "RU000A0JRKT8",
     "facevalue": 2.5,
-    "price": 6086.0,
+    "price": 5161.0,
     "lot": 1
   },
   "RU000A0ZZV11": {
@@ -220,7 +220,7 @@
     "maturity": "2033-11-04",
     "facevalue": 1000.0,
     "coupon": 22.69,
-    "price": 97.69,
+    "price": 97.27,
     "lot": 1
   },
   "SU29021RMFS1": {
@@ -228,14 +228,14 @@
     "isin": "RU000A105B11",
     "maturity": "2030-11-27",
     "facevalue": 1000.0,
-    "price": 97.824,
+    "price": 97.85,
     "lot": 1
   },
   "HNFG": {
     "name": "ХЭНДЕРСОН",
     "isin": "RU000A106XF2",
     "facevalue": 50.0,
-    "price": 357.0,
+    "price": 279.4,
     "lot": 1
   },
   "RU000A107AG6": {
@@ -244,7 +244,7 @@
     "maturity": "2027-05-18",
     "facevalue": 1000.0,
     "coupon": 12.66,
-    "price": 99.61,
+    "price": 99.76,
     "lot": 1
   },
   "RU000A104X32": {
@@ -253,14 +253,14 @@
     "maturity": "2032-06-28",
     "facevalue": 590.27,
     "coupon": 7.6,
-    "price": 97.77,
+    "price": 97.65,
     "lot": 1
   },
   "SFIN": {
     "name": "ЭсЭфАй ао",
     "isin": "RU000A0JVW89",
     "facevalue": 0.67,
-    "price": 688.8,
+    "price": 545.0,
     "lot": 1
   },
   "RU000A107TD3": {
@@ -269,7 +269,7 @@
     "maturity": "2029-02-13",
     "facevalue": 1000.0,
     "coupon": 44.88,
-    "price": 53.29,
+    "price": 51.99,
     "lot": 1
   },
   "RU000A109KK3": {
@@ -285,21 +285,21 @@
     "name": "Ростел -ао",
     "isin": "RU0008943394",
     "facevalue": 0.0025,
-    "price": 50.72,
+    "price": 42.55,
     "lot": 10
   },
   "BTBR": {
     "name": "В2В-РТС",
     "isin": "RU000A104U43",
     "facevalue": 0.01,
-    "price": 137.95,
+    "price": 125.75,
     "lot": 1
   },
   "AFLT": {
     "name": "Аэрофлот",
     "isin": "RU0009062285",
     "facevalue": 1.0,
-    "price": 45.17,
+    "price": 38.27,
     "lot": 10
   },
   "RU000A104SX0": {
@@ -308,14 +308,14 @@
     "maturity": "2027-04-30",
     "facevalue": 1000.0,
     "coupon": 59.19,
-    "price": 99.25,
+    "price": 99.18,
     "lot": 1
   },
   "ARSA": {
     "name": "Арсагера",
     "isin": "RU000A0JP0Q7",
     "facevalue": 1.0,
-    "price": 7.52,
+    "price": 6.11,
     "lot": 100
   },
   "SU29019RMFS5": {
@@ -323,7 +323,7 @@
     "isin": "RU000A102A49",
     "maturity": "2029-07-18",
     "facevalue": 1000.0,
-    "price": 99.362,
+    "price": 99.298,
     "lot": 1
   },
   "RU000A10BP87": {
@@ -332,7 +332,7 @@
     "maturity": "2028-05-11",
     "facevalue": 1000.0,
     "coupon": 24.66,
-    "price": 105.07,
+    "price": 103.65,
     "lot": 1
   },
   "RU000A108447": {
@@ -350,7 +350,7 @@
     "maturity": "2030-01-12",
     "facevalue": 1000.0,
     "coupon": 20.55,
-    "price": 76.87,
+    "price": 78.69,
     "lot": 1
   },
   "BANE": {
@@ -366,7 +366,7 @@
     "maturity": "2030-03-26",
     "facevalue": 218.21,
     "coupon": 4.63,
-    "price": 103.64,
+    "price": 104.41,
     "lot": 1
   },
   "RU000A10AMY3": {
@@ -375,14 +375,14 @@
     "maturity": "2028-01-01",
     "facevalue": 1000.0,
     "coupon": 25.48,
-    "price": 107.98,
+    "price": 106.02,
     "lot": 1
   },
   "PIKK": {
     "name": "ПИК ао",
     "isin": "RU000A0JP7J7",
     "facevalue": 62.5,
-    "price": 597.8,
+    "price": 536.8,
     "lot": 1
   },
   "RU000A1090H6": {
@@ -400,14 +400,14 @@
     "maturity": "2027-10-08",
     "facevalue": 1000.0,
     "coupon": 18.9,
-    "price": 104.0,
+    "price": 103.99,
     "lot": 1
   },
   "RENI": {
     "name": "Ренессанс",
     "isin": "RU000A0ZZM04",
     "facevalue": 9.88,
-    "price": 85.56,
+    "price": 79.64,
     "lot": 10
   },
   "RU000A10AQD8": {
@@ -416,21 +416,21 @@
     "maturity": "2028-01-12",
     "facevalue": 667.0,
     "coupon": 13.71,
-    "price": 101.85,
+    "price": 100.97,
     "lot": 1
   },
   "UNKL": {
     "name": "ЮУНК ао",
     "isin": "RU0004887991",
     "facevalue": 1.0,
-    "price": 3660.0,
+    "price": 2920.0,
     "lot": 1
   },
   "SLEN": {
     "name": "Сахэнер ао",
     "isin": "RU0009280465",
     "facevalue": 10.0,
-    "price": 3.27,
+    "price": 2.94,
     "lot": 100
   },
   "RU000A10ASY0": {
@@ -457,7 +457,7 @@
     "maturity": "2028-01-08",
     "facevalue": 1000.0,
     "coupon": 15.62,
-    "price": 104.54,
+    "price": 102.58,
     "lot": 1
   },
   "SU26237RMFS6": {
@@ -466,7 +466,7 @@
     "maturity": "2029-03-14",
     "facevalue": 1000.0,
     "coupon": 33.41,
-    "price": 85.533,
+    "price": 84.4,
     "lot": 1
   },
   "RU000A10DHX9": {
@@ -475,7 +475,7 @@
     "maturity": "2028-11-03",
     "facevalue": 1000.0,
     "coupon": 12.95,
-    "price": 103.6,
+    "price": 102.46,
     "lot": 1
   },
   "SU29024RMFS5": {
@@ -483,7 +483,7 @@
     "isin": "RU000A1066D5",
     "maturity": "2035-04-18",
     "facevalue": 1000.0,
-    "price": 95.895,
+    "price": 96.17,
     "lot": 1
   },
   "RU000A107DR7": {
@@ -492,7 +492,7 @@
     "maturity": "2033-10-26",
     "facevalue": 367.5,
     "coupon": 4.87,
-    "price": 101.5,
+    "price": 100.45,
     "lot": 1
   },
   "RU000A10CKZ0": {
@@ -501,14 +501,14 @@
     "maturity": "2028-02-13",
     "facevalue": 1000.0,
     "coupon": 11.42,
-    "price": 100.1,
+    "price": 99.29,
     "lot": 1
   },
   "VTBR": {
     "name": "ВТБ ао",
     "isin": "RU000A0JP5V6",
     "facevalue": 50.0,
-    "price": 79.645,
+    "price": 71.66,
     "lot": 1
   },
   "RU000A106XJ4": {
@@ -526,14 +526,14 @@
     "maturity": "2031-09-17",
     "facevalue": 1000.0,
     "coupon": 42.38,
-    "price": 80.339,
+    "price": 78.789,
     "lot": 1
   },
   "MAGN": {
     "name": "ММК",
     "isin": "RU0009084396",
     "facevalue": 1.0,
-    "price": 21.745,
+    "price": 17.915,
     "lot": 10
   },
   "RU000A106565": {
@@ -542,7 +542,7 @@
     "maturity": "2028-04-14",
     "facevalue": 1000.0,
     "coupon": 40.64,
-    "price": 99.7,
+    "price": 99.59,
     "lot": 1
   },
   "RU000A0JXN21": {
@@ -569,14 +569,14 @@
     "maturity": "2028-03-24",
     "facevalue": 1000.0,
     "coupon": 20.96,
-    "price": 111.79,
+    "price": 109.09,
     "lot": 1
   },
   "TNSE": {
     "name": "ТНСэнрг ао",
     "isin": "RU000A0JUCQ5",
     "facevalue": 1.0,
-    "price": 3375.0,
+    "price": 2760.0,
     "lot": 1
   },
   "RU000A10AYB6": {
@@ -585,7 +585,7 @@
     "maturity": "2028-08-04",
     "facevalue": 1000.0,
     "coupon": 25.48,
-    "price": 109.0,
+    "price": 107.5,
     "lot": 1
   },
   "RU000A106169": {
@@ -594,7 +594,7 @@
     "maturity": "2031-12-20",
     "facevalue": 707.69,
     "coupon": 33.26,
-    "price": 99.99,
+    "price": 99.94,
     "lot": 1
   },
   "RU000A10E747": {
@@ -603,14 +603,14 @@
     "maturity": "2029-01-19",
     "facevalue": 1000.0,
     "coupon": 20.55,
-    "price": 100.35,
+    "price": 99.59,
     "lot": 1
   },
   "NVTK": {
     "name": "Новатэк ао",
     "isin": "RU000A0DKVS5",
     "facevalue": 0.1,
-    "price": 1079.7,
+    "price": 936.3,
     "lot": 1
   },
   "RU000A10BBG1": {
@@ -628,7 +628,7 @@
     "maturity": "2032-05-05",
     "facevalue": 1000.0,
     "coupon": 84.47,
-    "price": 105.764,
+    "price": 103.88,
     "lot": 1
   },
   "PMSBP": {
@@ -642,7 +642,7 @@
     "name": "ГТМ ао",
     "isin": "RU000A0ZYD22",
     "facevalue": 100.0,
-    "price": 47.8,
+    "price": 51.2,
     "lot": 10
   },
   "SU52002RMFS1": {
@@ -660,7 +660,7 @@
     "maturity": "2029-03-22",
     "facevalue": 1000.0,
     "coupon": 13.97,
-    "price": 102.0,
+    "price": 101.12,
     "lot": 1
   },
   "SU46012RMFS9": {
@@ -687,7 +687,7 @@
     "maturity": "2029-07-04",
     "facevalue": 1000.0,
     "coupon": 13.77,
-    "price": 101.72,
+    "price": 100.58,
     "lot": 1
   },
   "RU000A10BB83": {
@@ -705,14 +705,14 @@
     "maturity": "2028-09-03",
     "facevalue": 1000.0,
     "coupon": 17.88,
-    "price": 102.5,
+    "price": 99.01,
     "lot": 1
   },
   "HYDR": {
     "name": "РусГидро",
     "isin": "RU000A0JPKH7",
     "facevalue": 1.0,
-    "price": 0.3661,
+    "price": 0.3053,
     "lot": 1000
   },
   "RU000A106FM5": {
@@ -721,14 +721,14 @@
     "maturity": "2033-06-28",
     "facevalue": 753.69,
     "coupon": 9.86,
-    "price": 98.2,
+    "price": 98.34,
     "lot": 1
   },
   "HEAD": {
     "name": "Хэдхантер",
     "isin": "RU000A107662",
     "facevalue": 1.0,
-    "price": 2817.0,
+    "price": 2592.0,
     "lot": 1
   },
   "RU000A109KY4": {
@@ -737,7 +737,7 @@
     "maturity": "2027-09-17",
     "facevalue": 1000.0,
     "coupon": 44.38,
-    "price": 100.55,
+    "price": 100.38,
     "lot": 1
   },
   "RU000A10C6L5": {
@@ -746,7 +746,7 @@
     "maturity": "2030-07-19",
     "facevalue": 1000.0,
     "coupon": 35.78,
-    "price": 101.38,
+    "price": 99.27,
     "lot": 1
   },
   "RU000A105492": {
@@ -755,7 +755,7 @@
     "maturity": "2027-08-17",
     "facevalue": 500.0,
     "coupon": 16.21,
-    "price": 93.51,
+    "price": 92.4,
     "lot": 1
   },
   "RU000A10AMP1": {
@@ -773,21 +773,21 @@
     "maturity": "2027-11-23",
     "facevalue": 1000.0,
     "coupon": 0.0,
-    "price": 99.1,
+    "price": 99.02,
     "lot": 1
   },
   "TGKB": {
     "name": "ТГК-2",
     "isin": "RU000A0JNGS7",
     "facevalue": 0.01,
-    "price": 0.005465,
+    "price": 0.00386,
     "lot": 1000000
   },
   "KMAZ": {
     "name": "КАМАЗ",
     "isin": "RU0008959580",
     "facevalue": 50.0,
-    "price": 57.5,
+    "price": 43.6,
     "lot": 10
   },
   "RU000A10A4C1": {
@@ -796,14 +796,14 @@
     "maturity": "2029-10-26",
     "facevalue": 800.0,
     "coupon": 18.41,
-    "price": 105.77,
+    "price": 103.37,
     "lot": 1
   },
   "MRKU": {
     "name": "Россети Ур",
     "isin": "RU000A0JPPT1",
     "facevalue": 0.1,
-    "price": 0.6148,
+    "price": 0.537,
     "lot": 10000
   },
   "SU29010RMFS4": {
@@ -812,7 +812,7 @@
     "maturity": "2034-12-06",
     "facevalue": 1000.0,
     "coupon": 95.44,
-    "price": 106.234,
+    "price": 103.373,
     "lot": 1
   },
   "SU46023RMFS6": {
@@ -830,7 +830,7 @@
     "maturity": "2028-10-12",
     "facevalue": 1000.0,
     "coupon": 11.51,
-    "price": 90.57,
+    "price": 93.28,
     "lot": 1
   },
   "RU000A10BGU1": {
@@ -839,7 +839,7 @@
     "maturity": "2028-04-09",
     "facevalue": 1000.0,
     "coupon": 20.14,
-    "price": 103.78,
+    "price": 104.23,
     "lot": 1
   },
   "RU000A109NF7": {
@@ -848,7 +848,7 @@
     "maturity": "2027-09-17",
     "facevalue": 1000.0,
     "coupon": 0.0,
-    "price": 100.09,
+    "price": 99.93,
     "lot": 1
   },
   "RU000A1013N6": {
@@ -875,7 +875,7 @@
     "maturity": "2027-07-06",
     "facevalue": 1000.0,
     "coupon": 54.1,
-    "price": 97.79,
+    "price": 97.16,
     "lot": 1
   },
   "RU000A10D3R8": {
@@ -884,7 +884,7 @@
     "maturity": "2028-10-11",
     "facevalue": 1000.0,
     "coupon": 59.21,
-    "price": 95.73,
+    "price": 93.57,
     "lot": 1
   },
   "RU000A10BQK1": {
@@ -893,14 +893,14 @@
     "maturity": "2032-12-02",
     "facevalue": 477.23,
     "coupon": 8.51,
-    "price": 107.49,
+    "price": 103.98,
     "lot": 1
   },
   "MGTS": {
     "name": "МГТС-5ао",
     "isin": "RU0009036461",
     "facevalue": 40.0,
-    "price": 1230.0,
+    "price": 1160.0,
     "lot": 1
   },
   "RU000A105PJ2": {
@@ -909,7 +909,7 @@
     "maturity": "2027-06-22",
     "facevalue": 1000.0,
     "coupon": 41.14,
-    "price": 88.65,
+    "price": 127.4,
     "lot": 1
   },
   "RU000A1092S9": {
@@ -925,7 +925,7 @@
     "name": "Куйбазот-п",
     "isin": "RU000A0B9BW0",
     "facevalue": 1.0,
-    "price": 370.5,
+    "price": 282.5,
     "lot": 10
   },
   "RU000A10CKY3": {
@@ -934,7 +934,7 @@
     "maturity": "2028-08-11",
     "facevalue": 1000.0,
     "coupon": 13.15,
-    "price": 101.15,
+    "price": 99.47,
     "lot": 1
   },
   "RU000A10B4L1": {
@@ -943,7 +943,7 @@
     "maturity": "2028-03-05",
     "facevalue": 1000.0,
     "coupon": 24.25,
-    "price": 109.9,
+    "price": 110.76,
     "lot": 1
   },
   "RU000A10A7A8": {
@@ -952,7 +952,7 @@
     "maturity": "2027-11-30",
     "facevalue": 1000.0,
     "coupon": 74.79,
-    "price": 91.8,
+    "price": 91.23,
     "lot": 1
   },
   "RU000A106GY8": {
@@ -970,7 +970,7 @@
     "maturity": "2035-09-26",
     "facevalue": 1000.0,
     "coupon": 59.84,
-    "price": 88.083,
+    "price": 84.035,
     "lot": 1
   },
   "RU000A105KR6": {
@@ -979,7 +979,7 @@
     "maturity": "2027-11-30",
     "facevalue": 1000.0,
     "coupon": 56.1,
-    "price": 95.73,
+    "price": 93.52,
     "lot": 1
   },
   "RU000A10BP46": {
@@ -988,7 +988,7 @@
     "maturity": "2028-05-11",
     "facevalue": 1000.0,
     "coupon": 21.78,
-    "price": 103.7,
+    "price": 101.76,
     "lot": 1
   },
   "RU000A10C8H9": {
@@ -997,14 +997,14 @@
     "maturity": "2030-07-06",
     "facevalue": 1000.0,
     "coupon": 23.01,
-    "price": 89.54,
+    "price": 88.48,
     "lot": 1
   },
   "ELMT": {
     "name": "iЭлемент",
     "isin": "RU000A102093",
     "facevalue": 0.05,
-    "price": 0.1019,
+    "price": 0.09785,
     "lot": 1000
   },
   "RU000A10BQM7": {
@@ -1013,7 +1013,7 @@
     "maturity": "2028-05-20",
     "facevalue": 1000.0,
     "coupon": 23.01,
-    "price": 107.68,
+    "price": 107.31,
     "lot": 1
   },
   "RU000A107YT9": {
@@ -1022,7 +1022,7 @@
     "maturity": "2029-03-06",
     "facevalue": 1000.0,
     "coupon": 46.12,
-    "price": 81.67,
+    "price": 79.23,
     "lot": 1
   },
   "RU000A1075D6": {
@@ -1049,7 +1049,7 @@
     "maturity": "2028-07-15",
     "facevalue": 790.0,
     "coupon": 14.93,
-    "price": 13.3,
+    "price": 11.38,
     "lot": 1
   },
   "RU000A10CP78": {
@@ -1058,7 +1058,7 @@
     "maturity": "2028-09-05",
     "facevalue": 1000.0,
     "coupon": 11.71,
-    "price": 101.55,
+    "price": 99.72,
     "lot": 1
   },
   "RU000A1078X8": {
@@ -1074,28 +1074,28 @@
     "name": "НКХП ао",
     "isin": "RU000A0BLWD7",
     "facevalue": 1.0,
-    "price": 476.0,
+    "price": 349.0,
     "lot": 10
   },
   "ASTR": {
     "name": "iАстра ао",
     "isin": "RU000A106T36",
     "facevalue": 0.05,
-    "price": 198.7,
+    "price": 170.3,
     "lot": 1
   },
   "AFKS": {
     "name": "Система ао",
     "isin": "RU000A0DQZE3",
     "facevalue": 0.09,
-    "price": 13.082,
+    "price": 12.015,
     "lot": 100
   },
   "CHMF": {
     "name": "СевСт-ао",
     "isin": "RU0009046510",
     "facevalue": 0.01,
-    "price": 696.4,
+    "price": 571.0,
     "lot": 1
   },
   "RU000A0ZYR91": {
@@ -1104,7 +1104,7 @@
     "maturity": "2033-01-18",
     "facevalue": 1000.0,
     "coupon": 28.22,
-    "price": 94.45,
+    "price": 94.02,
     "lot": 1
   },
   "RU000A106T85": {
@@ -1122,14 +1122,14 @@
     "maturity": "2029-01-09",
     "facevalue": 1000.0,
     "coupon": 20.34,
-    "price": 111.3,
+    "price": 109.72,
     "lot": 1
   },
   "GMKN": {
     "name": "ГМКНорНик",
     "isin": "RU0007288411",
     "facevalue": 0.01,
-    "price": 136.52,
+    "price": 125.96,
     "lot": 10
   },
   "RU000A109JX8": {
@@ -1138,7 +1138,7 @@
     "maturity": "2027-09-02",
     "facevalue": 1000.0,
     "coupon": 15.41,
-    "price": 99.96,
+    "price": 96.81,
     "lot": 1
   },
   "RU000A106UL6": {
@@ -1147,7 +1147,7 @@
     "maturity": "2027-09-03",
     "facevalue": 1000.0,
     "coupon": 39.89,
-    "price": 98.0,
+    "price": 97.5,
     "lot": 1
   },
   "RU000A10B081": {
@@ -1165,7 +1165,7 @@
     "maturity": "2028-11-22",
     "facevalue": 1000.0,
     "coupon": 16.4,
-    "price": 114.01,
+    "price": 111.48,
     "lot": 1
   },
   "STSBP": {
@@ -1179,7 +1179,7 @@
     "name": "МГКЛ",
     "isin": "RU000A0JVJQ8",
     "facevalue": 0.01,
-    "price": 2.4515,
+    "price": 2.4285,
     "lot": 100
   },
   "RU000A10A4N8": {
@@ -1197,14 +1197,14 @@
     "maturity": "2027-09-29",
     "facevalue": 1000.0,
     "coupon": 13.56,
-    "price": 104.18,
+    "price": 103.54,
     "lot": 1
   },
   "RDRB": {
     "name": "РДБанк ао",
     "isin": "RU000A0JU6Q7",
     "facevalue": 124.0,
-    "price": 111.8,
+    "price": 101.0,
     "lot": 10
   },
   "RU000A10C6U6": {
@@ -1213,7 +1213,7 @@
     "maturity": "2030-07-02",
     "facevalue": 1000.0,
     "coupon": 20.96,
-    "price": 102.1,
+    "price": 99.9,
     "lot": 1
   },
   "SU26250RMFS9": {
@@ -1222,7 +1222,7 @@
     "maturity": "2037-06-10",
     "facevalue": 1000.0,
     "coupon": 59.84,
-    "price": 87.109,
+    "price": 82.549,
     "lot": 1
   },
   "RU000A10AFQ3": {
@@ -1231,7 +1231,7 @@
     "maturity": "2027-12-21",
     "facevalue": 1000.0,
     "coupon": 48.62,
-    "price": 85.5,
+    "price": 85.16,
     "lot": 1
   },
   "SU29018RMFS7": {
@@ -1239,7 +1239,7 @@
     "isin": "RU000A102A31",
     "maturity": "2031-11-26",
     "facevalue": 1000.0,
-    "price": 97.5,
+    "price": 97.669,
     "lot": 1
   },
   "RU000A104V00": {
@@ -1255,14 +1255,14 @@
     "name": "Россети",
     "isin": "RU000A0JPNN9",
     "facevalue": 0.5,
-    "price": 0.05486,
+    "price": 0.04564,
     "lot": 10000
   },
   "KRSB": {
     "name": "Красэсб ао",
     "isin": "RU000A0HMLY1",
     "facevalue": 0.02,
-    "price": 22.22,
+    "price": 19.48,
     "lot": 100
   },
   "RU000A109L72": {
@@ -1271,7 +1271,7 @@
     "maturity": "2029-10-28",
     "facevalue": 800.0,
     "coupon": 10.74,
-    "price": 99.8,
+    "price": 99.43,
     "lot": 1
   },
   "RU000A109NM3": {
@@ -1280,7 +1280,7 @@
     "maturity": "2027-09-15",
     "facevalue": 1000.0,
     "coupon": 19.32,
-    "price": 102.51,
+    "price": 101.35,
     "lot": 1
   },
   "RU000A106037": {
@@ -1289,7 +1289,7 @@
     "maturity": "2028-03-20",
     "facevalue": 1000.0,
     "coupon": 41.88,
-    "price": 99.3,
+    "price": 99.94,
     "lot": 1
   },
   "SU29013RMFS8": {
@@ -1297,7 +1297,7 @@
     "isin": "RU000A101KT1",
     "maturity": "2030-09-18",
     "facevalue": 1000.0,
-    "price": 97.996,
+    "price": 97.75,
     "lot": 1
   },
   "RU000A10DPS2": {
@@ -1306,7 +1306,7 @@
     "maturity": "2031-05-29",
     "facevalue": 1000.0,
     "coupon": 37.65,
-    "price": 104.29,
+    "price": 101.36,
     "lot": 1
   },
   "SU26232RMFS7": {
@@ -1315,14 +1315,14 @@
     "maturity": "2027-10-06",
     "facevalue": 1000.0,
     "coupon": 29.92,
-    "price": 92.174,
+    "price": 92.118,
     "lot": 1
   },
   "CARM": {
     "name": "СТГ",
     "isin": "RU000A105NV2",
     "facevalue": 1.0,
-    "price": 1.0,
+    "price": 0.8115,
     "lot": 100
   },
   "RU000A10EXF1": {
@@ -1340,7 +1340,7 @@
     "maturity": "2032-12-01",
     "facevalue": 303.67,
     "coupon": 5.37,
-    "price": 105.81,
+    "price": 104.34,
     "lot": 1
   },
   "RU000A109TF4": {
@@ -1349,7 +1349,7 @@
     "maturity": "2027-10-15",
     "facevalue": 1000.0,
     "coupon": 64.2,
-    "price": 102.08,
+    "price": 101.0,
     "lot": 1
   },
   "RU000A108LN7": {
@@ -1358,7 +1358,7 @@
     "maturity": "2027-05-22",
     "facevalue": 1000.0,
     "coupon": 15.41,
-    "price": 93.99,
+    "price": 95.0,
     "lot": 1
   },
   "RU000A106YL8": {
@@ -1367,7 +1367,7 @@
     "maturity": "2027-06-24",
     "facevalue": 1000.0,
     "coupon": 41.14,
-    "price": 94.26,
+    "price": 94.24,
     "lot": 1
   },
   "RU000A10CSQ2": {
@@ -1385,7 +1385,7 @@
     "maturity": "2028-01-23",
     "facevalue": 1000.0,
     "coupon": 13.15,
-    "price": 93.19,
+    "price": 92.99,
     "lot": 1
   },
   "RU000A10C5Z7": {
@@ -1403,7 +1403,7 @@
     "maturity": "2028-10-04",
     "facevalue": 1000.0,
     "coupon": 40.39,
-    "price": 99.3,
+    "price": 99.04,
     "lot": 1
   },
   "RU000A10AZN8": {
@@ -1412,7 +1412,7 @@
     "maturity": "2028-02-13",
     "facevalue": 1000.0,
     "coupon": 24.25,
-    "price": 113.95,
+    "price": 104.29,
     "lot": 1
   },
   "RU000A106MW0": {
@@ -1421,7 +1421,7 @@
     "maturity": "2027-07-27",
     "facevalue": 1000.0,
     "coupon": 32.04,
-    "price": 93.9,
+    "price": 93.06,
     "lot": 1
   },
   "RU000A107U65": {
@@ -1430,14 +1430,14 @@
     "maturity": "2027-08-05",
     "facevalue": 1000.0,
     "coupon": 13.97,
-    "price": 97.33,
+    "price": 96.42,
     "lot": 1
   },
   "TRNFP": {
     "name": "Транснф ап",
     "isin": "RU0009091573",
     "facevalue": 0.01,
-    "price": 1395.8,
+    "price": 1297.0,
     "lot": 1
   },
   "RU000A10B7W1": {
@@ -1446,7 +1446,7 @@
     "maturity": "2028-03-18",
     "facevalue": 1000.0,
     "coupon": 20.14,
-    "price": 115.35,
+    "price": 115.2,
     "lot": 1
   },
   "RU000A109RX1": {
@@ -1464,7 +1464,7 @@
     "maturity": "2027-06-25",
     "facevalue": 1000.0,
     "coupon": 39.89,
-    "price": 91.37,
+    "price": 91.23,
     "lot": 1
   },
   "SU29023RMFS7": {
@@ -1472,7 +1472,7 @@
     "isin": "RU000A105L19",
     "maturity": "2034-08-23",
     "facevalue": 1000.0,
-    "price": 96.643,
+    "price": 96.972,
     "lot": 1
   },
   "RU000A109R50": {
@@ -1481,14 +1481,14 @@
     "maturity": "2027-09-23",
     "facevalue": 1000.0,
     "coupon": 18.9,
-    "price": 102.02,
+    "price": 100.09,
     "lot": 1
   },
   "IRKT": {
     "name": "Яковлев-3",
     "isin": "RU0006752979",
     "facevalue": 3.0,
-    "price": 19.44,
+    "price": 15.68,
     "lot": 100
   },
   "RU000A10BVF1": {
@@ -1506,7 +1506,7 @@
     "maturity": "2030-04-10",
     "facevalue": 1000.0,
     "coupon": 38.15,
-    "price": 82.888,
+    "price": 81.612,
     "lot": 1
   },
   "RU000A10D3C0": {
@@ -1515,7 +1515,7 @@
     "maturity": "2028-09-28",
     "facevalue": 1000.0,
     "coupon": 12.7,
-    "price": 104.23,
+    "price": 101.85,
     "lot": 1
   },
   "RU000A109NH3": {
@@ -1524,7 +1524,7 @@
     "maturity": "2053-05-28",
     "facevalue": 816.31,
     "coupon": 10.95,
-    "price": 99.82,
+    "price": 100.0,
     "lot": 1
   },
   "SU26221RMFS0": {
@@ -1533,14 +1533,14 @@
     "maturity": "2033-03-23",
     "facevalue": 1000.0,
     "coupon": 38.39,
-    "price": 72.78,
+    "price": 69.984,
     "lot": 1
   },
   "SMLT": {
     "name": "Самолет ао",
     "isin": "RU000A0ZZG02",
     "facevalue": 25.0,
-    "price": 411.6,
+    "price": 278.4,
     "lot": 1
   },
   "SU26242RMFS6": {
@@ -1549,14 +1549,14 @@
     "maturity": "2029-08-29",
     "facevalue": 1000.0,
     "coupon": 44.88,
-    "price": 89.452,
+    "price": 87.758,
     "lot": 1
   },
   "VLHZ": {
     "name": "ВХЗ-ао",
     "isin": "RU0007984761",
     "facevalue": 20.0,
-    "price": 145.0,
+    "price": 101.2,
     "lot": 10
   },
   "RU000A1098T4": {
@@ -1565,7 +1565,7 @@
     "maturity": "2027-08-12",
     "facevalue": 1000.0,
     "coupon": 62.33,
-    "price": 97.71,
+    "price": 96.18,
     "lot": 1
   },
   "RU000A106FN3": {
@@ -1574,14 +1574,14 @@
     "maturity": "2027-06-08",
     "facevalue": 1000.0,
     "coupon": 35.51,
-    "price": 96.91,
+    "price": 95.9,
     "lot": 1
   },
   "MRKP": {
     "name": "РСетиЦП ао",
     "isin": "RU000A0JPN96",
     "facevalue": 0.1,
-    "price": 0.6068,
+    "price": 0.5784,
     "lot": 10000
   },
   "RU000A106MV2": {
@@ -1590,7 +1590,7 @@
     "maturity": "2028-01-25",
     "facevalue": 1000.0,
     "coupon": 39.89,
-    "price": 87.92,
+    "price": 84.59,
     "lot": 1
   },
   "RU000A10BFG2": {
@@ -1599,7 +1599,7 @@
     "maturity": "2030-04-11",
     "facevalue": 1000.0,
     "coupon": 43.13,
-    "price": 110.32,
+    "price": 107.16,
     "lot": 1
   },
   "RU000A10A3Q3": {
@@ -1608,7 +1608,7 @@
     "maturity": "2027-11-16",
     "facevalue": 1000.0,
     "coupon": 74.79,
-    "price": 88.79,
+    "price": 83.15,
     "lot": 1
   },
   "RU000A109DP7": {
@@ -1624,7 +1624,7 @@
     "name": "Мечел ао",
     "isin": "RU000A0DKXV5",
     "facevalue": 10.0,
-    "price": 48.62,
+    "price": 39.37,
     "lot": 1
   },
   "SU26207RMFS9": {
@@ -1633,7 +1633,7 @@
     "maturity": "2027-02-03",
     "facevalue": 1000.0,
     "coupon": 40.64,
-    "price": 97.335,
+    "price": 97.33,
     "lot": 1
   },
   "RU000A10EQE8": {
@@ -1642,7 +1642,7 @@
     "maturity": "2031-03-05",
     "facevalue": 1000.0,
     "coupon": 18.9,
-    "price": 100.0,
+    "price": 100.05,
     "lot": 1
   },
   "RU000A1083A6": {
@@ -1651,7 +1651,7 @@
     "maturity": "2029-02-28",
     "facevalue": 1000.0,
     "coupon": 12.99,
-    "price": 100.08,
+    "price": 100.18,
     "lot": 1
   },
   "RU000A105CM4": {
@@ -1660,7 +1660,7 @@
     "maturity": "2027-10-26",
     "facevalue": 750.0,
     "coupon": 21.88,
-    "price": 97.52,
+    "price": 96.59,
     "lot": 1
   },
   "RU000A109LC8": {
@@ -1669,14 +1669,14 @@
     "maturity": "2027-09-09",
     "facevalue": 1000.0,
     "coupon": 14.38,
-    "price": 96.8,
+    "price": 95.31,
     "lot": 1
   },
   "OZON": {
     "name": "Озон",
     "isin": "RU000A10CW95",
     "facevalue": 0.07809,
-    "price": 3917.0,
+    "price": 3471.5,
     "lot": 1
   },
   "RU000A0ZZ885": {
@@ -1685,14 +1685,14 @@
     "maturity": "2033-05-10",
     "facevalue": 1000.0,
     "coupon": 76.34,
-    "price": 82.79,
+    "price": 82.4,
     "lot": 1
   },
   "LMBZ": {
     "name": "Ламбумиз",
     "isin": "RU000A108ZX6",
     "facevalue": 0.025,
-    "price": 460.5,
+    "price": 479.5,
     "lot": 1
   },
   "SU26239RMFS2": {
@@ -1701,21 +1701,21 @@
     "maturity": "2031-07-23",
     "facevalue": 1000.0,
     "coupon": 34.41,
-    "price": 75.309,
+    "price": 73.8,
     "lot": 1
   },
   "VGSB": {
     "name": "ВолгЭнСб",
     "isin": "RU000A0D8L73",
     "facevalue": 0.12,
-    "price": 13.95,
+    "price": 11.35,
     "lot": 1000
   },
   "IVAT": {
     "name": "iИВА",
     "isin": "RU000A108GD8",
     "facevalue": 0.1,
-    "price": 78.45,
+    "price": 55.15,
     "lot": 1
   },
   "SU26246RMFS7": {
@@ -1724,14 +1724,14 @@
     "maturity": "2036-03-12",
     "facevalue": 1000.0,
     "coupon": 59.84,
-    "price": 87.779,
+    "price": 83.768,
     "lot": 1
   },
   "AVAN": {
     "name": "Авангрд-ао",
     "isin": "RU000A0DM7B3",
     "facevalue": 30.0,
-    "price": 600.0,
+    "price": 554.0,
     "lot": 1
   },
   "RU000A10ERD8": {
@@ -1740,7 +1740,7 @@
     "maturity": "2031-03-08",
     "facevalue": 1000.0,
     "coupon": 18.08,
-    "price": 96.99,
+    "price": 95.9,
     "lot": 1
   },
   "SU29020RMFS3": {
@@ -1748,7 +1748,7 @@
     "isin": "RU000A102BV4",
     "maturity": "2027-09-22",
     "facevalue": 1000.0,
-    "price": 100.1,
+    "price": 100.189,
     "lot": 1
   },
   "RU000A10ATC4": {
@@ -1757,7 +1757,7 @@
     "maturity": "2030-01-11",
     "facevalue": 1000.0,
     "coupon": 24.66,
-    "price": 110.93,
+    "price": 107.65,
     "lot": 1
   },
   "RU000A103RL9": {
@@ -1775,7 +1775,7 @@
     "maturity": "2027-11-22",
     "facevalue": 1000.0,
     "coupon": 69.81,
-    "price": 83.98,
+    "price": 78.49,
     "lot": 1
   },
   "RU000A1099W6": {
@@ -1784,14 +1784,14 @@
     "maturity": "2027-08-20",
     "facevalue": 1000.0,
     "coupon": 57.34,
-    "price": 100.2,
+    "price": 99.9,
     "lot": 1
   },
   "LSNG": {
     "name": "РСетиЛЭ",
     "isin": "RU0009034490",
     "facevalue": 1.0,
-    "price": 14.79,
+    "price": 11.15,
     "lot": 100
   },
   "RU000A107PU5": {
@@ -1800,7 +1800,7 @@
     "maturity": "2031-02-03",
     "facevalue": 1000.0,
     "coupon": 30.92,
-    "price": 107.32,
+    "price": 112.32,
     "lot": 1
   },
   "SU26230RMFS1": {
@@ -1809,7 +1809,7 @@
     "maturity": "2039-03-16",
     "facevalue": 1000.0,
     "coupon": 38.39,
-    "price": 61.667,
+    "price": 57.949,
     "lot": 1
   },
   "RU000A1041Q0": {
@@ -1818,28 +1818,28 @@
     "maturity": "2031-10-28",
     "facevalue": 475.24,
     "coupon": 6.11,
-    "price": 99.18,
+    "price": 98.01,
     "lot": 1
   },
   "NKNC": {
     "name": "НКНХ ао",
     "isin": "RU0009100507",
     "facevalue": 1.0,
-    "price": 58.2,
+    "price": 49.5,
     "lot": 10
   },
   "AQUA": {
     "name": "ИНАРКТИКА",
     "isin": "RU000A0JQTS3",
     "facevalue": 100.0,
-    "price": 377.7,
+    "price": 312.5,
     "lot": 1
   },
   "EUTR": {
     "name": "ЕвроТранс",
     "isin": "RU000A1002V2",
     "facevalue": 0.05,
-    "price": 61.2,
+    "price": 59.75,
     "lot": 1
   },
   "RU000A10B2D2": {
@@ -1848,21 +1848,21 @@
     "maturity": "2028-02-26",
     "facevalue": 1000.0,
     "coupon": 22.19,
-    "price": 102.64,
+    "price": 103.72,
     "lot": 1
   },
   "MTLRP": {
     "name": "Мечел ап",
     "isin": "RU000A0JPV70",
     "facevalue": 10.0,
-    "price": 44.5,
+    "price": 36.2,
     "lot": 10
   },
   "DATA": {
     "name": "iАренадата",
     "isin": "RU000A108ZR8",
     "facevalue": 0.05,
-    "price": 87.96,
+    "price": 75.86,
     "lot": 1
   },
   "RU000A10A133": {
@@ -1896,7 +1896,7 @@
     "name": "АстрЭнСб",
     "isin": "RU000A0D8MM8",
     "facevalue": 0.007,
-    "price": 2.685,
+    "price": 2.32,
     "lot": 1000
   },
   "RU000A10BGC9": {
@@ -1905,21 +1905,21 @@
     "maturity": "2029-04-03",
     "facevalue": 1000.0,
     "coupon": 20.96,
-    "price": 110.27,
+    "price": 108.49,
     "lot": 1
   },
   "MVID": {
     "name": "М.видео",
     "isin": "RU000A0JPGA0",
     "facevalue": 10.0,
-    "price": 64.6,
+    "price": 57.95,
     "lot": 1
   },
   "FIXR": {
     "name": "Фикс Прайс",
     "isin": "RU000A10B5G8",
     "facevalue": 0.001,
-    "price": 0.4756,
+    "price": 0.4125,
     "lot": 1000
   },
   "RU000A1058R2": {
@@ -1937,7 +1937,7 @@
     "maturity": "2028-05-09",
     "facevalue": 1000.0,
     "coupon": 49.86,
-    "price": 70.75,
+    "price": 68.98,
     "lot": 1
   },
   "RU000A1097T6": {
@@ -1946,7 +1946,7 @@
     "maturity": "2033-08-26",
     "facevalue": 283.62,
     "coupon": 4.82,
-    "price": 102.37,
+    "price": 102.3,
     "lot": 1
   },
   "RU000A104XR2": {
@@ -1955,21 +1955,21 @@
     "maturity": "2027-07-01",
     "facevalue": 1000.0,
     "coupon": 53.1,
-    "price": 96.67,
+    "price": 96.98,
     "lot": 1
   },
   "BSPBP": {
     "name": "БСП ап",
     "isin": "RU000A0JP0U9",
     "facevalue": 1.0,
-    "price": 46.15,
+    "price": 34.7,
     "lot": 100
   },
   "SBER": {
     "name": "Сбербанк",
     "isin": "RU0009029540",
     "facevalue": 3.0,
-    "price": 324.56,
+    "price": 300.45,
     "lot": 1
   },
   "SU26253RMFS3": {
@@ -1978,7 +1978,7 @@
     "maturity": "2038-10-06",
     "facevalue": 1000.0,
     "coupon": 64.82,
-    "price": 92.18,
+    "price": 87.225,
     "lot": 1
   },
   "RU000A1005L6": {
@@ -1994,14 +1994,14 @@
     "name": "ТНСэКубань",
     "isin": "RU000A0JNJ11",
     "facevalue": 0.56,
-    "price": 829.0,
+    "price": 722.0,
     "lot": 10
   },
   "PLZL": {
     "name": "Полюс",
     "isin": "RU000A0JNAA8",
     "facevalue": 0.1,
-    "price": 2073.8,
+    "price": 1961.0,
     "lot": 1
   },
   "RU000A10E6S8": {
@@ -2010,14 +2010,14 @@
     "maturity": "2029-01-18",
     "facevalue": 1000.0,
     "coupon": 21.37,
-    "price": 104.4,
+    "price": 102.84,
     "lot": 1
   },
   "LKOH": {
     "name": "ЛУКОЙЛ",
     "isin": "RU0009024277",
     "facevalue": 0.025,
-    "price": 4776.0,
+    "price": 4396.0,
     "lot": 1
   },
   "RU000A106987": {
@@ -2035,7 +2035,7 @@
     "maturity": "2028-03-11",
     "facevalue": 1000.0,
     "coupon": 23.01,
-    "price": 106.18,
+    "price": 105.27,
     "lot": 1
   },
   "RU000A1099A2": {
@@ -2044,7 +2044,7 @@
     "maturity": "2027-08-05",
     "facevalue": 1000.0,
     "coupon": 13.07,
-    "price": 100.15,
+    "price": 100.09,
     "lot": 1
   },
   "RU000A107P62": {
@@ -2053,7 +2053,7 @@
     "maturity": "2028-01-24",
     "facevalue": 1000.0,
     "coupon": 39.89,
-    "price": 87.5,
+    "price": 86.05,
     "lot": 1
   },
   "RU000A10BNM4": {
@@ -2062,14 +2062,14 @@
     "maturity": "2028-05-07",
     "facevalue": 1000.0,
     "coupon": 20.96,
-    "price": 111.35,
+    "price": 108.6,
     "lot": 1
   },
   "ZVEZ": {
     "name": "ЗВЕЗДА ао",
     "isin": "RU0009091300",
     "facevalue": 0.1,
-    "price": 5.31,
+    "price": 4.15,
     "lot": 1000
   },
   "RU000A1094W7": {
@@ -2078,7 +2078,7 @@
     "maturity": "2029-07-06",
     "facevalue": 1000.0,
     "coupon": 15.82,
-    "price": 86.25,
+    "price": 86.43,
     "lot": 1
   },
   "RU000A106R79": {
@@ -2087,7 +2087,7 @@
     "maturity": "2028-08-10",
     "facevalue": 600.0,
     "coupon": 23.93,
-    "price": 87.11,
+    "price": 86.09,
     "lot": 1
   },
   "RU000A1068S9": {
@@ -2096,14 +2096,14 @@
     "maturity": "2028-05-11",
     "facevalue": 1000.0,
     "coupon": 33.66,
-    "price": 95.93,
+    "price": 94.28,
     "lot": 1
   },
   "MSRS": {
     "name": "РСетиМР ао",
     "isin": "RU000A0ET7Y7",
     "facevalue": 0.5,
-    "price": 1.859,
+    "price": 1.6635,
     "lot": 1000
   },
   "CBOM": {
@@ -2144,7 +2144,7 @@
     "maturity": "2027-06-18",
     "facevalue": 1000.0,
     "coupon": 44.13,
-    "price": 100.3,
+    "price": 100.14,
     "lot": 1
   },
   "RU000A10D2Y6": {
@@ -2153,7 +2153,7 @@
     "maturity": "2028-03-31",
     "facevalue": 1000.0,
     "coupon": 16.85,
-    "price": 95.83,
+    "price": 93.37,
     "lot": 1
   },
   "RU000A106607": {
@@ -2162,21 +2162,21 @@
     "maturity": "2028-04-26",
     "facevalue": 500.0,
     "coupon": 13.21,
-    "price": 94.63,
+    "price": 93.92,
     "lot": 1
   },
   "DIOD": {
     "name": "ЗаводДИОД",
     "isin": "RU000A0JQWC1",
     "facevalue": 0.01,
-    "price": 8.09,
+    "price": 6.74,
     "lot": 100
   },
   "GCHE": {
     "name": "ЧеркизГ-ао",
     "isin": "RU000A0JL4R1",
     "facevalue": 0.01,
-    "price": 3217.0,
+    "price": 2937.0,
     "lot": 1
   },
   "RU000A109T74": {
@@ -2185,7 +2185,7 @@
     "maturity": "2027-10-02",
     "facevalue": 664.0,
     "coupon": 10.64,
-    "price": 99.4,
+    "price": 99.06,
     "lot": 1
   },
   "SU29017RMFS9": {
@@ -2193,14 +2193,14 @@
     "isin": "RU000A1028D5",
     "maturity": "2032-08-25",
     "facevalue": 1000.0,
-    "price": 97.112,
+    "price": 97.35,
     "lot": 1
   },
   "UNAC": {
     "name": "iАвиастКао",
     "isin": "RU000A0JPLZ7",
     "facevalue": 0.27,
-    "price": 0.3445,
+    "price": 0.2485,
     "lot": 1000
   },
   "RU000A0ZZ1M2": {
@@ -2209,7 +2209,7 @@
     "maturity": "2028-03-24",
     "facevalue": 1000.0,
     "coupon": 79.78,
-    "price": 98.32,
+    "price": 97.39,
     "lot": 1
   },
   "RU000A108KV2": {
@@ -2218,7 +2218,7 @@
     "maturity": "2029-05-25",
     "facevalue": 1000.0,
     "coupon": 49.86,
-    "price": 62.95,
+    "price": 55.78,
     "lot": 1
   },
   "SU26233RMFS5": {
@@ -2227,7 +2227,7 @@
     "maturity": "2035-07-18",
     "facevalue": 1000.0,
     "coupon": 30.42,
-    "price": 59.378,
+    "price": 56.28,
     "lot": 1
   },
   "RU000A10CT33": {
@@ -2236,7 +2236,7 @@
     "maturity": "2030-09-17",
     "facevalue": 1000.0,
     "coupon": 36.65,
-    "price": 103.16,
+    "price": 100.99,
     "lot": 1
   },
   "RU000A10CSR0": {
@@ -2254,7 +2254,7 @@
     "maturity": "2028-02-26",
     "facevalue": 1000.0,
     "coupon": 11.1,
-    "price": 100.46,
+    "price": 99.98,
     "lot": 1
   },
   "RU000A107480": {
@@ -2281,7 +2281,7 @@
     "maturity": "2029-04-07",
     "facevalue": 1000.0,
     "coupon": 20.55,
-    "price": 100.11,
+    "price": 100.0,
     "lot": 1
   },
   "RU000A10AZ60": {
@@ -2290,7 +2290,7 @@
     "maturity": "2030-03-02",
     "facevalue": 1000.0,
     "coupon": 14.71,
-    "price": 111.81,
+    "price": 108.78,
     "lot": 1
   },
   "RU000A108GM9": {
@@ -2299,7 +2299,7 @@
     "maturity": "2027-05-08",
     "facevalue": 1000.0,
     "coupon": 13.97,
-    "price": 96.86,
+    "price": 94.57,
     "lot": 1
   },
   "PMSB": {
@@ -2315,14 +2315,14 @@
     "maturity": "2027-06-24",
     "facevalue": 543.5,
     "coupon": 9.83,
-    "price": 102.68,
+    "price": 100.89,
     "lot": 1
   },
   "TTLK": {
     "name": "Таттел. ао",
     "isin": "RU000A0HM5C1",
     "facevalue": 0.1,
-    "price": 0.592,
+    "price": 0.501,
     "lot": 1000
   },
   "RU000A105RF6": {
@@ -2338,7 +2338,7 @@
     "name": "ИнтерРАОао",
     "isin": "RU000A0JPNM1",
     "facevalue": 2.80977,
-    "price": 2.7615,
+    "price": 2.5975,
     "lot": 100
   },
   "SU26224RMFS4": {
@@ -2347,7 +2347,7 @@
     "maturity": "2029-05-23",
     "facevalue": 1000.0,
     "coupon": 34.41,
-    "price": 85.32,
+    "price": 83.892,
     "lot": 1
   },
   "SU29022RMFS9": {
@@ -2355,7 +2355,7 @@
     "isin": "RU000A105G16",
     "maturity": "2033-07-20",
     "facevalue": 1000.0,
-    "price": 97.0,
+    "price": 97.669,
     "lot": 1
   },
   "RU000A10DP93": {
@@ -2364,14 +2364,14 @@
     "maturity": "2027-11-22",
     "facevalue": 1000.0,
     "coupon": 13.56,
-    "price": 101.86,
+    "price": 100.72,
     "lot": 1
   },
   "T": {
     "name": "Т-Техно ао",
     "isin": "RU000A107UL4",
     "facevalue": 0.36394,
-    "price": 303.28,
+    "price": 266.32,
     "lot": 1
   },
   "SU26212RMFS9": {
@@ -2380,7 +2380,7 @@
     "maturity": "2028-01-19",
     "facevalue": 1000.0,
     "coupon": 35.15,
-    "price": 92.04,
+    "price": 91.812,
     "lot": 1
   },
   "RU000A10B2P6": {
@@ -2389,7 +2389,7 @@
     "maturity": "2028-02-27",
     "facevalue": 1000.0,
     "coupon": 21.37,
-    "price": 108.04,
+    "price": 107.35,
     "lot": 1
   },
   "RU000A1094L0": {
@@ -2407,7 +2407,7 @@
     "maturity": "2028-03-13",
     "facevalue": 1000.0,
     "coupon": 66.07,
-    "price": 44.4,
+    "price": 26.82,
     "lot": 1
   },
   "RU000A10BQC8": {
@@ -2416,7 +2416,7 @@
     "maturity": "2027-05-24",
     "facevalue": 1000.0,
     "coupon": 16.03,
-    "price": 105.3,
+    "price": 103.91,
     "lot": 1
   },
   "SVAV": {
@@ -2432,7 +2432,7 @@
     "maturity": "2027-07-18",
     "facevalue": 1000.0,
     "coupon": 16.64,
-    "price": 101.4,
+    "price": 100.27,
     "lot": 1
   },
   "RU000A107936": {
@@ -2441,7 +2441,7 @@
     "maturity": "2030-11-15",
     "facevalue": 1000.0,
     "coupon": 31.29,
-    "price": 101.32,
+    "price": 100.1,
     "lot": 1
   },
   "RU000A104Z48": {
@@ -2450,7 +2450,7 @@
     "maturity": "2027-07-15",
     "facevalue": 1000.0,
     "coupon": 50.86,
-    "price": 96.46,
+    "price": 96.04,
     "lot": 1
   },
   "RU000A10ABC2": {
@@ -2459,14 +2459,14 @@
     "maturity": "2027-11-28",
     "facevalue": 700.0,
     "coupon": 10.93,
-    "price": 102.63,
+    "price": 103.06,
     "lot": 1
   },
   "RTSBP": {
     "name": "ТНСэнРст-п",
     "isin": "RU000A0D8PC2",
     "facevalue": 0.02,
-    "price": 1.282,
+    "price": 1.078,
     "lot": 1000
   },
   "RU000A101DA6": {
@@ -2475,7 +2475,7 @@
     "maturity": "2031-02-15",
     "facevalue": 436.81,
     "coupon": 18.08,
-    "price": 97.0,
+    "price": 89.92,
     "lot": 1
   },
   "RU000A1089A3": {
@@ -2484,14 +2484,14 @@
     "maturity": "2027-09-23",
     "facevalue": 889.0,
     "coupon": 12.42,
-    "price": 98.47,
+    "price": 97.5,
     "lot": 1
   },
   "UWGN": {
     "name": "ОВК ао",
     "isin": "RU000A0JVBT9",
     "facevalue": 1.0,
-    "price": 21.54,
+    "price": 16.48,
     "lot": 1
   },
   "RU000A1087F6": {
@@ -2500,7 +2500,7 @@
     "maturity": "2029-04-05",
     "facevalue": 1000.0,
     "coupon": 39.89,
-    "price": 102.18,
+    "price": 101.09,
     "lot": 1
   },
   "RU000A100W60": {
@@ -2509,7 +2509,7 @@
     "maturity": "2029-09-20",
     "facevalue": 1000.0,
     "coupon": 97.23,
-    "price": 103.03,
+    "price": 102.87,
     "lot": 1
   },
   "RU000A108WJ2": {
@@ -2518,7 +2518,7 @@
     "maturity": "2027-12-30",
     "facevalue": 1000.0,
     "coupon": 57.34,
-    "price": 55.0,
+    "price": 54.39,
     "lot": 1
   },
   "RU000A107C00": {
@@ -2527,21 +2527,21 @@
     "maturity": "2027-11-16",
     "facevalue": 1000.0,
     "coupon": 14.79,
-    "price": 101.9,
+    "price": 99.5,
     "lot": 1
   },
   "MRKC": {
     "name": "РоссЦентр",
     "isin": "RU000A0JPPL8",
     "facevalue": 0.1,
-    "price": 0.6616,
+    "price": 0.5736,
     "lot": 1000
   },
   "MSNG": {
     "name": "+МосЭнерго",
     "isin": "RU0008958863",
     "facevalue": 1.0,
-    "price": 1.888,
+    "price": 1.8495,
     "lot": 1000
   },
   "RU000A10DQ68": {
@@ -2550,7 +2550,7 @@
     "maturity": "2027-11-25",
     "facevalue": 1000.0,
     "coupon": 14.18,
-    "price": 102.44,
+    "price": 101.21,
     "lot": 1
   },
   "SU29014RMFS6": {
@@ -2567,7 +2567,7 @@
     "maturity": "2027-11-07",
     "facevalue": 1000.0,
     "coupon": 0.0,
-    "price": 101.98,
+    "price": 101.89,
     "lot": 1
   },
   "RU000A10BFK4": {
@@ -2576,7 +2576,7 @@
     "maturity": "2027-04-08",
     "facevalue": 1000.0,
     "coupon": 19.11,
-    "price": 105.89,
+    "price": 103.51,
     "lot": 1
   },
   "RU000A10DPJ1": {
@@ -2585,7 +2585,7 @@
     "maturity": "2028-11-17",
     "facevalue": 1000.0,
     "coupon": 20.55,
-    "price": 99.99,
+    "price": 100.07,
     "lot": 1
   },
   "RU000A10BBE6": {
@@ -2594,7 +2594,7 @@
     "maturity": "2028-09-22",
     "facevalue": 1000.0,
     "coupon": 15.41,
-    "price": 106.95,
+    "price": 104.47,
     "lot": 1
   },
   "RU000A106DV1": {
@@ -2629,7 +2629,7 @@
     "maturity": "2027-08-18",
     "facevalue": 1000.0,
     "coupon": 11.26,
-    "price": 88.9,
+    "price": 87.19,
     "lot": 1
   },
   "RU000A103WB0": {
@@ -2638,7 +2638,7 @@
     "maturity": "2026-10-13",
     "facevalue": 1000.0,
     "coupon": 27.42,
-    "price": 97.26,
+    "price": 95.28,
     "lot": 1
   },
   "RU000A10A026": {
@@ -2647,7 +2647,7 @@
     "maturity": "2027-11-26",
     "facevalue": 800.0,
     "coupon": 12.4,
-    "price": 100.6,
+    "price": 99.39,
     "lot": 1
   },
   "RU000A1098H9": {
@@ -2663,7 +2663,7 @@
     "name": "Приморье",
     "isin": "RU000A0DPNQ5",
     "facevalue": 1000.0,
-    "price": 20200.0,
+    "price": 19000.0,
     "lot": 1
   },
   "RU000A0ZZGT5": {
@@ -2672,7 +2672,7 @@
     "maturity": "2028-08-03",
     "facevalue": 1000.0,
     "coupon": 76.39,
-    "price": 99.96,
+    "price": 99.7,
     "lot": 1
   },
   "RU000A108L65": {
@@ -2681,7 +2681,7 @@
     "maturity": "2027-05-20",
     "facevalue": 1000.0,
     "coupon": 15.62,
-    "price": 100.0,
+    "price": 100.02,
     "lot": 1
   },
   "RU000A10DPT0": {
@@ -2690,7 +2690,7 @@
     "maturity": "2030-11-28",
     "facevalue": 1000.0,
     "coupon": 59.84,
-    "price": 89.0,
+    "price": 84.43,
     "lot": 1
   },
   "RU000A107LU4": {
@@ -2699,7 +2699,7 @@
     "maturity": "2029-01-16",
     "facevalue": 1000.0,
     "coupon": 44.88,
-    "price": 28.95,
+    "price": 25.59,
     "lot": 1
   },
   "RU000A109PF2": {
@@ -2708,7 +2708,7 @@
     "maturity": "2028-10-29",
     "facevalue": 1000.0,
     "coupon": 13.11,
-    "price": 98.81,
+    "price": 98.51,
     "lot": 1
   },
   "RU000A10DG52": {
@@ -2724,14 +2724,14 @@
     "name": "ОргСинт ап",
     "isin": "RU0006753456",
     "facevalue": 1.0,
-    "price": 12.58,
+    "price": 10.07,
     "lot": 10
   },
   "GECO": {
     "name": "iГЕНЕТИКО",
     "isin": "RU000A105BN4",
     "facevalue": 0.01,
-    "price": 16.62,
+    "price": 11.72,
     "lot": 10
   },
   "RU000A10B2F7": {
@@ -2740,14 +2740,14 @@
     "maturity": "2030-02-15",
     "facevalue": 1000.0,
     "coupon": 20.96,
-    "price": 104.39,
+    "price": 102.95,
     "lot": 1
   },
   "YRSB": {
     "name": "ТНСэнЯр",
     "isin": "RU000A0D8760",
     "facevalue": 1.0,
-    "price": 746.0,
+    "price": 594.0,
     "lot": 10
   },
   "RU000A108VL0": {
@@ -2756,7 +2756,7 @@
     "maturity": "2028-02-01",
     "facevalue": 1000.0,
     "coupon": 12.33,
-    "price": 98.58,
+    "price": 97.99,
     "lot": 1
   },
   "RU000A10ATW2": {
@@ -2774,7 +2774,7 @@
     "maturity": "2030-04-27",
     "facevalue": 1000.0,
     "coupon": 22.19,
-    "price": 103.0,
+    "price": 103.24,
     "lot": 1
   },
   "RU000A108P61": {
@@ -2783,14 +2783,14 @@
     "maturity": "2027-05-30",
     "facevalue": 1000.0,
     "coupon": 12.86,
-    "price": 100.1,
+    "price": 100.08,
     "lot": 1
   },
   "ETLN": {
     "name": "ЭталонГруп",
     "isin": "RU000A10C1L6",
     "facevalue": 0.00562,
-    "price": 27.14,
+    "price": 22.78,
     "lot": 1
   },
   "RU000A10EXW6": {
@@ -2799,7 +2799,7 @@
     "maturity": "2029-04-07",
     "facevalue": 1000.0,
     "coupon": 12.95,
-    "price": 99.81,
+    "price": 99.2,
     "lot": 1
   },
   "RU000A109TJ6": {
@@ -2808,14 +2808,14 @@
     "maturity": "2027-10-15",
     "facevalue": 1000.0,
     "coupon": 13.59,
-    "price": 100.35,
+    "price": 100.0,
     "lot": 1
   },
   "MOEX": {
     "name": "МосБиржа",
     "isin": "RU000A0JR4A1",
     "facevalue": 1.0,
-    "price": 178.34,
+    "price": 164.5,
     "lot": 10
   },
   "RU000A10BHX3": {
@@ -2824,7 +2824,7 @@
     "maturity": "2029-04-08",
     "facevalue": 1000.0,
     "coupon": 20.96,
-    "price": 102.03,
+    "price": 101.29,
     "lot": 1
   },
   "RU000A108Z85": {
@@ -2833,14 +2833,14 @@
     "maturity": "2029-08-18",
     "facevalue": 1000.0,
     "coupon": 13.17,
-    "price": 98.07,
+    "price": 98.1,
     "lot": 1
   },
   "SPBE": {
     "name": "СПБ Биржа",
     "isin": "RU000A0JQ9P9",
     "facevalue": 3.75,
-    "price": 198.3,
+    "price": 133.3,
     "lot": 1
   },
   "RU000A10AYM3": {
@@ -2856,7 +2856,7 @@
     "name": "Сургнфгз",
     "isin": "RU0008926258",
     "facevalue": 1.0,
-    "price": 18.93,
+    "price": 16.095,
     "lot": 100
   },
   "RU000A109KG1": {
@@ -2865,21 +2865,21 @@
     "maturity": "2027-09-04",
     "facevalue": 1000.0,
     "coupon": 20.75,
-    "price": 14.08,
+    "price": 34.39,
     "lot": 1
   },
   "TRMK": {
     "name": "ТМК ао",
     "isin": "RU000A0B6NK6",
     "facevalue": 10.0,
-    "price": 72.54,
+    "price": 58.6,
     "lot": 10
   },
   "SGZH": {
     "name": "Сегежа",
     "isin": "RU000A102XG9",
     "facevalue": 0.1,
-    "price": 0.8905,
+    "price": 0.576,
     "lot": 100
   },
   "RU000A108U72": {
@@ -2888,7 +2888,7 @@
     "maturity": "2028-06-07",
     "facevalue": 1000.0,
     "coupon": 0.0,
-    "price": 99.4,
+    "price": 98.99,
     "lot": 1
   },
   "RU000A10AAQ4": {
@@ -2897,7 +2897,7 @@
     "maturity": "2028-12-27",
     "facevalue": 417.71,
     "coupon": 8.87,
-    "price": 104.03,
+    "price": 103.13,
     "lot": 1
   },
   "RU000A101CQ4": {
@@ -2906,7 +2906,7 @@
     "maturity": "2030-01-16",
     "facevalue": 1000.0,
     "coupon": 99.23,
-    "price": 100.58,
+    "price": 100.33,
     "lot": 1
   },
   "SU46011RMFS1": {
@@ -2941,14 +2941,14 @@
     "maturity": "2027-07-20",
     "facevalue": 1000.0,
     "coupon": 47.37,
-    "price": 87.02,
+    "price": 86.49,
     "lot": 1
   },
   "SELG": {
     "name": "Селигдар",
     "isin": "RU000A0JPR50",
     "facevalue": 1.0,
-    "price": 40.65,
+    "price": 34.51,
     "lot": 10
   },
   "RASP": {
@@ -2964,7 +2964,7 @@
     "maturity": "2028-01-05",
     "facevalue": 1000.0,
     "coupon": 15.21,
-    "price": 43.0,
+    "price": 40.0,
     "lot": 1
   },
   "RU000A10BPQ0": {
@@ -2973,14 +2973,14 @@
     "maturity": "2027-05-27",
     "facevalue": 1000.0,
     "coupon": 44.75,
-    "price": 103.8,
+    "price": 103.57,
     "lot": 1
   },
   "LENT": {
     "name": "Лента ао",
     "isin": "RU000A102S15",
     "facevalue": 0.09126,
-    "price": 1864.0,
+    "price": 1828.5,
     "lot": 1
   },
   "RU000A1082G5": {
@@ -2989,7 +2989,7 @@
     "maturity": "2031-02-11",
     "facevalue": 1000.0,
     "coupon": 12.74,
-    "price": 46.37,
+    "price": 46.81,
     "lot": 1
   },
   "RU000A10B4H9": {
@@ -2998,7 +2998,7 @@
     "maturity": "2030-03-15",
     "facevalue": 850.0,
     "coupon": 64.63,
-    "price": 96.06,
+    "price": 99.37,
     "lot": 1
   },
   "RU000A106YE3": {
@@ -3007,14 +3007,14 @@
     "maturity": "2028-09-20",
     "facevalue": 1000.0,
     "coupon": 34.28,
-    "price": 99.28,
+    "price": 98.6,
     "lot": 1
   },
   "MBNK": {
     "name": "МТС Банк",
     "isin": "RU000A0JRH43",
     "facevalue": 500.0,
-    "price": 1191.5,
+    "price": 1031.0,
     "lot": 1
   },
   "RU000A1065Y3": {
@@ -3023,14 +3023,14 @@
     "maturity": "2027-07-22",
     "facevalue": 1000.0,
     "coupon": 37.4,
-    "price": 94.18,
+    "price": 90.43,
     "lot": 1
   },
   "ALRS": {
     "name": "АЛРОСА ао",
     "isin": "RU0007252813",
     "facevalue": 0.5,
-    "price": 24.67,
+    "price": 20.49,
     "lot": 10
   },
   "SU26231RMFS9": {
@@ -3048,7 +3048,7 @@
     "maturity": "2028-07-28",
     "facevalue": 1000.0,
     "coupon": 59.84,
-    "price": 95.31,
+    "price": 92.5,
     "lot": 1
   },
   "RU000A105TY3": {
@@ -3057,14 +3057,14 @@
     "maturity": "2028-02-14",
     "facevalue": 1000.0,
     "coupon": 26.3,
-    "price": 94.65,
+    "price": 93.03,
     "lot": 1
   },
   "GAZP": {
     "name": "ГАЗПРОМ ао",
     "isin": "RU0007661625",
     "facevalue": 5.0,
-    "price": 114.08,
+    "price": 99.29,
     "lot": 10
   },
   "RU000A10B5C7": {
@@ -3080,14 +3080,14 @@
     "name": "ВИ.ру",
     "isin": "RU000A108K09",
     "facevalue": 0.01,
-    "price": 71.73,
+    "price": 62.17,
     "lot": 1
   },
   "SAGO": {
     "name": "СамарЭн-ао",
     "isin": "RU0009098255",
     "facevalue": 0.25,
-    "price": 2.33,
+    "price": 2.165,
     "lot": 1000
   },
   "RU000A10EX35": {
@@ -3096,7 +3096,7 @@
     "maturity": "2029-04-05",
     "facevalue": 1000.0,
     "coupon": 21.37,
-    "price": 99.89,
+    "price": 99.99,
     "lot": 1
   },
   "RU000A10AYU6": {
@@ -3105,7 +3105,7 @@
     "maturity": "2028-02-10",
     "facevalue": 1000.0,
     "coupon": 21.78,
-    "price": 109.97,
+    "price": 107.89,
     "lot": 1
   },
   "SU26223RMFS6": {
@@ -3122,7 +3122,7 @@
     "maturity": "2028-07-09",
     "facevalue": 1000.0,
     "coupon": 13.77,
-    "price": 104.66,
+    "price": 103.25,
     "lot": 1
   },
   "RU000A1083V2": {
@@ -3131,7 +3131,7 @@
     "maturity": "2029-03-22",
     "facevalue": 1000.0,
     "coupon": 44.88,
-    "price": 96.22,
+    "price": 98.69,
     "lot": 1
   },
   "RU000A109890": {
@@ -3140,7 +3140,7 @@
     "maturity": "2028-01-26",
     "facevalue": 1000.0,
     "coupon": 16.03,
-    "price": 97.15,
+    "price": 96.35,
     "lot": 1
   },
   "RU000A105UC7": {
@@ -3149,7 +3149,7 @@
     "maturity": "2050-06-26",
     "facevalue": 390.45,
     "coupon": 10.48,
-    "price": 89.99,
+    "price": 89.29,
     "lot": 1
   },
   "RU000A107761": {
@@ -3158,21 +3158,21 @@
     "maturity": "2028-11-07",
     "facevalue": 950.0,
     "coupon": 42.63,
-    "price": 35.74,
+    "price": 31.72,
     "lot": 1
   },
   "VRSB": {
     "name": "ТНСэнВорон",
     "isin": "RU000A0DPG67",
     "facevalue": 0.4,
-    "price": 335.0,
+    "price": 288.0,
     "lot": 10
   },
   "KAZT": {
     "name": "Куйбазот",
     "isin": "RU000A0B9BV2",
     "facevalue": 1.0,
-    "price": 370.8,
+    "price": 273.6,
     "lot": 10
   },
   "RU000A1006C3": {
@@ -3190,21 +3190,21 @@
     "maturity": "2036-07-30",
     "facevalue": 1000.0,
     "coupon": 34.9,
-    "price": 61.419,
+    "price": 57.966,
     "lot": 1
   },
   "X5": {
     "name": "КЦ ИКС 5",
     "isin": "RU000A108X38",
     "facevalue": 1164.26,
-    "price": 2412.0,
+    "price": 2210.0,
     "lot": 1
   },
   "KRKNP": {
     "name": "СаратНПЗ-п",
     "isin": "RU0009100416",
     "facevalue": 1.0,
-    "price": 6440.0,
+    "price": 5660.0,
     "lot": 1
   },
   "RU000A106VV3": {
@@ -3213,14 +3213,14 @@
     "maturity": "2027-09-09",
     "facevalue": 1000.0,
     "coupon": 13.16,
-    "price": 99.58,
+    "price": 99.8,
     "lot": 1
   },
   "SBERP": {
     "name": "Сбербанк-п",
     "isin": "RU0009029557",
     "facevalue": 3.0,
-    "price": 325.3,
+    "price": 301.1,
     "lot": 1
   },
   "RU000A106Y70": {
@@ -3229,7 +3229,7 @@
     "maturity": "2027-09-21",
     "facevalue": 700.0,
     "coupon": 31.41,
-    "price": 75.71,
+    "price": 77.07,
     "lot": 1
   },
   "SU26235RMFS0": {
@@ -3238,21 +3238,21 @@
     "maturity": "2031-03-12",
     "facevalue": 1000.0,
     "coupon": 29.42,
-    "price": 73.096,
+    "price": 71.907,
     "lot": 1
   },
   "VSMO": {
     "name": "ВСМПО-АВСМ",
     "isin": "RU0009100291",
     "facevalue": 1.0,
-    "price": 23820.0,
+    "price": 20960.0,
     "lot": 1
   },
   "KUZB": {
     "name": "КузнецкийБ",
     "isin": "RU000A0JSQ66",
     "facevalue": 0.01,
-    "price": 0.0312,
+    "price": 0.0281,
     "lot": 10000
   },
   "RU000A105NT6": {
@@ -3261,7 +3261,7 @@
     "maturity": "2027-12-17",
     "facevalue": 700.0,
     "coupon": 18.52,
-    "price": 96.75,
+    "price": 96.92,
     "lot": 1
   },
   "RU000A10BNF8": {
@@ -3270,7 +3270,7 @@
     "maturity": "2027-08-11",
     "facevalue": 1000.0,
     "coupon": 14.26,
-    "price": 104.21,
+    "price": 104.14,
     "lot": 1
   },
   "RU000A10F7K2": {
@@ -3279,7 +3279,7 @@
     "maturity": "2030-10-28",
     "facevalue": 1000.0,
     "coupon": 23.42,
-    "price": 99.1,
+    "price": 99.99,
     "lot": 1
   },
   "RU000A108FG3": {
@@ -3288,7 +3288,7 @@
     "maturity": "2027-05-13",
     "facevalue": 1000.0,
     "coupon": 56.1,
-    "price": 97.64,
+    "price": 97.9,
     "lot": 1
   },
   "RU000A10BGE5": {
@@ -3304,7 +3304,7 @@
     "name": "ЭЛ5Энер ао",
     "isin": "RU000A0F5UN3",
     "facevalue": 1.0,
-    "price": 0.4372,
+    "price": 0.3558,
     "lot": 1000
   },
   "RU000A1094T3": {
@@ -3322,7 +3322,7 @@
     "maturity": "2029-01-30",
     "facevalue": 1000.0,
     "coupon": 46.12,
-    "price": 99.17,
+    "price": 97.03,
     "lot": 1
   },
   "RU000A1008J4": {
@@ -3340,28 +3340,28 @@
     "maturity": "2028-04-06",
     "facevalue": 1000.0,
     "coupon": 20.96,
-    "price": 104.46,
+    "price": 101.01,
     "lot": 1
   },
   "VGSBP": {
     "name": "ВолгЭнСб-п",
     "isin": "RU000A0D8L57",
     "facevalue": 0.12,
-    "price": 11.05,
+    "price": 9.55,
     "lot": 1000
   },
   "TATNP": {
     "name": "Татнфт 3ап",
     "isin": "RU0006944147",
     "facevalue": 1.0,
-    "price": 542.9,
+    "price": 468.3,
     "lot": 1
   },
   "PRMD": {
     "name": "iПРОМОМЕД",
     "isin": "RU000A108JF7",
     "facevalue": 1.0,
-    "price": 386.0,
+    "price": 355.0,
     "lot": 1
   },
   "RU000A101DB4": {
@@ -3370,7 +3370,7 @@
     "maturity": "2031-02-15",
     "facevalue": 530.0,
     "coupon": 27.28,
-    "price": 94.62,
+    "price": 93.41,
     "lot": 1
   },
   "RU000A0ZZTL5": {
@@ -3379,7 +3379,7 @@
     "maturity": "2028-11-02",
     "facevalue": 1000.0,
     "coupon": 75.99,
-    "price": 98.88,
+    "price": 98.96,
     "lot": 1
   },
   "RU000A0ZZ877": {
@@ -3388,7 +3388,7 @@
     "maturity": "2033-05-10",
     "facevalue": 1000.0,
     "coupon": 76.34,
-    "price": 82.75,
+    "price": 81.73,
     "lot": 1
   },
   "RU000A108RK0": {
@@ -3397,7 +3397,7 @@
     "maturity": "2027-06-18",
     "facevalue": 1000.0,
     "coupon": 49.86,
-    "price": 99.37,
+    "price": 97.1,
     "lot": 1
   },
   "RU000A10ER66": {
@@ -3406,7 +3406,7 @@
     "maturity": "2029-04-16",
     "facevalue": 1000.0,
     "coupon": 11.3,
-    "price": 100.94,
+    "price": 100.46,
     "lot": 1
   },
   "ENRU": {
@@ -3420,7 +3420,7 @@
     "name": "НМТП ао",
     "isin": "RU0009084446",
     "facevalue": 0.01,
-    "price": 8.775,
+    "price": 8.305,
     "lot": 100
   },
   "RU000A10AHU1": {
@@ -3429,7 +3429,7 @@
     "maturity": "2029-12-02",
     "facevalue": 1000.0,
     "coupon": 27.12,
-    "price": 102.39,
+    "price": 102.0,
     "lot": 1
   },
   "RU000A1086N2": {
@@ -3445,7 +3445,7 @@
     "name": "АбрауДюрсо",
     "isin": "RU000A0JS5T7",
     "facevalue": 1.0,
-    "price": 137.8,
+    "price": 112.2,
     "lot": 10
   },
   "RU000A10EQ83": {
@@ -3454,7 +3454,7 @@
     "maturity": "2031-03-04",
     "facevalue": 1000.0,
     "coupon": 17.67,
-    "price": 97.99,
+    "price": 97.9,
     "lot": 1
   },
   "RU000A10D3J5": {
@@ -3463,7 +3463,7 @@
     "maturity": "2028-04-01",
     "facevalue": 1000.0,
     "coupon": 14.14,
-    "price": 103.45,
+    "price": 102.91,
     "lot": 1
   },
   "ZAYM": {
@@ -3479,21 +3479,21 @@
     "maturity": "2026-10-07",
     "facevalue": 1000.0,
     "coupon": 39.64,
-    "price": 98.5,
+    "price": 98.695,
     "lot": 1
   },
   "TGKA": {
     "name": "ТГК-1",
     "isin": "RU000A0JNUD0",
     "facevalue": 0.01,
-    "price": 0.005342,
+    "price": 0.004054,
     "lot": 100000
   },
   "FESH": {
     "name": "ДВМП ао",
     "isin": "RU0008992318",
     "facevalue": 1.0,
-    "price": 63.85,
+    "price": 56.09,
     "lot": 10
   },
   "RU000A107P47": {
@@ -3502,7 +3502,7 @@
     "maturity": "2028-01-05",
     "facevalue": 750.0,
     "coupon": 11.71,
-    "price": 79.47,
+    "price": 78.41,
     "lot": 1
   },
   "RU000A10AC67": {
@@ -3511,14 +3511,14 @@
     "maturity": "2028-12-04",
     "facevalue": 1000.0,
     "coupon": 17.67,
-    "price": 102.02,
+    "price": 100.88,
     "lot": 1
   },
   "BLNG": {
     "name": "Белон ао",
     "isin": "RU000A0J2QG8",
     "facevalue": 0.01,
-    "price": 9.45,
+    "price": 7.06,
     "lot": 100
   },
   "RU000A10ASC6": {
@@ -3527,14 +3527,14 @@
     "maturity": "2028-07-14",
     "facevalue": 900.0,
     "coupon": 17.75,
-    "price": 109.56,
+    "price": 108.17,
     "lot": 1
   },
   "MISBP": {
     "name": "ТНСэМаЭл-п",
     "isin": "RU000A0D8K41",
     "facevalue": 0.1,
-    "price": 54.8,
+    "price": 38.4,
     "lot": 100
   },
   "SU26254RMFS1": {
@@ -3543,7 +3543,7 @@
     "maturity": "2040-10-03",
     "facevalue": 1000.0,
     "coupon": 64.82,
-    "price": 91.799,
+    "price": 86.75,
     "lot": 1
   },
   "RU000A10A141": {
@@ -3552,7 +3552,7 @@
     "maturity": "2029-10-16",
     "facevalue": 1000.0,
     "coupon": 20.55,
-    "price": 76.9,
+    "price": 77.52,
     "lot": 1
   },
   "RU000A108YZ4": {
@@ -3561,14 +3561,14 @@
     "maturity": "2027-06-26",
     "facevalue": 375.0,
     "coupon": 6.16,
-    "price": 100.8,
+    "price": 99.95,
     "lot": 1
   },
   "ROSN": {
     "name": "Роснефть",
     "isin": "RU000A0J2Q06",
     "facevalue": 0.01,
-    "price": 362.65,
+    "price": 323.0,
     "lot": 1
   },
   "RU000A10B925": {
@@ -3577,7 +3577,7 @@
     "maturity": "2030-03-13",
     "facevalue": 1000.0,
     "coupon": 17.67,
-    "price": 100.39,
+    "price": 99.79,
     "lot": 1
   },
   "RU000A10C873": {
@@ -3586,21 +3586,21 @@
     "maturity": "2028-07-15",
     "facevalue": 1000.0,
     "coupon": 23.42,
-    "price": 104.77,
+    "price": 102.37,
     "lot": 1
   },
   "SAGOP": {
     "name": "СамарЭн-ап",
     "isin": "RU0009084495",
     "facevalue": 0.01,
-    "price": 2.28,
+    "price": 2.065,
     "lot": 1000
   },
   "LSNGP": {
     "name": "РСетиЛЭ-п",
     "isin": "RU0009092134",
     "facevalue": 1.0,
-    "price": 383.4,
+    "price": 328.45,
     "lot": 10
   },
   "SU26229RMFS3": {
@@ -3615,7 +3615,7 @@
     "name": "MDMG-ао",
     "isin": "RU000A108KL3",
     "facevalue": 7.16872,
-    "price": 1297.2,
+    "price": 1280.0,
     "lot": 1
   },
   "RU000A108FS8": {
@@ -3624,14 +3624,14 @@
     "maturity": "2027-05-18",
     "facevalue": 1000.0,
     "coupon": 49.86,
-    "price": 74.17,
+    "price": 73.02,
     "lot": 1
   },
   "MTSS": {
     "name": "МТС-ао",
     "isin": "RU0007775219",
     "facevalue": 0.1,
-    "price": 229.45,
+    "price": 219.6,
     "lot": 10
   },
   "RU000A109U06": {
@@ -3649,7 +3649,7 @@
     "maturity": "2029-12-13",
     "facevalue": 1000.0,
     "coupon": 25.68,
-    "price": 96.02,
+    "price": 95.4,
     "lot": 1
   },
   "RU000A1095N3": {
@@ -3667,7 +3667,7 @@
     "maturity": "2028-12-13",
     "facevalue": 1000.0,
     "coupon": 20.14,
-    "price": 103.98,
+    "price": 101.85,
     "lot": 1
   },
   "RU000A108Z77": {
@@ -3676,7 +3676,7 @@
     "maturity": "2027-08-02",
     "facevalue": 390.6,
     "coupon": 5.67,
-    "price": 99.51,
+    "price": 97.93,
     "lot": 1
   },
   "RU000A10D3S6": {
@@ -3685,7 +3685,7 @@
     "maturity": "2028-04-02",
     "facevalue": 1000.0,
     "coupon": 15.21,
-    "price": 104.79,
+    "price": 102.82,
     "lot": 1
   },
   "RU000A106UA9": {
@@ -3694,7 +3694,7 @@
     "maturity": "2027-08-17",
     "facevalue": 900.0,
     "coupon": 11.1,
-    "price": 86.79,
+    "price": 78.79,
     "lot": 1
   },
   "RU000A108D81": {
@@ -3703,14 +3703,14 @@
     "maturity": "2031-03-27",
     "facevalue": 1000.0,
     "coupon": 12.74,
-    "price": 46.99,
+    "price": 47.32,
     "lot": 1
   },
   "SVCB": {
     "name": "Совкомбанк",
     "isin": "RU000A0ZZAC4",
     "facevalue": 0.1,
-    "price": 11.44,
+    "price": 10.9,
     "lot": 100
   },
   "SU29007RMFS0": {
@@ -3719,14 +3719,14 @@
     "maturity": "2027-03-03",
     "facevalue": 1000.0,
     "coupon": 87.16,
-    "price": 101.69,
+    "price": 101.67,
     "lot": 1
   },
   "ROLO": {
     "name": "Русолово",
     "isin": "RU000A0JU1B0",
     "facevalue": 0.1,
-    "price": 0.315,
+    "price": 0.2314,
     "lot": 1000
   },
   "RU000A105VC5": {
@@ -3735,14 +3735,14 @@
     "maturity": "2028-02-11",
     "facevalue": 1000.0,
     "coupon": 51.86,
-    "price": 95.7,
+    "price": 95.02,
     "lot": 1
   },
   "UKUZ": {
     "name": "ЮжКузб. ао",
     "isin": "RU0005294775",
     "facevalue": 0.04,
-    "price": 708.0,
+    "price": 610.0,
     "lot": 1
   },
   "RU000A1097C2": {
@@ -3751,7 +3751,7 @@
     "maturity": "2027-08-30",
     "facevalue": 700.0,
     "coupon": 10.55,
-    "price": 99.92,
+    "price": 99.19,
     "lot": 1
   },
   "SU25085RMFS0": {
@@ -3783,14 +3783,14 @@
     "name": "РУСАЛ ао",
     "isin": "RU000A1025V3",
     "facevalue": 0.65652,
-    "price": 33.87,
+    "price": 28.91,
     "lot": 10
   },
   "BAZA": {
     "name": "iБАЗИС",
     "isin": "RU000A10CTQ0",
     "facevalue": 1.0,
-    "price": 115.92,
+    "price": 96.64,
     "lot": 10
   },
   "RU000A10B750": {
@@ -3808,7 +3808,7 @@
     "maturity": "2028-03-17",
     "facevalue": 1000.0,
     "coupon": 23.01,
-    "price": 110.57,
+    "price": 107.72,
     "lot": 1
   },
   "RU000A10F6Y5": {
@@ -3817,7 +3817,7 @@
     "maturity": "2029-05-06",
     "facevalue": 1000.0,
     "coupon": 17.47,
-    "price": 99.8,
+    "price": 99.92,
     "lot": 1
   },
   "RU000A105NN9": {
@@ -3826,7 +3826,7 @@
     "maturity": "2032-11-28",
     "facevalue": 587.65,
     "coupon": 8.09,
-    "price": 101.23,
+    "price": 100.61,
     "lot": 1
   },
   "RU000A107UB5": {
@@ -3835,7 +3835,7 @@
     "maturity": "2029-02-20",
     "facevalue": 1000.0,
     "coupon": 49.86,
-    "price": 88.96,
+    "price": 83.01,
     "lot": 1
   },
   "RU000A10E7U2": {
@@ -3844,7 +3844,7 @@
     "maturity": "2029-01-25",
     "facevalue": 1000.0,
     "coupon": 21.78,
-    "price": 94.91,
+    "price": 84.97,
     "lot": 1
   },
   "RU000A108F63": {
@@ -3853,7 +3853,7 @@
     "maturity": "2027-10-28",
     "facevalue": 1000.0,
     "coupon": 16.03,
-    "price": 97.0,
+    "price": 96.32,
     "lot": 1
   },
   "RU000A10AC91": {
@@ -3862,14 +3862,14 @@
     "maturity": "2027-12-14",
     "facevalue": 750.0,
     "coupon": 14.64,
-    "price": 109.75,
+    "price": 108.1,
     "lot": 1
   },
   "DOMRF": {
     "name": "ДОМ.РФ",
     "isin": "RU000A0ZZFU5",
     "facevalue": 1400.0,
-    "price": 2441.7,
+    "price": 2219.8,
     "lot": 1
   },
   "RU000A105WZ4": {
@@ -3905,7 +3905,7 @@
     "maturity": "2036-03-28",
     "facevalue": 1000.0,
     "coupon": 14.1,
-    "price": 101.15,
+    "price": 100.31,
     "lot": 1
   },
   "RU000A10B7D1": {
@@ -3914,7 +3914,7 @@
     "maturity": "2028-03-15",
     "facevalue": 1000.0,
     "coupon": 24.25,
-    "price": 91.0,
+    "price": 89.19,
     "lot": 1
   },
   "RU000A10B933": {
@@ -3923,7 +3923,7 @@
     "maturity": "2027-09-25",
     "facevalue": 1000.0,
     "coupon": 19.11,
-    "price": 109.36,
+    "price": 107.46,
     "lot": 1
   },
   "RU000A106RB3": {
@@ -3941,7 +3941,7 @@
     "maturity": "2028-06-01",
     "facevalue": 1000.0,
     "coupon": 21.78,
-    "price": 122.08,
+    "price": 112.38,
     "lot": 1
   },
   "RU000A108KT6": {
@@ -3957,7 +3957,7 @@
     "name": "ЯНДЕКС",
     "isin": "RU000A107T19",
     "facevalue": 0.4,
-    "price": 4066.0,
+    "price": 3597.0,
     "lot": 1
   },
   "RU000A104UV0": {
@@ -3966,14 +3966,14 @@
     "maturity": "2032-05-28",
     "facevalue": 588.51,
     "coupon": 7.45,
-    "price": 97.39,
+    "price": 97.2,
     "lot": 1
   },
   "MGNT": {
     "name": "Магнит ао",
     "isin": "RU000A0JKQU8",
     "facevalue": 0.01,
-    "price": 2207.0,
+    "price": 1811.0,
     "lot": 1
   },
   "SU26236RMFS8": {
@@ -3982,14 +3982,14 @@
     "maturity": "2028-05-17",
     "facevalue": 1000.0,
     "coupon": 28.42,
-    "price": 87.969,
+    "price": 87.295,
     "lot": 1
   },
   "SNGSP": {
     "name": "Сургнфгз-п",
     "isin": "RU0009029524",
     "facevalue": 1.0,
-    "price": 40.46,
+    "price": 40.82,
     "lot": 10
   },
   "RU000A0ZYNY4": {
@@ -4013,7 +4013,7 @@
     "isin": "RU000A1025B5",
     "maturity": "2026-12-23",
     "facevalue": 1000.0,
-    "price": 100.215,
+    "price": 100.272,
     "lot": 1
   },
   "RU000A10BLP1": {
@@ -4022,14 +4022,14 @@
     "maturity": "2028-05-04",
     "facevalue": 1000.0,
     "coupon": 25.48,
-    "price": 104.86,
+    "price": 103.33,
     "lot": 1
   },
   "STSB": {
     "name": "СтаврЭнСб",
     "isin": "RU000A0ET1W4",
     "facevalue": 0.00483,
-    "price": 5.115,
+    "price": 5.21,
     "lot": 1000
   },
   "RU000A10AC75": {
@@ -4038,14 +4038,14 @@
     "maturity": "2027-12-12",
     "facevalue": 750.0,
     "coupon": 16.03,
-    "price": 109.62,
+    "price": 108.79,
     "lot": 1
   },
   "VRSBP": {
     "name": "ТНСэнВор-п",
     "isin": "RU000A0DPG75",
     "facevalue": 0.4,
-    "price": 161.0,
+    "price": 119.8,
     "lot": 10
   },
   "RU000A10DB16": {
@@ -4054,7 +4054,7 @@
     "maturity": "2030-10-03",
     "facevalue": 1000.0,
     "coupon": 23.84,
-    "price": 82.79,
+    "price": 77.78,
     "lot": 1
   },
   "RU000A100DG5": {
@@ -4063,14 +4063,14 @@
     "maturity": "2029-05-15",
     "facevalue": 400.0,
     "coupon": 44.88,
-    "price": 104.01,
+    "price": 102.74,
     "lot": 1
   },
   "OGKB": {
     "name": "ОГК-2 ао",
     "isin": "RU000A0JNG55",
     "facevalue": 0.3627,
-    "price": 0.2489,
+    "price": 0.1984,
     "lot": 1000
   },
   "RU000A108LL1": {
@@ -4079,14 +4079,14 @@
     "maturity": "2029-05-31",
     "facevalue": 1000.0,
     "coupon": 47.37,
-    "price": 88.26,
+    "price": 83.09,
     "lot": 1
   },
   "SARE": {
     "name": "СаратЭн-ао",
     "isin": "RU0009100754",
     "facevalue": 0.02,
-    "price": 0.746,
+    "price": 0.714,
     "lot": 10000
   },
   "RU000A10FAL4": {
@@ -4095,7 +4095,7 @@
     "maturity": "2029-05-18",
     "facevalue": 1000.0,
     "coupon": 17.26,
-    "price": 104.1,
+    "price": 104.9,
     "lot": 1
   },
   "RU000A1080Y2": {
@@ -4104,7 +4104,7 @@
     "maturity": "2029-03-08",
     "facevalue": 1000.0,
     "coupon": 43.63,
-    "price": 26.0,
+    "price": 25.08,
     "lot": 1
   },
   "RU000A10BQB0": {
@@ -4113,14 +4113,14 @@
     "maturity": "2028-05-18",
     "facevalue": 1000.0,
     "coupon": 16.03,
-    "price": 107.3,
+    "price": 106.98,
     "lot": 1
   },
   "SIBN": {
     "name": "Газпрнефть",
     "isin": "RU0009062467",
     "facevalue": 0.0016,
-    "price": 492.6,
+    "price": 439.2,
     "lot": 1
   },
   "RU000A10AT01": {
@@ -4129,7 +4129,7 @@
     "maturity": "2028-01-20",
     "facevalue": 1000.0,
     "coupon": 25.48,
-    "price": 108.46,
+    "price": 108.02,
     "lot": 1
   },
   "RU000A1099S4": {
@@ -4138,14 +4138,14 @@
     "maturity": "2029-08-17",
     "facevalue": 1000.0,
     "coupon": 44.88,
-    "price": 103.53,
+    "price": 102.45,
     "lot": 1
   },
   "OZPH": {
     "name": "iОзонФарм",
     "isin": "RU000A109B25",
     "facevalue": 0.02,
-    "price": 46.61,
+    "price": 40.4,
     "lot": 10
   },
   "RU000A10C8T4": {
@@ -4154,7 +4154,7 @@
     "maturity": "2029-02-11",
     "facevalue": 1000.0,
     "coupon": 11.47,
-    "price": 101.39,
+    "price": 100.54,
     "lot": 1
   },
   "RU000A107F49": {
@@ -4163,7 +4163,7 @@
     "maturity": "2027-06-20",
     "facevalue": 1000.0,
     "coupon": 12.32,
-    "price": 98.8,
+    "price": 98.6,
     "lot": 1
   },
   "RU000A10AZ45": {
@@ -4172,7 +4172,7 @@
     "maturity": "2028-08-24",
     "facevalue": 1000.0,
     "coupon": 16.03,
-    "price": 110.94,
+    "price": 108.79,
     "lot": 1
   },
   "RU000A109XN0": {
@@ -4181,7 +4181,7 @@
     "maturity": "2027-10-26",
     "facevalue": 1000.0,
     "coupon": 47.37,
-    "price": 41.0,
+    "price": 44.99,
     "lot": 1
   },
   "RU000A108KK5": {
@@ -4190,14 +4190,14 @@
     "maturity": "2028-05-09",
     "facevalue": 538.0,
     "coupon": 8.51,
-    "price": 13.38,
+    "price": 12.5,
     "lot": 1
   },
   "BSPB": {
     "name": "БСП ао",
     "isin": "RU0009100945",
     "facevalue": 1.0,
-    "price": 305.83,
+    "price": 251.95,
     "lot": 10
   },
   "RU000A1090A1": {
@@ -4215,7 +4215,7 @@
     "maturity": "2027-06-03",
     "facevalue": 1000.0,
     "coupon": 17.26,
-    "price": 93.05,
+    "price": 93.57,
     "lot": 1
   },
   "SU26243RMFS4": {
@@ -4224,21 +4224,21 @@
     "maturity": "2038-05-19",
     "facevalue": 1000.0,
     "coupon": 48.87,
-    "price": 74.363,
+    "price": 70.0,
     "lot": 1
   },
   "RTKMP": {
     "name": "Ростел -ап",
     "isin": "RU0009046700",
     "facevalue": 0.0025,
-    "price": 50.6,
+    "price": 43.4,
     "lot": 10
   },
   "NKNCP": {
     "name": "НКНХ ап",
     "isin": "RU0006765096",
     "facevalue": 1.0,
-    "price": 44.86,
+    "price": 38.12,
     "lot": 10
   },
   "RU000A1062J1": {
@@ -4247,14 +4247,14 @@
     "maturity": "2031-04-03",
     "facevalue": 115.36,
     "coupon": 1.04,
-    "price": 99.42,
+    "price": 99.8,
     "lot": 1
   },
   "POSI": {
     "name": "iПозитив",
     "isin": "RU000A103X66",
     "facevalue": 0.5,
-    "price": 850.0,
+    "price": 777.8,
     "lot": 1
   },
   "RU000A107B19": {
@@ -4263,7 +4263,7 @@
     "maturity": "2030-11-22",
     "facevalue": 1000.0,
     "coupon": 31.79,
-    "price": 97.6,
+    "price": 94.71,
     "lot": 1
   },
   "SU29015RMFS3": {
@@ -4271,14 +4271,14 @@
     "isin": "RU000A1025A7",
     "maturity": "2028-10-18",
     "facevalue": 1000.0,
-    "price": 99.486,
+    "price": 99.548,
     "lot": 1
   },
   "LSRG": {
     "name": "ЛСР ао",
     "isin": "RU000A0JPFP0",
     "facevalue": 0.25,
-    "price": 685.8,
+    "price": 577.8,
     "lot": 1
   },
   "RU000A10B255": {
@@ -4287,14 +4287,14 @@
     "maturity": "2029-02-19",
     "facevalue": 880.0,
     "coupon": 19.53,
-    "price": 106.18,
+    "price": 106.08,
     "lot": 1
   },
   "MGTSP": {
     "name": "МГТС-4ап",
     "isin": "RU0009036479",
     "facevalue": 40.0,
-    "price": 1296.0,
+    "price": 1282.0,
     "lot": 1
   },
   "RU000A10BS76": {
@@ -4303,14 +4303,14 @@
     "maturity": "2028-05-26",
     "facevalue": 1000.0,
     "coupon": 16.64,
-    "price": 97.17,
+    "price": 95.91,
     "lot": 1
   },
   "RNFT": {
     "name": "РуссНфт ао",
     "isin": "RU000A0JSE60",
     "facevalue": 0.5,
-    "price": 94.9,
+    "price": 73.7,
     "lot": 1
   },
   "RU000A109L98": {
@@ -4319,14 +4319,14 @@
     "maturity": "2055-04-28",
     "facevalue": 862.1,
     "coupon": 11.2,
-    "price": 98.14,
+    "price": 97.81,
     "lot": 1
   },
   "LPSB": {
     "name": "ЛЭСК ао",
     "isin": "RU000A0D8MR7",
     "facevalue": 0.22,
-    "price": 53.2,
+    "price": 46.0,
     "lot": 100
   },
   "SU26238RMFS4": {
@@ -4335,7 +4335,7 @@
     "maturity": "2041-05-15",
     "facevalue": 1000.0,
     "coupon": 35.4,
-    "price": 56.398,
+    "price": 52.599,
     "lot": 1
   },
   "RU000A108ZU2": {
@@ -4344,7 +4344,7 @@
     "maturity": "2029-06-21",
     "facevalue": 1000.0,
     "coupon": 18.9,
-    "price": 99.98,
+    "price": 95.88,
     "lot": 1
   },
   "RU000A100030": {
@@ -4353,7 +4353,7 @@
     "maturity": "2030-12-12",
     "facevalue": 560.0,
     "coupon": 42.28,
-    "price": 100.64,
+    "price": 100.0,
     "lot": 1
   },
   "RU000A106GB6": {
@@ -4407,7 +4407,7 @@
     "maturity": "2032-11-17",
     "facevalue": 1000.0,
     "coupon": 47.37,
-    "price": 81.241,
+    "price": 78.472,
     "lot": 1
   },
   "RU000A10C618": {
@@ -4416,7 +4416,7 @@
     "maturity": "2027-09-12",
     "facevalue": 1000.0,
     "coupon": 12.29,
-    "price": 101.69,
+    "price": 101.32,
     "lot": 1
   },
   "RU000A10B5A1": {
@@ -4425,7 +4425,7 @@
     "maturity": "2028-03-09",
     "facevalue": 1000.0,
     "coupon": 23.42,
-    "price": 108.2,
+    "price": 109.0,
     "lot": 1
   },
   "RU000A105H98": {
@@ -4434,7 +4434,7 @@
     "maturity": "2027-11-18",
     "facevalue": 750.0,
     "coupon": 23.37,
-    "price": 95.01,
+    "price": 94.01,
     "lot": 1
   },
   "SU29008RMFS8": {
@@ -4443,7 +4443,7 @@
     "maturity": "2029-10-03",
     "facevalue": 1000.0,
     "coupon": 85.66,
-    "price": 103.9,
+    "price": 103.389,
     "lot": 1
   },
   "RU000A10D4S4": {
@@ -4452,7 +4452,7 @@
     "maturity": "2028-10-05",
     "facevalue": 1000.0,
     "coupon": 21.37,
-    "price": 103.01,
+    "price": 102.98,
     "lot": 1
   },
   "SU52003RMFS9": {
@@ -4468,7 +4468,7 @@
     "name": "РсетВол ао",
     "isin": "RU000A0JPPN4",
     "facevalue": 0.1,
-    "price": 0.22065,
+    "price": 0.19975,
     "lot": 10000
   },
   "RU000A103TS0": {
@@ -4484,7 +4484,7 @@
     "name": "ТНСэнМарЭл",
     "isin": "RU000A0D8K33",
     "facevalue": 0.1,
-    "price": 47.4,
+    "price": 36.0,
     "lot": 100
   },
   "RU000A10DPW4": {
@@ -4493,14 +4493,14 @@
     "maturity": "2028-05-22",
     "facevalue": 1000.0,
     "coupon": 14.59,
-    "price": 102.3,
+    "price": 102.2,
     "lot": 1
   },
   "UPRO": {
     "name": "Юнипро ао",
     "isin": "RU000A0JNGA5",
     "facevalue": 0.4,
-    "price": 1.206,
+    "price": 1.019,
     "lot": 1000
   },
   "RU000A108FE8": {
@@ -4509,7 +4509,7 @@
     "maturity": "2027-11-11",
     "facevalue": 1000.0,
     "coupon": 49.86,
-    "price": 63.53,
+    "price": 62.49,
     "lot": 1
   },
   "SU52004RMFS7": {
@@ -4527,7 +4527,7 @@
     "maturity": "2026-09-16",
     "facevalue": 1000.0,
     "coupon": 38.64,
-    "price": 98.747,
+    "price": 98.9,
     "lot": 1
   },
   "RU000A10B7S9": {
@@ -4536,7 +4536,7 @@
     "maturity": "2028-03-17",
     "facevalue": 1000.0,
     "coupon": 23.42,
-    "price": 104.3,
+    "price": 104.11,
     "lot": 1
   },
   "RU000A10BFJ6": {
@@ -4545,7 +4545,7 @@
     "maturity": "2027-04-08",
     "facevalue": 1000.0,
     "coupon": 20.96,
-    "price": 106.93,
+    "price": 103.75,
     "lot": 1
   },
   "RU000A106DJ6": {
@@ -4554,7 +4554,7 @@
     "maturity": "2027-05-25",
     "facevalue": 600.0,
     "coupon": 7.52,
-    "price": 6.7,
+    "price": 5.2,
     "lot": 1
   },
   "RU000A106CB5": {
@@ -4579,14 +4579,14 @@
     "name": "Совкомфлот",
     "isin": "RU000A0JXNU8",
     "facevalue": 1.0,
-    "price": 78.91,
+    "price": 74.7,
     "lot": 10
   },
   "TGKN": {
     "name": "ТГК-14",
     "isin": "RU000A0H1ES3",
     "facevalue": 0.001,
-    "price": 0.00442,
+    "price": 0.00276,
     "lot": 100000
   },
   "RU000A10A1U9": {
@@ -4602,7 +4602,7 @@
     "name": "ЕвроЭлтех",
     "isin": "RU000A0JWW54",
     "facevalue": 1.0,
-    "price": 8.28,
+    "price": 7.08,
     "lot": 10
   },
   "RU000A107EC7": {
@@ -4611,7 +4611,7 @@
     "maturity": "2027-11-27",
     "facevalue": 1000.0,
     "coupon": 12.86,
-    "price": 99.99,
+    "price": 99.57,
     "lot": 1
   },
   "RU000A100N12": {
@@ -4629,7 +4629,7 @@
     "maturity": "2027-07-29",
     "facevalue": 1000.0,
     "coupon": 18.9,
-    "price": 99.2,
+    "price": 98.1,
     "lot": 1
   },
   "RU000A101H84": {
@@ -4638,21 +4638,21 @@
     "maturity": "2030-02-20",
     "facevalue": 1000.0,
     "coupon": 75.04,
-    "price": 98.8,
+    "price": 97.28,
     "lot": 1
   },
   "KRKN": {
     "name": "СаратНПЗ",
     "isin": "RU0009100408",
     "facevalue": 1.0,
-    "price": 11050.0,
+    "price": 10500.0,
     "lot": 1
   },
   "GEMC": {
     "name": "МКПАО ЮМГ",
     "isin": "RU000A107JE2",
     "facevalue": 0.03721,
-    "price": 746.4,
+    "price": 657.6,
     "lot": 1
   },
   "RU000A10CPB0": {
@@ -4661,14 +4661,14 @@
     "maturity": "2030-09-04",
     "facevalue": 1000.0,
     "coupon": 52.36,
-    "price": 114.42,
+    "price": 114.96,
     "lot": 1
   },
   "WUSH": {
     "name": "iВУШХолднг",
     "isin": "RU000A105EX7",
     "facevalue": 0.01,
-    "price": 70.52,
+    "price": 46.84,
     "lot": 1
   },
   "RU000A103NE3": {
@@ -4677,14 +4677,14 @@
     "maturity": "2026-09-03",
     "facevalue": 125.0,
     "coupon": 3.58,
-    "price": 98.47,
+    "price": 97.78,
     "lot": 1
   },
   "RTSB": {
     "name": "ТНСэнРст",
     "isin": "RU000A0D8PB4",
     "facevalue": 0.02,
-    "price": 3.075,
+    "price": 2.47,
     "lot": 1000
   },
   "RU000A1083X8": {
@@ -4693,7 +4693,7 @@
     "maturity": "2029-03-22",
     "facevalue": 1000.0,
     "coupon": 44.88,
-    "price": 97.22,
+    "price": 95.98,
     "lot": 1
   },
   "RU000A10BPN7": {
@@ -4702,7 +4702,7 @@
     "maturity": "2027-05-19",
     "facevalue": 1000.0,
     "coupon": 20.96,
-    "price": 107.03,
+    "price": 104.45,
     "lot": 1
   },
   "RU000A10D3G1": {
@@ -4711,7 +4711,7 @@
     "maturity": "2028-09-29",
     "facevalue": 1000.0,
     "coupon": 18.08,
-    "price": 112.1,
+    "price": 109.72,
     "lot": 1
   },
   "RU000A10A0H8": {
@@ -4727,7 +4727,7 @@
     "name": "ЭН+ГРУП ао",
     "isin": "RU000A100K72",
     "facevalue": 7e-05,
-    "price": 392.5,
+    "price": 317.45,
     "lot": 1
   },
   "RU000A106K43": {
@@ -4736,7 +4736,7 @@
     "maturity": "2028-07-19",
     "facevalue": 1000.0,
     "coupon": 13.16,
-    "price": 98.74,
+    "price": 98.24,
     "lot": 1
   },
   "RU000A109RR3": {
@@ -4745,7 +4745,7 @@
     "maturity": "2029-10-04",
     "facevalue": 1000.0,
     "coupon": 56.1,
-    "price": 118.2,
+    "price": 115.9,
     "lot": 1
   },
   "RU000A10DQM3": {
@@ -4761,7 +4761,7 @@
     "name": "НЛМК ао",
     "isin": "RU0009046452",
     "facevalue": 1.0,
-    "price": 74.6,
+    "price": 59.74,
     "lot": 10
   },
   "RU000A10B8R9": {
@@ -4770,7 +4770,7 @@
     "maturity": "2028-04-03",
     "facevalue": 1000.0,
     "coupon": 47.37,
-    "price": 106.89,
+    "price": 106.19,
     "lot": 1
   },
   "RU000A10ADH7": {
@@ -4788,7 +4788,7 @@
     "maturity": "2030-05-23",
     "facevalue": 1000.0,
     "coupon": 53.6,
-    "price": 104.1,
+    "price": 102.96,
     "lot": 1
   },
   "RU000A108KU4": {
@@ -4797,7 +4797,7 @@
     "maturity": "2027-05-16",
     "facevalue": 1000.0,
     "coupon": 13.97,
-    "price": 103.2,
+    "price": 101.2,
     "lot": 1
   },
   "RU000A102556": {
@@ -4806,14 +4806,14 @@
     "maturity": "2027-09-14",
     "facevalue": 1000.0,
     "coupon": 26.8,
-    "price": 92.85,
+    "price": 89.87,
     "lot": 1
   },
   "BELU": {
     "name": "НоваБев ао",
     "isin": "RU000A0HL5M1",
     "facevalue": 100.0,
-    "price": 306.6,
+    "price": 243.4,
     "lot": 1
   },
   "RU000A100DZ5": {
@@ -4822,7 +4822,7 @@
     "maturity": "2029-05-17",
     "facevalue": 1000.0,
     "coupon": 37.4,
-    "price": 100.9,
+    "price": 102.65,
     "lot": 1
   },
   "RU000A1013P1": {
@@ -4831,7 +4831,7 @@
     "maturity": "2026-11-17",
     "facevalue": 1000.0,
     "coupon": 36.25,
-    "price": 97.67,
+    "price": 97.51,
     "lot": 1
   },
   "RU000A10B461": {
@@ -4840,7 +4840,7 @@
     "maturity": "2028-03-04",
     "facevalue": 1000.0,
     "coupon": 21.37,
-    "price": 103.81,
+    "price": 102.29,
     "lot": 1
   },
   "RU000A1021A6": {
@@ -4856,7 +4856,7 @@
     "name": "Русагро",
     "isin": "RU000A0JQUZ6",
     "facevalue": 2.5,
-    "price": 104.2,
+    "price": 79.12,
     "lot": 1
   },
   "SU26225RMFS1": {
@@ -4865,7 +4865,7 @@
     "maturity": "2034-05-10",
     "facevalue": 1000.0,
     "coupon": 36.15,
-    "price": 67.272,
+    "price": 64.643,
     "lot": 1
   },
   "RU000A0ZZ893": {
@@ -4874,7 +4874,7 @@
     "maturity": "2033-05-10",
     "facevalue": 1000.0,
     "coupon": 76.34,
-    "price": 82.94,
+    "price": 83.25,
     "lot": 1
   },
   "RU000A10E6G3": {
@@ -4883,7 +4883,16 @@
     "maturity": "2030-01-09",
     "facevalue": 1000.0,
     "coupon": 26.3,
-    "price": 105.34,
+    "price": 105.97,
+    "lot": 1
+  },
+  "RU000A106HF5": {
+    "name": "ЭЛРЕШ 1Р1",
+    "isin": "RU000A106HF5",
+    "maturity": "2026-07-06",
+    "facevalue": 1000.0,
+    "coupon": 30.67,
+    "price": 99.8,
     "lot": 1
   }
 }
