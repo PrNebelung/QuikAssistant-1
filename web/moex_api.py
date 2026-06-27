@@ -140,28 +140,89 @@ def fetch_instrument_data(secid):
     
     return info if info.get('name') else None
 
+def _batch_fetch_prices():
+    """Fetch current prices for all instruments in bulk from MOEX boards."""
+    prices = {}
+
+    # Shares from TQBR
+    try:
+        url = f"{BASE_URL}/engines/stock/markets/shares/boards/TQBR/securities.json"
+        resp = requests.get(url, params={'iss.meta': 'off', 'limit': 10000}, timeout=30)
+        resp.raise_for_status()
+        d = resp.json()
+        md = _parse_iss_response(d.get('marketdata', {}))
+        for row in md:
+            secid = row.get('SECID')
+            price = row.get('LAST') or row.get('PREVPRICE') or row.get('LCURRENTPRICE') or 0
+            if secid and price:
+                prices[secid] = float(price)
+        print(f"  Fetched {len(prices)} share prices from TQBR")
+    except Exception as e:
+        print(f"  Error fetching TQBR: {e}")
+
+    # Bonds from TQCB, TQOB, TQRD, TQIB, TQIEB
+    bond_boards = ['TQCB', 'TQOB', 'TQRD', 'TQIB', 'TQIEB']
+    for board in bond_boards:
+        try:
+            url = f"{BASE_URL}/engines/stock/markets/bonds/boards/{board}/securities.json"
+            resp = requests.get(url, params={'iss.meta': 'off', 'limit': 10000}, timeout=30)
+            resp.raise_for_status()
+            d = resp.json()
+            md = _parse_iss_response(d.get('marketdata', {}))
+            for row in md:
+                secid = row.get('SECID')
+                price = row.get('LAST') or row.get('PREVPRICE') or row.get('LCURRENTPRICE') or 0
+                if secid and price and secid not in prices:
+                    prices[secid] = float(price)
+        except Exception:
+            continue
+
+    print(f"  Total bulk prices: {len(prices)}")
+    return prices
+
+
 def refresh_instruments():
-    """Refresh instrument cache - only instruments from CSV files."""
+    """Refresh instrument cache - bulk fetch prices, individual fetch for metadata."""
     cache = _load_cache()
     cache['updated'] = time.time()
-    
+
     isins = get_all_isins_from_csv()
     print(f"Found {len(isins)} instruments in CSV files")
-    
+
+    # Bulk fetch all current prices
+    bulk_prices = _batch_fetch_prices()
+
     for i, isin in enumerate(isins):
-        if isin in cache and cache[isin].get('price', 0) > 0:
-            continue  # Skip if already have price
-        
+        # Get price from bulk data
+        bulk_price = bulk_prices.get(isin, 0)
+
+        # Check if we already have metadata (name, maturity, etc.)
+        existing = cache.get(isin, {})
+        has_metadata = existing.get('name') and existing.get('isin')
+
+        if has_metadata and bulk_price:
+            # Just update price from bulk data
+            cache[isin]['price'] = bulk_price
+            continue
+
+        # Need to fetch full instrument data (first time or missing metadata)
         print(f"  [{i+1}/{len(isins)}] Fetching {isin}...", end=' ')
         data = fetch_instrument_data(isin)
         if data:
+            if bulk_price:
+                data['price'] = bulk_price
             cache[isin] = data
             print(f"OK - {data.get('name', '')} price={data.get('price', 0)}")
         else:
-            print("not found")
-        
+            # Even if metadata fails, save the bulk price
+            if bulk_price:
+                cache[isin] = {'name': isin, 'isin': isin, 'price': bulk_price, 'lot': 1}
+                print(f"price only: {bulk_price}")
+            else:
+                print("not found")
+
         time.sleep(0.1)  # Rate limit
-    
+
     _save_cache(cache)
     return cache
 
