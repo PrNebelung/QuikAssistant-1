@@ -734,17 +734,16 @@ document.addEventListener('DOMContentLoaded', () => {
         settingsForm.querySelectorAll('input[type="number"]').forEach(input => {
             const rawVal = input.value;
             if (rawVal) {
-                input.value = Number(rawVal).toLocaleString('ru-RU');
+                input.value = rawVal.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             }
             input.addEventListener('focus', () => {
-                const raw = input.value.replace(/\s/g, '');
-                input.value = raw;
+                input.value = input.value.replace(/\s/g, '');
             });
             input.addEventListener('blur', () => {
                 const raw = input.value.replace(/\s/g, '');
                 const num = parseFloat(raw);
                 if (!isNaN(num)) {
-                    input.value = num.toLocaleString('ru-RU');
+                    input.value = raw.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
                 }
             });
         });
