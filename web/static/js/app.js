@@ -628,6 +628,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allSettings = {};
     let activeBroker = '';
+    const brokerOrder = ['FINAM', 'VTB', 'PSB', 'RSHB', 'TEST'];
 
     const settingsFields = [
         { group: 'Брокер', fields: [
@@ -650,15 +651,9 @@ document.addEventListener('DOMContentLoaded', () => {
             { key: 'sessionEveningEnabled', label: 'Вечерняя сессия', type: 'checkbox' },
         ]},
         { group: 'Время сессий (UTC)', fields: [
-            { key: 'sessionMorningHour', label: 'Утро час', type: 'number' },
-            { key: 'sessionMorningMin', label: 'Утро мин', type: 'number' },
-            { key: 'sessionMorningSec', label: 'Утро сек', type: 'number' },
-            { key: 'sessionMainHour', label: 'Основная час', type: 'number' },
-            { key: 'sessionMainMin', label: 'Основная мин', type: 'number' },
-            { key: 'sessionMainSec', label: 'Основная сек', type: 'number' },
-            { key: 'sessionEveningHour', label: 'Вечерняя час', type: 'number' },
-            { key: 'sessionEveningMin', label: 'Вечерняя мин', type: 'number' },
-            { key: 'sessionEveningSec', label: 'Вечерняя сек', type: 'number' },
+            { key: 'sessionMorning', label: 'Утренняя', type: 'time' },
+            { key: 'sessionMain', label: 'Основная', type: 'time' },
+            { key: 'sessionEvening', label: 'Вечерняя', type: 'time' },
         ]},
     ];
 
@@ -675,7 +670,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function renderBrokerTabs() {
-        const brokers = Object.keys(allSettings);
+        const brokers = Object.keys(allSettings).sort((a, b) => {
+            const ia = brokerOrder.indexOf(a);
+            const ib = brokerOrder.indexOf(b);
+            return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+        });
         brokerTabs.innerHTML = brokers.map(b =>
             `<button class="broker-tab ${b === activeBroker ? 'active' : ''}" data-broker="${b}">${b}</button>`
         ).join('');
@@ -686,6 +685,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderSettingsForm();
             });
         });
+    }
+
+    function timeToHMS(h, m, s) {
+        const pad = n => String(n || 0).padStart(2, '0');
+        return `${pad(h)}:${pad(m)}:${pad(s)}`;
+    }
+
+    function hmsToParts(val) {
+        const parts = (val || '10:00:30').split(':');
+        return {
+            hour: parseInt(parts[0]) || 10,
+            min: parseInt(parts[1]) || 0,
+            sec: parseInt(parts[2]) || 30,
+        };
     }
 
     function renderSettingsForm() {
@@ -699,6 +712,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         return `<div class="settings-row">
                             <label>${f.label}</label>
                             <input type="checkbox" data-key="${f.key}" ${val ? 'checked' : ''}>
+                        </div>`;
+                    }
+                    if (f.type === 'time') {
+                        const h = data[f.key + 'Hour'] ?? brokerDefaults[f.key + 'Hour'] ?? 10;
+                        const m = data[f.key + 'Min'] ?? brokerDefaults[f.key + 'Min'] ?? 0;
+                        const s = data[f.key + 'Sec'] ?? brokerDefaults[f.key + 'Sec'] ?? 30;
+                        return `<div class="settings-row">
+                            <label>${f.label}</label>
+                            <input type="time" step="1" data-key="${f.key}" value="${timeToHMS(h, m, s)}">
                         </div>`;
                     }
                     return `<div class="settings-row">
@@ -732,6 +754,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const key = input.dataset.key;
             if (input.type === 'checkbox') {
                 data[key] = input.checked;
+            } else if (input.type === 'time') {
+                const parts = hmsToParts(input.value);
+                data[key + 'Hour'] = parts.hour;
+                data[key + 'Min'] = parts.min;
+                data[key + 'Sec'] = parts.sec;
             } else if (input.type === 'number') {
                 data[key] = parseFloat(input.value) || 0;
             } else {
