@@ -89,9 +89,10 @@ def fetch_instrument_data(secid):
         try:
             if board.startswith('TQ') or board.startswith('EQ') or board.startswith('FQ'):
                 # Stock or bond board
-                market = 'bonds' if 'OB' in board or 'CB' in board or 'RD' in board else 'shares'
+                is_bond_board = any(x in board for x in ['OB', 'CB', 'RD', 'IB', 'IEB'])
+                market = 'bonds' if is_bond_board else 'shares'
                 url2 = f"{BASE_URL}/engines/stock/markets/{market}/boards/{board}/securities.json"
-                resp2 = requests.get(url2, params={'iss.meta': 'off', 'limit': 500}, timeout=10)
+                resp2 = requests.get(url2, params={'iss.meta': 'off', 'limit': 5000}, timeout=10)
                 d2 = resp2.json()
                 
                 md_rows = _parse_iss_response(d2.get('marketdata', {}))
@@ -104,10 +105,10 @@ def fetch_instrument_data(secid):
                 
                 for md in md_rows:
                     if md.get('SECID') == secid:
-                        price = md.get('LAST') or md.get('PREVPRICE') or 0
+                        price = md.get('LAST') or md.get('PREVPRICE') or md.get('LCURRENTPRICE') or 0
                         if price:
                             break
-                
+
                 if price:
                     break
         except:
@@ -115,17 +116,17 @@ def fetch_instrument_data(secid):
     
     if not price and info.get('maturity'):
         # Try to get price from marketdata boards
-        for board in ['TQCB', 'TQOB', 'TQRD']:
+        for board in ['TQCB', 'TQOB', 'TQRD', 'TQIB', 'TQIEB']:
             try:
                 market = 'bonds'
                 url2 = f"{BASE_URL}/engines/stock/markets/{market}/boards/{board}/securities.json"
-                resp2 = requests.get(url2, params={'iss.meta': 'off', 'limit': 500}, timeout=10)
+                resp2 = requests.get(url2, params={'iss.meta': 'off', 'limit': 5000}, timeout=10)
                 d2 = resp2.json()
                 
                 md_rows = _parse_iss_response(d2.get('marketdata', {}))
                 for md in md_rows:
                     if md.get('SECID') == secid:
-                        price = md.get('LAST') or md.get('PREVPRICE') or 0
+                        price = md.get('LAST') or md.get('PREVPRICE') or md.get('LCURRENTPRICE') or 0
                         if price:
                             break
                 
@@ -165,15 +166,18 @@ def refresh_instruments():
     return cache
 
 def get_instrument(isin_or_ticker):
-    """Get instrument data from cache."""
+    """Get instrument data from cache. Auto-refreshes if stale."""
     cache = _load_cache()
-    
+
     if time.time() - cache.get('updated', 0) > CACHE_TTL:
-        return None
-    
+        cache = refresh_instruments()
+
     return cache.get(isin_or_ticker)
 
 def get_all_instruments():
-    """Get all cached instruments."""
+    """Get all cached instruments. Auto-refreshes if cache is stale."""
     cache = _load_cache()
+    if time.time() - cache.get('updated', 0) > CACHE_TTL:
+        print("Cache stale, refreshing instruments...")
+        cache = refresh_instruments()
     return {k: v for k, v in cache.items() if k != 'updated'}

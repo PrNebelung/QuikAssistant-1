@@ -25,15 +25,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    let ordersSortBy = 'name';
+    let ordersSortDir = 'asc';
+
     async function loadOrders() {
         const broker = brokerSelect.value;
         const type = fileTypeSelect.value;
-        
+
         try {
             const response = await fetch(`/api/orders/${broker}?type=${type}`);
-            const orders = await response.json();
-            
-            ordersTable.innerHTML = orders.map(order => {
+            let orders = await response.json();
+
+            // Enrich with instrument data for sorting
+            orders = orders.map(order => {
                 const inst = instrumentsCache[order.isin] || instrumentsCache[order.name] || {};
                 const lot = inst.lot || 1;
                 const price = parseFloat(order.price) || 0;
@@ -42,28 +46,54 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isBond = order.isin.startsWith('SU') || order.isin.startsWith('RU000A');
                 const actualPrice = isBond && facevalue ? facevalue * (price / 100) : price;
                 const sum = actualPrice * qty * lot;
-                
                 const currentPrice = inst.price || 0;
+                const maturity = inst.maturity || '';
+                return { ...order, lot, sum, currentPrice, maturity, side: order.side === 'B' ? 'Покупка' : 'Продажа' };
+            });
+
+            // Sort
+            const reverse = ordersSortDir === 'desc';
+            orders.sort((a, b) => {
+                let va, vb;
+                switch (ordersSortBy) {
+                    case 'name': va = a.name; vb = b.name; break;
+                    case 'maturity': va = a.maturity; vb = b.maturity; break;
+                    case 'isin': va = a.isin; vb = b.isin; break;
+                    case 'side': va = a.side; vb = b.side; break;
+                    case 'lot': va = a.lot; vb = b.lot; break;
+                    case 'qty': va = parseInt(a.qty)||0; vb = parseInt(b.qty)||0; break;
+                    case 'price': va = parseFloat(a.price)||0; vb = parseFloat(b.price)||0; break;
+                    case 'currentPrice': va = a.currentPrice; vb = b.currentPrice; break;
+                    case 'sum': va = a.sum; vb = b.sum; break;
+                    default: va = a.name; vb = b.name;
+                }
+                if (typeof va === 'string') return reverse ? vb.localeCompare(va) : va.localeCompare(vb);
+                return reverse ? vb - va : va - vb;
+            });
+
+            ordersTable.innerHTML = orders.map(order => {
+                const inst = instrumentsCache[order.isin] || instrumentsCache[order.name] || {};
+                const price = parseFloat(order.price) || 0;
+                const currentPrice = order.currentPrice;
                 const diff = price && currentPrice ? ((currentPrice - price) / price * 100).toFixed(1) : 0;
                 const diffClass = diff >= 0 ? 'positive' : 'negative';
-                
-                const maturity = inst.maturity || '';
-                
+
                 return `
-                <tr class="${order.enabled ? '' : 'disabled'}">
+                <tr class="${order.enabled ? '' : 'disabled'}" data-raw-line="${order.raw.replace(/"/g, '&quot;')}">
                     <td>${order.name}</td>
-                    <td class="maturity-cell">${maturity || ''}</td>
+                    <td class="maturity-cell">${order.maturity || ''}</td>
                     <td>${order.isin}</td>
-                    <td>${order.side === 'B' ? 'Покупка' : 'Продажа'}</td>
-                    <td class="lot-cell">${lot}</td>
+                    <td>${order.side}</td>
+                    <td class="lot-cell">${order.lot}</td>
                     <td><input class="edit-input" type="number" value="${order.qty}" data-field="qty" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
                     <td><input class="edit-input" type="number" step="0.01" value="${order.price}" data-field="price" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
                     <td class="current-price">${currentPrice > 0 ? currentPrice : '-'} ${currentPrice > 0 ? `<span class="${diffClass}">(${diff}%)</span>` : ''}</td>
-                    <td class="sum-cell" data-isin="${order.isin}">${sum > 0 ? fmt(sum) : '-'}</td>
+                    <td class="sum-cell" data-isin="${order.isin}">${order.sum > 0 ? fmt(order.sum) : '-'}</td>
                     <td class="actions-cell">
-                        <button class="btn-toggle ${order.enabled ? 'btn-enabled' : 'btn-disabled'}" data-isin="${order.isin}">${order.enabled ? 'Выкл' : 'Вкл'}</button>
-                        <button class="btn-delete" data-isin="${order.isin}">Удалить</button>
-                        ${order.enabled ? `<button class="btn-save btn-hidden" data-isin="${order.isin}">Сохранить</button><button class="btn-cancel btn-hidden" data-isin="${order.isin}">Отмена</button>` : ''}
+                        <button class="btn-icon btn-toggle ${order.enabled ? 'btn-enabled' : 'btn-disabled'}" data-isin="${order.isin}" title="${order.enabled ? 'Отключить' : 'Включить'}">${order.enabled ? '&#x2716;' : '&#x2714;'}</button>
+                        <button class="btn-icon btn-save" data-isin="${order.isin}" disabled title="Сохранить">&#x1F4BE;</button>
+                        <button class="btn-icon btn-cancel" data-isin="${order.isin}" disabled title="Отмена">&#x21BA;</button>
+                        <button class="btn-icon btn-delete" data-isin="${order.isin}" title="Удалить">&#x1F5D1;</button>
                     </td>
                 </tr>`;
             }).join('');
@@ -119,8 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Mark as edited
                     row.classList.add('edited');
                     saveBtn.classList.add('btn-edited');
-                    saveBtn.classList.remove('btn-hidden');
-                    cancelBtn.classList.remove('btn-hidden');
+                    saveBtn.disabled = false;
+                    cancelBtn.disabled = false;
                 });
             });
         } catch (error) {
@@ -134,18 +164,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportLogBtn = document.getElementById('export-log');
     let logEntries = [];
     
-    function webLog(msg, level = 'info') {
+    function webLog(msg, level = 'info', undo = null) {
         const time = new Date().toLocaleTimeString('ru-RU');
         const date = new Date().toLocaleDateString('ru-RU');
-        const entry = { time, date, msg, level };
+        const entry = { time, date, msg, level, undo };
         logEntries.push(entry);
-        
+
         const el = document.createElement('div');
         el.className = `log-entry log-${level}`;
-        el.innerHTML = `<span class="log-time">${date} ${time}</span><span class="log-msg">${msg}</span>`;
+        el.innerHTML = `<span class="log-time">${date} ${time}</span><span class="log-msg">${msg}</span>${undo ? '<button class="btn-undo" onclick="undoAction(this)" data-index="' + (logEntries.length - 1) + '" title="Отменить">&#x21A9;</button>' : ''}`;
         webLogEntries.appendChild(el);
         webLogEntries.scrollTop = webLogEntries.scrollHeight;
-        
+
         // Save to server
         fetch('/api/actionlog', {
             method: 'POST',
@@ -159,10 +189,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/api/actionlog');
             const entries = await response.json();
             logEntries = entries;
-            webLogEntries.innerHTML = entries.map(e => `
+            webLogEntries.innerHTML = entries.map((e, i) => `
                 <div class="log-entry log-${e.level}">
                     <span class="log-time">${e.date} ${e.time}</span>
                     <span class="log-msg">${e.msg}</span>
+                    ${e.undo ? `<button class="btn-undo" onclick="undoAction(this)" data-index="${i}" title="Отменить">&#x21A9;</button>` : ''}
                 </div>
             `).join('');
             webLogEntries.scrollTop = webLogEntries.scrollHeight;
@@ -191,66 +222,102 @@ document.addEventListener('DOMContentLoaded', () => {
     async function toggleOrder(isin) {
         const broker = brokerSelect.value;
         const type = fileTypeSelect.value;
-        
+        const row = document.querySelector(`[data-isin="${isin}"]`)?.closest('tr');
+        const wasEnabled = row ? row.classList.contains('disabled') === false : true;
+
         await fetch(`/api/orders/${broker}/${isin}/toggle`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type })
         });
-        
-        webLog(`Переключено: ${isin}`, 'info');
+
+        webLog(`Переключено: ${isin}`, 'info', { action: 'toggle', broker, file_type: type, isin, old_enabled: wasEnabled });
         loadOrders();
     }
-    
+
     async function saveOrder(isin) {
         const broker = brokerSelect.value;
         const type = fileTypeSelect.value;
         const row = document.querySelector(`[data-isin="${isin}"]`).closest('tr');
         const qty = row.querySelector('[data-field="qty"]').value;
         const price = row.querySelector('[data-field="price"]').value;
-        
+        const oldQty = row.dataset.origQty;
+        const oldPrice = row.dataset.origPrice;
+
         await fetch(`/api/orders/${broker}/${isin}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type, qty, price })
         });
-        
-        webLog(`Сохранено: ${isin} — qty=${qty}, price=${price}`, 'success');
+
+        webLog(`Сохранено: ${isin} — qty=${qty}, price=${price}`, 'success', { action: 'save', broker, file_type: type, isin, old_qty: oldQty, old_price: oldPrice });
         loadOrders();
     }
     
     function cancelEdit(isin) {
         const row = document.querySelector(`[data-isin="${isin}"]`).closest('tr');
-        row.querySelector('[data-field="qty"]').value = row.dataset.origQty;
-        row.querySelector('[data-field="price"]').value = row.dataset.origPrice;
+        const qtyInput = row.querySelector('[data-field="qty"]');
+        const priceInput = row.querySelector('[data-field="price"]');
+        const sumCell = row.querySelector('.sum-cell');
+        const saveBtn = row.querySelector('.btn-save');
+        const cancelBtn = row.querySelector('.btn-cancel');
+
+        qtyInput.value = row.dataset.origQty;
+        priceInput.value = row.dataset.origPrice;
         row.classList.remove('edited');
-        row.querySelector('.btn-save').classList.add('btn-hidden');
-        row.querySelector('.btn-save').classList.remove('btn-edited');
-        row.querySelector('.btn-cancel').classList.add('btn-hidden');
-        
-        // Recalculate sum
-        row.querySelector('[data-field="price"]').dispatchEvent(new Event('input'));
+        saveBtn.disabled = true;
+        saveBtn.classList.remove('btn-edited');
+        cancelBtn.disabled = true;
+
+        const inst = instrumentsCache[isin] || {};
+        const lot = inst.lot || 1;
+        const facevalue = inst.facevalue || 0;
+        const isBond = isin.startsWith('SU') || isin.startsWith('RU000A');
+        const price = parseFloat(priceInput.value) || 0;
+        const qty = parseInt(qtyInput.value) || 0;
+        const actualPrice = isBond && facevalue ? facevalue * (price / 100) : price;
+        const sum = actualPrice * qty * lot;
+        sumCell.textContent = sum > 0 ? fmt(sum) : '-';
+
         webLog(`Отменено: ${isin}`, 'info');
     }
     
     async function deleteOrder(isin) {
         if (!confirm(`Удалить заявку ${isin}?`)) return;
-        
+
         const broker = brokerSelect.value;
         const type = fileTypeSelect.value;
-        
+        const row = document.querySelector(`[data-isin="${isin}"]`)?.closest('tr');
+        const oldLine = row ? row.dataset.rawLine : '';
+
         await fetch(`/api/orders/${broker}/${isin}?type=${type}`, {
             method: 'DELETE'
         });
-        
-        webLog(`Удалено: ${isin}`, 'warn');
+
+        webLog(`Удалено: ${isin}`, 'warn', { action: 'delete', broker, file_type: type, isin, old_line: oldLine });
         loadOrders();
     }
     
     refreshBtn.addEventListener('click', loadOrders);
     brokerSelect.addEventListener('change', loadOrders);
     fileTypeSelect.addEventListener('change', loadOrders);
-    
+
+    // Orders table sorting
+    document.querySelectorAll('#orders-table .sortable').forEach(th => {
+        th.addEventListener('click', () => {
+            const sort = th.dataset.sort;
+            if (ordersSortBy === sort) {
+                ordersSortDir = ordersSortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                ordersSortBy = sort;
+                ordersSortDir = 'asc';
+            }
+            document.querySelectorAll('#orders-table .sortable').forEach(h => h.textContent = h.textContent.replace(/[▲▼]/g, ''));
+            th.textContent += ordersSortDir === 'asc' ? ' ▲' : ' ▼';
+            loadOrders();
+        });
+    });
+
     loadInstruments().then(loadOrders);
 
     // Dashboard
@@ -316,7 +383,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshTrades = document.getElementById('refresh-trades');
     let currentSort = 'datetime';
     let currentDir = 'desc';
-    
+
+    // Default date range: last 2 months
+    const today = new Date();
+    const twoMonthsAgo = new Date(today);
+    twoMonthsAgo.setMonth(today.getMonth() - 2);
+    tradeDateTo.value = today.toISOString().slice(0, 10);
+    tradeDateFrom.value = twoMonthsAgo.toISOString().slice(0, 10);
+
     async function loadTrades() {
         const params = new URLSearchParams({
             source: tradeSource.value,
@@ -528,4 +602,30 @@ document.addEventListener('DOMContentLoaded', () => {
     
     loadLogDates();
     loadLogs();
+
+    window.undoAction = async function(btn) {
+        const index = parseInt(btn.dataset.index);
+        const response = await fetch('/api/actionlog');
+        const entries = await response.json();
+        const entry = entries[index];
+        if (!entry || !entry.undo) return;
+
+        if (!confirm('Отменить это действие?')) return;
+
+        const res = await fetch('/api/actionlog/undo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ undo: entry.undo })
+        });
+
+        if (res.ok) {
+            const u = entry.undo;
+            const desc = u.action === 'save' ? `Сохранение ${u.isin} (qty=${u.old_qty}, price=${u.old_price})`
+                : u.action === 'toggle' ? `Переключение ${u.isin}`
+                : `Удаление ${u.isin}`;
+            webLog(`Откат: ${desc}`, 'info');
+        } else {
+            btn.textContent = 'Ошибка';
+        }
+    };
 });

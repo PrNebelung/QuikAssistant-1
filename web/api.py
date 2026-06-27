@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from csv_handler import get_csv_files, read_orders, write_orders, delete_order, get_all_brokers
 import os
 import glob
+import json
 
 api = Blueprint('api', __name__)
 
@@ -125,7 +126,66 @@ def clear_action_log():
         json.dump([], f)
     return jsonify({'success': True})
 
-import json
+@api.route('/api/actionlog/undo', methods=['POST'])
+def undo_action():
+    """Undo the last action by restoring previous state."""
+    data = request.json
+    undo = data.get('undo')
+    if not undo:
+        return jsonify({'error': 'No undo data'}), 400
+
+    action = undo.get('action')
+    broker = undo.get('broker')
+    file_type = undo.get('file_type')
+    isin = undo.get('isin')
+
+    files = get_csv_files(broker)
+    filepath = files.get(file_type)
+    if not filepath or not os.path.exists(filepath):
+        return jsonify({'error': 'File not found'}), 404
+
+    if action == 'save':
+        orders = read_orders(filepath)
+        for order in orders:
+            if order['isin'] == isin:
+                order['qty'] = undo['old_qty']
+                order['price'] = undo['old_price']
+                break
+        if write_orders(filepath, orders):
+            return jsonify({'success': True})
+        return jsonify({'error': 'Write failed'}), 500
+
+    elif action == 'toggle':
+        with open(filepath, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+        new_lines = []
+        for line in lines:
+            stripped = line.strip()
+            if isin in stripped:
+                clean = stripped.lstrip('-').lstrip()
+                if undo['old_enabled']:
+                    line = clean + '\n'
+                else:
+                    line = '--' + clean + '\n'
+            new_lines.append(line)
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.writelines(new_lines)
+        return jsonify({'success': True})
+
+    elif action == 'delete':
+        old_line = undo.get('old_line', '')
+        if old_line:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()
+            if not content.endswith('\n'):
+                content += '\n'
+            content += old_line + '\n'
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(content)
+            return jsonify({'success': True})
+        return jsonify({'error': 'No old line data'}), 400
+
+    return jsonify({'error': 'Unknown action'}), 400
 
 LOG_DIR = os.path.join(os.path.dirname(__file__), '..', 'Log')
 
