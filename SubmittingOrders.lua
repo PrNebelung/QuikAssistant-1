@@ -114,7 +114,6 @@ function SubmittingOrders()
 end
 
 --- Запуск процесса отправки заявок.
---- ???????? ???? ???????? ?????? ???? ?????? ????????¬ ?????????.
 local marketDataWaited = false
 function WaitForMarketData()
   if marketDataWaited then return end
@@ -132,16 +131,16 @@ function WaitForMarketData()
     for _, sample in ipairs(sampleSecurities) do
       local value = getParamEx(sample.classCode, sample.secCode, "LAST")
       if value ~= nil and value.result == "1" and tonumber(value.param_value) > 0 then
-        log.info(string.format("Market data loaded (checked %s, retry %d)", sample.secCode, retry))
+        log.info(string.format("Рыночные данные загружены (%s, попытка %d)", sample.secCode, retry))
         return true
       end
     end
     if retry % 5 == 0 then
-      log.info(string.format("Waiting for market data... (retry %d/%d)", retry, maxRetries))
+      log.info(string.format("Ожидание рыночных данных... (попытка %d/%d)", retry, maxRetries))
     end
     sleep(retryInterval * 1000)
   end
-  log.warn("Market data not fully loaded after waiting, proceeding anyway")
+  log.warn("Рыночные данные не полностью загружены, продолжаем")
   return false
 end
 
@@ -149,7 +148,7 @@ function SubmittingOrdersRun()
   if IsSendingOrders then
     return
   end
-  if not Config.BrokerEnabled then log.warn('Broker disabled, skipping order submission'); return end
+  if not Config.BrokerEnabled then log.warn('Брокер отключен, пропуск выставления заявок'); return end
 
   local isSubmittingOrdersRun = true
 
@@ -464,12 +463,12 @@ function SubmitOrders(orders)
   end
 
   if stats.duplicate > 0 then
-    log.debug(string.format("  [SKIP] %d orders: already in QUIK or sent this session", stats.duplicate))
+    log.debug(string.format("  [SKIP] %d заявок: уже в QUIK или отправлены на этой сессии", stats.duplicate))
   end
   for reason, count in pairs(skipReasons) do
     local tickers = skipTickers[reason] or {}
     local tickerList = table.concat(tickers, ", ")
-    log.warn(string.format("  [SKIP] %d orders: %s [%s]", count, reason, tickerList))
+    log.warn(string.format("  [SKIP] %d заявок: %s [%s]", count, reason, tickerList))
   end
 
   return stats
@@ -528,7 +527,7 @@ function TradeClosePosition(trade)
     order:FormatQuantity()
   )
   if err ~= "" then
-    log.error("Reverse sell order failed: ", err, order:Print())
+    log.error("Ошибка обратной продажи: ", err, order:Print())
   else
     log.info(
       string.format(
