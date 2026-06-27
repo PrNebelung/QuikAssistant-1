@@ -93,6 +93,9 @@ th, td {
 th {
     background: #16213e;
     font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 tr:hover {
