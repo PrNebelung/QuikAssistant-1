@@ -641,7 +641,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { key: 'volumeOrderMax', label: 'Макс. объем акций', type: 'number' },
             { key: 'bondVolumeOrderMax', label: 'Макс. объем облигаций', type: 'number' },
             { key: 'volumeOrderLimit', label: 'Лимит объема', type: 'number' },
-            { key: 'volumeOrderLimitUSD', label: 'Лимит USD', type: 'number' },
             { key: 'limitActuationOrderEdge', label: 'Лимит edge акций %', type: 'number' },
             { key: 'limitActuationOrderBondEdge', label: 'Лимит edge облигаций %', type: 'number' },
         ]},
@@ -660,7 +659,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const brokerDefaults = {
         clientCode: '', accountCode: '', firmId: '',
         volumeOrderMax: 0, bondVolumeOrderMax: 0,
-        volumeOrderLimit: 200000, volumeOrderLimitUSD: 100,
+        volumeOrderLimit: 200000,
         limitActuationOrderEdge: 5, limitActuationOrderBondEdge: 60,
         sessionMorningEnabled: false, sessionMainEnabled: false, sessionEveningEnabled: false,
         brokerEnabled: false,

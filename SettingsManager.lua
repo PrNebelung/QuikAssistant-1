@@ -15,7 +15,6 @@ local defaults = {
     volumeOrderMax = 0,
     bondVolumeOrderMax = 0,
     volumeOrderLimit = 200000,
-    volumeOrderLimitUSD = 100,
     limitActuationOrderEdge = 5,
     limitActuationOrderBondEdge = 60,
     sessionMorningEnabled = false,
@@ -96,7 +95,6 @@ function SettingsManager.ApplyBroker(brokerName)
     Config.VolumeOrderMax = tonumber(s.volumeOrderMax) or 0
     Config.BondVolumeOrderMax = tonumber(s.bondVolumeOrderMax) or 0
     Config.VolumeOrderLimit = tonumber(s.volumeOrderLimit) or 200000
-    Config.VolumeOrderLimitUSD = tonumber(s.volumeOrderLimitUSD) or 100
 
     Config.LimitActuationOrderEdge = tonumber(s.limitActuationOrderEdge) or 5
     Config.LimitActuationOrderBondEdge = tonumber(s.limitActuationOrderBondEdge) or 60

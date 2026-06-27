@@ -28,7 +28,6 @@ function _initSettingGlobals()
   VolumeOrderMax = Config.VolumeOrderMax
   BondVolumeOrderMax = Config.BondVolumeOrderMax
   VolumeOrderLimit = Config.VolumeOrderLimit
-  VolumeOrderLimitUSD = Config.VolumeOrderLimitUSD
   LimitActuationOrderEdge = Config.LimitActuationOrderEdge
   LimitActuationOrderBondEdge = Config.LimitActuationOrderBondEdge
   FileBuyOrder = Config.FileBuyOrder

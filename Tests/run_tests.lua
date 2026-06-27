@@ -39,7 +39,6 @@ dofile("SubmittingOrders.lua")
 VolumeOrderMax = 11000
 BondVolumeOrderMax = 7000
 VolumeOrderLimit = 200000
-VolumeOrderLimitUSD = 100
 LimitActuationOrderEdge = 5
 LimitActuationOrderBondEdge = 60
 
@@ -49,7 +48,6 @@ local Config = require("Config")
 Config.VolumeOrderMax = VolumeOrderMax
 Config.BondVolumeOrderMax = BondVolumeOrderMax
 Config.VolumeOrderLimit = VolumeOrderLimit
-Config.VolumeOrderLimitUSD = VolumeOrderLimitUSD
 Config.LimitActuationOrderEdge = LimitActuationOrderEdge
 Config.LimitActuationOrderBondEdge = LimitActuationOrderBondEdge
 local passed = 0
