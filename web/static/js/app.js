@@ -22,13 +22,41 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => tab.click(), 0);
         }
     }
-    
+
     // Orders tab
     const ordersTable = document.querySelector('#orders-table tbody');
     const brokerSelect = document.getElementById('broker-select');
     const fileTypeSelect = document.getElementById('file-type');
     const refreshBtn = document.getElementById('refresh-btn');
     let instrumentsCache = {};
+
+    function fmtNum(n) {
+        const s = String(n);
+        const parts = s.split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        return parts.join('.');
+    }
+
+    function parseNum(s) {
+        return parseFloat(s.replace(/\s/g, '')) || 0;
+    }
+
+    function initNumInputs() {
+        document.querySelectorAll('.num-input').forEach(input => {
+            if (input.value) {
+                const v = parseFloat(input.value);
+                if (!isNaN(v)) input.value = fmtNum(input.value);
+            }
+            input.addEventListener('focus', () => {
+                input.value = input.value.replace(/\s/g, '');
+            });
+            input.addEventListener('blur', () => {
+                const raw = input.value.replace(/\s/g, '');
+                const num = parseFloat(raw);
+                if (!isNaN(num)) input.value = fmtNum(raw);
+            });
+        });
+    }
     
     async function loadInstruments() {
         try {
@@ -100,8 +128,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${order.isin}</td>
                     <td>${order.side}</td>
                     <td class="lot-cell">${order.lot}</td>
-                    <td><input class="edit-input" type="number" value="${order.qty}" data-field="qty" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
-                    <td><input class="edit-input" type="number" step="0.01" value="${order.price}" data-field="price" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
+                    <td><input class="edit-input num-input" type="text" inputmode="numeric" value="${order.qty}" data-field="qty" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
+                    <td><input class="edit-input num-input" type="text" inputmode="numeric" step="0.01" value="${order.price}" data-field="price" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
                     <td class="current-price">${currentPrice > 0 ? currentPrice : '-'} ${currentPrice > 0 ? `<span class="${diffClass}">(${diff}%)</span>` : ''}</td>
                     <td class="sum-cell" data-isin="${order.isin}">${order.sum > 0 ? fmt(order.sum) : '-'}</td>
                     <td class="actions-cell">
@@ -112,7 +140,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </td>
                 </tr>`;
             }).join('');
-            
+
+            initNumInputs();
+
             // Store original values for cancel
             document.querySelectorAll('#orders-table tr').forEach(row => {
                 const qtyInput = row.querySelector('[data-field="qty"]');
@@ -149,8 +179,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const saveBtn = row.querySelector('.btn-save');
                     const cancelBtn = row.querySelector('.btn-cancel');
                     
-                    const qty = parseInt(qtyInput.value) || 0;
-                    const price = parseFloat(priceInput.value) || 0;
+                    const qty = parseInt(qtyInput.value.replace(/\s/g, '')) || 0;
+                    const price = parseFloat(priceInput.value.replace(/\s/g, '')) || 0;
                     
                     const inst = instrumentsCache[isin] || {};
                     const lot = inst.lot || 1;
@@ -254,8 +284,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const broker = brokerSelect.value;
         const type = fileTypeSelect.value;
         const row = document.querySelector(`[data-isin="${isin}"]`).closest('tr');
-        const qty = row.querySelector('[data-field="qty"]').value;
-        const price = row.querySelector('[data-field="price"]').value;
+        const qty = row.querySelector('[data-field="qty"]').value.replace(/\s/g, '');
+        const price = row.querySelector('[data-field="price"]').value.replace(/\s/g, '');
         const oldQty = row.dataset.origQty;
         const oldPrice = row.dataset.origPrice;
 
@@ -277,8 +307,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const saveBtn = row.querySelector('.btn-save');
         const cancelBtn = row.querySelector('.btn-cancel');
 
-        qtyInput.value = row.dataset.origQty;
-        priceInput.value = row.dataset.origPrice;
+        qtyInput.value = fmtNum(row.dataset.origQty);
+        priceInput.value = fmtNum(row.dataset.origPrice);
         row.classList.remove('edited');
         saveBtn.disabled = true;
         saveBtn.classList.remove('btn-edited');
@@ -288,8 +318,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const lot = inst.lot || 1;
         const facevalue = inst.facevalue || 0;
         const isBond = isin.startsWith('SU') || isin.startsWith('RU000A');
-        const price = parseFloat(priceInput.value) || 0;
-        const qty = parseInt(qtyInput.value) || 0;
+        const price = parseNum(priceInput.value);
+        const qty = parseInt(qtyInput.value.replace(/\s/g, '')) || 0;
         const actualPrice = isBond && facevalue ? facevalue * (price / 100) : price;
         const sum = actualPrice * qty * lot;
         sumCell.textContent = sum > 0 ? fmt(sum) : '-';
@@ -447,9 +477,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td>${t.datetime}</td>
                                 <td>${t.ticker}</td>
                                 <td><span class="level-badge ${t.side === 'buy' ? 'level-INFO' : 'level-ERROR'}">${t.side === 'buy' ? 'Покупка' : 'Продажа'}</span></td>
-                                <td>${Math.abs(t.qty)}</td>
-                                <td>${t.price}</td>
-                                <td class="money">${fmt(t.value)}</td>
+                                <td class="num-cell">${fmtNum(Math.abs(t.qty))}</td>
+                                <td class="num-cell">${fmtNum(t.price)}</td>
+                                <td class="money num-cell">${fmt(t.value)}</td>
                                 <td>${t.broker}</td>
                             </tr>
                         `).join('')}</tbody>
@@ -516,8 +546,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td>${t.datetime}</td>
                         <td>${t.ticker}</td>
                         <td><span class="level-badge ${t.side === 'buy' ? 'level-INFO' : 'level-ERROR'}">${t.side === 'buy' ? 'Покупка' : 'Продажа'}</span></td>
-                        <td class="num-cell">${Math.abs(t.qty)}</td>
-                        <td class="num-cell">${t.price}</td>
+                        <td class="num-cell">${fmtNum(Math.abs(t.qty))}</td>
+                        <td class="num-cell">${fmtNum(t.price)}</td>
                         <td class="num-cell sum-cell">${fmt(t.value)}</td>
                         <td>${t.broker}</td>
                     </tr>

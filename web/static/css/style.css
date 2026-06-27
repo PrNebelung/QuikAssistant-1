@@ -295,6 +295,13 @@ pre {
     border: 1px solid #1a4a8a;
     color: #eee;
     border-radius: 2px;
+    text-align: right;
+}
+
+.edit-input.num-input {
+    width: 90px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
 }
 
 .btn-toggle {
