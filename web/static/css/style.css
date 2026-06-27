@@ -134,7 +134,7 @@ tr:hover {
 }
 
 .lot-cell {
-    text-align: center;
+    text-align: right;
     color: #4fc3f7;
     font-weight: 600;
 }
@@ -143,6 +143,10 @@ tr:hover {
     text-align: right;
     color: #4caf50;
     font-weight: 500;
+}
+
+.num-cell {
+    text-align: right;
 }
 
 .current-price {

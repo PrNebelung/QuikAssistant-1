@@ -516,9 +516,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td>${t.datetime}</td>
                         <td>${t.ticker}</td>
                         <td><span class="level-badge ${t.side === 'buy' ? 'level-INFO' : 'level-ERROR'}">${t.side === 'buy' ? 'Покупка' : 'Продажа'}</span></td>
-                        <td>${Math.abs(t.qty)}</td>
-                        <td>${t.price}</td>
-                        <td>${fmt(t.value)}</td>
+                        <td class="num-cell">${Math.abs(t.qty)}</td>
+                        <td class="num-cell">${t.price}</td>
+                        <td class="num-cell sum-cell">${fmt(t.value)}</td>
                         <td>${t.broker}</td>
                     </tr>
                 `).join('');
