@@ -730,6 +730,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).join('')}
             </div>
         `).join('');
+
+        settingsForm.querySelectorAll('input[type="number"]').forEach(input => {
+            const rawVal = input.value;
+            if (rawVal) {
+                input.value = Number(rawVal).toLocaleString('ru-RU');
+            }
+            input.addEventListener('focus', () => {
+                const raw = input.value.replace(/\s/g, '');
+                input.value = raw;
+            });
+            input.addEventListener('blur', () => {
+                const raw = input.value.replace(/\s/g, '');
+                const num = parseFloat(raw);
+                if (!isNaN(num)) {
+                    input.value = num.toLocaleString('ru-RU');
+                }
+            });
+        });
     }
 
     async function loadSettings() {
@@ -760,7 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 data[key + 'Min'] = parts.min;
                 data[key + 'Sec'] = parts.sec;
             } else if (input.type === 'number') {
-                data[key] = parseFloat(input.value) || 0;
+                data[key] = parseFloat(input.value.replace(/\s/g, '')) || 0;
             } else {
                 data[key] = input.value;
             }
