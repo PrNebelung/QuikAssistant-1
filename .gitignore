@@ -2,3 +2,9 @@ Log/**/*.log
 __pycache__/
 *.pyc
 .claude/
+
+# Generated / user-specific files
+web/instruments_cache.json
+web/action_log.json
+settings.json
+Data/
