@@ -145,6 +145,15 @@
         <div id="control" class="tab-content">
             <h2>Управление</h2>
             <div class="control-card">
+                <h3>Настройки брокера</h3>
+                <p>Настройки сохраняются в settings.json и применяются при следующем запуске QUIK.</p>
+                <div id="settings-form" class="settings-grid"></div>
+                <div class="settings-actions">
+                    <button id="save-settings-btn" class="btn-control">Сохранить настройки</button>
+                    <span id="settings-status" class="control-status"></span>
+                </div>
+            </div>
+            <div class="control-card">
                 <h3>Обновление цен</h3>
                 <p>Быстрое обновление текущих цен для всех инструментов в кэше (акции + облигации) напрямую с MOEX.</p>
                 <button id="refresh-prices-btn" class="btn-control">Обновить цены</button>

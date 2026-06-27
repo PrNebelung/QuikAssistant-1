@@ -312,6 +312,24 @@ def instruments_refresh_prices():
     _save_cache(cache)
     return jsonify({'success': True, 'updated': updated, 'total': len(prices)})
 
+SETTINGS_FILE = os.path.join(os.path.dirname(__file__), '..', 'Data', 'settings.json')
+
+@api.route('/api/settings', methods=['GET'])
+def get_settings():
+    """Get current broker settings from settings.json."""
+    if os.path.exists(SETTINGS_FILE):
+        with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
+            return jsonify(json.load(f))
+    return jsonify({})
+
+@api.route('/api/settings', methods=['POST'])
+def save_settings():
+    """Save broker settings to settings.json."""
+    data = request.json
+    with open(SETTINGS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    return jsonify({'success': True})
+
 def is_bond(isin):
     """Check if ISIN is a bond (starts with RU000A or SU)."""
     return isin.startswith('RU000A') or isin.startswith('SU')

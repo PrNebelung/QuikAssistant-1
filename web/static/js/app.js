@@ -618,7 +618,107 @@ document.addEventListener('DOMContentLoaded', () => {
     loadLogDates();
     loadLogs();
 
-    // Control tab
+    // Control tab - Settings
+    const settingsForm = document.getElementById('settings-form');
+    const saveSettingsBtn = document.getElementById('save-settings-btn');
+    const settingsStatus = document.getElementById('settings-status');
+
+    const settingsConfig = [
+        { group: 'Брокер', fields: [
+            { key: 'Broker', label: 'Брокер', type: 'text' },
+            { key: 'ClientCode', label: 'Код клиента', type: 'text' },
+            { key: 'AccountCode', label: 'Код счета', type: 'text' },
+            { key: 'FirmId', label: 'FirmId', type: 'text' },
+            { key: 'BrokerEnabled', label: 'Брокер включен', type: 'checkbox' },
+        ]},
+        { group: 'Лимиты', fields: [
+            { key: 'VolumeOrderMax', label: 'Макс. объем акций', type: 'number' },
+            { key: 'BondVolumeOrderMax', label: 'Макс. объем облигаций', type: 'number' },
+            { key: 'VolumeOrderLimit', label: 'Лимит объема', type: 'number' },
+            { key: 'VolumeOrderLimitUSD', label: 'Лимит USD', type: 'number' },
+            { key: 'LimitActuationOrderEdge', label: 'Лимит edge акций %', type: 'number' },
+            { key: 'LimitActuationOrderBondEdge', label: 'Лимит edge облигаций %', type: 'number' },
+        ]},
+        { group: 'Сессии', fields: [
+            { key: 'SessionMorningEnabled', label: 'Утренняя сессия', type: 'checkbox' },
+            { key: 'SessionMainEnabled', label: 'Основная сессия', type: 'checkbox' },
+            { key: 'SessionEveningEnabled', label: 'Вечерняя сессия', type: 'checkbox' },
+        ]},
+        { group: 'Время сессий (UTC)', fields: [
+            { key: 'SessionMorningHour', label: 'Утро час', type: 'number' },
+            { key: 'SessionMorningMin', label: 'Утро мин', type: 'number' },
+            { key: 'SessionMorningSec', label: 'Утро сек', type: 'number' },
+            { key: 'SessionMainHour', label: 'Основная час', type: 'number' },
+            { key: 'SessionMainMin', label: 'Основная мин', type: 'number' },
+            { key: 'SessionMainSec', label: 'Основная сек', type: 'number' },
+            { key: 'SessionEveningHour', label: 'Вечерняя час', type: 'number' },
+            { key: 'SessionEveningMin', label: 'Вечерняя мин', type: 'number' },
+            { key: 'SessionEveningSec', label: 'Вечерняя сек', type: 'number' },
+        ]},
+    ];
+
+    function buildSettingsForm(data) {
+        settingsForm.innerHTML = settingsConfig.map(group => `
+            <div class="settings-group">
+                <h4>${group.group}</h4>
+                ${group.fields.map(f => {
+                    if (f.type === 'checkbox') {
+                        return `<div class="settings-row">
+                            <label>${f.label}</label>
+                            <input type="checkbox" data-key="${f.key}" ${data[f.key] ? 'checked' : ''}>
+                        </div>`;
+                    }
+                    return `<div class="settings-row">
+                        <label>${f.label}</label>
+                        <input type="${f.type}" data-key="${f.key}" value="${data[f.key] ?? ''}">
+                    </div>`;
+                }).join('')}
+            </div>
+        `).join('');
+    }
+
+    async function loadSettings() {
+        try {
+            const res = await fetch('/api/settings');
+            const data = await res.json();
+            buildSettingsForm(data);
+        } catch (e) {
+            console.error('Error loading settings:', e);
+        }
+    }
+
+    async function saveSettings() {
+        const data = {};
+        settingsForm.querySelectorAll('input').forEach(input => {
+            const key = input.dataset.key;
+            if (input.type === 'checkbox') {
+                data[key] = input.checked;
+            } else if (input.type === 'number') {
+                data[key] = parseFloat(input.value) || 0;
+            } else {
+                data[key] = input.value;
+            }
+        });
+        try {
+            settingsStatus.textContent = 'Сохранение...';
+            settingsStatus.style.color = '#ff9800';
+            await fetch('/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            settingsStatus.textContent = 'Настройки сохранены';
+            settingsStatus.style.color = '#4caf50';
+        } catch (e) {
+            settingsStatus.textContent = 'Ошибка сохранения';
+            settingsStatus.style.color = '#e94560';
+        }
+    }
+
+    saveSettingsBtn.addEventListener('click', saveSettings);
+    document.querySelector('[data-tab="control"]').addEventListener('click', loadSettings);
+
+    // Control tab - Price refresh
     const refreshPricesBtn = document.getElementById('refresh-prices-btn');
     const refreshPricesStatus = document.getElementById('refresh-prices-status');
     const refreshAllBtn = document.getElementById('refresh-all-btn');
