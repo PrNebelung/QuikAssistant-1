@@ -48,4 +48,9 @@ Config.SessionMorningEnabled = true
 Config.SessionMainEnabled = true
 Config.SessionEveningEnabled = true
 
+-- ==========================================
+-- Включение/выключение брокера
+-- ==========================================
+Config.BrokerEnabled = true
+
 return Config

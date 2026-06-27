@@ -9,6 +9,7 @@ local BrokerAdapter = require("BrokerAdapter")
 local Config = require("Config")
 
 require("TableSetting")
+local SettingsManager = require('SettingsManager')
 
 --- Путь к папке данных QUIK
 -- Инициализация констант из модуля Constants
@@ -29,6 +30,7 @@ function SetSettingFinam()
   Config.SessionMorningEnabled = false
   Config.SessionMainEnabled = true
   Config.SessionEveningEnabled = false
+  Config.BrokerEnabled = true
 end
 
 --- Копирует значения Config.* в глобальные переменные (Broker, ClientCode и др.) для обратной совместимости.
@@ -51,6 +53,7 @@ function _initSettingGlobals()
   SessionMorningEnabled = Config.SessionMorningEnabled
   SessionMainEnabled = Config.SessionMainEnabled
   SessionEveningEnabled = Config.SessionEveningEnabled
+  BrokerEnabled = Config.BrokerEnabled
 end
 --- Устанавливает параметры для брокера VTB: код клиента, счёт, фирма, лимиты.
 function SetSettingVTB()
@@ -65,6 +68,7 @@ function SetSettingVTB()
   Config.SessionMorningEnabled = false
   Config.SessionMainEnabled = true
   Config.SessionEveningEnabled = false
+  Config.BrokerEnabled = true
 end
 
 --- Устанавливает параметры для брокера PSB: код клиента, счёт, фирма, лимиты.
@@ -80,6 +84,7 @@ function SetSettingPSB()
   Config.VolumeOrderLimit = 120000
   Config.SessionMorningEnabled = false
   Config.SessionMainEnabled = true
+  Config.BrokerEnabled = true
   Config.SessionEveningEnabled = false
 end
 
@@ -94,6 +99,7 @@ function SetSettingRSHB()
   Config.LimitActuationOrderEdge = 0
   Config.LimitActuationOrderBondEdge = 60
   Config.SessionMorningEnabled = false
+  Config.BrokerEnabled = true
   Config.SessionMainEnabled = true
   Config.SessionEveningEnabled = false
 end
@@ -106,6 +112,7 @@ function SetSettingTest()
   Config.FirmId = ""
   Config.VolumeOrderMax = 11000
   Config.BondVolumeOrderMax = 7000
+  Config.BrokerEnabled = true
   Config.SessionMorningEnabled = false
   Config.SessionMainEnabled = true
   Config.SessionEveningEnabled = false
@@ -144,4 +151,9 @@ function SetClientSetting()
   Config.FileSellOrderEdge = Config.Broker .. "_SellOrders_Edge.csv"
 
   _initSettingGlobals()
+  local settings = SettingsManager.Load()
+  if settings then
+    SettingsManager.Apply(settings)
+    _initSettingGlobals()
+  end
 end
