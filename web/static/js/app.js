@@ -725,13 +725,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     return `<div class="settings-row">
                         <label>${f.label}</label>
-                        <input type="${f.type}" data-key="${f.key}" value="${val}">
+                        <input type="text" inputmode="numeric" data-key="${f.key}" value="${val}">
                     </div>`;
                 }).join('')}
             </div>
         `).join('');
 
-        settingsForm.querySelectorAll('input[type="number"]').forEach(input => {
+        settingsForm.querySelectorAll('input[inputmode="numeric"]').forEach(input => {
             const rawVal = input.value;
             if (rawVal) {
                 input.value = rawVal.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
@@ -776,7 +776,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 data[key + 'Hour'] = parts.hour;
                 data[key + 'Min'] = parts.min;
                 data[key + 'Sec'] = parts.sec;
-            } else if (input.type === 'number') {
+            } else if (input.type === 'number' || input.inputMode === 'numeric') {
                 data[key] = parseFloat(input.value.replace(/\s/g, '')) || 0;
             } else {
                 data[key] = input.value;
