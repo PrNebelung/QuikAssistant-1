@@ -6,8 +6,21 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             tab.classList.add('active');
             document.getElementById(tab.dataset.tab).classList.add('active');
+            localStorage.setItem('activeTab', tab.dataset.tab);
         });
     });
+
+    // Restore last active tab
+    const savedTab = localStorage.getItem('activeTab');
+    if (savedTab) {
+        const tab = document.querySelector(`.tab[data-tab="${savedTab}"]`);
+        if (tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(savedTab).classList.add('active');
+        }
+    }
     
     // Orders tab
     const ordersTable = document.querySelector('#orders-table tbody');
