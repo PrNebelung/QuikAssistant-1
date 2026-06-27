@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             tab.classList.add('active');
             document.getElementById(savedTab).classList.add('active');
+            setTimeout(() => tab.click(), 0);
         }
     }
     
