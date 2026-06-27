@@ -312,7 +312,7 @@ def instruments_refresh_prices():
     _save_cache(cache)
     return jsonify({'success': True, 'updated': updated, 'total': len(prices)})
 
-SETTINGS_FILE = os.path.join(os.path.dirname(__file__), '..', 'Data', 'settings.json')
+SETTINGS_FILE = os.path.join(os.path.dirname(__file__), '..', 'settings.json')
 
 @api.route('/api/settings', methods=['GET'])
 def get_settings():

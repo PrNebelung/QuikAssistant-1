@@ -6,7 +6,7 @@ local json = require("json")
 local Config = require("Config")
 
 local SettingsManager = {}
-local SETTINGS_FILE = getScriptPath() .. "\\Data\\settings.json"
+local SETTINGS_FILE = getScriptPath() .. "\\settings.json"
 
 local defaults = {
     clientCode = "",
