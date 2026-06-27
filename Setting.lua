@@ -1,8 +1,7 @@
---- Настройки брокеров и инициализация конфигурации.
---- Содержит функции SetSettingVTB, SetSettingPSB, SetSettingFinam и др.
---- для заполнения Config параметрами конкретного брокера.
---- Реализует автодетект брокера по USERID через BrokerRegistry.
-
+--- РњРѕРґСѓР»СЊ РЅР°СЃС‚СЂРѕРµРє Рё СѓРїСЂР°РІР»РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°РјРё РїРѕРґРєР»СЋС‡РµРЅРёСЏ.
+--- РЎРѕРґРµСЂР¶РёС‚ РЅР°Р±РѕСЂ С„СѓРЅРєС†РёР№ SetSettingVTB, SetSettingPSB, SetSettingFinam Рё РґСЂ.
+--- Р”Р»СЏ РЅР°СЃС‚СЂРѕР№РєРё Config РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ С„Р°Р№Р» settings.json.
+--- Р’СЃРµ РЅР°СЃС‚СЂРѕР№РєРё Р·Р°РіСЂСѓР¶Р°СЋС‚СЃСЏ РёР· USERID С‡РµСЂРµР· BrokerRegistry.
 
 local Constants = require("Constants")
 local BrokerAdapter = require("BrokerAdapter")
@@ -11,29 +10,16 @@ local Config = require("Config")
 require("TableSetting")
 local SettingsManager = require('SettingsManager')
 
---- Путь к папке данных QUIK
--- Инициализация констант из модуля Constants
-_initConstants()
+--- РљСЌС€: РєР°РєРѕР№ USERID СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ РєР°РєРѕРјСѓ Р±СЂРѕРєРµСЂСѓ
+BrokerUserMap = {
+  ["171783"] = "FINAM",
+  ["49653"] = "VTB",
+  ["34146"] = "PSB",
+  ["48640"] = "RSHB",
+  ["119330"] = "TEST",
+}
 
---- Настройки ордеров
-
-function SetSettingFinam()
-  Config.Broker = "FINAM"
-  Config.ClientCode = "0734A/0734A"
-  Config.AccountCode = "L01+00000F00"
-  Config.FirmId = "MC0061900000"
-  Config.VolumeOrderMax = 70000
-  Config.BondVolumeOrderMax = 100000
-  Config.LimitActuationOrderEdge = 0
-  Config.LimitActuationOrderBondEdge = 50
-  Config.VolumeOrderLimit = 120000
-  Config.SessionMorningEnabled = false
-  Config.SessionMainEnabled = true
-  Config.SessionEveningEnabled = false
-  Config.BrokerEnabled = true
-end
-
---- Копирует значения Config.* в глобальные переменные (Broker, ClientCode и др.) для обратной совместимости.
+--- РљРѕРїРёСЂРѕРІР°РЅРёРµ Р·РЅР°С‡РµРЅРёР№ Config.* РІ РіР»РѕР±Р°Р»СЊРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ
 function _initSettingGlobals()
   Broker = Config.Broker
   ClientCode = Config.ClientCode
@@ -55,105 +41,26 @@ function _initSettingGlobals()
   SessionEveningEnabled = Config.SessionEveningEnabled
   BrokerEnabled = Config.BrokerEnabled
 end
---- Устанавливает параметры для брокера VTB: код клиента, счёт, фирма, лимиты.
-function SetSettingVTB()
-  Config.Broker = "VTB"
-  Config.ClientCode = "386507"
-  Config.AccountCode = "L01-00000F00"
-  Config.FirmId = "MC0003300000"
-  Config.VolumeOrderMax = 20000
-  Config.BondVolumeOrderMax = 20000
-  Config.LimitActuationOrderEdge = 0
-  Config.LimitActuationOrderBondEdge = 30
-  Config.SessionMorningEnabled = false
-  Config.SessionMainEnabled = true
-  Config.SessionEveningEnabled = false
-  Config.BrokerEnabled = true
-end
 
---- Устанавливает параметры для брокера PSB: код клиента, счёт, фирма, лимиты.
-function SetSettingPSB()
-  Config.Broker = "PSB"
-  Config.ClientCode = "40200"
-  Config.AccountCode = "L01+00000F00"
-  Config.FirmId = "MC0038600000"
-  Config.VolumeOrderMax = 50000
-  Config.BondVolumeOrderMax = 100000
-  Config.LimitActuationOrderEdge = 0
-  Config.LimitActuationOrderBondEdge = 0
-  Config.VolumeOrderLimit = 120000
-  Config.SessionMorningEnabled = false
-  Config.SessionMainEnabled = true
-  Config.BrokerEnabled = true
-  Config.SessionEveningEnabled = false
-end
-
---- Устанавливает параметры для брокера RSHB: код клиента, счёт, фирма, лимиты.
-function SetSettingRSHB()
-  Config.Broker = "RSHB"
-  Config.ClientCode = "496082"
-  Config.AccountCode = "L01+00000F00"
-  Config.FirmId = "MC0134700000"
-  Config.VolumeOrderMax = 20000
-  Config.BondVolumeOrderMax = 20000
-  Config.LimitActuationOrderEdge = 0
-  Config.LimitActuationOrderBondEdge = 60
-  Config.SessionMorningEnabled = false
-  Config.BrokerEnabled = true
-  Config.SessionMainEnabled = true
-  Config.SessionEveningEnabled = false
-end
-
---- Устанавливает параметры для тестового брокера: код клиента, счёт, лимиты.
-function SetSettingTest()
-  Config.Broker = "TEST"
-  Config.ClientCode = "10567"
-  Config.AccountCode = "NL0011100043"
-  Config.FirmId = ""
-  Config.VolumeOrderMax = 11000
-  Config.BondVolumeOrderMax = 7000
-  Config.BrokerEnabled = true
-  Config.SessionMorningEnabled = false
-  Config.SessionMainEnabled = true
-  Config.SessionEveningEnabled = false
-end
-
---- Временные ограничения для ордеров
-BrokerRegistry = {
-  ["171783"] = SetSettingFinam,
-  ["49653"] = SetSettingVTB,
-  ["34146"] = SetSettingPSB,
-  ["48640"] = SetSettingRSHB,
-  ["119330"] = SetSettingTest,
-}
-
---- Автоматически определяет брокера по USERID, вызывает настройку, формирует имена CSV, копирует в глобалы.
+--- РћРїСЂРµРґРµР»РµРЅРёРµ Р±СЂРѕРєРµСЂР° РїРѕ USERID Рё РїСЂРёРјРµРЅРµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РёР· settings.json
 function SetClientSetting()
   if ClearSecurityInfoCache then
     ClearSecurityInfoCache()
   end
-  local userId = BrokerAdapter.GetInfoParam("USERID")
 
-  local settingFunc = BrokerRegistry[userId]
-  if settingFunc then
-    settingFunc()
+  local userId = BrokerAdapter.GetInfoParam("USERID")
+  local brokerName = BrokerUserMap[userId]
+
+  if brokerName then
+    -- Р—Р°РіСЂСѓР¶Р°РµРј РЅР°СЃС‚СЂРѕР№РєРё РёР· settings.json РґР»СЏ СЌС‚РѕРіРѕ Р±СЂРѕРєРµСЂР°
+    SettingsManager.ApplyBroker(brokerName)
   else
     Config.Broker = ""
     Config.ClientCode = ""
     Config.AccountCode = ""
     Config.VolumeOrderMax = 0
+    Config.BrokerEnabled = false
   end
-
-  Config.FileBuyOrder = Config.Broker .. "_BuyOrders.csv"
-  Config.FileSellOrder = Config.Broker .. "_SellOrders.csv"
-  Config.FileBuyOrderEdge = Config.Broker .. "_BuyOrders_Edge.csv"
-  Config.FileBuyOrderBondsEdge = Config.Broker .. "_BuyOrdersBonds_Edge.csv"
-  Config.FileSellOrderEdge = Config.Broker .. "_SellOrders_Edge.csv"
 
   _initSettingGlobals()
-  local settings = SettingsManager.Load()
-  if settings then
-    SettingsManager.Apply(settings)
-    _initSettingGlobals()
-  end
 end

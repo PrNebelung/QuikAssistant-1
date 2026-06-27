@@ -145,11 +145,14 @@
         <div id="control" class="tab-content">
             <h2>Управление</h2>
             <div class="control-card">
-                <h3>Настройки брокера</h3>
+                <h3>Настройки брокеров</h3>
                 <p>Настройки сохраняются в settings.json и применяются при следующем запуске QUIK.</p>
+                <div class="broker-tabs" id="broker-tabs"></div>
                 <div id="settings-form" class="settings-grid"></div>
                 <div class="settings-actions">
                     <button id="save-settings-btn" class="btn-control">Сохранить настройки</button>
+                    <button id="add-broker-btn" class="btn-control">Добавить брокера</button>
+                    <button id="delete-broker-btn" class="btn-control btn-danger">Удалить брокера</button>
                     <span id="settings-status" class="control-status"></span>
                 </div>
             </div>

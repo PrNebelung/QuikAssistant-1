@@ -316,15 +316,37 @@ SETTINGS_FILE = os.path.join(os.path.dirname(__file__), '..', 'Data', 'settings.
 
 @api.route('/api/settings', methods=['GET'])
 def get_settings():
-    """Get current broker settings from settings.json."""
+    """Get all broker settings from settings.json."""
     if os.path.exists(SETTINGS_FILE):
         with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
             return jsonify(json.load(f))
     return jsonify({})
 
+@api.route('/api/settings/<broker>', methods=['GET'])
+def get_broker_settings(broker):
+    """Get settings for a specific broker."""
+    if os.path.exists(SETTINGS_FILE):
+        with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
+            all_settings = json.load(f)
+        return jsonify(all_settings.get(broker, {}))
+    return jsonify({})
+
+@api.route('/api/settings/<broker>', methods=['POST'])
+def save_broker_settings(broker):
+    """Save settings for a specific broker."""
+    data = request.json
+    all_settings = {}
+    if os.path.exists(SETTINGS_FILE):
+        with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
+            all_settings = json.load(f)
+    all_settings[broker] = data
+    with open(SETTINGS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(all_settings, f, ensure_ascii=False, indent=2)
+    return jsonify({'success': True})
+
 @api.route('/api/settings', methods=['POST'])
-def save_settings():
-    """Save broker settings to settings.json."""
+def save_all_settings():
+    """Save all settings (full replace)."""
     data = request.json
     with open(SETTINGS_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)

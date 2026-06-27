@@ -620,57 +620,90 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Control tab - Settings
     const settingsForm = document.getElementById('settings-form');
+    const brokerTabs = document.getElementById('broker-tabs');
     const saveSettingsBtn = document.getElementById('save-settings-btn');
+    const addBrokerBtn = document.getElementById('add-broker-btn');
+    const deleteBrokerBtn = document.getElementById('delete-broker-btn');
     const settingsStatus = document.getElementById('settings-status');
 
-    const settingsConfig = [
+    let allSettings = {};
+    let activeBroker = '';
+
+    const settingsFields = [
         { group: 'Брокер', fields: [
-            { key: 'Broker', label: 'Брокер', type: 'text' },
-            { key: 'ClientCode', label: 'Код клиента', type: 'text' },
-            { key: 'AccountCode', label: 'Код счета', type: 'text' },
-            { key: 'FirmId', label: 'FirmId', type: 'text' },
-            { key: 'BrokerEnabled', label: 'Брокер включен', type: 'checkbox' },
+            { key: 'clientCode', label: 'Код клиента', type: 'text' },
+            { key: 'accountCode', label: 'Код счета', type: 'text' },
+            { key: 'firmId', label: 'FirmId', type: 'text' },
+            { key: 'brokerEnabled', label: 'Брокер включен', type: 'checkbox' },
         ]},
         { group: 'Лимиты', fields: [
-            { key: 'VolumeOrderMax', label: 'Макс. объем акций', type: 'number' },
-            { key: 'BondVolumeOrderMax', label: 'Макс. объем облигаций', type: 'number' },
-            { key: 'VolumeOrderLimit', label: 'Лимит объема', type: 'number' },
-            { key: 'VolumeOrderLimitUSD', label: 'Лимит USD', type: 'number' },
-            { key: 'LimitActuationOrderEdge', label: 'Лимит edge акций %', type: 'number' },
-            { key: 'LimitActuationOrderBondEdge', label: 'Лимит edge облигаций %', type: 'number' },
+            { key: 'volumeOrderMax', label: 'Макс. объем акций', type: 'number' },
+            { key: 'bondVolumeOrderMax', label: 'Макс. объем облигаций', type: 'number' },
+            { key: 'volumeOrderLimit', label: 'Лимит объема', type: 'number' },
+            { key: 'volumeOrderLimitUSD', label: 'Лимит USD', type: 'number' },
+            { key: 'limitActuationOrderEdge', label: 'Лимит edge акций %', type: 'number' },
+            { key: 'limitActuationOrderBondEdge', label: 'Лимит edge облигаций %', type: 'number' },
         ]},
         { group: 'Сессии', fields: [
-            { key: 'SessionMorningEnabled', label: 'Утренняя сессия', type: 'checkbox' },
-            { key: 'SessionMainEnabled', label: 'Основная сессия', type: 'checkbox' },
-            { key: 'SessionEveningEnabled', label: 'Вечерняя сессия', type: 'checkbox' },
+            { key: 'sessionMorningEnabled', label: 'Утренняя сессия', type: 'checkbox' },
+            { key: 'sessionMainEnabled', label: 'Основная сессия', type: 'checkbox' },
+            { key: 'sessionEveningEnabled', label: 'Вечерняя сессия', type: 'checkbox' },
         ]},
         { group: 'Время сессий (UTC)', fields: [
-            { key: 'SessionMorningHour', label: 'Утро час', type: 'number' },
-            { key: 'SessionMorningMin', label: 'Утро мин', type: 'number' },
-            { key: 'SessionMorningSec', label: 'Утро сек', type: 'number' },
-            { key: 'SessionMainHour', label: 'Основная час', type: 'number' },
-            { key: 'SessionMainMin', label: 'Основная мин', type: 'number' },
-            { key: 'SessionMainSec', label: 'Основная сек', type: 'number' },
-            { key: 'SessionEveningHour', label: 'Вечерняя час', type: 'number' },
-            { key: 'SessionEveningMin', label: 'Вечерняя мин', type: 'number' },
-            { key: 'SessionEveningSec', label: 'Вечерняя сек', type: 'number' },
+            { key: 'sessionMorningHour', label: 'Утро час', type: 'number' },
+            { key: 'sessionMorningMin', label: 'Утро мин', type: 'number' },
+            { key: 'sessionMorningSec', label: 'Утро сек', type: 'number' },
+            { key: 'sessionMainHour', label: 'Основная час', type: 'number' },
+            { key: 'sessionMainMin', label: 'Основная мин', type: 'number' },
+            { key: 'sessionMainSec', label: 'Основная сек', type: 'number' },
+            { key: 'sessionEveningHour', label: 'Вечерняя час', type: 'number' },
+            { key: 'sessionEveningMin', label: 'Вечерняя мин', type: 'number' },
+            { key: 'sessionEveningSec', label: 'Вечерняя сек', type: 'number' },
         ]},
     ];
 
-    function buildSettingsForm(data) {
-        settingsForm.innerHTML = settingsConfig.map(group => `
+    const brokerDefaults = {
+        clientCode: '', accountCode: '', firmId: '',
+        volumeOrderMax: 0, bondVolumeOrderMax: 0,
+        volumeOrderLimit: 200000, volumeOrderLimitUSD: 100,
+        limitActuationOrderEdge: 5, limitActuationOrderBondEdge: 60,
+        sessionMorningEnabled: true, sessionMainEnabled: true, sessionEveningEnabled: true,
+        brokerEnabled: true,
+        sessionMorningHour: 7, sessionMorningMin: 0, sessionMorningSec: 30,
+        sessionMainHour: 10, sessionMainMin: 0, sessionMainSec: 30,
+        sessionEveningHour: 19, sessionEveningMin: 2, sessionEveningSec: 10,
+    };
+
+    function renderBrokerTabs() {
+        const brokers = Object.keys(allSettings);
+        brokerTabs.innerHTML = brokers.map(b =>
+            `<button class="broker-tab ${b === activeBroker ? 'active' : ''}" data-broker="${b}">${b}</button>`
+        ).join('');
+        brokerTabs.querySelectorAll('.broker-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                activeBroker = btn.dataset.broker;
+                renderBrokerTabs();
+                renderSettingsForm();
+            });
+        });
+    }
+
+    function renderSettingsForm() {
+        const data = allSettings[activeBroker] || {};
+        settingsForm.innerHTML = settingsFields.map(group => `
             <div class="settings-group">
                 <h4>${group.group}</h4>
                 ${group.fields.map(f => {
+                    const val = data[f.key] !== undefined ? data[f.key] : (brokerDefaults[f.key] ?? '');
                     if (f.type === 'checkbox') {
                         return `<div class="settings-row">
                             <label>${f.label}</label>
-                            <input type="checkbox" data-key="${f.key}" ${data[f.key] ? 'checked' : ''}>
+                            <input type="checkbox" data-key="${f.key}" ${val ? 'checked' : ''}>
                         </div>`;
                     }
                     return `<div class="settings-row">
                         <label>${f.label}</label>
-                        <input type="${f.type}" data-key="${f.key}" value="${data[f.key] ?? ''}">
+                        <input type="${f.type}" data-key="${f.key}" value="${val}">
                     </div>`;
                 }).join('')}
             </div>
@@ -680,14 +713,20 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadSettings() {
         try {
             const res = await fetch('/api/settings');
-            const data = await res.json();
-            buildSettingsForm(data);
+            allSettings = await res.json();
+            const brokers = Object.keys(allSettings);
+            if (brokers.length > 0 && !activeBroker) {
+                activeBroker = brokers[0];
+            }
+            renderBrokerTabs();
+            renderSettingsForm();
         } catch (e) {
             console.error('Error loading settings:', e);
         }
     }
 
     async function saveSettings() {
+        if (!activeBroker) return;
         const data = {};
         settingsForm.querySelectorAll('input').forEach(input => {
             const key = input.dataset.key;
@@ -699,13 +738,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 data[key] = input.value;
             }
         });
+        allSettings[activeBroker] = data;
         try {
             settingsStatus.textContent = 'Сохранение...';
             settingsStatus.style.color = '#ff9800';
             await fetch('/api/settings', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify(allSettings)
             });
             settingsStatus.textContent = 'Настройки сохранены';
             settingsStatus.style.color = '#4caf50';
@@ -714,6 +754,39 @@ document.addEventListener('DOMContentLoaded', () => {
             settingsStatus.style.color = '#e94560';
         }
     }
+
+    addBrokerBtn.addEventListener('click', async () => {
+        const name = prompt('Имя нового брокера (латиница, например VTB):');
+        if (!name || name.trim() === '') return;
+        const broker = name.trim().toUpperCase();
+        if (allSettings[broker]) {
+            settingsStatus.textContent = 'Брокер уже существует';
+            settingsStatus.style.color = '#e94560';
+            return;
+        }
+        allSettings[broker] = { ...brokerDefaults };
+        activeBroker = broker;
+        await saveSettings();
+        renderBrokerTabs();
+        renderSettingsForm();
+    });
+
+    deleteBrokerBtn.addEventListener('click', async () => {
+        if (!activeBroker) return;
+        if (!confirm(`Удалить брокера ${activeBroker}?`)) return;
+        delete allSettings[activeBroker];
+        const brokers = Object.keys(allSettings);
+        activeBroker = brokers[0] || '';
+        await fetch('/api/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(allSettings)
+        });
+        renderBrokerTabs();
+        renderSettingsForm();
+        settingsStatus.textContent = 'Брокер удален';
+        settingsStatus.style.color = '#4caf50';
+    });
 
     saveSettingsBtn.addEventListener('click', saveSettings);
     document.querySelector('[data-tab="control"]').addEventListener('click', loadSettings);
