@@ -93,14 +93,6 @@ th, td {
 th {
     background: #16213e;
     font-weight: 600;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.tab-content {
-    overflow-y: auto;
-    max-height: calc(100vh - 120px);
 }
 
 tr:hover {
