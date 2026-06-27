@@ -1,0 +1,608 @@
+[
+  {
+    "time": "13:58:41",
+    "date": "27.06.2026",
+    "msg": "Переключено: GAZP",
+    "level": "info"
+  },
+  {
+    "time": "13:59:20",
+    "date": "27.06.2026",
+    "msg": "Переключено: GAZP",
+    "level": "info"
+  },
+  {
+    "time": "14:07:48",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26236RMFS8 — qty=153, price=65",
+    "level": "success"
+  },
+  {
+    "time": "14:08:24",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26224RMFS4 — qty=163, price=61",
+    "level": "success"
+  },
+  {
+    "time": "14:08:33",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26250RMFS9 — qty=119, price=84",
+    "level": "success"
+  },
+  {
+    "time": "14:08:51",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26246RMFS7 — qty=120, price=83",
+    "level": "success"
+  },
+  {
+    "time": "14:08:58",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26233RMFS5 — qty=181, price=55",
+    "level": "success"
+  },
+  {
+    "time": "14:15:08",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26250RMFS9 — qty=117, price=85",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26250RMFS9",
+      "old_qty": "119",
+      "old_price": "85"
+    }
+  },
+  {
+    "time": "14:16:55",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26250RMFS9 — qty=117, price=85",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26250RMFS9",
+      "old_qty": "119",
+      "old_price": "85"
+    }
+  },
+  {
+    "time": "14:26:17",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26233RMFS5 — qty=185, price=54",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26233RMFS5",
+      "old_qty": "181",
+      "old_price": "54"
+    }
+  },
+  {
+    "time": "14:28:35",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26235RMFS0 — qty=145, price=69",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26235RMFS0",
+      "old_qty": "146",
+      "old_price": "69"
+    }
+  },
+  {
+    "time": "14:28:48",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26224RMFS4 — qty=166, price=60",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26224RMFS4",
+      "old_qty": "163",
+      "old_price": "60"
+    }
+  },
+  {
+    "time": "14:31:30",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26236RMFS8 — qty=156, price=64",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26236RMFS8",
+      "old_qty": "153",
+      "old_price": "64"
+    }
+  },
+  {
+    "time": "14:31:43",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26232RMFS7 — qty=144, price=69",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26232RMFS7",
+      "old_qty": "142",
+      "old_price": "69"
+    }
+  },
+  {
+    "time": "14:31:53",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26226RMFS9 — qty=126, price=79",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26226RMFS9",
+      "old_qty": "125",
+      "old_price": "79"
+    }
+  },
+  {
+    "time": "14:32:00",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26237RMFS6 — qty=158, price=63",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26237RMFS6",
+      "old_qty": "156",
+      "old_price": "63"
+    }
+  },
+  {
+    "time": "14:32:09",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26219RMFS4 — qty=129, price=77",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26219RMFS4",
+      "old_qty": "128",
+      "old_price": "77"
+    }
+  },
+  {
+    "time": "14:32:20",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26212RMFS9 — qty=149, price=67",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26212RMFS9",
+      "old_qty": "146",
+      "old_price": "67"
+    }
+  },
+  {
+    "time": "14:32:32",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26207RMFS9 — qty=131, price=76",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26207RMFS9",
+      "old_qty": "129",
+      "old_price": "76"
+    }
+  },
+  {
+    "time": "14:32:40",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29007RMFS0 — qty=103, price=97",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29007RMFS0",
+      "old_qty": "102",
+      "old_price": "97"
+    }
+  },
+  {
+    "time": "14:32:49",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29009RMFS6 — qty=103, price=97",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29009RMFS6",
+      "old_qty": "102",
+      "old_price": "97"
+    }
+  },
+  {
+    "time": "14:33:00",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29010RMFS4 — qty=102, price=98",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29010RMFS4",
+      "old_qty": "101",
+      "old_price": "98"
+    }
+  },
+  {
+    "time": "14:33:11",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29013RMFS8 — qty=106, price=94",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29013RMFS8",
+      "old_qty": "105",
+      "old_price": "94"
+    }
+  },
+  {
+    "time": "14:33:17",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29015RMFS3 — qty=106, price=94",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29015RMFS3",
+      "old_qty": "105",
+      "old_price": "94"
+    }
+  },
+  {
+    "time": "14:33:26",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29016RMFS1 — qty=106, price=94",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29016RMFS1",
+      "old_qty": "105",
+      "old_price": "94"
+    }
+  },
+  {
+    "time": "14:33:31",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29017RMFS9 — qty=107, price=93",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29017RMFS9",
+      "old_qty": "106",
+      "old_price": "93"
+    }
+  },
+  {
+    "time": "14:33:48",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU26242RMFS6 — qty=149, price=67",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU26242RMFS6",
+      "old_qty": "146",
+      "old_price": "67"
+    }
+  },
+  {
+    "time": "14:34:09",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29024RMFS5 — qty=103, price=97",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29024RMFS5",
+      "old_qty": "110",
+      "old_price": "97"
+    }
+  },
+  {
+    "time": "14:34:17",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29023RMFS7 — qty=111, price=90",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29023RMFS7",
+      "old_qty": "109",
+      "old_price": "90"
+    }
+  },
+  {
+    "time": "14:34:23",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29022RMFS9 — qty=109, price=91",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29022RMFS9",
+      "old_qty": "108",
+      "old_price": "91"
+    }
+  },
+  {
+    "time": "14:34:31",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29021RMFS1 — qty=111, price=90",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29021RMFS1",
+      "old_qty": "109",
+      "old_price": "90"
+    }
+  },
+  {
+    "time": "14:34:36",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29020RMFS3 — qty=106, price=94",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29020RMFS3",
+      "old_qty": "105",
+      "old_price": "94"
+    }
+  },
+  {
+    "time": "14:34:44",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29018RMFS7 — qty=107, price=93",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29018RMFS7",
+      "old_qty": "106",
+      "old_price": "93"
+    }
+  },
+  {
+    "time": "14:39:24",
+    "date": "27.06.2026",
+    "msg": "Отменено: GAZP",
+    "level": "info",
+    "undo": null
+  },
+  {
+    "time": "14:39:53",
+    "date": "27.06.2026",
+    "msg": "Отменено: NVTK",
+    "level": "info",
+    "undo": null
+  },
+  {
+    "time": "14:40:19",
+    "date": "27.06.2026",
+    "msg": "Удалено: GAZP",
+    "level": "warn",
+    "undo": {
+      "action": "delete",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "GAZP",
+      "old_line": "ГАЗПРОМ;B;GAZP;200;50"
+    }
+  },
+  {
+    "time": "14:40:42",
+    "date": "27.06.2026",
+    "msg": "Откат: Удаление GAZP",
+    "level": "info",
+    "undo": null
+  },
+  {
+    "time": "14:43:01",
+    "date": "27.06.2026",
+    "msg": "Сохранено: SU29024RMFS5 — qty=111, price=90",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "SU29024RMFS5",
+      "old_qty": "103",
+      "old_price": "97"
+    }
+  },
+  {
+    "time": "14:45:02",
+    "date": "27.06.2026",
+    "msg": "Сохранено: FIXR — qty=1, price=0.01",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "VTB",
+      "file_type": "buy_edge",
+      "isin": "FIXR",
+      "old_qty": "1",
+      "old_price": "1"
+    }
+  },
+  {
+    "time": "15:09:00",
+    "date": "27.06.2026",
+    "msg": "Удалено: STSB",
+    "level": "warn",
+    "undo": {
+      "action": "delete",
+      "broker": "VTB",
+      "file_type": "sell",
+      "isin": "STSB",
+      "old_line": "СтаврЭнСб;S;STSB;14;7"
+    }
+  },
+  {
+    "time": "15:10:27",
+    "date": "27.06.2026",
+    "msg": "Сохранено: FEES — qty=333, price=0.03",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "FINAM",
+      "file_type": "buy",
+      "isin": "FEES",
+      "old_qty": "324",
+      "old_price": "0.03"
+    }
+  },
+  {
+    "time": "15:10:36",
+    "date": "27.06.2026",
+    "msg": "Сохранено: RTKMP — qty=333, price=30",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "FINAM",
+      "file_type": "buy",
+      "isin": "RTKMP",
+      "old_qty": "332",
+      "old_price": "30"
+    }
+  },
+  {
+    "time": "15:11:40",
+    "date": "27.06.2026",
+    "msg": "Сохранено: RTSB — qty=1, price=2",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "FINAM",
+      "file_type": "buy_edge",
+      "isin": "RTSB",
+      "old_qty": "1",
+      "old_price": "5"
+    }
+  },
+  {
+    "time": "15:11:59",
+    "date": "27.06.2026",
+    "msg": "Сохранено: RTSBP — qty=1, price=0.5",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "FINAM",
+      "file_type": "buy_edge",
+      "isin": "RTSBP",
+      "old_qty": "1",
+      "old_price": "5"
+    }
+  },
+  {
+    "time": "15:12:05",
+    "date": "27.06.2026",
+    "msg": "Сохранено: RTSB — qty=1, price=1",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "FINAM",
+      "file_type": "buy_edge",
+      "isin": "RTSB",
+      "old_qty": "1",
+      "old_price": "2"
+    }
+  },
+  {
+    "time": "15:12:25",
+    "date": "27.06.2026",
+    "msg": "Удалено: KZSB",
+    "level": "warn",
+    "undo": {
+      "action": "delete",
+      "broker": "FINAM",
+      "file_type": "buy_edge",
+      "isin": "KZSB",
+      "old_line": "Кузбассэнергосбыт ао;B;KZSB;1;0.1"
+    }
+  },
+  {
+    "time": "15:12:43",
+    "date": "27.06.2026",
+    "msg": "Сохранено: FIXR — qty=1, price=0.01",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "FINAM",
+      "file_type": "buy_edge",
+      "isin": "FIXR",
+      "old_qty": "1",
+      "old_price": "1"
+    }
+  },
+  {
+    "time": "15:13:12",
+    "date": "27.06.2026",
+    "msg": "Сохранено: TTLK — qty=1, price=0.01",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "FINAM",
+      "file_type": "buy_edge",
+      "isin": "TTLK",
+      "old_qty": "1",
+      "old_price": "1"
+    }
+  },
+  {
+    "time": "15:13:28",
+    "date": "27.06.2026",
+    "msg": "Сохранено: KUZB — qty=1, price=0.01",
+    "level": "success",
+    "undo": {
+      "action": "save",
+      "broker": "FINAM",
+      "file_type": "buy_edge",
+      "isin": "KUZB",
+      "old_qty": "1",
+      "old_price": "1"
+    }
+  }
+]

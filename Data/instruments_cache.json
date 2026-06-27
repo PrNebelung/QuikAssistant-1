@@ -1,5 +1,5 @@
 {
-  "updated": 1781549367.7290518,
+  "updated": 1782561506.9059033,
   "RU000A10DJH8": {
     "name": "ПКТ 2P1",
     "isin": "RU000A10DJH8",
@@ -63,9 +63,9 @@
     "name": "ИАДОМ 1P39",
     "isin": "RU000A107G55",
     "maturity": "2033-11-28",
-    "facevalue": 724.3,
-    "coupon": 10.06,
-    "price": 0,
+    "facevalue": 715.7,
+    "coupon": 9.62,
+    "price": 101.19,
     "lot": 1
   },
   "RU000A0JX5W4": {
@@ -439,7 +439,7 @@
     "maturity": "2028-07-03",
     "facevalue": 1000.0,
     "coupon": 16.52,
-    "price": 0,
+    "price": 113.03,
     "lot": 1
   },
   "RU000A10B4T4": {
@@ -678,7 +678,7 @@
     "maturity": "2035-08-30",
     "facevalue": 1000.0,
     "coupon": 13.03,
-    "price": 0,
+    "price": 103.2,
     "lot": 1
   },
   "RU000A10C6F7": {
@@ -1188,7 +1188,7 @@
     "maturity": "2027-11-07",
     "facevalue": 680.0,
     "coupon": 10.62,
-    "price": 0,
+    "price": 98.0,
     "lot": 1
   },
   "RU000A10BSL5": {
@@ -1871,7 +1871,7 @@
     "maturity": "2029-10-16",
     "facevalue": 1000.0,
     "coupon": 11.51,
-    "price": 0,
+    "price": 99.67,
     "lot": 1
   },
   "RU000A10B0J3": {
@@ -1926,9 +1926,9 @@
     "name": "ИАДОМ 1P22",
     "isin": "RU000A1058R2",
     "maturity": "2032-09-28",
-    "facevalue": 651.79,
-    "coupon": 8.36,
-    "price": 0,
+    "facevalue": 646.43,
+    "coupon": 8.02,
+    "price": 97.55,
     "lot": 1
   },
   "RU000A108E80": {
@@ -2133,9 +2133,9 @@
     "name": "ИАДОМ 1P32",
     "isin": "RU000A105NZ3",
     "maturity": "2032-11-28",
-    "facevalue": 675.0,
-    "coupon": 8.71,
-    "price": 0,
+    "facevalue": 667.53,
+    "coupon": 8.34,
+    "price": 97.83,
     "lot": 1
   },
   "RU000A108RP9": {
@@ -2611,7 +2611,7 @@
     "maturity": "2033-10-14",
     "facevalue": 1000.0,
     "coupon": 73.9,
-    "price": 0,
+    "price": 100.19,
     "lot": 1
   },
   "RU000A109NA8": {
@@ -3071,9 +3071,9 @@
     "name": "ТАЛК002P01",
     "isin": "RU000A10B5C7",
     "maturity": "2028-03-09",
-    "facevalue": 880.0,
-    "coupon": 13.02,
-    "price": 0,
+    "facevalue": 840.0,
+    "coupon": 12.43,
+    "price": 96.5,
     "lot": 1
   },
   "VSEH": {
@@ -3658,7 +3658,7 @@
     "maturity": "2029-09-06",
     "facevalue": 486.0,
     "coupon": 23.02,
-    "price": 0,
+    "price": 96.86,
     "lot": 1
   },
   "RU000A10E283": {
@@ -4380,7 +4380,7 @@
     "maturity": "2027-02-22",
     "facevalue": 1000.0,
     "coupon": 94.74,
-    "price": 0,
+    "price": 100.85,
     "lot": 1
   },
   "SU52005RMFS4": {
@@ -4396,9 +4396,9 @@
     "name": "sИАДОМ1P26",
     "isin": "RU000A105JF3",
     "maturity": "2032-11-28",
-    "facevalue": 693.22,
-    "coupon": 8.81,
-    "price": 0,
+    "facevalue": 688.09,
+    "coupon": 8.47,
+    "price": 97.1,
     "lot": 1
   },
   "SU26241RMFS8": {
@@ -4849,7 +4849,7 @@
     "maturity": "2030-08-05",
     "facevalue": 1000.0,
     "coupon": 88.51,
-    "price": 0,
+    "price": 100.02,
     "lot": 1
   },
   "RAGR": {
