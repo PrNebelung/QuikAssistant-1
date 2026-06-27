@@ -626,7 +626,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     min-width: 0;
 }
 
-.settings-row input[type="number"] {
+.settings-row input[type="number"],
+.settings-row input[inputmode="numeric"] {
     text-align: right;
 }
 
