@@ -458,7 +458,7 @@ def parse_trade(line, instruments=None):
             facevalue = inst.get('facevalue', 0) or 0
         qty = abs(float(parts[2]))
         price = float(parts[3])
-        if facevalue > 0:
+        if facevalue >= 100:
             value = qty * (price / 100) * facevalue * int(lot)
         else:
             value = qty * price * int(lot)
