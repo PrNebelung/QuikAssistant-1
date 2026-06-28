@@ -445,17 +445,24 @@ def stats_all():
     
     return jsonify({'brokers': all_stats, 'totals': totals})
 
-def parse_trade(line):
+def parse_trade(line, instruments=None):
     """Parse a trade line: DATETIME;TICKER;QTY;PRICE;BROKER"""
     parts = line.strip().split(';')
     if len(parts) >= 5:
+        ticker = parts[1]
+        lot = 1
+        if instruments and ticker in instruments:
+            lot = instruments[ticker].get('lot', 1) or 1
+        qty = abs(float(parts[2]))
+        price = float(parts[3])
         return {
             'datetime': parts[0],
-            'ticker': parts[1],
+            'ticker': ticker,
             'qty': float(parts[2]),
-            'price': float(parts[3]),
+            'price': price,
+            'lot': int(lot),
             'broker': parts[4],
-            'value': abs(float(parts[2])) * float(parts[3])
+            'value': qty * price * int(lot)
         }
     return None
 
@@ -490,10 +497,12 @@ def trades():
             if os.path.exists(trade_file):
                 files_to_read.append(trade_file)
     
+    instruments = get_all_instruments()
+    
     for filepath in files_to_read:
         with open(filepath, 'r', encoding='utf-8') as f:
             for line in f:
-                trade = parse_trade(line)
+                trade = parse_trade(line, instruments)
                 if trade:
                     key = (trade['datetime'], trade['ticker'], trade['qty'], trade['price'])
                     if key not in seen:
