@@ -237,14 +237,14 @@ tr:hover {
 }
 
 .actions-cell {
-    display: flex;
-    gap: 0.3rem;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    vertical-align: middle;
 }
 
-td.actions-cell {
+.actions-cell button {
+    display: inline-block;
     vertical-align: middle;
+    margin: 0 1px;
 }
 
 .actions-cell button:disabled {
