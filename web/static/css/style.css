@@ -240,13 +240,13 @@ tr:hover {
     display: flex;
     gap: 0.3rem;
     justify-content: center;
-    align-items: center;
-    padding-top: 0;
-    padding-bottom: 0;
 }
 
 td.actions-cell {
+    padding-top: 0;
+    padding-bottom: 0;
     vertical-align: middle;
+    line-height: 1;
 }
 
 .actions-cell button:disabled {
