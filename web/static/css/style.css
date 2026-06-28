@@ -45,6 +45,7 @@ nav {
 
 main {
     padding: 2rem;
+    overflow-x: auto;
 }
 
 .tab-content {
@@ -723,7 +724,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #orders-table {
     table-layout: fixed;
     width: max-content;
-    min-width: 100%;
 }
 
 #orders-table th:nth-child(1),
@@ -742,10 +742,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #orders-table td:nth-child(5) { width: 50px; text-align: right; }
 
 #orders-table th:nth-child(6),
-#orders-table td:nth-child(6) { width: 80px; }
+#orders-table td:nth-child(6) { width: 50px; }
 
 #orders-table th:nth-child(7),
-#orders-table td:nth-child(7) { width: 90px; }
+#orders-table td:nth-child(7) { width: 50px; }
 
 #orders-table th:nth-child(8),
 #orders-table td:nth-child(8) { width: 140px; text-align: right; }
