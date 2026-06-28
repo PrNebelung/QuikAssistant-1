@@ -1,4 +1,4 @@
-"""MOEX ISS API client for instrument data - loads only instruments from CSV files."""
+"""Клиент API MOEX ISS для данных инструментов - загружает только инструменты из CSV-файлов."""
 import os
 import json
 import time
@@ -24,7 +24,7 @@ def _save_cache(cache):
         json.dump(cache, f, ensure_ascii=False, indent=2)
 
 def _parse_iss_response(data):
-    """Parse MOEX ISS response into list of dicts."""
+    """Разобрать ответ MOEX ISS в список словарей."""
     columns = data.get('columns', [])
     rows = data.get('data', [])
     result = []
@@ -34,7 +34,7 @@ def _parse_iss_response(data):
     return result
 
 def get_all_isins_from_csv():
-    """Collect all ISINs/tickers from all broker CSV files."""
+    """Собрать все ISIN/тикеры из CSV-файлов всех брокеров."""
     isins = set()
     for broker in get_all_brokers():
         files = get_csv_files(broker)
@@ -45,13 +45,13 @@ def get_all_isins_from_csv():
     return isins
 
 def fetch_instrument_data(secid):
-    """Fetch data for a single instrument from MOEX."""
+    """Получить данные по одному инструменту из MOEX."""
     url = f"{BASE_URL}/securities/{secid}.json"
     try:
         resp = requests.get(url, params={'iss.meta': 'off'}, timeout=10)
         d = resp.json()
     except Exception as e:
-        print(f"  Error fetching {secid}: {e}")
+        print(f"  Ошибка получения {secid}: {e}")
         return None
     
     # Get description data
@@ -141,7 +141,7 @@ def fetch_instrument_data(secid):
     return info if info.get('name') else None
 
 def _batch_fetch_prices():
-    """Fetch current prices for all instruments in bulk from MOEX boards."""
+    """Получить текущие цены для всех инструментов пакетно с бирж MOEX."""
     prices = {}
 
     # Shares from TQBR
@@ -156,9 +156,9 @@ def _batch_fetch_prices():
             price = row.get('LAST') or row.get('PREVPRICE') or row.get('LCURRENTPRICE') or 0
             if secid and price:
                 prices[secid] = float(price)
-        print(f"  Fetched {len(prices)} share prices from TQBR")
+        print(f"  Получено {len(prices)} цен акций с TQBR")
     except Exception as e:
-        print(f"  Error fetching TQBR: {e}")
+        print(f"  Ошибка получения TQBR: {e}")
 
     # Bonds from TQCB, TQOB, TQRD, TQIB, TQIEB
     bond_boards = ['TQCB', 'TQOB', 'TQRD', 'TQIB', 'TQIEB']
@@ -177,17 +177,17 @@ def _batch_fetch_prices():
         except Exception:
             continue
 
-    print(f"  Total bulk prices: {len(prices)}")
+    print(f"  Всего пакетных цен: {len(prices)}")
     return prices
 
 
 def refresh_instruments():
-    """Refresh instrument cache - bulk fetch prices, individual fetch for metadata."""
+    """Обновить кэш инструментов - пакетная загрузка цен, индивидуальная загрузка метаданных."""
     cache = _load_cache()
     cache['updated'] = time.time()
 
     isins = get_all_isins_from_csv()
-    print(f"Found {len(isins)} instruments in CSV files")
+    print(f"Найдено {len(isins)} инструментов в CSV-файлах")
 
     # Bulk fetch all current prices
     bulk_prices = _batch_fetch_prices()
@@ -206,20 +206,20 @@ def refresh_instruments():
             continue
 
         # Need to fetch full instrument data (first time or missing metadata)
-        print(f"  [{i+1}/{len(isins)}] Fetching {isin}...", end=' ')
+        print(f"  [{i+1}/{len(isins)}] Получение {isin}...", end=' ')
         data = fetch_instrument_data(isin)
         if data:
             if bulk_price:
                 data['price'] = bulk_price
             cache[isin] = data
-            print(f"OK - {data.get('name', '')} price={data.get('price', 0)}")
+            print(f"OK - {data.get('name', '')} цена={data.get('price', 0)}")
         else:
             # Even if metadata fails, save the bulk price
             if bulk_price:
                 cache[isin] = {'name': isin, 'isin': isin, 'price': bulk_price, 'lot': 1}
-                print(f"price only: {bulk_price}")
+                print(f"только цена: {bulk_price}")
             else:
-                print("not found")
+                print("не найден")
 
         time.sleep(0.1)  # Rate limit
 
@@ -227,7 +227,7 @@ def refresh_instruments():
     return cache
 
 def get_instrument(isin_or_ticker):
-    """Get instrument data from cache. Auto-refreshes if stale."""
+    """Получить данные инструмента из кэша. Автообновление при устаревании."""
     cache = _load_cache()
 
     if time.time() - cache.get('updated', 0) > CACHE_TTL:
@@ -236,9 +236,9 @@ def get_instrument(isin_or_ticker):
     return cache.get(isin_or_ticker)
 
 def get_all_instruments():
-    """Get all cached instruments. Auto-refreshes if cache is stale."""
+    """Получить все кэшированные инструменты. Автообновление при устаревании кэша."""
     cache = _load_cache()
     if time.time() - cache.get('updated', 0) > CACHE_TTL:
-        print("Cache stale, refreshing instruments...")
+        print("Кэш устарел, обновление инструментов...")
         cache = refresh_instruments()
     return {k: v for k, v in cache.items() if k != 'updated'}

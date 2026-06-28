@@ -12,9 +12,9 @@ cache_file = os.path.join(os.path.dirname(__file__), 'instruments_cache.json')
 cache = _load_cache()
 cache_age = time.time() - cache.get('updated', 0)
 if not os.path.exists(cache_file) or cache_age > CACHE_TTL:
-    print(f"Cache missing or stale ({int(cache_age/3600)}h old). Loading instrument data from MOEX...")
+    print(f"Кэш отсутствует или устарел ({int(cache_age/3600)}ч). Загрузка данных инструментов из MOEX...")
     refresh_instruments()
-    print("Done.")
+    print("Готово.")
 
 @app.route('/')
 def index():

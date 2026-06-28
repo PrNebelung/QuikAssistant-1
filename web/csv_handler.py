@@ -5,7 +5,7 @@ from typing import List, Dict, Optional
 DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'Data')
 
 def get_csv_files(broker: str) -> Dict[str, str]:
-    """Return available CSV files for a broker."""
+    """Вернуть доступные CSV-файлы для брокера."""
     return {
         'buy': os.path.join(DATA_DIR, f'{broker}_BuyOrders.csv'),
         'buy_edge': os.path.join(DATA_DIR, f'{broker}_BuyOrders_Edge.csv'),
@@ -15,7 +15,7 @@ def get_csv_files(broker: str) -> Dict[str, str]:
     }
 
 def read_orders(filepath: str) -> List[Dict]:
-    """Read orders from CSV file, including commented lines."""
+    """Прочитать заявки из CSV-файла, включая закомментированные строки."""
     orders = []
     if not os.path.exists(filepath):
         return orders
@@ -52,7 +52,7 @@ def read_orders(filepath: str) -> List[Dict]:
     return orders
 
 def write_orders(filepath: str, orders: List[Dict]) -> bool:
-    """Write orders back to CSV file."""
+    """Записать заявки обратно в CSV-файл."""
     try:
         lines = []
         for order in orders:
@@ -62,11 +62,11 @@ def write_orders(filepath: str, orders: List[Dict]) -> bool:
             f.write('\n'.join(lines) + '\n')
         return True
     except Exception as e:
-        print(f"Error writing CSV: {e}")
+        print(f"Ошибка записи CSV: {e}")
         return False
 
 def delete_order(filepath: str, isin: str) -> bool:
-    """Delete an order by ISIN from CSV file."""
+    """Удалить заявку по ISIN из CSV-файла."""
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             lines = f.readlines()
@@ -77,11 +77,11 @@ def delete_order(filepath: str, isin: str) -> bool:
             f.writelines(new_lines)
         return True
     except Exception as e:
-        print(f"Error deleting order: {e}")
+        print(f"Ошибка удаления заявки: {e}")
         return False
 
 def get_all_brokers() -> List[str]:
-    """Get list of available brokers."""
+    """Получить список доступных брокеров."""
     brokers = set()
     for filename in os.listdir(DATA_DIR):
         if filename.endswith('_BuyOrders.csv'):

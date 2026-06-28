@@ -17,7 +17,7 @@ def orders(broker):
 
     filepath = files.get(file_type)
     if not filepath:
-        return jsonify({'error': 'Unknown file type'}), 400
+        return jsonify({'error': 'Неизвестный тип файла'}), 400
 
     orders = read_orders(filepath)
     return jsonify(orders)
@@ -30,7 +30,7 @@ def update_order(broker, isin):
 
     filepath = files.get(file_type)
     if not filepath:
-        return jsonify({'error': 'Unknown file type'}), 400
+        return jsonify({'error': 'Неизвестный тип файла'}), 400
 
     orders = read_orders(filepath)
     for order in orders:
@@ -45,13 +45,13 @@ def update_order(broker, isin):
 
 @api.route('/api/orders/<broker>/<isin>', methods=['DELETE'])
 def delete_order_endpoint(broker, isin):
-    """Delete an order by ISIN."""
+    """Удалить заявку по ISIN."""
     file_type = request.args.get('type', 'buy')
     files = get_csv_files(broker)
     
     filepath = files.get(file_type)
     if not filepath:
-        return jsonify({'error': 'Unknown file type'}), 400
+        return jsonify({'error': 'Неизвестный тип файла'}), 400
     
     if delete_order(filepath, isin):
         return jsonify({'success': True})
@@ -65,7 +65,7 @@ def toggle_order(broker, isin):
     
     filepath = files.get(file_type)
     if not filepath:
-        return jsonify({'error': 'Unknown file type'}), 400
+        return jsonify({'error': 'Неизвестный тип файла'}), 400
     
     with open(filepath, 'r', encoding='utf-8') as f:
         lines = f.readlines()
@@ -93,7 +93,7 @@ ACTION_LOG_FILE = os.path.join(os.path.dirname(__file__), 'action_log.json')
 
 @api.route('/api/actionlog', methods=['GET'])
 def get_action_log():
-    """Get action log entries."""
+    """Получить записи журнала действий."""
     if os.path.exists(ACTION_LOG_FILE):
         with open(ACTION_LOG_FILE, 'r', encoding='utf-8') as f:
             return jsonify(json.load(f))
@@ -101,7 +101,7 @@ def get_action_log():
 
 @api.route('/api/actionlog', methods=['POST'])
 def add_action_log():
-    """Add entry to action log."""
+    """Добавить запись в журнал действий."""
     entry = request.json
     entries = []
     if os.path.exists(ACTION_LOG_FILE):
@@ -121,14 +121,14 @@ def add_action_log():
 
 @api.route('/api/actionlog', methods=['DELETE'])
 def clear_action_log():
-    """Clear action log."""
+    """Очистить журнал действий."""
     with open(ACTION_LOG_FILE, 'w', encoding='utf-8') as f:
         json.dump([], f)
     return jsonify({'success': True})
 
 @api.route('/api/actionlog/undo', methods=['POST'])
 def undo_action():
-    """Undo the last action by restoring previous state."""
+    """Отменить последнее действие, восстановив предыдущее состояние."""
     data = request.json
     undo = data.get('undo')
     if not undo:
@@ -153,7 +153,7 @@ def undo_action():
                 break
         if write_orders(filepath, orders):
             return jsonify({'success': True})
-        return jsonify({'error': 'Write failed'}), 500
+        return jsonify({'error': 'Ошибка записи'}), 500
 
     elif action == 'toggle':
         with open(filepath, 'r', encoding='utf-8') as f:
@@ -195,7 +195,7 @@ from datetime import datetime
 LOG_PATTERN = re.compile(r'^(INFO|WARN|ERROR|DEBUG|TRACE)\s+(\d{2}:\d{2}:\d{2})\s+\[(\w+)\]\s+(\S+):(\d+):\s*(.*)$')
 
 def parse_log_entry(line):
-    """Parse a log line into structured data."""
+    """Разобрать строку лога в структурированные данные."""
     m = LOG_PATTERN.match(line)
     if m:
         return {
@@ -211,7 +211,7 @@ def parse_log_entry(line):
 
 @api.route('/api/logs/dates')
 def log_dates():
-    """Get available log dates for a broker."""
+    """Получить доступные даты логов для брокера."""
     broker = request.args.get('broker', 'VTB')
     log_dir = os.path.join(LOG_DIR, broker)
     
@@ -227,7 +227,7 @@ def log_dates():
 
 @api.route('/api/logs')
 def logs():
-    """Get parsed log entries with filters."""
+    """Получить разобранные записи лога с фильтрами."""
     broker = request.args.get('broker', 'VTB')
     date = request.args.get('date', '')
     level = request.args.get('level', '')
@@ -278,13 +278,13 @@ from moex_api import get_instrument, get_all_instruments, refresh_instruments
 
 @api.route('/api/instruments')
 def instruments_list():
-    """Get all cached instruments."""
+    """Получить все кэшированные инструменты."""
     instruments = get_all_instruments()
     return jsonify(instruments)
 
 @api.route('/api/instruments/<code>')
 def instrument_detail(code):
-    """Get instrument data by ticker or ISIN."""
+    """Получить данные инструмента по тикеру или ISIN."""
     data = get_instrument(code)
     if data:
         return jsonify(data)
@@ -292,13 +292,13 @@ def instrument_detail(code):
 
 @api.route('/api/instruments/refresh', methods=['POST'])
 def instruments_refresh():
-    """Refresh instrument data from MOEX."""
+    """Обновить данные инструментов из MOEX."""
     data = refresh_instruments()
     return jsonify({'success': True, 'count': len(data) - 1})
 
 @api.route('/api/instruments/refresh-prices', methods=['POST'])
 def instruments_refresh_prices():
-    """Fast refresh: update only prices from MOEX boards (no metadata fetch)."""
+    """Быстрое обновление: только цены с бирж MOEX (без метаданных)."""
     from moex_api import _batch_fetch_prices, _load_cache, _save_cache
     import time
     cache = _load_cache()
@@ -316,7 +316,7 @@ SETTINGS_FILE = os.path.join(os.path.dirname(__file__), '..', 'settings.json')
 
 @api.route('/api/settings', methods=['GET'])
 def get_settings():
-    """Get all broker settings from settings.json."""
+    """Получить все настройки брокеров из settings.json."""
     if os.path.exists(SETTINGS_FILE):
         with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
             return jsonify(json.load(f))
@@ -324,7 +324,7 @@ def get_settings():
 
 @api.route('/api/settings/<broker>', methods=['GET'])
 def get_broker_settings(broker):
-    """Get settings for a specific broker."""
+    """Получить настройки конкретного брокера."""
     if os.path.exists(SETTINGS_FILE):
         with open(SETTINGS_FILE, 'r', encoding='utf-8') as f:
             all_settings = json.load(f)
@@ -333,7 +333,7 @@ def get_broker_settings(broker):
 
 @api.route('/api/settings/<broker>', methods=['POST'])
 def save_broker_settings(broker):
-    """Save settings for a specific broker."""
+    """Сохранить настройки конкретного брокера."""
     data = request.json
     all_settings = {}
     if os.path.exists(SETTINGS_FILE):
@@ -346,19 +346,19 @@ def save_broker_settings(broker):
 
 @api.route('/api/settings', methods=['POST'])
 def save_all_settings():
-    """Save all settings (full replace)."""
+    """Сохранить все настройки (полная замена)."""
     data = request.json
     with open(SETTINGS_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     return jsonify({'success': True})
 
 def is_bond(isin):
-    """Check if ISIN is a bond (starts with RU000A or SU)."""
+    """Проверить, является ли ISIN облигацией (начинается с RU000A или SU)."""
     return isin.startswith('RU000A') or isin.startswith('SU')
 
 @api.route('/api/stats')
 def stats():
-    """Get detailed order statistics per broker."""
+    """Получить статистику по заявкам для конкретного брокера."""
     broker = request.args.get('broker', 'VTB')
     files = get_csv_files(broker)
     
@@ -401,7 +401,7 @@ def stats():
 
 @api.route('/api/stats/all')
 def stats_all():
-    """Get statistics for all brokers combined."""
+    """Получить статистику по всем брокерам."""
     brokers = get_all_brokers()
     all_stats = {}
     totals = {'total': 0, 'active': 0, 'disabled': 0, 'stocks': 0, 'bonds': 0, 'stocks_value': 0, 'bonds_value': 0}
@@ -446,7 +446,7 @@ def stats_all():
     return jsonify({'brokers': all_stats, 'totals': totals})
 
 def parse_trade(line, instruments=None):
-    """Parse a trade line: DATETIME;TICKER;QTY;PRICE;BROKER"""
+    """Разобрать строку сделки: DATETIME;TICKER;QTY;PRICE;BROKER"""
     parts = line.strip().split(';')
     if len(parts) >= 5:
         ticker = parts[1]
@@ -477,7 +477,7 @@ def parse_trade(line, instruments=None):
 
 @api.route('/api/trades')
 def trades():
-    """Get trades with filters and sorting."""
+    """Получить сделки с фильтрами и сортировкой."""
     source = request.args.get('source', 'all')
     date_from = request.args.get('date_from', '')
     date_to = request.args.get('date_to', '')
