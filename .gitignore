@@ -3,6 +3,8 @@ __pycache__/
 *.pyc
 .claude/
 
-# Generated files
+# Web: сгенерированные и временные файлы
+web/venv/
+web/__pycache__/
 web/instruments_cache.json
 web/action_log.json
