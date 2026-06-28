@@ -451,10 +451,17 @@ def parse_trade(line, instruments=None):
     if len(parts) >= 5:
         ticker = parts[1]
         lot = 1
+        facevalue = 0
         if instruments and ticker in instruments:
-            lot = instruments[ticker].get('lot', 1) or 1
+            inst = instruments[ticker]
+            lot = inst.get('lot', 1) or 1
+            facevalue = inst.get('facevalue', 0) or 0
         qty = abs(float(parts[2]))
         price = float(parts[3])
+        if facevalue > 0:
+            value = qty * (price / 100) * facevalue * int(lot)
+        else:
+            value = qty * price * int(lot)
         return {
             'datetime': parts[0],
             'ticker': ticker,
@@ -462,7 +469,7 @@ def parse_trade(line, instruments=None):
             'price': price,
             'lot': int(lot),
             'broker': parts[4],
-            'value': qty * price * int(lot)
+            'value': value
         }
     return None
 
