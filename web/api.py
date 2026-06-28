@@ -458,9 +458,9 @@ def parse_trade(line, instruments=None):
             facevalue = inst.get('facevalue', 0) or 0
         qty = abs(float(parts[2]))
         price = float(parts[3])
-        is_bond = facevalue >= 100
+        is_bond = facevalue >= 100 or ticker.startswith('SU') or ticker.startswith('RU000')
         if is_bond:
-            value = qty * (price / 100) * facevalue * int(lot)
+            value = qty * (price / 100) * (facevalue if facevalue > 0 else 1000) * int(lot)
         else:
             value = qty * price * int(lot)
         return {

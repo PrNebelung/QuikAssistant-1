@@ -692,6 +692,57 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background: #b71c1c !important;
 }
 
+#trades-table th:nth-child(1),
+#trades-table td:nth-child(1) { max-width: 140px; }
+
+#trades-table th:nth-child(2),
+#trades-table td:nth-child(2) { max-width: 180px; }
+
+#trades-table th:nth-child(3),
+#trades-table td:nth-child(3) { max-width: 80px; }
+
+#trades-table th:nth-child(4),
+#trades-table td:nth-child(4) { max-width: 50px; text-align: right; }
+
+#trades-table th:nth-child(5),
+#trades-table td:nth-child(5) { max-width: 70px; text-align: right; }
+
+#trades-table th:nth-child(6),
+#trades-table td:nth-child(6) { max-width: 80px; text-align: right; }
+
+#trades-table th:nth-child(7),
+#trades-table td:nth-child(7) { max-width: 100px; text-align: right; }
+
+#trades-table th:nth-child(8),
+#trades-table td:nth-child(8) { max-width: 70px; }
+
+#orders-table th:nth-child(1),
+#orders-table td:nth-child(1) { max-width: 200px; }
+
+#orders-table th:nth-child(2),
+#orders-table td:nth-child(2) { max-width: 90px; }
+
+#orders-table th:nth-child(3),
+#orders-table td:nth-child(3) { max-width: 130px; }
+
+#orders-table th:nth-child(4),
+#orders-table td:nth-child(4) { max-width: 70px; }
+
+#orders-table th:nth-child(5),
+#orders-table td:nth-child(5) { max-width: 50px; text-align: right; }
+
+#orders-table th:nth-child(6),
+#orders-table td:nth-child(6) { max-width: 60px; text-align: right; }
+
+#orders-table th:nth-child(7),
+#orders-table td:nth-child(7) { max-width: 80px; text-align: right; }
+
+#orders-table th:nth-child(8),
+#orders-table td:nth-child(8) { max-width: 80px; text-align: right; }
+
+#orders-table th:nth-child(9),
+#orders-table td:nth-child(9) { max-width: 100px; text-align: right; }
+
 .bond-badge {
     display: inline-block;
     padding: 0.1rem 0.35rem;
