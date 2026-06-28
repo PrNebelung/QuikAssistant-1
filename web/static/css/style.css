@@ -232,7 +232,7 @@ tr:hover {
     white-space: nowrap;
     display: flex;
     gap: 0.15rem;
-    min-width: 100px;
+    justify-content: flex-end;
 }
 
 .actions-cell button:disabled {
@@ -292,7 +292,7 @@ pre {
 }
 
 .edit-input {
-    width: 60px;
+    width: 100%;
     padding: 0.2rem 0.3rem;
     background: #0f3460;
     border: 1px solid #1a4a8a;
@@ -300,10 +300,10 @@ pre {
     border-radius: 2px;
     text-align: right;
     font-size: 0.85rem;
+    box-sizing: border-box;
 }
 
 .edit-input.num-input {
-    width: 65px;
     text-align: right;
     font-variant-numeric: tabular-nums;
 }
@@ -717,35 +717,40 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #trades-table th:nth-child(8),
 #trades-table td:nth-child(8) { max-width: 70px; }
 
+#orders-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
 #orders-table th:nth-child(1),
-#orders-table td:nth-child(1) { max-width: 160px; }
+#orders-table td:nth-child(1) { width: 14%; }
 
 #orders-table th:nth-child(2),
-#orders-table td:nth-child(2) { max-width: 80px; }
+#orders-table td:nth-child(2) { width: 7%; }
 
 #orders-table th:nth-child(3),
-#orders-table td:nth-child(3) { max-width: 120px; }
+#orders-table td:nth-child(3) { width: 11%; }
 
 #orders-table th:nth-child(4),
-#orders-table td:nth-child(4) { max-width: 70px; }
+#orders-table td:nth-child(4) { width: 8%; }
 
 #orders-table th:nth-child(5),
-#orders-table td:nth-child(5) { max-width: 45px; text-align: right; }
+#orders-table td:nth-child(5) { width: 5%; text-align: right; }
 
 #orders-table th:nth-child(6),
-#orders-table td:nth-child(6) { max-width: 70px; }
+#orders-table td:nth-child(6) { width: 9%; }
 
 #orders-table th:nth-child(7),
-#orders-table td:nth-child(7) { max-width: 80px; }
+#orders-table td:nth-child(7) { width: 10%; }
 
 #orders-table th:nth-child(8),
-#orders-table td:nth-child(8) { max-width: 100px; text-align: right; }
+#orders-table td:nth-child(8) { width: 13%; text-align: right; }
 
 #orders-table th:nth-child(9),
-#orders-table td:nth-child(9) { max-width: 80px; text-align: right; }
+#orders-table td:nth-child(9) { width: 10%; text-align: right; }
 
 #orders-table th:nth-child(10),
-#orders-table td:nth-child(10) { max-width: 110px; }
+#orders-table td:nth-child(10) { width: 13%; }
 
 .bond-badge {
     display: inline-block;
