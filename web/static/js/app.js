@@ -473,9 +473,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <table class="detail-table">
                         <thead><tr><th>Дата</th><th>Тикер</th><th>Операция</th><th>Лот</th><th>Кол-во</th><th>Цена</th><th>Сумма</th><th>Брокер</th></tr></thead>
                         <tbody>${trades.map(t => `
-                            <tr>
+                            <tr class="${t.is_bond ? 'trade-bond' : 'trade-stock'}">
                                 <td>${t.datetime}</td>
-                                <td>${t.ticker}</td>
+                                <td>${t.ticker}${t.is_bond ? ' <span class="bond-badge">ОФЗ</span>' : ''}</td>
                                 <td><span class="level-badge ${t.side === 'buy' ? 'level-INFO' : 'level-ERROR'}">${t.side === 'buy' ? 'Покупка' : 'Продажа'}</span></td>
                                 <td class="num-cell">${t.lot || 1}</td>
                                 <td class="num-cell">${fmtNum(Math.abs(t.qty))}</td>
@@ -543,9 +543,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 tradesTable.style.display = 'table';
                 
                 tradesTbody.innerHTML = data.trades.map(t => `
-                    <tr>
+                    <tr class="${t.is_bond ? 'trade-bond' : 'trade-stock'}">
                         <td>${t.datetime}</td>
-                        <td>${t.ticker}</td>
+                        <td>${t.ticker}${t.is_bond ? ' <span class="bond-badge">ОФЗ</span>' : ''}</td>
                         <td><span class="level-badge ${t.side === 'buy' ? 'level-INFO' : 'level-ERROR'}">${t.side === 'buy' ? 'Покупка' : 'Продажа'}</span></td>
                         <td class="num-cell">${t.lot || 1}</td>
                         <td class="num-cell">${fmtNum(Math.abs(t.qty))}</td>

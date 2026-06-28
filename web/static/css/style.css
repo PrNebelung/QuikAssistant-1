@@ -691,3 +691,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .btn-danger:hover {
     background: #b71c1c !important;
 }
+
+.bond-badge {
+    display: inline-block;
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    background: #ff9800;
+    color: #fff;
+    vertical-align: middle;
+    margin-left: 0.3rem;
+}
+
+.trade-bond {
+    background: rgba(255, 152, 0, 0.06);
+}
+
+.trade-bond:hover {
+    background: rgba(255, 152, 0, 0.12) !important;
+}

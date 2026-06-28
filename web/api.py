@@ -458,7 +458,8 @@ def parse_trade(line, instruments=None):
             facevalue = inst.get('facevalue', 0) or 0
         qty = abs(float(parts[2]))
         price = float(parts[3])
-        if facevalue >= 100:
+        is_bond = facevalue >= 100
+        if is_bond:
             value = qty * (price / 100) * facevalue * int(lot)
         else:
             value = qty * price * int(lot)
@@ -469,7 +470,8 @@ def parse_trade(line, instruments=None):
             'price': price,
             'lot': int(lot),
             'broker': parts[4],
-            'value': value
+            'value': value,
+            'is_bond': is_bond
         }
     return None
 
