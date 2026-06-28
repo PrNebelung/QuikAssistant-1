@@ -53,11 +53,11 @@ def fetch_instrument_data(secid):
     except Exception as e:
         print(f"  Ошибка получения {secid}: {e}")
         return None
-    
+
     # Get description data
     desc_raw = d.get('description', {})
     desc_rows = _parse_iss_response(desc_raw)
-    
+
     info = {}
     for row in desc_rows:
         key = row.get('name', '')
@@ -72,16 +72,16 @@ def fetch_instrument_data(secid):
             info['maturity'] = val
         elif key == 'COUPONVALUE':
             info['coupon'] = float(val) if val else 0
-    
+
     # Get board data to find where it trades
     boards_raw = d.get('boards', {})
     boards_rows = _parse_iss_response(boards_raw)
-    
+
     board_ids = []
     for row in boards_rows:
         if row.get('is_traded') == 1:
             board_ids.append(row.get('boardid', ''))
-    
+
     # Try to get price from boards
     price = 0
     lot = 1
@@ -94,15 +94,15 @@ def fetch_instrument_data(secid):
                 url2 = f"{BASE_URL}/engines/stock/markets/{market}/boards/{board}/securities.json"
                 resp2 = requests.get(url2, params={'iss.meta': 'off', 'limit': 5000}, timeout=10)
                 d2 = resp2.json()
-                
+
                 md_rows = _parse_iss_response(d2.get('marketdata', {}))
                 sec_rows = _parse_iss_response(d2.get('securities', {}))
-                
+
                 for sec in sec_rows:
                     if sec.get('SECID') == secid:
                         lot = sec.get('LOTSIZE', 1) or 1
                         break
-                
+
                 for md in md_rows:
                     if md.get('SECID') == secid:
                         price = md.get('LAST') or md.get('PREVPRICE') or md.get('LCURRENTPRICE') or 0
@@ -111,9 +111,9 @@ def fetch_instrument_data(secid):
 
                 if price:
                     break
-        except:
+        except Exception:
             continue
-    
+
     if not price and info.get('maturity'):
         # Try to get price from marketdata boards
         for board in ['TQCB', 'TQOB', 'TQRD', 'TQIB', 'TQIEB']:
@@ -122,22 +122,22 @@ def fetch_instrument_data(secid):
                 url2 = f"{BASE_URL}/engines/stock/markets/{market}/boards/{board}/securities.json"
                 resp2 = requests.get(url2, params={'iss.meta': 'off', 'limit': 5000}, timeout=10)
                 d2 = resp2.json()
-                
+
                 md_rows = _parse_iss_response(d2.get('marketdata', {}))
                 for md in md_rows:
                     if md.get('SECID') == secid:
                         price = md.get('LAST') or md.get('PREVPRICE') or md.get('LCURRENTPRICE') or 0
                         if price:
                             break
-                
+
                 if price:
                     break
-            except:
+            except Exception:
                 continue
-    
+
     info['price'] = float(price) if price else 0
     info['lot'] = int(lot) if lot else 1
-    
+
     return info if info.get('name') else None
 
 def _batch_fetch_prices():

@@ -1,6 +1,5 @@
 import os
-import csv
-from typing import List, Dict, Optional
+from typing import List, Dict
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), '..', 'Data')
 
@@ -19,24 +18,24 @@ def read_orders(filepath: str) -> List[Dict]:
     orders = []
     if not os.path.exists(filepath):
         return orders
-    
+
     with open(filepath, 'r', encoding='utf-8') as f:
         for line_num, line in enumerate(f, 1):
             line = line.rstrip('\n\r')
             stripped = line.strip()
             if not stripped:
                 continue
-            
+
             # Check if line is a separator
             if stripped.startswith('----'):
                 continue
-            
+
             # Check if order is disabled (commented)
             enabled = True
             if stripped.startswith('--'):
                 enabled = False
                 stripped = stripped[2:].strip()
-            
+
             parts = stripped.split(';')
             if len(parts) >= 5:
                 orders.append({
@@ -57,7 +56,7 @@ def write_orders(filepath: str, orders: List[Dict]) -> bool:
         lines = []
         for order in orders:
             lines.append(f"{order['name']};{order['side']};{order['isin']};{order['qty']};{order['price']}")
-        
+
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write('\n'.join(lines) + '\n')
         return True
@@ -70,9 +69,9 @@ def delete_order(filepath: str, isin: str) -> bool:
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             lines = f.readlines()
-        
+
         new_lines = [line for line in lines if isin not in line]
-        
+
         with open(filepath, 'w', encoding='utf-8') as f:
             f.writelines(new_lines)
         return True

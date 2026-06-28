@@ -48,11 +48,11 @@ def delete_order_endpoint(broker, isin):
     """Удалить заявку по ISIN."""
     file_type = request.args.get('type', 'buy')
     files = get_csv_files(broker)
-    
+
     filepath = files.get(file_type)
     if not filepath:
         return jsonify({'error': 'Неизвестный тип файла'}), 400
-    
+
     if delete_order(filepath, isin):
         return jsonify({'success': True})
     return jsonify({'error': 'Delete failed'}), 500
@@ -62,14 +62,14 @@ def toggle_order(broker, isin):
     data = request.json
     file_type = data.get('type', 'buy')
     files = get_csv_files(broker)
-    
+
     filepath = files.get(file_type)
     if not filepath:
         return jsonify({'error': 'Неизвестный тип файла'}), 400
-    
+
     with open(filepath, 'r', encoding='utf-8') as f:
         lines = f.readlines()
-    
+
     new_lines = []
     for line in lines:
         stripped = line.strip()
@@ -83,10 +83,10 @@ def toggle_order(broker, isin):
                 # Was enabled, disable it
                 line = '--' + clean + '\n'
         new_lines.append(line)
-    
+
     with open(filepath, 'w', encoding='utf-8') as f:
         f.writelines(new_lines)
-    
+
     return jsonify({'success': True})
 
 ACTION_LOG_FILE = os.path.join(os.path.dirname(__file__), 'action_log.json')
@@ -107,16 +107,16 @@ def add_action_log():
     if os.path.exists(ACTION_LOG_FILE):
         with open(ACTION_LOG_FILE, 'r', encoding='utf-8') as f:
             entries = json.load(f)
-    
+
     entries.append(entry)
-    
+
     # Keep last 500 entries
     if len(entries) > 500:
         entries = entries[-500:]
-    
+
     with open(ACTION_LOG_FILE, 'w', encoding='utf-8') as f:
         json.dump(entries, f, ensure_ascii=False, indent=2)
-    
+
     return jsonify({'success': True})
 
 @api.route('/api/actionlog', methods=['DELETE'])
@@ -190,7 +190,6 @@ def undo_action():
 LOG_DIR = os.path.join(os.path.dirname(__file__), '..', 'Log')
 
 import re
-from datetime import datetime
 
 LOG_PATTERN = re.compile(r'^(INFO|WARN|ERROR|DEBUG|TRACE)\s+(\d{2}:\d{2}:\d{2})\s+\[(\w+)\]\s+(\S+):(\d+):\s*(.*)$')
 
@@ -214,15 +213,15 @@ def log_dates():
     """Получить доступные даты логов для брокера."""
     broker = request.args.get('broker', 'VTB')
     log_dir = os.path.join(LOG_DIR, broker)
-    
+
     if not os.path.exists(log_dir):
         return jsonify([])
-    
+
     dates = []
     for f in glob.glob(os.path.join(log_dir, '*.log')):
         basename = os.path.basename(f).replace('.log', '')
         dates.append(basename)
-    
+
     return jsonify(sorted(dates, reverse=True))
 
 @api.route('/api/logs')
@@ -232,12 +231,12 @@ def logs():
     date = request.args.get('date', '')
     level = request.args.get('level', '')
     search = request.args.get('search', '').lower()
-    
+
     log_dir = os.path.join(LOG_DIR, broker)
-    
+
     if not os.path.exists(log_dir):
         return jsonify([])
-    
+
     if date:
         log_file = os.path.join(log_dir, f'{date}.log')
     else:
@@ -245,7 +244,7 @@ def logs():
         if not log_files:
             return jsonify([])
         log_file = log_files[0]
-    
+
     entries = []
     with open(log_file, 'r', encoding='utf-8', errors='replace') as f:
         for line in f:
@@ -253,14 +252,14 @@ def logs():
             if not line:
                 continue
             entry = parse_log_entry(line)
-            
+
             if level and entry['level'] != level:
                 continue
             if search and search not in entry['message'].lower() and search not in entry['raw'].lower():
                 continue
-            
+
             entries.append(entry)
-    
+
     return jsonify(entries)
 
 @api.route('/api/logs/list')
@@ -361,13 +360,13 @@ def stats():
     """Получить статистику по заявкам для конкретного брокера."""
     broker = request.args.get('broker', 'VTB')
     files = get_csv_files(broker)
-    
+
     result = {
         'total': 0, 'active': 0, 'disabled': 0,
         'stocks': 0, 'bonds': 0,
         'stocks_value': 0, 'bonds_value': 0
     }
-    
+
     for filepath in files.values():
         if os.path.exists(filepath):
             with open(filepath, 'r', encoding='utf-8') as f:
@@ -379,7 +378,7 @@ def stats():
                             result['disabled'] += 1
                         else:
                             result['active'] += 1
-                        
+
                         parts = line.split(';')
                         if len(parts) >= 5:
                             isin = parts[2]
@@ -387,16 +386,16 @@ def stats():
                                 qty = float(parts[3])
                                 price = float(parts[4])
                                 value = qty * price
-                            except:
+                            except Exception:
                                 value = 0
-                            
+
                             if is_bond(isin):
                                 result['bonds'] += 1
                                 result['bonds_value'] += value
                             else:
                                 result['stocks'] += 1
                                 result['stocks_value'] += value
-    
+
     return jsonify(result)
 
 @api.route('/api/stats/all')
@@ -405,11 +404,11 @@ def stats_all():
     brokers = get_all_brokers()
     all_stats = {}
     totals = {'total': 0, 'active': 0, 'disabled': 0, 'stocks': 0, 'bonds': 0, 'stocks_value': 0, 'bonds_value': 0}
-    
+
     for broker in brokers:
         files = get_csv_files(broker)
         broker_stats = {'total': 0, 'active': 0, 'disabled': 0, 'stocks': 0, 'bonds': 0, 'stocks_value': 0, 'bonds_value': 0}
-        
+
         for filepath in files.values():
             if os.path.exists(filepath):
                 with open(filepath, 'r', encoding='utf-8') as f:
@@ -421,7 +420,7 @@ def stats_all():
                                 broker_stats['disabled'] += 1
                             else:
                                 broker_stats['active'] += 1
-                            
+
                             parts = line.split(';')
                             if len(parts) >= 5:
                                 isin = parts[2]
@@ -429,20 +428,20 @@ def stats_all():
                                     qty = float(parts[3])
                                     price = float(parts[4])
                                     value = qty * price
-                                except:
+                                except Exception:
                                     value = 0
-                                
+
                                 if is_bond(isin):
                                     broker_stats['bonds'] += 1
                                     broker_stats['bonds_value'] += value
                                 else:
                                     broker_stats['stocks'] += 1
                                     broker_stats['stocks_value'] += value
-        
+
         all_stats[broker] = broker_stats
         for key in totals:
             totals[key] += broker_stats[key]
-    
+
     return jsonify({'brokers': all_stats, 'totals': totals})
 
 def parse_trade(line, instruments=None):
@@ -485,29 +484,29 @@ def trades():
     side_filter = request.args.get('side', '')
     sort_by = request.args.get('sort', 'datetime')
     sort_dir = request.args.get('dir', 'desc')
-    
+
     trades_data = []
     seen = set()  # Deduplicate
-    
+
     files_to_read = []
     if source == 'all' or source == 'mytrades':
         mytrades_file = os.path.join(DATA_DIR, 'MyTrades.csv')
         if os.path.exists(mytrades_file):
             files_to_read.append(mytrades_file)
-    
+
     if source != 'all' and source != 'mytrades':
         trade_file = os.path.join(DATA_DIR, f'trades{source}.csv')
         if os.path.exists(trade_file):
             files_to_read.append(trade_file)
-    
+
     if source == 'all':
         for broker in get_all_brokers():
             trade_file = os.path.join(DATA_DIR, f'trades{broker}.csv')
             if os.path.exists(trade_file):
                 files_to_read.append(trade_file)
-    
+
     instruments = get_all_instruments()
-    
+
     for filepath in files_to_read:
         with open(filepath, 'r', encoding='utf-8') as f:
             for line in f:
@@ -518,7 +517,7 @@ def trades():
                         seen.add(key)
                         trade['side'] = 'buy' if trade['qty'] > 0 else 'sell'
                         trades_data.append(trade)
-    
+
     # Apply filters
     if date_from:
         trades_data = [t for t in trades_data if t['datetime'][:10] >= date_from]
@@ -528,7 +527,7 @@ def trades():
         trades_data = [t for t in trades_data if ticker_filter in t['ticker'].upper()]
     if side_filter:
         trades_data = [t for t in trades_data if t['side'] == side_filter]
-    
+
     # Sort
     reverse = sort_dir == 'desc'
     if sort_by == 'value':
@@ -539,7 +538,7 @@ def trades():
         trades_data.sort(key=lambda t: t['price'], reverse=reverse)
     elif sort_by in ('datetime', 'ticker', 'side', 'broker'):
         trades_data.sort(key=lambda t: t.get(sort_by, ''), reverse=reverse)
-    
+
     # Stats
     total_trades = len(trades_data)
     total_value = sum(t['value'] for t in trades_data)
@@ -547,11 +546,11 @@ def trades():
     sells = [t for t in trades_data if t['side'] == 'sell']
     tickers = set(t['ticker'] for t in trades_data)
     dates = [t['datetime'][:10] for t in trades_data if t['datetime']]
-    
+
     # Grouping
     group_by = request.args.get('group', '')
     grouped = {}
-    
+
     if group_by == 'date':
         for t in trades_data:
             key = t['datetime'][:10]
@@ -564,12 +563,12 @@ def trades():
             else:
                 grouped[key]['sells'] += 1
             grouped[key]['tickers'].add(t['ticker'])
-        
+
         for k in grouped:
             grouped[k]['tickers'] = len(grouped[k]['tickers'])
             grouped[k]['value'] = round(grouped[k]['value'], 2)
         grouped = dict(sorted(grouped.items(), reverse=True))
-    
+
     elif group_by == 'ticker':
         for t in trades_data:
             key = t['ticker']
@@ -583,14 +582,14 @@ def trades():
             else:
                 grouped[key]['sells'] += 1
             grouped[key]['dates'].add(t['datetime'][:10])
-        
+
         for k in grouped:
             grouped[k]['value'] = round(grouped[k]['value'], 2)
             grouped[k]['first_date'] = min(grouped[k]['dates'])
             grouped[k]['last_date'] = max(grouped[k]['dates'])
             del grouped[k]['dates']
         grouped = dict(sorted(grouped.items(), key=lambda x: x[1]['value'], reverse=True))
-    
+
     return jsonify({
         'total_trades': total_trades,
         'total_value': round(total_value, 2),
