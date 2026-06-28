@@ -29,7 +29,7 @@ function BrokerAdapter.GetSecurityInfo(securityCode)
       return info
     end
   end
-  log.error("Security not found: " .. securityCode)
+  log.error("Ценная бумага не найдена: " .. securityCode)
   return nil
 end
 
@@ -50,7 +50,7 @@ end
 function BrokerAdapter.GetParamInfo(order, param)
   local value = getParamEx(order.SecurityInfo.class_code, order.SecurityInfo.code, param)
   if value == nil or value.result == "0" then
-    log.error("Parameter not found.", param, order:Print())
+    log.error("Параметр не найден.", param, order:Print())
     return "0"
   end
   return value.param_value
@@ -69,21 +69,21 @@ end
 function BrokerAdapter.SearchOrders(filterFunc, params)
   local count = BrokerAdapter.GetNumberOfOrders()
   if count <= 0 then
-    log.debug("SearchOrders: orders count=0, returning empty")
+    log.debug("SearchOrders: нет ордеров в QUIK (count=0)")
     return {}
   end
   local ok, orders = pcall(function()
     return SearchItems("orders", 0, count - 1, filterFunc, params)
   end)
   if not ok then
-    log.error("SearchOrders: SearchItems error: " .. tostring(orders) .. " (count=" .. count .. ")")
+    log.error("SearchOrders: ошибка SearchItems: " .. tostring(orders) .. " (count=" .. count .. ")")
     return {}
   end
   if orders ~= nil then
-    log.debug(string.format("SearchOrders: found %d orders (QUIK total=%d)", #orders, count))
+    log.debug(string.format("SearchOrders: найдено %d ордеров (всего в QUIK=%d)", #orders, count))
     return orders
   end
-  log.warn("SearchOrders: SearchItems returned nil (count=" .. count .. ")")
+  log.warn("SearchOrders: SearchItems вернул nil (count=" .. count .. ")")
   return {}
 end
 
