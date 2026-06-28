@@ -733,7 +733,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 #orders-table th:nth-child(1),
-#orders-table td:nth-child(1) { width: 150px; }
+#orders-table td:nth-child(1) { width: 180px; }
 
 #orders-table th:nth-child(2),
 #orders-table td:nth-child(2) { width: 80px; }
@@ -748,10 +748,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #orders-table td:nth-child(5) { width: 50px; text-align: right; }
 
 #orders-table th:nth-child(6),
-#orders-table td:nth-child(6) { width: 50px; }
+#orders-table td:nth-child(6) { width: 40px; }
 
 #orders-table th:nth-child(7),
-#orders-table td:nth-child(7) { width: 50px; }
+#orders-table td:nth-child(7) { width: 40px; }
 
 #orders-table th:nth-child(8),
 #orders-table td:nth-child(8) { width: 140px; text-align: right; }
