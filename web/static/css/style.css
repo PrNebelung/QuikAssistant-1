@@ -237,12 +237,16 @@ tr:hover {
 }
 
 .actions-cell {
-    white-space: nowrap;
     display: flex;
     gap: 0.3rem;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+td.actions-cell {
+    vertical-align: middle;
 }
 
 .actions-cell button:disabled {
