@@ -1,177 +1,196 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QuikAssistant</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/static/css/style.css" />
+  </head>
+  <body>
     <header>
-        <h1>QuikAssistant</h1>
-        <nav>
-            <button class="tab active" data-tab="orders">Заявки</button>
-            <button class="tab" data-tab="dashboard">Дашборд</button>
-            <button class="tab" data-tab="logs">Логи</button>
-            <button class="tab" data-tab="trades">Сделки</button>
-            <button class="tab" data-tab="actionlog">Лог действий</button>
-            <button class="tab" data-tab="control">Управление</button>
-        </nav>
+      <h1>QuikAssistant</h1>
+      <nav>
+        <button class="tab active" data-tab="orders">Заявки</button>
+        <button class="tab" data-tab="dashboard">Дашборд</button>
+        <button class="tab" data-tab="logs">Логи</button>
+        <button class="tab" data-tab="trades">Сделки</button>
+        <button class="tab" data-tab="actionlog">Лог действий</button>
+        <button class="tab" data-tab="control">Управление</button>
+      </nav>
     </header>
-    
+
     <main>
-        <div id="orders" class="tab-content active">
-            <div class="controls">
-                <select id="broker-select">
-                    <option value="VTB">VTB</option>
-                    <option value="FINAM">FINAM</option>
-                    <option value="PSB">PSB</option>
-                </select>
-                <select id="file-type">
-                    <option value="buy">Покупка</option>
-                    <option value="buy_edge">Покупка (Edge)</option>
-                    <option value="buy_bonds">Облигации</option>
-                    <option value="sell">Продажа</option>
-                </select>
-                <button id="refresh-btn">Обновить</button>
-            </div>
-            <table id="orders-table">
-                <thead>
-                    <tr>
-                        <th class="sortable" data-sort="name">Название</th>
-                        <th class="sortable" data-sort="maturity">Погашение</th>
-                        <th class="sortable" data-sort="isin">ISIN</th>
-                        <th class="sortable" data-sort="side">Операция</th>
-                        <th class="sortable" data-sort="lot">Лот</th>
-                        <th class="sortable" data-sort="qty">Кол-во</th>
-                        <th class="sortable" data-sort="price">Цена заявки</th>
-                        <th class="sortable" data-sort="currentPrice">Текущая цена</th>
-                        <th class="sortable" data-sort="sum">Сумма</th>
-                        <th>Действия</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+      <div id="orders" class="tab-content active">
+        <div class="controls">
+          <select id="broker-select">
+            <option value="VTB">VTB</option>
+            <option value="FINAM">FINAM</option>
+            <option value="PSB">PSB</option>
+          </select>
+          <select id="file-type">
+            <option value="buy">Покупка</option>
+            <option value="buy_edge">Покупка (Edge)</option>
+            <option value="buy_bonds">Облигации</option>
+            <option value="sell">Продажа</option>
+          </select>
+          <button id="refresh-btn">Обновить</button>
         </div>
-        
-        <div id="dashboard" class="tab-content">
-            <h2>Заявки по брокерам</h2>
-            <div id="broker-stats"></div>
+        <table id="orders-table">
+          <thead>
+            <tr>
+              <th class="sortable" data-sort="name">Название</th>
+              <th class="sortable" data-sort="maturity">Погашение</th>
+              <th class="sortable" data-sort="isin">ISIN</th>
+              <th class="sortable" data-sort="side">Операция</th>
+              <th class="sortable" data-sort="lot">Лот</th>
+              <th class="sortable" data-sort="qty">Кол-во</th>
+              <th class="sortable" data-sort="price">Цена заявки</th>
+              <th class="sortable" data-sort="currentPrice">Текущая цена</th>
+              <th class="sortable" data-sort="sum">Сумма</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="dashboard" class="tab-content">
+        <h2>Заявки по брокерам</h2>
+        <div id="broker-stats"></div>
+      </div>
+
+      <div id="trades" class="tab-content">
+        <div class="controls">
+          <select id="trade-source">
+            <option value="all">Все источники</option>
+            <option value="mytrades" selected>MyTrades.csv</option>
+            <option value="FINAM">tradesFinam.csv</option>
+            <option value="VTB">tradesVTB.csv</option>
+            <option value="PSB">tradesPSB.csv</option>
+          </select>
+          <input type="date" id="trade-date-from" placeholder="С даты" />
+          <input type="date" id="trade-date-to" placeholder="По дату" />
+          <input type="text" id="trade-ticker" placeholder="Тикер..." />
+          <select id="trade-side">
+            <option value="">Все стороны</option>
+            <option value="buy">Покупка</option>
+            <option value="sell">Продажа</option>
+          </select>
+          <select id="trade-group">
+            <option value="">Без группировки</option>
+            <option value="date">По дате</option>
+            <option value="ticker">По инструменту</option>
+          </select>
+          <button id="refresh-trades">Обновить</button>
         </div>
-        
-        <div id="trades" class="tab-content">
-            <div class="controls">
-                <select id="trade-source">
-                    <option value="all">Все источники</option>
-                    <option value="mytrades" selected>MyTrades.csv</option>
-                    <option value="FINAM">tradesFinam.csv</option>
-                    <option value="VTB">tradesVTB.csv</option>
-                    <option value="PSB">tradesPSB.csv</option>
-                </select>
-                <input type="date" id="trade-date-from" placeholder="С даты">
-                <input type="date" id="trade-date-to" placeholder="По дату">
-                <input type="text" id="trade-ticker" placeholder="Тикер...">
-                <select id="trade-side">
-                    <option value="">Все стороны</option>
-                    <option value="buy">Покупка</option>
-                    <option value="sell">Продажа</option>
-                </select>
-                <select id="trade-group">
-                    <option value="">Без группировки</option>
-                    <option value="date">По дате</option>
-                    <option value="ticker">По инструменту</option>
-                </select>
-                <button id="refresh-trades">Обновить</button>
-            </div>
-            <div id="trade-stats"></div>
-            <div id="trade-count"></div>
-            <div id="trade-grouped"></div>
-            <table id="trades-table">
-                <thead>
-                    <tr>
-                        <th class="sortable" data-sort="datetime">Дата ▾</th>
-                        <th class="sortable" data-sort="ticker">Тикер</th>
-                        <th class="sortable" data-sort="side">Операция</th>
-                        <th class="sortable" data-sort="lot">Лот</th>
-                        <th class="sortable" data-sort="qty">Кол-во</th>
-                        <th class="sortable" data-sort="price">Цена</th>
-                        <th class="sortable" data-sort="value">Сумма</th>
-                        <th class="sortable" data-sort="broker">Брокер</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <div id="trade-stats"></div>
+        <div id="trade-count"></div>
+        <div id="trade-grouped"></div>
+        <table id="trades-table">
+          <thead>
+            <tr>
+              <th class="sortable" data-sort="datetime">Дата ▾</th>
+              <th class="sortable" data-sort="ticker">Тикер</th>
+              <th class="sortable" data-sort="side">Операция</th>
+              <th class="sortable" data-sort="lot">Лот</th>
+              <th class="sortable" data-sort="qty">Кол-во</th>
+              <th class="sortable" data-sort="price">Цена</th>
+              <th class="sortable" data-sort="value">Сумма</th>
+              <th class="sortable" data-sort="broker">Брокер</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="logs" class="tab-content">
+        <div class="controls">
+          <select id="log-broker">
+            <option value="VTB">VTB</option>
+            <option value="FINAM">FINAM</option>
+            <option value="PSB">PSB</option>
+          </select>
+          <select id="log-date">
+            <option value="">Загрузка...</option>
+          </select>
+          <select id="log-level">
+            <option value="">Все уровни</option>
+            <option value="INFO">INFO</option>
+            <option value="WARN">WARN</option>
+            <option value="ERROR">ERROR</option>
+          </select>
+          <input type="text" id="log-search" placeholder="Поиск..." />
+          <button id="refresh-logs">Обновить</button>
         </div>
-        
-        <div id="logs" class="tab-content">
-            <div class="controls">
-                <select id="log-broker">
-                    <option value="VTB">VTB</option>
-                    <option value="FINAM">FINAM</option>
-                    <option value="PSB">PSB</option>
-                </select>
-                <select id="log-date">
-                    <option value="">Загрузка...</option>
-                </select>
-                <select id="log-level">
-                    <option value="">Все уровни</option>
-                    <option value="INFO">INFO</option>
-                    <option value="WARN">WARN</option>
-                    <option value="ERROR">ERROR</option>
-                </select>
-                <input type="text" id="log-search" placeholder="Поиск...">
-                <button id="refresh-logs">Обновить</button>
-            </div>
-            <table id="logs-table">
-                <thead>
-                    <tr>
-                        <th>Уровень</th>
-                        <th>Время</th>
-                        <th>Файл</th>
-                        <th>Сообщение</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <table id="logs-table">
+          <thead>
+            <tr>
+              <th>Уровень</th>
+              <th>Время</th>
+              <th>Файл</th>
+              <th>Сообщение</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="actionlog" class="tab-content">
+        <div class="controls">
+          <button id="clear-log">Очистить лог</button>
+          <button id="export-log">Экспорт</button>
         </div>
-        
-        <div id="actionlog" class="tab-content">
-            <div class="controls">
-                <button id="clear-log">Очистить лог</button>
-                <button id="export-log">Экспорт</button>
-            </div>
-            <div id="web-log-entries" class="log-container"></div>
+        <div id="web-log-entries" class="log-container"></div>
+      </div>
+
+      <div id="control" class="tab-content">
+        <h2>Управление</h2>
+        <div class="control-card">
+          <h3>Настройки брокеров</h3>
+          <p>
+            Настройки сохраняются в settings.json и применяются при следующем
+            запуске QUIK.
+          </p>
+          <div class="broker-tabs" id="broker-tabs"></div>
+          <div id="settings-form" class="settings-grid"></div>
+          <div class="settings-actions">
+            <button id="save-settings-btn" class="btn-control">
+              Сохранить настройки
+            </button>
+            <button id="add-broker-btn" class="btn-control">
+              Добавить брокера
+            </button>
+            <button id="delete-broker-btn" class="btn-control btn-danger">
+              Удалить брокера
+            </button>
+            <span id="settings-status" class="control-status"></span>
+          </div>
         </div>
-        
-        <div id="control" class="tab-content">
-            <h2>Управление</h2>
-            <div class="control-card">
-                <h3>Настройки брокеров</h3>
-                <p>Настройки сохраняются в settings.json и применяются при следующем запуске QUIK.</p>
-                <div class="broker-tabs" id="broker-tabs"></div>
-                <div id="settings-form" class="settings-grid"></div>
-                <div class="settings-actions">
-                    <button id="save-settings-btn" class="btn-control">Сохранить настройки</button>
-                    <button id="add-broker-btn" class="btn-control">Добавить брокера</button>
-                    <button id="delete-broker-btn" class="btn-control btn-danger">Удалить брокера</button>
-                    <span id="settings-status" class="control-status"></span>
-                </div>
-            </div>
-            <div class="control-card">
-                <h3>Обновление цен</h3>
-                <p>Быстрое обновление текущих цен для всех инструментов в кэше (акции + облигации) напрямую с MOEX.</p>
-                <button id="refresh-prices-btn" class="btn-control">Обновить цены</button>
-                <span id="refresh-prices-status" class="control-status"></span>
-            </div>
-            <div class="control-card">
-                <h3>Полное обновление кэша</h3>
-                <p>Полное обновление метаданных и цен всех инструментов из CSV-файлов. Медленнее, ~1-2 минуты.</p>
-                <button id="refresh-all-btn" class="btn-control">Полное обновление</button>
-                <span id="refresh-all-status" class="control-status"></span>
-            </div>
+        <div class="control-card">
+          <h3>Обновление цен</h3>
+          <p>
+            Быстрое обновление текущих цен для всех инструментов в кэше (акции +
+            облигации) напрямую с MOEX.
+          </p>
+          <button id="refresh-prices-btn" class="btn-control">
+            Обновить цены
+          </button>
+          <span id="refresh-prices-status" class="control-status"></span>
         </div>
+        <div class="control-card">
+          <h3>Полное обновление кэша</h3>
+          <p>
+            Полное обновление метаданных и цен всех инструментов из CSV-файлов.
+            Медленнее, ~1-2 минуты.
+          </p>
+          <button id="refresh-all-btn" class="btn-control">
+            Полное обновление
+          </button>
+          <span id="refresh-all-status" class="control-status"></span>
+        </div>
+      </div>
     </main>
-    
+
     <script src="/static/js/app.js"></script>
-</body>
+  </body>
 </html>
