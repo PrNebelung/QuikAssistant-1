@@ -120,12 +120,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentPrice = order.currentPrice;
                 const diff = price && currentPrice ? ((currentPrice - price) / price * 100).toFixed(1) : 0;
                 const diffClass = diff >= 0 ? 'positive' : 'negative';
+                const isBond = order.isin.startsWith('SU') || order.isin.startsWith('RU000A');
 
                 return `
-                <tr class="${order.enabled ? '' : 'disabled'}" data-raw-line="${order.raw.replace(/"/g, '&quot;')}">
+                <tr class="${order.enabled ? '' : 'disabled'} ${isBond ? 'trade-bond' : ''}" data-raw-line="${order.raw.replace(/"/g, '&quot;')}">
                     <td>${order.name}</td>
                     <td class="maturity-cell">${order.maturity || ''}</td>
-                    <td>${order.isin}</td>
+                    <td>${order.isin}${isBond ? ' <span class="bond-badge">ОБЛ</span>' : ''}</td>
                     <td>${order.side}</td>
                     <td class="lot-cell">${order.lot}</td>
                     <td><input class="edit-input num-input" type="text" inputmode="numeric" value="${order.qty}" data-field="qty" data-isin="${order.isin}" ${order.enabled ? '' : 'disabled'}></td>
@@ -475,7 +476,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tbody>${trades.map(t => `
                             <tr class="${t.is_bond ? 'trade-bond' : 'trade-stock'}">
                                 <td>${t.datetime}</td>
-                                <td>${t.ticker}${t.is_bond ? ' <span class="bond-badge">ОФЗ</span>' : ''}</td>
+                                <td>${t.ticker}${t.is_bond ? ' <span class="bond-badge">ОБЛ</span>' : ''}</td>
                                 <td><span class="level-badge ${t.side === 'buy' ? 'level-INFO' : 'level-ERROR'}">${t.side === 'buy' ? 'Покупка' : 'Продажа'}</span></td>
                                 <td class="num-cell">${t.lot || 1}</td>
                                 <td class="num-cell">${fmtNum(Math.abs(t.qty))}</td>
@@ -545,7 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tradesTbody.innerHTML = data.trades.map(t => `
                     <tr class="${t.is_bond ? 'trade-bond' : 'trade-stock'}">
                         <td>${t.datetime}</td>
-                        <td>${t.ticker}${t.is_bond ? ' <span class="bond-badge">ОФЗ</span>' : ''}</td>
+                        <td>${t.ticker}${t.is_bond ? ' <span class="bond-badge">ОБЛ</span>' : ''}</td>
                         <td><span class="level-badge ${t.side === 'buy' ? 'level-INFO' : 'level-ERROR'}">${t.side === 'buy' ? 'Покупка' : 'Продажа'}</span></td>
                         <td class="num-cell">${t.lot || 1}</td>
                         <td class="num-cell">${fmtNum(Math.abs(t.qty))}</td>
