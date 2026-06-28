@@ -45,6 +45,9 @@ nav {
 
 main {
     padding: 2rem;
+}
+
+#orders {
     overflow-x: auto;
 }
 
@@ -754,7 +757,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #orders-table td:nth-child(9) { width: 90px; text-align: right; }
 
 #orders-table th:nth-child(10),
-#orders-table td:nth-child(10) { width: 120px; }
+#orders-table td:nth-child(10) { width: 140px; }
 
 .bond-badge {
     display: inline-block;
