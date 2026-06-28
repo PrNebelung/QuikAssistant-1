@@ -241,6 +241,8 @@ tr:hover {
     display: flex;
     gap: 0.3rem;
     justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
 .actions-cell button:disabled {
