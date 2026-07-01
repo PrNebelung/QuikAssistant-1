@@ -1,15 +1,15 @@
--- Unit-ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Order
--- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: lua Tests/run_tests.lua
+-- Unit-????? ??? ?????? Order
+-- ??????: lua Tests/run_tests.lua
 
--- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UTF-8 ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ Windows
+-- ????????? UTF-8 ????? ??? ?????????? ?????? ? Windows
 os.execute("chcp 65001 >nul 2>&1")
 
 package.path = "?.lua;libs/?.lua;utils/?.lua;" .. package.path
 
--- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ QUIK API
+-- ??????? ??? QUIK API
 dofile("Tests/quik_mock.lua")
 
--- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+-- ????????????? ??????????? ???????
 dofile("Order.lua")
 require("MarketData")
 require("PositionService")
@@ -18,7 +18,7 @@ require("TransactionHandler")
 dofile("utils/TradeSave.lua")
 dofile("TableConstructor.lua")
 
--- ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ N_SetLimitOrder ï¿½ï¿½ SubmittingOrders
+-- ??? ??? N_SetLimitOrder ?? SubmittingOrders
 _G.N_SetLimitOrder = function(clientAccountCode, clientCode, classCode, secCode, operation, price, quantity)
   table.insert(tables.orders, {
     sec_code = secCode,
@@ -37,7 +37,7 @@ _G.sleep = function(ms) end
 
 dofile("SubmittingOrders.lua")
 
--- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ require("Setting")
+-- ?????????????? ???????? ????????? ??????? ????? require("Setting")
 VolumeOrderMax = 11000
 BondVolumeOrderMax = 7000
 VolumeOrderLimit = 200000
@@ -61,7 +61,7 @@ local function assert_eq(actual, expected, msg)
   else
     failed = failed + 1
     local err = string.format(
-      "FAIL: %s (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %s, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %s)",
+      "FAIL: %s (?????????: %s, ????????: %s)",
       msg or "",
       tostring(expected),
       tostring(actual)
@@ -76,7 +76,7 @@ local function assert_true(value, msg)
     passed = passed + 1
   else
     failed = failed + 1
-    local err = string.format("FAIL: %s (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: true, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %s)", msg or "", tostring(value))
+    local err = string.format("FAIL: %s (?????????: true, ????????: %s)", msg or "", tostring(value))
     table.insert(errors, err)
     print("  " .. err)
   end
@@ -87,7 +87,7 @@ local function assert_false(value, msg)
     passed = passed + 1
   else
     failed = failed + 1
-    local err = string.format("FAIL: %s (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: false, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %s)", msg or "", tostring(value))
+    local err = string.format("FAIL: %s (?????????: false, ????????: %s)", msg or "", tostring(value))
     table.insert(errors, err)
     print("  " .. err)
   end
@@ -99,72 +99,72 @@ local function test(name, func)
 end
 
 ---------------------------------------------
--- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Order
+-- ???????????? ?????? Order
 ---------------------------------------------
-print("=== ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Order ===")
+print("=== ???????????? ?????? Order ===")
 
 ClearSecurityInfoCache()
 test("SecurityCode", function()
   local order = Order:new("GAZP")
-  assert_eq(order.SecurityCode, "GAZP", "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(order.SecurityCode, "GAZP", "??? ??????")
 end)
 
 ClearSecurityInfoCache()
-test("SecurityInfo ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SecurityInfo ????????", function()
   local order = Order:new("GAZP")
   local expected = getSecurityInfo("TQBR", "GAZP")
-  assert_eq(order.SecurityInfo.name, expected.name, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.SecurityInfo.short_name, expected.short_name, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.SecurityInfo.code, "GAZP", "ï¿½ï¿½ï¿½")
+  assert_eq(order.SecurityInfo.name, expected.name, "?????? ????????")
+  assert_eq(order.SecurityInfo.short_name, expected.short_name, "??????????? ????????")
+  assert_eq(order.SecurityInfo.code, "GAZP", "???")
   assert_eq(order.SecurityInfo.isin_code, "RU0007661625", "ISIN")
-  assert_eq(order.SecurityInfo.class_code, "TQBR", "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.SecurityInfo.face_value, 5, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.SecurityInfo.face_unit, "SUR", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.SecurityInfo.scale, 2, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.SecurityInfo.min_price_step, 0.01, "ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.SecurityInfo.lot_size, 10, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(order.SecurityInfo.class_code, "TQBR", "????? ??????")
+  assert_eq(order.SecurityInfo.face_value, 5, "???????")
+  assert_eq(order.SecurityInfo.face_unit, "SUR", "??????")
+  assert_eq(order.SecurityInfo.scale, 2, "????????")
+  assert_eq(order.SecurityInfo.min_price_step, 0.01, "???. ??? ????")
+  assert_eq(order.SecurityInfo.lot_size, 10, "?????? ????")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("?? ?????????", function()
   local order = Order:new("GAZP")
-  assert_true(order:IsBond() == false, "GAZP ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(order:IsBond() == false, "GAZP ?? ?????????")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Buy ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("????????? Buy ??? ?????", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
-  assert_eq(order.Operation, "B", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.Price, 200.00, "ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.Quantity, 100, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(order.Operation, "B", "????????")
+  assert_eq(order.Price, 200.00, "????")
+  assert_eq(order.Quantity, 100, "??????????")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Sell", function()
+test("????????? Sell", function()
   local order = Order:new("GAZP")
   order:SetOperation("S", 250.00, 50)
-  assert_eq(order.Operation, "S", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.Price, 250.00, "ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.Quantity, 50, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(order.Operation, "S", "????????")
+  assert_eq(order.Price, 250.00, "????")
+  assert_eq(order.Quantity, 50, "??????????")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("??? - ??????????? ?????????", function()
   local order = Order:new("RU000A102RN7")
-  assert_eq(order.SecurityInfo.class_code, "TQOB", "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ TQOB")
-  assert_true(order:IsBond(), "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_true(order:IsOFZ(), "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½")
+  assert_eq(order.SecurityInfo.class_code, "TQOB", "????? ?????? TQOB")
+  assert_true(order:IsBond(), "?????????? ?????????")
+  assert_true(order:IsOFZ(), "?????????? ???")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("????????? - ???????", function()
   local order = Order:new("RU000A102RN7")
-  assert_eq(order.SecurityInfo.face_value, 1000.00, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(order.SecurityInfo.face_value, 1000.00, "??????? ?????????")
 end)
 
 ClearSecurityInfoCache()
-test("SPB - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SPB - ??????????? ??????", function()
   local order = Order:new("ADBE_SPB")
 end)
 
@@ -172,9 +172,9 @@ ClearSecurityInfoCache()
 test("SetOperation", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
-  assert_eq(order.Operation, "B", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ B")
+  assert_eq(order.Operation, "B", "???????? B")
   order:SetOperation("S", 250.00, 50)
-  assert_eq(order.Operation, "S", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ S")
+  assert_eq(order.Operation, "S", "???????? S")
 end)
 
 ClearSecurityInfoCache()
@@ -182,14 +182,14 @@ test("SetQuantity", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   order:SetQuantity("B", 200.00, 200)
-  assert_true(order.Quantity > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ > 0")
+  assert_true(order.Quantity > 0, "?????????? > 0")
 end)
 
 ClearSecurityInfoCache()
 test("SetPriceMin", function()
   local order = Order:new("GAZP")
   order:SetPriceMin("B")
-  assert_true(order.Price > 0, "ï¿½ï¿½ï¿½ï¿½ > 0 ï¿½ï¿½ï¿½ï¿½ï¿½ SetPriceMin")
+  assert_true(order.Price > 0, "???? > 0 ????? SetPriceMin")
 end)
 
 ClearSecurityInfoCache()
@@ -197,14 +197,14 @@ test("Clear", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   order:Clear()
-  assert_eq(order.Operation, "", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Clear")
+  assert_eq(order.Operation, "", "???????? ????? Clear")
 end)
 
 ClearSecurityInfoCache()
 test("FormatPrice", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.123, 100)
-  assert_eq(order:FormatPrice(), "200.12", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ GAZP (scale=2)")
+  assert_eq(order:FormatPrice(), "200.12", "?????? ???? GAZP (scale=2)")
 end)
 
 ClearSecurityInfoCache()
@@ -213,30 +213,30 @@ test("GetPriceRound", function()
   order:SetOperation("B", 200.123, 100)
   order:SetPriceMin("B")
   order:GetPriceRound()
-  assert_true(order.Price > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ > 0")
+  assert_true(order.Price > 0, "??????????? ???? > 0")
 end)
 
 ClearSecurityInfoCache()
 test("IsExceptionFromLimitActuation", function()
   local order = Order:new("GAZP")
-  assert_true(order:IsExceptionFromLimitActuation(), "GAZP - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(order:IsExceptionFromLimitActuation(), "GAZP - ??????????")
   local order2 = Order:new("LKOH")
-  assert_false(order2:IsExceptionFromLimitActuation(), "LKOH - ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_false(order2:IsExceptionFromLimitActuation(), "LKOH - ?? ??????????")
 end)
 
 ClearSecurityInfoCache()
-test("GetVolume ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("GetVolume ??? ?????", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
-  assert_true(order:GetVolume() > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ > 0")
+  assert_true(order:GetVolume() > 0, "????? > 0")
 end)
 
 ClearSecurityInfoCache()
 test("GetPriceInCurrency", function()
   local order = Order:new("GAZP")
-  assert_eq(order:GetPriceInCurrency(100), 100, "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(order:GetPriceInCurrency(100), 100, "???? ????? ? ??????")
   local bond = Order:new("RU000A102RN7")
-  assert_eq(bond:GetPriceInCurrency(100), 1000, "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(bond:GetPriceInCurrency(100), 1000, "???? ????????? ? ??????")
 end)
 
 ClearSecurityInfoCache()
@@ -244,10 +244,10 @@ test("IsBuy/IsSell", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   assert_true(order:IsBuy(), "IsBuy")
-  assert_false(order:IsSell(), "ï¿½ï¿½ IsSell")
+  assert_false(order:IsSell(), "?? IsSell")
   order:SetOperation("S", 250.00, 50)
   assert_true(order:IsSell(), "IsSell")
-  assert_false(order:IsBuy(), "ï¿½ï¿½ IsBuy")
+  assert_false(order:IsBuy(), "?? IsBuy")
 end)
 
 ClearSecurityInfoCache()
@@ -255,42 +255,42 @@ test("Print", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   local str = order:Print()
-  assert_true(str ~= nil and #str > 0, "Print ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(str ~= nil and #str > 0, "Print ?????????? ??????")
 end)
 
 ---------------------------------------------
--- Edge Cases ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
+-- Edge Cases ? ?????????????? ?????
 ---------------------------------------------
-print("\n=== Edge Cases ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ===")
+print("\n=== Edge Cases ? ?????????????? ????? ===")
 
 ClearSecurityInfoCache()
-test("Order:new ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("Order:new ? ?????????????? ???????", function()
   local order = Order:new("ZZZZZ")
-  assert_true(order == nil, "nil ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(order == nil, "nil ??? ?????????????? ??????")
 end)
 
 ClearSecurityInfoCache()
-test("SetOperation ï¿½ price = 0", function()
+test("SetOperation ? price = 0", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 0, 100)
   assert_true(order.Price > 0, "price becomes min_price_step")
 end)
 
 ClearSecurityInfoCache()
-test("SetQuantity ï¿½ nil ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SetQuantity ? nil ???????????", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   order:SetQuantity("B", nil, 200)
-  assert_true(order.Quantity >= 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ >= 0")
+  assert_true(order.Quantity >= 0, "?????????? >= 0")
   order:SetQuantity("B", 200.00, nil)
-  assert_true(order.Quantity >= 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ >= 0 ï¿½ï¿½ï¿½ nil quantityMax")
+  assert_true(order.Quantity >= 0, "?????????? >= 0 ??? nil quantityMax")
 end)
 
 ClearSecurityInfoCache()
-test("SetQuantity ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SetQuantity ??? ???????", function()
   local order = Order:new("RU000A102RN7")
   order:SetOperation("B", 95.00, 1)
-  assert_true(order.Quantity > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ > 0 ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(order.Quantity > 0, "????? > 0 ??? ???????")
 end)
 
 ClearSecurityInfoCache()
@@ -299,150 +299,150 @@ test("GetPriceRound edge cases", function()
   order:SetOperation("B", 200.123, 100)
   order:SetPriceMin("B")
   order:GetPriceRound()
-  assert_true(order.Price > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ > 0")
+  assert_true(order.Price > 0, "??????????? ???? > 0")
 end)
 
 ClearSecurityInfoCache()
 test("GetVolume edge cases", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 0, 100)
-  assert_true(order:GetVolume() > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(order:GetVolume() > 0, "????? ??? ??????? ?????")
   order:Clear()
   order:SetOperation("B", 200.00, 0)
-  assert_true(order:GetVolume() >= 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(order:GetVolume() >= 0, "????? ??? ???????? ??????????")
 end)
 
 ClearSecurityInfoCache()
 test("FormatPrice edge cases", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 0, 100)
-  assert_eq(order:FormatPrice(), "0.01", "ï¿½ï¿½ï¿½ï¿½ = min_price_step")
+  assert_eq(order:FormatPrice(), "0.01", "???? = min_price_step")
 end)
 
 ClearSecurityInfoCache()
 test("FormatQuantity edge cases", function()
   local order = Order:new("GAZP")
-  assert_eq(order:FormatQuantity(0), "0", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ = 0")
-  assert_eq(order:FormatQuantity(4), "0.0000", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ = 1 ï¿½ï¿½ï¿½ scale 4")
+  assert_eq(order:FormatQuantity(0), "0", "?????????? = 0")
+  assert_eq(order:FormatQuantity(4), "0.0000", "?????????? = 1 ??? scale 4")
 end)
 
 ClearSecurityInfoCache()
-test("Clear ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("Clear ????????? ??????????", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   order:Clear()
-  assert_eq(order.SecurityInfo.code, "GAZP", "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Clear")
+  assert_eq(order.SecurityInfo.code, "GAZP", "??? ?????? ????? Clear")
 end)
 
 ClearSecurityInfoCache()
-test("IsBuy/IsSell ï¿½ï¿½ï¿½ nil ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("IsBuy/IsSell ??? nil ????????", function()
   local order = Order:new("GAZP")
-  assert_false(order:IsBuy(), "IsBuy ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_false(order:IsBuy(), "IsBuy ??? ?????? ????????")
 end)
 
 ---------------------------------------------
--- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ edge cases
+-- ?????????????? edge cases
 ---------------------------------------------
-print("\n=== ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ edge cases ===")
+print("\n=== ?????????????? edge cases ===")
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ GAZP", function()
+test("??????????? ??????? GAZP", function()
   local order1 = Order:new("GAZP")
   local order2 = Order:new("GAZP")
-  assert_eq(order1.SecurityCode, order2.SecurityCode, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½")
+  assert_eq(order1.SecurityCode, order2.SecurityCode, "?????????? ???")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("???????????????? ???????? - ?????", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
-  assert_true(order:IsBuy(), "Buy ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(order:IsBuy(), "Buy ??????????")
   order:SetOperation("S", 250.00, 50)
-  assert_true(order:IsSell(), "Sell ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(order:IsSell(), "Sell ??????????")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("???????? ????? ???????? - ??????", function()
   local order = Order:new("GAZP")
-  assert_eq(order.Operation, "", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.Quantity, 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(order.Price, 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(order.Operation, "", "?????? ????????")
+  assert_eq(order.Quantity, 0, "??????? ??????????")
+  assert_eq(order.Price, 0, "??????? ????")
 end)
 
 ClearSecurityInfoCache()
-test("SPB ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SPB ????? ?????? ?????????", function()
   local order = Order:new("ADBE_SPB")
-  assert_eq(order.SecurityInfo.class_code, "SPBXM", "ï¿½ï¿½ï¿½ï¿½ï¿½ SPBXM")
+  assert_eq(order.SecurityInfo.class_code, "SPBXM", "????? SPBXM")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ = 0.01 * 100 * 10", function()
+test("????? = 0.01 * 100 * 10", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 0, 100)
-  assert_eq(order:GetVolume(), 10, "ï¿½ï¿½ï¿½ï¿½ï¿½ = 0.01 * 100 * 10 = 10")
+  assert_eq(order:GetVolume(), 10, "????? = 0.01 * 100 * 10 = 10")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ GAZP", function()
+test("?????????????? ???? GAZP", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.123, 100)
-  assert_eq(order:FormatPrice(), "200.12", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(order:FormatPrice(), "200.12", "?????? ????")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("?????????????? ??????????", function()
   local order = Order:new("GAZP")
-  assert_eq(order:FormatQuantity(4), "0.0000", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(order:FormatQuantity(4), "0.0000", "?????? ??????????")
 end)
 
 ClearSecurityInfoCache()
-test("Print ï¿½ SetPriceMin", function()
+test("Print ? SetPriceMin", function()
   local order = Order:new("GAZP")
   order:SetPriceMin("B")
   local str = order:Print()
-  assert_true(str ~= nil and #str > 0, "Print ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(str ~= nil and #str > 0, "Print ????????")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½", function()
+test("?????? ?????????? ????????? - ???", function()
   local order = Order:new("RU000A102RN7")
-  assert_true(order:IsBond(), "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_true(order:IsOFZ(), "ï¿½ï¿½ï¿½")
-  assert_eq(order.SecurityInfo.face_value, 1000.00, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(order:IsBond(), "?????????")
+  assert_true(order:IsOFZ(), "???")
+  assert_eq(order.SecurityInfo.face_value, 1000.00, "???????")
 end)
 
 ClearSecurityInfoCache()
-test("IsExceptionFromLimitActuation - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("IsExceptionFromLimitActuation - ?????? ?????", function()
   local order = Order:new("GAZP")
-  assert_true(order:IsExceptionFromLimitActuation(), "GAZP - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(order:IsExceptionFromLimitActuation(), "GAZP - ??????????")
 end)
 
 ClearSecurityInfoCache()
-test("GetPriceRound - ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½", function()
+test("GetPriceRound - ???? ?????? ????", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   order:SetPriceMin("B")
   order:GetPriceRound()
-  assert_true(order.Price > 0, "ï¿½ï¿½ï¿½ï¿½ = n * step ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(order.Price > 0, "???? = n * step ????? ??????????")
 end)
 
 ClearSecurityInfoCache()
-test("GetVolume - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ edge cases", function()
+test("GetVolume - ?????????????? edge cases", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 1)
-  assert_true(order:GetVolume() > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1")
+  assert_true(order:GetVolume() > 0, "????? ??? ?????????? 1")
 end)
 
 ClearSecurityInfoCache()
-test("SetQuantity - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SetQuantity - ?????????? ??????????", function()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   order:SetQuantity("B", 200.00, 200)
-  assert_true(order.Quantity > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ > 0")
+  assert_true(order.Quantity > 0, "?????????? > 0")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("????????????? ??????", function()
   local order = Order:new("GAZP")
   assert_eq(order:FormatQuantity(4), "0.0000", "FormatQuantity")
   local order2 = Order:new("GAZP")
@@ -451,30 +451,30 @@ test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("???????????? ????????? ??????", function()
   local order = Order:new("GAZP")
-  assert_true(order.SecurityInfo ~= nil, "SecurityInfo ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(order.SecurityInfo ~= nil, "SecurityInfo ??????????")
 end)
 
 ---------------------------------------------
--- TransactionHandler / OrderValidator ï¿½ï¿½ï¿½ï¿½ï¿½
+-- TransactionHandler / OrderValidator ?????
 ---------------------------------------------
-print("\n=== TransactionHandler / OrderValidator ï¿½ï¿½ï¿½ï¿½ï¿½ ===")
+print("\n=== TransactionHandler / OrderValidator ????? ===")
 
 test("GetOperation, IsOrderExecuted, FindOrder", function()
   assert_eq(GetOperation(FLAG_ACTIVE | FLAG_SELL), "S", "GetOperation sell")
   assert_eq(GetOperation(FLAG_ACTIVE), "B", "GetOperation buy")
-  assert_false(IsOrderExecuted(FLAG_EXECUTED), "IsOrderExecuted ï¿½ï¿½ï¿½ executed")
-  assert_false(IsOrderExecuted(FLAG_ACTIVE), "IsOrderExecuted ï¿½ï¿½ï¿½ active")
+  assert_false(IsOrderExecuted(FLAG_EXECUTED), "IsOrderExecuted ??? executed")
+  assert_false(IsOrderExecuted(FLAG_ACTIVE), "IsOrderExecuted ??? active")
 end)
 
-test("TradeSave - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("TradeSave - ?????????? ??????", function()
   assert_true((FLAG_EXECUTED & FLAG_EXECUTED) > 0, "FLAG_EXECUTED")
   assert_true((FLAG_ACTIVE & FLAG_ACTIVE) > 0, "FLAG_ACTIVE")
   assert_true((FLAG_SELL & FLAG_SELL) > 0, "FLAG_SELL")
 end)
 
-test("TableConstructor ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("TableConstructor ????????", function()
   assert_eq(comma_value(1000), "1 000", "comma_value")
   assert_eq(round(1.5), 2, "round")
 end)
@@ -488,27 +488,27 @@ end)
 test("GetOrderVolumeMax", function()
   local order = Order:new("GAZP")
   local vol = GetOrderVolumeMax(order, 200)
-  assert_true(vol > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ > 0")
+  assert_true(vol > 0, "????? > 0")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("?????????? - ?????", function()
   local order = Order:new("RU000A102RN7")
   local vol = GetOrderVolumeMax(order, 90)
-  assert_true(vol > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ > 0")
+  assert_true(vol > 0, "????? > 0")
 end)
 
 ClearSecurityInfoCache()
-test("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("???????????? ?????????? - ?????", function()
   local order = Order:new("ADBE_SPB")
   local vol = GetOrderVolumeMax(order, 400)
-  assert_true(vol > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ > 0")
+  assert_true(vol > 0, "????? > 0")
 end)
 
 ---------------------------------------------
--- SubmitingOrders ï¿½ï¿½ï¿½ï¿½ï¿½
+-- SubmitingOrders ?????
 ---------------------------------------------
-print("\n=== SubmitingOrders ï¿½ï¿½ï¿½ï¿½ï¿½ ===")
+print("\n=== SubmitingOrders ????? ===")
 
 local function resetSendOrders()
   sendOrders = {}
@@ -527,75 +527,75 @@ test("GetDedupKey", function()
 end)
 
 ClearSecurityInfoCache()
-test("IsSendOrder - ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("IsSendOrder - ?? ?????????", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
-  assert_eq(IsSendOrder(order), false, "ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(IsSendOrder(order), false, "??? ? ?????? ????????????")
 end)
 
 ClearSecurityInfoCache()
-test("IsSendOrder - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("IsSendOrder - ?????????", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   sendOrdersSet[order:GetDedupKey()] = true
-  assert_eq(IsSendOrder(order), true, "ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(IsSendOrder(order), true, "???? ? ?????? ????????????")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SubmitOrders - ?????????? ???????? ??????", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.sent, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(stats.rejected, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(stats.duplicate, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(stats.sent, 1, "1 ????? ?????????")
+  assert_eq(stats.rejected, 0, "0 ?????????")
+  assert_eq(stats.duplicate, 0, "0 ??????????")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ IsSendOrder", function()
+test("SubmitOrders - ???????? ?? IsSendOrder", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   SubmitOrders({ order })
   local stats = SubmitOrders({ order })
-  assert_eq(stats.sent, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(stats.duplicate, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(stats.sent, 0, "0 ??????? ??????????")
+  assert_eq(stats.duplicate, 1, "1 ????????")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ IsOrderExists", function()
+test("SubmitOrders - ???????? ?? IsOrderExists", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   addTestOrder("GAZP", "TQBR", FLAG_ACTIVE, 1, 100, 200.00, 100, 0)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.sent, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ ï¿½ QUIK")
-  assert_eq(stats.duplicate, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(stats.sent, 0, "0 ?????????? - ???? ? QUIK")
+  assert_eq(stats.duplicate, 1, "1 ????????")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: QUIK > sendOrders", function()
+test("SubmitOrders - ?????????: QUIK > sendOrders", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   addTestOrder("GAZP", "TQBR", FLAG_ACTIVE, 1, 100, 200.00, 100, 0)
   sendOrdersSet[order:GetDedupKey()] = true
   local stats = SubmitOrders({ order })
-  assert_eq(stats.duplicate, 1, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(stats.sent, 0, "ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(stats.duplicate, 1, "???????? ????????? ??????")
+  assert_eq(stats.sent, 0, "?? ??????????")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ CheckOrder", function()
+test("SubmitOrders - ???????? CheckOrder", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 0, 0)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.rejected, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(stats.sent, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(stats.rejected, 1, "1 ?????????")
+  assert_eq(stats.sent, 0, "0 ??????????")
 end)
 
 ClearSecurityInfoCache()
@@ -624,19 +624,19 @@ test("CheckOrder - UseFileParams + price below PRICEMIN", function()
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SubmitOrders - ???????? ??????", function()
   resetSendOrders()
   local order1 = Order:new("GAZP")
   order1:SetOperation("B", 200.00, 100)
   local order2 = Order:new("LKOH")
   order2:SetOperation("B", 5000.00, 10)
   local stats = SubmitOrders({ order1, order2 })
-  assert_eq(stats.sent, 2, "2 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(stats.rejected, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(stats.sent, 2, "2 ?????? ??????????")
+  assert_eq(stats.rejected, 0, "0 ?????????")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SubmitOrders - ????????? ??????", function()
   resetSendOrders()
   local order1 = Order:new("GAZP")
   order1:SetOperation("B", 200.00, 100)
@@ -645,23 +645,23 @@ test("SubmitOrders - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
   local order3 = Order:new("LKOH")
   order3:SetOperation("B", 0, 0)
   local stats = SubmitOrders({ order1, order2, order3 })
-  assert_eq(stats.sent, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(stats.rejected, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(stats.duplicate, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(stats.sent, 1, "1 ??????????")
+  assert_eq(stats.rejected, 1, "1 ?????????")
+  assert_eq(stats.duplicate, 1, "1 ????????")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - sendOrdersSet ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SubmitOrders - sendOrdersSet ????????", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("B", 200.00, 100)
   SubmitOrders({ order })
-  assert_eq(sendOrdersSet[order:GetDedupKey()], true, "ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(#sendOrders, 1, "1 ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ sendOrders")
+  assert_eq(sendOrdersSet[order:GetDedupKey()], true, "???? ? ??????")
+  assert_eq(#sendOrders, 1, "1 ? ??????? sendOrders")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SubmitOrders - ?????? ??????", function()
   resetSendOrders()
   local savedGetParamEx = getParamEx
   getParamEx = function(class_code, sec_code, param)
@@ -679,34 +679,34 @@ test("SubmitOrders - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
   local order = Order:new("RU000A102RN7")
   order:SetOperation("B", 95.00, 1)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.sent, 1, "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(stats.sent, 1, "????? ????????? ?????????")
   getParamEx = savedGetParamEx
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SubmitOrders - ??? ? ??????????", function()
   resetSendOrders()
   addTestPosition("GAZP", 50, 250.00)
   local order = Order:new("GAZP")
   order:SetOperation("S", 200.00, 10)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.sent, 1, "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½")
+  assert_eq(stats.sent, 1, "????? ????????? ???? ???")
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SubmitOrders - ?????? ??? ??????????????? ??????", function()
   resetSendOrders()
   local order = Order:new("GAZP")
   order:SetOperation("S", 200.00, 10)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.rejected, 1, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(stats.sent, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(stats.rejected, 1, "????????? - ??? ??????")
+  assert_eq(stats.sent, 0, "0 ??????????")
 end)
 
 ---------------------------------------------
--- LoadOrdersFromFile ï¿½ï¿½ï¿½ï¿½ï¿½
+-- LoadOrdersFromFile ?????
 ---------------------------------------------
-print("\n=== LoadOrdersFromFile ï¿½ï¿½ï¿½ï¿½ï¿½ ===")
+print("\n=== LoadOrdersFromFile ????? ===")
 
 local originalGetFromCSV = getFromCSV
 
@@ -721,88 +721,88 @@ local function restoreCSV()
 end
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ buy ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - ??????? buy ????", function()
   mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(orders[1].SecurityCode, "GAZP", "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(orders[1].Operation, "B", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(orders[1].Quantity, 100, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(orders[1].Price, 200.00, "ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 ????? ????????")
+  assert_eq(orders[1].SecurityCode, "GAZP", "??? ??????")
+  assert_eq(orders[1].Operation, "B", "????????")
+  assert_eq(orders[1].Quantity, 100, "??????????")
+  assert_eq(orders[1].Price, 200.00, "????")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - multiple ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - multiple ???????", function()
   mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" }, { "Lukoil", "B", "LKOH", "10", "7000.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 2, "2 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 2, "2 ?????? ?????????")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - ?????????", function()
   mockCSV({
     { "-- header", "B", "GAZP", "100", "200.00" },
     { "Gazprom", "B", "GAZP", "100", "200.00" },
     { "-- footer", "B", "GAZP", "50", "250.00" },
   })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ (2 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
+  assert_eq(#orders, 1, "1 ????? (2 ????????? ?????????????)")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - ??????????? ??????", function()
   unknownSecurities = {}
   mockCSV({ { "Unknown", "B", "ZZZZZ", "100", "200.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
-  assert_true(unknownSecurities["ZZZZZ"] ~= nil, "ZZZZZ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ unknownSecurities")
-  assert_eq(unknownSecurities["ZZZZZ"], "Unknown", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 0, "0 ??????? (??????????? ??????)")
+  assert_true(unknownSecurities["ZZZZZ"] ~= nil, "ZZZZZ ????????? ? unknownSecurities")
+  assert_eq(unknownSecurities["ZZZZZ"], "Unknown", "???????? ?????? ?? ?????????")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ CSV", function()
+test("LoadOrdersFromFile - ?????? CSV", function()
   mockCSV({})
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ CSV")
+  assert_eq(#orders, 0, "0 ??????? ? ?????? CSV")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - sell ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - sell ????", function()
   mockCSV({ { "Gazprom", "S", "GAZP", "50", "250.00" } })
   local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-  assert_eq(#orders, 1, "1 sell ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(orders[1].Operation, "S", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ S")
+  assert_eq(#orders, 1, "1 sell ????? ????????")
+  assert_eq(orders[1].Operation, "S", "???????? S")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - ?????????", function()
   mockCSV({ { "OFZ", "B", "RU000A102RN7", "1", "95.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_true(orders[1]:IsBond(), "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 ????? ?????????")
+  assert_true(orders[1]:IsBond(), "?????????")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - edge ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - edge ????", function()
   mockCSV({ { "Gazprom", "B", "GAZP", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders_Edge.csv")
-  assert_eq(#orders, 1, "1 edge ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_true(orders[1].Quantity > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 edge ?????")
+  assert_true(orders[1].Quantity > 0, "?????????? ??????????")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - edge ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - edge ?????????", function()
   mockCSV({ { "OFZ", "B", "RU000A102RN7", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrdersBonds_Edge.csv")
-  assert_eq(#orders, 1, "1 edge ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 edge ????? ?????????")
   restoreCSV()
 end)
 
@@ -810,7 +810,7 @@ ClearSecurityInfoCache()
 test("LoadOrdersFromFile - SPB edge", function()
   mockCSV({ { "Foreign", "B", "ADBE_SPB", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrdersSpb_Edge.csv")
-  assert_eq(#orders, 1, "1 SPB ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 SPB ?????")
   restoreCSV()
 end)
 
@@ -818,12 +818,12 @@ ClearSecurityInfoCache()
 test("LoadOrdersFromFile - RmUSD edge", function()
   mockCSV({ { "Foreign", "B", "ADBE_SPB", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders_RmUSD_Edge.csv")
-  assert_eq(#orders, 1, "1 RmUSD ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 RmUSD ?????")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - ??????????? ??????", function()
   mockCSV({
     { "-- header", "B", "GAZP", "100", "200.00" },
     { "Gazprom", "B", "GAZP", "100", "200.00" },
@@ -832,22 +832,22 @@ test("LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
     { "Gazprom2", "B", "GAZP", "200", "300.00" },
   })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 3, "3 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (2 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
+  assert_eq(#orders, 3, "3 ?????? (2 ??????????? ?????????????)")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - SPB ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - SPB ????", function()
   mockCSV({ { "Foreign", "B", "ADBE_SPB", "10", "400.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 SPB ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 SPB ?????")
   restoreCSV()
 end)
 
 local originalGetParamEx = getParamEx
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - edge ï¿½ priceMin=0 (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)", function()
+test("LoadOrdersFromFile - edge ? priceMin=0 (???????)", function()
   getParamEx = function(class_code, sec_code, param)
     if param == "PRICEMIN" then
       return { result = "1", param_value = "0" }
@@ -865,26 +865,26 @@ test("LoadOrdersFromFile - edge ï¿½ priceMin=0 (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)", functio
   end
   mockCSV({ { "Gazprom", "B", "GAZP", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders_Edge.csv")
-  assert_eq(#orders, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (priceMin=0, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
+  assert_eq(#orders, 0, "0 ??????? (priceMin=0, ???????)")
   getParamEx = originalGetParamEx
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - edge ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - edge ????? ? ???????", function()
   local savedLimit = VolumeOrderLimit
   VolumeOrderLimit = 50000
   mockCSV({ { "Gazprom", "B", "GAZP", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders_Edge.csv")
-  assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 ?????")
   local volume = orders[1]:GetVolume()
-  assert_true(volume <= VolumeOrderLimit, "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(volume <= VolumeOrderLimit, "????? ? ??????")
   VolumeOrderLimit = savedLimit
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - edge ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ koeff", function()
+test("LoadOrdersFromFile - edge ? ??????? koeff", function()
   getParamEx = function(class_code, sec_code, param)
     if param == "PRICEMIN" then
       return { result = "1", param_value = "100.0" }
@@ -902,14 +902,14 @@ test("LoadOrdersFromFile - edge ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ koeff", function()
   end
   mockCSV({ { "Gazprom", "B", "GAZP", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders_Edge.csv")
-  assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_true(orders[1].Quantity > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ koeff")
+  assert_eq(#orders, 1, "1 ?????")
+  assert_true(orders[1].Quantity > 0, "?????????? ?????????? ? koeff")
   getParamEx = originalGetParamEx
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - edge ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - edge ????? ? ???????????? ???????????", function()
   local savedLimit = VolumeOrderLimit
   local savedMax = VolumeOrderMax
   VolumeOrderMax = 500000
@@ -931,9 +931,9 @@ test("LoadOrdersFromFile - edge ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï
   end
   mockCSV({ { "Gazprom", "B", "GAZP", "0", "0" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders_Edge.csv")
-  assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 ?????")
   local volume = orders[1]:GetVolume()
-  assert_true(volume <= VolumeOrderLimit, "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_true(volume <= VolumeOrderLimit, "????? ?? ????????")
   VolumeOrderLimit = savedLimit
   VolumeOrderMax = savedMax
   getParamEx = originalGetParamEx
@@ -941,235 +941,235 @@ test("LoadOrdersFromFile - edge ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï
 end)
 
 ---------------------------------------------
--- Sell Edge ï¿½ï¿½ï¿½ï¿½ï¿½
+-- Sell Edge ?????
 ---------------------------------------------
-print("\n=== Sell Edge ï¿½ï¿½ï¿½ï¿½ï¿½ ===")
+print("\n=== Sell Edge ????? ===")
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - sell edge ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - sell edge ????", function()
   resetSendOrders()
   addTestPosition("GAZP", 100, 250.00)
   mockCSV({ { "Gazprom", "S", "GAZP", "10", "0.01" } })
   local orders = LoadOrdersFromFile("TEST_SellOrders_Edge.csv")
-  assert_eq(#orders, 1, "1 sell edge ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(orders[1].Operation, "S", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ S")
-  assert_true(orders[1].Quantity > 0, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ > 0")
-  assert_true(orders[1].Price > 0, "ï¿½ï¿½ï¿½ï¿½ > 0")
+  assert_eq(#orders, 1, "1 sell edge ?????")
+  assert_eq(orders[1].Operation, "S", "???????? S")
+  assert_true(orders[1].Quantity > 0, "?????????? > 0")
+  assert_true(orders[1].Price > 0, "???? > 0")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - sell edge ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - sell edge ??? ???????", function()
   resetSendOrders()
   clearTestData()
   mockCSV({ { "Gazprom", "S", "GAZP", "10", "0.01" } })
   local orders = LoadOrdersFromFile("TEST_SellOrders_Edge.csv")
-  assert_eq(#orders, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
+  assert_eq(#orders, 0, "0 ??????? (??? ???????)")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - sell edge ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("LoadOrdersFromFile - sell edge ?????????????? ??????????", function()
   resetSendOrders()
   clearTestData()
   addTestPosition("GAZP", 30, 250.00)
   mockCSV({ { "Gazprom", "S", "GAZP", "10", "0.01" } })
   local orders = LoadOrdersFromFile("TEST_SellOrders_Edge.csv")
-  assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
-  assert_eq(orders[1].Quantity, 3, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ = ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/lot_size (30/10=3)")
+  assert_eq(#orders, 1, "1 ????? (?????????????? ?????????? ???????)")
+  assert_eq(orders[1].Quantity, 3, "?????????? = ???????/lot_size (30/10=3)")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("SubmitOrders - sell edge ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", function()
+test("SubmitOrders - sell edge ????? ?????????", function()
   resetSendOrders()
   addTestPosition("GAZP", 50, 250.00)
   local order = Order:new("GAZP")
   order:SetOperation("S", 300.00, 10)
   local stats = SubmitOrders({ order })
-  assert_eq(stats.sent, 1, "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(stats.sent, 1, "????? ?????????")
 end)
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ BUY ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)",
+  "LoadOrdersFromFile - ???????? ???????? ? BUY ????? (???????? ????????)",
   function()
     resetSendOrders()
     clearTestData()
     mockCSV({ { "Gazprom", "S", "GAZP", "100", "200.00" } })
     local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-    assert_eq(#orders, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
+    assert_eq(#orders, 0, "0 ??????? (???????? ????????)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ SELL ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)",
+  "LoadOrdersFromFile - ???????? ???????? ? SELL ????? (???????? ????????)",
   function()
     resetSendOrders()
     clearTestData()
     mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" } })
     local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-    assert_eq(#orders, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
+    assert_eq(#orders, 0, "0 ??????? (???????? ????????)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ BUY ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)",
+  "LoadOrdersFromFile - ???????? ???????? ? BUY ????? (???????????? ????????)",
   function()
     resetSendOrders()
     mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" } })
     local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-    assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
+    assert_eq(#orders, 1, "1 ????? (???????????? ????????)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ SELL ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)",
+  "LoadOrdersFromFile - ???????? ???????? ? SELL ????? (???????????? ????????)",
   function()
     resetSendOrders()
     mockCSV({ { "Gazprom", "S", "GAZP", "50", "250.00" } })
     local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-    assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
+    assert_eq(#orders, 1, "1 ????? (???????????? ????????)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ SellOrders_Edge (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)",
+  "LoadOrdersFromFile - ???????? ???????? ? SellOrders_Edge (???????? ????????)",
   function()
     resetSendOrders()
     clearTestData()
     addTestPosition("GAZP", 100, 250.00)
     mockCSV({ { "Gazprom", "B", "GAZP", "10", "0.01" } })
     local orders = LoadOrdersFromFile("TEST_SellOrders_Edge.csv")
-    assert_eq(#orders, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ edge)")
+    assert_eq(#orders, 0, "0 ??????? (???????? ???????? ? edge)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ BUY/SELL ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)", function()
+test("LoadOrdersFromFile - ???? ??? BUY/SELL ? ????? (???????)", function()
   resetSendOrders()
   clearTestData()
   mockCSV({ { "Gazprom", "B", "GAZP", "100", "200.00" } })
   local orders = LoadOrdersFromFile("TEST_Orders.csv")
-  assert_eq(#orders, 0, "0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)")
+  assert_eq(#orders, 0, "0 ??????? (???????????? ????)")
   restoreCSV()
 end)
 
 ---------------------------------------------
--- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+-- ??????? ? ??????????
 ---------------------------------------------
-print("\n=== ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ===")
+print("\n=== ??????? ? ?????????? ===")
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½)", function()
+test("LoadOrdersFromFile - ????????? ?? ????? (?????)", function()
   resetSendOrders()
   mockCSV({ { "Gazprom", " B ", "GAZP", "100", "200.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(orders[1].Operation, "B", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 ?????")
+  assert_eq(orders[1].Operation, "B", "???????? ??????????")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½)", function()
+test("LoadOrdersFromFile - ????????? ?? ???? (?????)", function()
   resetSendOrders()
   mockCSV({ { "Gazprom", "B", " GAZP ", "100", "200.00" } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(orders[1].SecurityCode, "GAZP", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 ?????")
+  assert_eq(orders[1].SecurityCode, "GAZP", "????????? ??????")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ BUY/SELL",
+  "LoadOrdersFromFile - ????????? ?? ????? ? ???????????? ?????????? BUY/SELL",
   function()
     resetSendOrders()
     mockCSV({ { "Gazprom", " B ", "GAZP", "100", "200.00" } })
     local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-    assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
+    assert_eq(#orders, 1, "1 ????? (????????? ???? ?????????)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½)", function()
+test("LoadOrdersFromFile - ????????? ?? ???? (?????)", function()
   resetSendOrders()
   mockCSV({ { " Gazprom ", " B ", " GAZP ", " 100 ", " 200.00 " } })
   local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-  assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(orders[1].Operation, "B", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(orders[1].SecurityCode, "GAZP", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 ?????")
+  assert_eq(orders[1].Operation, "B", "????????")
+  assert_eq(orders[1].SecurityCode, "GAZP", "??????")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
-test("LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½)", function()
+test("LoadOrdersFromFile - ????????? ? ??????? (?????)", function()
   resetSendOrders()
   clearTestData()
   addTestPosition("GAZP", 100, 250.00)
   mockCSV({ { "Gazprom", " S ", " GAZP ", " 10 ", " 0.01 " } })
   local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-  assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½")
-  assert_eq(orders[1].Operation, "S", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
+  assert_eq(#orders, 1, "1 ?????")
+  assert_eq(orders[1].Operation, "S", "????????")
   restoreCSV()
 end)
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ BUY/SELL",
+  "LoadOrdersFromFile - ????????? ?? ????? ???????????? ???????? BUY/SELL",
   function()
     resetSendOrders()
     mockCSV({ { "Gazprom", "B", " GAZP ", "100", "200.00" } })
     local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-    assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
+    assert_eq(#orders, 1, "1 ????? (????????? ???? ?????????)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ BUY/SELL",
+  "LoadOrdersFromFile - ????????? ?? ???? ???????????? ???????? BUY/SELL",
   function()
     resetSendOrders()
     mockCSV({ { "Gazprom", " B ", "GAZP", "100", "200.00" } })
     local orders = LoadOrdersFromFile("TEST_BuyOrders.csv")
-    assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)")
+    assert_eq(#orders, 1, "1 ????? (????????? ???? ?????????)")
     restoreCSV()
   end
 )
 
 ClearSecurityInfoCache()
 test(
-  "LoadOrdersFromFile - ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+  "LoadOrdersFromFile - ????????? ?????? ? ?????????????? ???????????",
   function()
     resetSendOrders()
     clearTestData()
     addTestPosition("GAZP", 100, 250.00)
     mockCSV({ { "Gazprom", " S ", " GAZP ", " 10 ", " 0.01 " } })
     local orders = LoadOrdersFromFile("TEST_SellOrders.csv")
-    assert_eq(#orders, 1, "1 ï¿½ï¿½ï¿½ï¿½ï¿½")
-    assert_eq(orders[1].Operation, "S", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ S")
+    assert_eq(#orders, 1, "1 ?????")
+    assert_eq(orders[1].Operation, "S", "???????? S")
     restoreCSV()
   end
 )
 
 ---------------------------------------------
--- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+-- ??????????
 ---------------------------------------------
 print("\n" .. string.rep("=", 40))
-print(string.format("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: %d ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, %d ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", passed, failed))
+print(string.format("?????????: %d ????????, %d ?????????", passed, failed))
 if #errors > 0 then
-  print("\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:")
+  print("\n??????:")
   for _, err in ipairs(errors) do
     print("  " .. err)
   end
