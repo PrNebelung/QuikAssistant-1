@@ -101,7 +101,7 @@ end
 ---------------------------------------------
 -- ???????????? ?????? Order
 ---------------------------------------------
-print("=== ???????????? ?????? Order ===")
+print("=== Классические тесты Order ===")
 
 ClearSecurityInfoCache()
 test("SecurityCode", function()
@@ -261,7 +261,7 @@ end)
 ---------------------------------------------
 -- Edge Cases ? ?????????????? ?????
 ---------------------------------------------
-print("\n=== Edge Cases ? ?????????????? ????? ===")
+print("\n=== Edge Cases и граничные значения ===")
 
 ClearSecurityInfoCache()
 test("Order:new ? ?????????????? ???????", function()
@@ -343,7 +343,7 @@ end)
 ---------------------------------------------
 -- ?????????????? edge cases
 ---------------------------------------------
-print("\n=== ?????????????? edge cases ===")
+print("\n=== Дополнительные edge cases ===")
 
 ClearSecurityInfoCache()
 test("??????????? ??????? GAZP", function()
@@ -459,7 +459,7 @@ end)
 ---------------------------------------------
 -- TransactionHandler / OrderValidator ?????
 ---------------------------------------------
-print("\n=== TransactionHandler / OrderValidator ????? ===")
+print("\n=== TransactionHandler / OrderValidator тесты ===")
 
 test("GetOperation, IsOrderExecuted, FindOrder", function()
   assert_eq(GetOperation(FLAG_ACTIVE | FLAG_SELL), "S", "GetOperation sell")
@@ -508,7 +508,7 @@ end)
 ---------------------------------------------
 -- SubmitingOrders ?????
 ---------------------------------------------
-print("\n=== SubmitingOrders ????? ===")
+print("\n=== SubmittingOrders тесты ===")
 
 local function resetSendOrders()
   sendOrders = {}
@@ -706,7 +706,7 @@ end)
 ---------------------------------------------
 -- LoadOrdersFromFile ?????
 ---------------------------------------------
-print("\n=== LoadOrdersFromFile ????? ===")
+print("\n=== LoadOrdersFromFile тесты ===")
 
 local originalGetFromCSV = getFromCSV
 
@@ -943,7 +943,7 @@ end)
 ---------------------------------------------
 -- Sell Edge ?????
 ---------------------------------------------
-print("\n=== Sell Edge ????? ===")
+print("\n=== Sell Edge тесты ===")
 
 ClearSecurityInfoCache()
 test("LoadOrdersFromFile - sell edge ????", function()
@@ -1067,7 +1067,7 @@ end)
 ---------------------------------------------
 -- ??????? ? ??????????
 ---------------------------------------------
-print("\n=== ??????? ? ?????????? ===")
+print("\n=== Ошибки и комментарии ===")
 
 ClearSecurityInfoCache()
 test("LoadOrdersFromFile - ????????? ?? ????? (?????)", function()
@@ -1167,9 +1167,9 @@ test(
 -- ??????????
 ---------------------------------------------
 print("\n" .. string.rep("=", 40))
-print(string.format("?????????: %d ????????, %d ?????????", passed, failed))
+print(string.format("Результат: %d пройдено, %d провалено", passed, failed))
 if #errors > 0 then
-  print("\n??????:")
+print("\nОшибки:")
   for _, err in ipairs(errors) do
     print("  " .. err)
   end

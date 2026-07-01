@@ -296,7 +296,7 @@ _G.VolumeOrderLimit = 200000
 _G.LimitActuationOrderEdge = 5
 _G.LimitActuationOrderBondEdge = 60
 
-print("[MOCK] QUIK API ???????????????")
+  print("[MOCK] QUIK API инициализирован")
 
 if not unpack then
   unpack = table.unpack
