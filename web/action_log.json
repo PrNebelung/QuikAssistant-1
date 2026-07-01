@@ -660,5 +660,57 @@
       "old_qty": "120",
       "old_price": "82"
     }
+  },
+  {
+    "time": "16:02:07",
+    "date": "01.07.2026",
+    "msg": "Переключено: GAZP",
+    "level": "info",
+    "undo": {
+      "action": "toggle",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "GAZP",
+      "old_enabled": true
+    }
+  },
+  {
+    "time": "16:02:45",
+    "date": "01.07.2026",
+    "msg": "Переключено: GAZP",
+    "level": "info",
+    "undo": {
+      "action": "toggle",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "GAZP",
+      "old_enabled": false
+    }
+  },
+  {
+    "time": "16:20:09",
+    "date": "01.07.2026",
+    "msg": "Переключено: NVTK",
+    "level": "info",
+    "undo": {
+      "action": "toggle",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "NVTK",
+      "old_enabled": true
+    }
+  },
+  {
+    "time": "16:20:28",
+    "date": "01.07.2026",
+    "msg": "Переключено: NVTK",
+    "level": "info",
+    "undo": {
+      "action": "toggle",
+      "broker": "VTB",
+      "file_type": "buy",
+      "isin": "NVTK",
+      "old_enabled": false
+    }
   }
 ]
