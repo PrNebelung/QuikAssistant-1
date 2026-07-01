@@ -291,7 +291,7 @@ function EventCallbackTableSetting(t_id, msg, par1, par2)
         local file = getScriptPath() .. "//Data//" .. filename
         os.execute('start "" notepad.exe "' .. file .. '"')
       else
-        log.error("Недопустимое имя файла: " .. tostring(filename))
+        log.error(string.format("Недопустимое имя файла: %s", tostring(filename)))
       end
     end
 

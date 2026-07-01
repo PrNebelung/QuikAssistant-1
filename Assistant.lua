@@ -159,7 +159,7 @@ function N_SetLimitOrder(
   -- Защита от бесконечной рекурсии (N_SetLimitOrder -> ошибка -> SetLimitOrdersWithError -> N_SetLimitOrder)
   limitOrderRecursionDepth = limitOrderRecursionDepth + 1
   if limitOrderRecursionDepth > LIMIT_ORDER_MAX_RECURSION then
-    log.error("Превышена глубина рекурсии N_SetLimitOrder, прерывание")
+    log.error(string.format("Превышена глубина рекурсии N_SetLimitOrder, прерывание"))
     limitOrderRecursionDepth = limitOrderRecursionDepth - 1
     return transId, "Превышена глубина рекурсии"
   end

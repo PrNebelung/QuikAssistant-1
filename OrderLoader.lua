@@ -56,11 +56,11 @@ function OrderLoader.LoadOrdersFromFile(fileName)
           )
         )
       elseif securityCode == nil or operation == nil then
-        log.error("Некорректная строка в CSV:", json.encode(row))
+        log.error(string.format("Некорректная строка в CSV: %s", json.encode(row)))
       else
         local order = Order:new(securityCode)
         if order == nil then
-          log.error("Не удалось создать ордер " .. json.encode(row))
+          log.error(string.format("Не удалось создать ордер %s", json.encode(row)))
           unknownSecurities[securityCode] = securityName
         else
           if isFileSellEdge ~= nil then
@@ -99,7 +99,7 @@ function OrderLoader.LoadOrdersFromFile(fileName)
               order:SetOperation(operation, price, quantity)
               order.UseFileParams = true
             else
-              log.error("Некорректные данные для ордера в CSV:", json.encode(row))
+              log.error(string.format("Некорректные данные для ордера в CSV: %s", json.encode(row)))
             end
           end
           if order.Quantity > 0 then

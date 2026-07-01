@@ -29,7 +29,7 @@ function BrokerAdapter.GetSecurityInfo(securityCode)
       return info
     end
   end
-  log.error("Не удалось найти бумагу: " .. securityCode)
+  log.error(string.format("Не удалось найти бумагу: %s", securityCode))
   return nil
 end
 
@@ -50,7 +50,7 @@ end
 function BrokerAdapter.GetParamInfo(order, param)
   local value = getParamEx(order.SecurityInfo.class_code, order.SecurityInfo.code, param)
   if value == nil or value.result == "0" then
-    log.error("Параметр не найден.", param, order:Print())
+    log.error(string.format("Параметр не найден: %s %s", param, order:Print()))
     return "0"
   end
   return value.param_value
@@ -76,14 +76,14 @@ function BrokerAdapter.SearchOrders(filterFunc, params)
     return SearchItems("orders", 0, count - 1, filterFunc, params)
   end)
   if not ok then
-    log.error("SearchOrders: ошибка SearchItems: " .. tostring(orders) .. " (count=" .. count .. ")")
+    log.error(string.format("SearchOrders: ошибка SearchItems: %s (count=%d)", tostring(orders), count))
     return {}
   end
   if orders ~= nil then
     log.debug(string.format("SearchOrders: найдено %d ордеров (всего в QUIK=%d)", #orders, count))
     return orders
   end
-  log.warn("SearchOrders: SearchItems вернул nil (count=" .. count .. ")")
+  log.warn(string.format("SearchOrders: SearchItems вернул nil (count=%d)", count))
   return {}
 end
 

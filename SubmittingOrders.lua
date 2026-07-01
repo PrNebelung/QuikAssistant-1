@@ -217,7 +217,7 @@ function SubmittingOrdersRun()
   ensureSendingReset()
 
   if not ok then
-    log.error("Ошибка в цикле отправки: " .. tostring(err))
+    log.error(string.format("Ошибка в цикле отправки: %s", tostring(err)))
   end
 
   -- Итоговая статистика
@@ -282,7 +282,7 @@ function SubmitOrders(orders, resubmit)
         )
         if error ~= "" then
           stats.rejected = stats.rejected + 1
-          log.error("Не удалось отправить ордер в QUIK: ", error, order:Print())
+          log.error(string.format("Не удалось отправить ордер в QUIK: %s %s", error, order:Print()))
         else
           stats.sent = stats.sent + 1
           log.info(
@@ -337,7 +337,7 @@ function TradeClosePosition(trade)
   local order = Order:new(securityCode)
 
   if order == nil then
-    log.error("Не удалось создать ордер " .. json.encode(trade))
+    log.error(string.format("Не удалось создать ордер %s", json.encode(trade)))
     return
   end
 
@@ -354,7 +354,7 @@ function TradeClosePosition(trade)
     return
   end
 
-  log.info("Создание ордера на продажу для закрытия позиции ", order:Print())
+  log.info(string.format("Создание ордера на продажу для закрытия позиции %s", order:Print()))
 
   order:SetOperation(operation, price, quantity)
   order.UseFileParams = true
@@ -371,7 +371,7 @@ function TradeClosePosition(trade)
     order:FormatQuantity()
   )
   if err ~= "" then
-    log.error("Ошибка отправки ордера: ", err, order:Print())
+    log.error(string.format("Ошибка отправки ордера: %s %s", err, order:Print()))
   else
     log.info(
       string.format(

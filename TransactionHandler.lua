@@ -115,7 +115,7 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
       return
     end
     order:SetOperation(operation, maxPrice, trans.quantity)
-    log.info("Повторная отправка ордера по макс. цене: " .. order:Print())
+    log.info(string.format("Повторная отправка ордера по макс. цене: %s", order:Print()))
     local orders = {}
     table.insert(orders, order)
     SubmitOrders(orders, false)
@@ -138,7 +138,7 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
       return
     end
     order:SetOperation(operation, minPrice, 0)
-    log.info("Повторная отправка ордера по мин. цене: " .. order:Print())
+    log.info(string.format("Повторная отправка ордера по мин. цене: %s", order:Print()))
     return
   end
 

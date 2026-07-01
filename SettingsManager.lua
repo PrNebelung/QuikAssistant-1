@@ -44,7 +44,7 @@ function SettingsManager.LoadAll()
   end
   local ok, data = pcall(json.decode, content)
   if not ok then
-    log.error("Failed to parse settings.json: " .. tostring(data))
+    log.error(string.format("Ошибка парсинга settings.json: %s", tostring(data)))
     return {}
   end
   return data
@@ -80,7 +80,7 @@ end
 function SettingsManager.ApplyBroker(brokerName)
   local all = SettingsManager.LoadAll()
   if not all[brokerName] then
-    log.warn("No settings for broker " .. brokerName .. ", disabling")
+    log.warn(string.format("Нет настроек для брокера %s, отключение", brokerName))
     Config.Broker = brokerName
     Config.BrokerEnabled = false
     Config.SessionMorningEnabled = false
@@ -124,7 +124,7 @@ function SettingsManager.ApplyBroker(brokerName)
   Config.FileBuyOrderBondsEdge = Config.Broker .. "_BuyOrdersBonds_Edge.csv"
   Config.FileSellOrderEdge = Config.Broker .. "_SellOrders_Edge.csv"
 
-  log.info("Settings applied for broker " .. brokerName)
+  log.info(string.format("Настройки применены для брокера %s", brokerName))
 end
 
 return SettingsManager

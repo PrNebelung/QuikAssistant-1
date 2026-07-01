@@ -122,7 +122,7 @@ function main()
       sleep(1000)
     end)
     if not loopOk then
-      log.error("Main loop error: " .. tostring(loopErr))
+      log.error(string.format("Main loop error: %s", tostring(loopErr)))
       sleep(5000)
     end
   end
