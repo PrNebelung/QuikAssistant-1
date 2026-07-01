@@ -3,6 +3,7 @@
 --- цветом, форматированным выводом, событиями мыши,
 --- и вспомогательными функциями форматирования.
 
+local FormatUtils = require("FormatUtils")
 EventTable = {
   [QTABLE_LBUTTONDOWN] = "Нажатие левой кнопки мыши",
   [QTABLE_RBUTTONDOWN] = "Нажатие правой кнопки мыши",
@@ -164,19 +165,12 @@ end
 --
 --- Форматирование числа с разделителем разрядов (пробел).
 function comma_value(amount)
-  local formatted = amount
-  while true do
-    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", "%1 %2")
-    if k == 0 then
-      break
-    end
-  end
-  return formatted
+  return FormatUtils.comma_value(amount)
 end
 
 --- Округление числа до decimal знаков. Использует math.round.
 function round(val, decimal)
-  return math.round(val, decimal)
+  return FormatUtils.round(val, decimal)
 end
 
 --===================================================================
@@ -186,39 +180,7 @@ end
 --
 --- Форматирование числа: количество знаков, десятичные, префикс, отрицательный префикс.
 function format_num(amount, decimal, prefix, neg_prefix)
-  local str_amount, formatted, famount, remain
-
-  amount = amount or 0
-  decimal = decimal or 2 -- default 2 decimal places
-  neg_prefix = neg_prefix or "-" -- default negative sign
-
-  famount = math.abs(math.round(amount, decimal))
-  famount = math.floor(famount)
-
-  remain = math.round(math.abs(amount) - famount, decimal)
-
-  -- Форматирование целой части
-  formatted = comma_value(famount)
-
-  -- Форматирование дробной части
-  if decimal > 0 then
-    remain = string.sub(tostring(remain), 3)
-    formatted = formatted .. "." .. remain .. string.rep("0", decimal - string.len(remain))
-  end
-
-  -- Добавление префикса
-  formatted = (prefix or "") .. formatted
-
-  -- Обработка отрицательного значения
-  if amount < 0 then
-    if neg_prefix == "()" then
-      formatted = "(" .. formatted .. ")"
-    else
-      formatted = neg_prefix .. formatted
-    end
-  end
-
-  return formatted
+  return FormatUtils.format_num(amount, decimal, prefix, neg_prefix)
 end
 
-return QTable
+return QTable
