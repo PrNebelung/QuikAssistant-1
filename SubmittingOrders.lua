@@ -10,8 +10,8 @@ require("PositionService")
 require("OrderValidator")
 require("TransactionHandler")
 require("TableOrders")
-require("SessionScheduler")
-require("OrderLoader")
+SessionScheduler = require("SessionScheduler")
+OrderLoader = require("OrderLoader")
 local Config = require("Config")
 
 -- Состояние отправки
@@ -62,11 +62,7 @@ function WaitForMarketData()
       local value = getParamEx(sample.classCode, sample.secCode, "LAST")
       if value ~= nil and value.result == "1" and tonumber(value.param_value) > 0 then
         log.info(
-          string.format(
-            "Рыночные данные получены (%s, попытка %d)",
-            sample.secCode,
-            retry
-          )
+          string.format("Рыночные данные получены (%s, попытка %d)", sample.secCode, retry)
         )
         return true
       end
@@ -250,7 +246,7 @@ function IsSendOrder(order)
 end
 
 --- Отправка ордеров в QUIK
-function SubmitOrders(orders)
+function SubmitOrders(orders, resubmit)
   local stats = { sent = 0, rejected = 0, duplicate = 0 }
   local skipReasons = {}
   local skipTickers = {}
@@ -281,7 +277,8 @@ function SubmitOrders(orders)
           order.SecurityInfo.code,
           order.Operation,
           order:FormatPrice(),
-          order:FormatQuantity()
+          order:FormatQuantity(),
+          resubmit
         )
         if error ~= "" then
           stats.rejected = stats.rejected + 1

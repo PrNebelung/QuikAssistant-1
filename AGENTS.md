@@ -1,5 +1,12 @@
 # AGENTS.md - QuikAssistant Project Rules
 
+## Quick Start
+
+**When working with .lua files:**
+1. Load skill `cp1251-guard` for encoding rules
+2. Use `python cp1255_wrapper.py check_all` after any changes
+3. NEVER use Edit tool on .lua files with Russian text
+
 ## CRITICAL: File Encoding
 
 All `.lua` files in this project use **Windows-1251 (cp1251)** encoding.

@@ -3,6 +3,7 @@
 --- (тикер, операция, количество, цена) в файл MyTrades.csv.
 
 local BrokerAdapter = require("BrokerAdapter")
+local Config = require("Config")
 
 --Сохранение сделок в файл и в таблицу заявок
 --- Сохранение сделок в файл MyTrades.csv: дата, время, тикер, операция, количество, цена, брокер.
@@ -34,7 +35,7 @@ function TradeSave(trade)
     .. ";"
     .. trade.price
     .. ";"
-    .. Broker
+    .. Config.Broker
     .. "\n"
 
   local fp, err = io.open(BrokerAdapter.GetScriptPath() .. "//Data//MyTrades.csv", "a+")

@@ -18,27 +18,6 @@ BrokerUserMap = {
   ["48640"] = "RSHB",
 }
 
----  опирование значений Config.* в глобальные переменные
-function _initSettingGlobals()
-  Broker = Config.Broker
-  ClientCode = Config.ClientCode
-  AccountCode = Config.AccountCode
-  FirmId = Config.FirmId
-  VolumeOrderMax = Config.VolumeOrderMax
-  BondVolumeOrderMax = Config.BondVolumeOrderMax
-  VolumeOrderLimit = Config.VolumeOrderLimit
-  LimitActuationOrderEdge = Config.LimitActuationOrderEdge
-  LimitActuationOrderBondEdge = Config.LimitActuationOrderBondEdge
-  FileBuyOrder = Config.FileBuyOrder
-  FileSellOrder = Config.FileSellOrder
-  FileBuyOrderEdge = Config.FileBuyOrderEdge
-  FileBuyOrderBondsEdge = Config.FileBuyOrderBondsEdge
-  FileSellOrderEdge = Config.FileSellOrderEdge
-  SessionMorningEnabled = Config.SessionMorningEnabled
-  SessionMainEnabled = Config.SessionMainEnabled
-  SessionEveningEnabled = Config.SessionEveningEnabled
-  BrokerEnabled = Config.BrokerEnabled
-end
 
 --- ќпределение брокера по USERID и применение настроек из settings.json
 function SetClientSetting()
@@ -60,5 +39,5 @@ function SetClientSetting()
     Config.BrokerEnabled = false
   end
 
-  _initSettingGlobals()
+
 end

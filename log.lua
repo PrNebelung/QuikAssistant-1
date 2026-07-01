@@ -12,6 +12,8 @@
 --- INFO и выше записываются в файл Log/<Broker>/<дата>.log,
 --- для отладки используются цвета в консоли QUIK.
 
+local Config = require("Config")
+
 local log = { _version = "0.1.0" }
 
 log.usecolor = true
@@ -33,7 +35,7 @@ local modes = {
 --- Формирует путь к файлу лога: /Log/<Broker>/<дата>.log.
 local function getLogFile()
   local datetime = os.date("*t", os.time())
-  local broker = Broker or ""
+  local broker = Config.Broker or ""
   return string.format("/Log/%s/%04d-%02d-%02d.log", broker, datetime.year, datetime.month, datetime.day)
 end
 
@@ -130,7 +132,7 @@ for i, x in ipairs(modes) do
     )
 
     -- Вывод в файл лога (если доступен)
-    if Broker and Broker ~= "" then
+    if Config.Broker and Config.Broker ~= "" then
       local str = string.format("%-6s %s [%s] %s: %s\n", nameupper, os.date("%H:%M:%S"), Broker, lineinfo, msg)
       local fp = openLogFile()
       if not fp then

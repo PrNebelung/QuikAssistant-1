@@ -46,7 +46,8 @@ def get_all_isins_from_csv():
         for filepath in files.values():
             if os.path.exists(filepath):
                 for order in read_orders(filepath):
-                    isins.add(order["isin"])
+                    if order.get("type") == "order":
+                        isins.add(order["isin"])
     return isins
 
 

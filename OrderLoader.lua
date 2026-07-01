@@ -23,7 +23,7 @@ function OrderLoader.LoadOrdersFromFile(fileName)
   for i, row in ipairs(rows) do
     local securityName = row[1]
     local isComment = string.find(securityName, "--", 1, true)
-    if isComment == nil then
+    if isComment == nil and row[2] ~= nil and row[3] ~= nil then
       local operation = string.match(row[2], "^%s*(.-)%s*$")
       local securityCode = string.match(row[3], "^%s*(.-)%s*$")
       local quantity = tonumber(row[4])
@@ -115,7 +115,11 @@ end
 
 -- Глобальная обёртка для обратной совместимости
 function LoadOrdersFromFile(fileName)
-  return OrderLoader.LoadOrdersFromFile(fileName)
+  OrderLoader = OrderLoader
+
+return OrderLoader.LoadOrdersFromFile(fileName)
 end
+
+OrderLoader = OrderLoader
 
 return OrderLoader

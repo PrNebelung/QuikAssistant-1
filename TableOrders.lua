@@ -142,4 +142,16 @@ function GetPriceCurrent(classCode, secCode)
   return priceLast or "0"
 end
 
+-- Module table for require()
+TableOrders = {
+  RefreshTableOrdersControl = RefreshTableOrdersControl,
+  ClearTableOrdersControl = ClearTableOrdersControl,
+  CreateTableOrdersControl = CreateTableOrdersControl,
+  ShowTableOrdersControl = ShowTableOrdersControl,
+  FindRow = FindRow,
+  UpdateTableOrdersControl = UpdateTableOrdersControl,
+  GetOrderOperation = GetOrderOperation,
+  GetPriceCurrent = GetPriceCurrent,
+}
+
 return TableOrders
