@@ -16,7 +16,7 @@ def get_csv_files(broker: str) -> Dict[str, str]:
 
 
 def read_orders(filepath: str) -> List[Dict]:
-    """Прочитать заявки из CSV-файла, включая закомментированные строки."""
+    """Прочитать заявки из CSV-файла, включая закомментированные строки и разделители."""
     orders = []
     if not os.path.exists(filepath):
         return orders
@@ -28,8 +28,9 @@ def read_orders(filepath: str) -> List[Dict]:
             if not stripped:
                 continue
 
-            # Check if line is a separator
-            if stripped.startswith("----"):
+            # Preserve separator lines (section headers)
+            if stripped.startswith("----") or stripped.startswith("-- ══"):
+                orders.append({"type": "separator", "text": stripped})
                 continue
 
             # Check if order is disabled (commented)
@@ -42,6 +43,7 @@ def read_orders(filepath: str) -> List[Dict]:
             if len(parts) >= 5:
                 orders.append(
                     {
+                        "type": "order",
                         "line": line_num,
                         "name": parts[0],
                         "side": parts[1],
@@ -56,13 +58,16 @@ def read_orders(filepath: str) -> List[Dict]:
 
 
 def write_orders(filepath: str, orders: List[Dict]) -> bool:
-    """Записать заявки обратно в CSV-файл."""
+    """Записать заявки обратно в CSV-файл, сохраняя разделители."""
     try:
         lines = []
-        for order in orders:
-            lines.append(
-                f"{order['name']};{order['side']};{order['isin']};{order['qty']};{order['price']}"
-            )
+        for item in orders:
+            if item.get("type") == "separator":
+                lines.append(item["text"])
+            else:
+                lines.append(
+                    f"{item['name']};{item['side']};{item['isin']};{item['qty']};{item['price']}"
+                )
 
         with open(filepath, "w", encoding="utf-8") as f:
             f.write("\n".join(lines) + "\n")

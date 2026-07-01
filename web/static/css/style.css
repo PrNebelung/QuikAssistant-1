@@ -866,3 +866,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .trade-bond:hover {
   background: rgba(255, 152, 0, 0.12) !important;
 }
+
+.category-row td {
+  background: #0f3460;
+  padding: 0.4rem 0.8rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #4fc3f7;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #1a4a8a;
+  text-transform: uppercase;
+}

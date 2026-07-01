@@ -84,86 +84,79 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const response = await fetch(`/api/orders/${broker}?type=${type}`);
-      let orders = await response.json();
+      const allItems = await response.json();
 
-      // Enrich with instrument data for sorting
-      orders = orders.map((order) => {
-        const inst =
-          instrumentsCache[order.isin] || instrumentsCache[order.name] || {};
-        const lot = inst.lot || 1;
-        const price = parseFloat(order.price) || 0;
-        const qty = parseInt(order.qty) || 0;
-        const facevalue = inst.facevalue || 0;
-        const isBond =
-          order.isin.startsWith("SU") || order.isin.startsWith("RU000A");
-        const actualPrice =
-          isBond && facevalue ? facevalue * (price / 100) : price;
-        const sum = actualPrice * qty * lot;
-        const currentPrice = inst.price || 0;
-        const maturity = inst.maturity || "";
-        return {
-          ...order,
-          lot,
-          sum,
-          currentPrice,
-          maturity,
-          side: order.side === "B" ? "Покупка" : "Продажа",
-        };
-      });
-
-      // Sort
-      if (ordersSortBy) {
-        const reverse = ordersSortDir === "desc";
-        orders.sort((a, b) => {
-          let va, vb;
-          switch (ordersSortBy) {
-            case "name":
-              va = a.name;
-              vb = b.name;
-              break;
-            case "maturity":
-              va = a.maturity;
-              vb = b.maturity;
-              break;
-            case "isin":
-              va = a.isin;
-              vb = b.isin;
-              break;
-            case "side":
-              va = a.side;
-              vb = b.side;
-              break;
-            case "lot":
-              va = a.lot;
-              vb = b.lot;
-              break;
-            case "qty":
-              va = parseInt(a.qty) || 0;
-              vb = parseInt(b.qty) || 0;
-              break;
-            case "price":
-              va = parseFloat(a.price) || 0;
-              vb = parseFloat(b.price) || 0;
-              break;
-            case "currentPrice":
-              va = a.currentPrice;
-              vb = b.currentPrice;
-              break;
-            case "sum":
-              va = a.sum;
-              vb = b.sum;
-              break;
+      // Build groups: [{separator, orders}, ...]
+      const groups = [];
+      let currentGroup = { separator: null, orders: [] };
+      for (const item of allItems) {
+        if (item.type === "separator") {
+          if (currentGroup.separator || currentGroup.orders.length > 0) {
+            groups.push(currentGroup);
           }
-          if (typeof va === "string")
-            return reverse ? vb.localeCompare(va) : va.localeCompare(vb);
-          return reverse ? vb - va : va - vb;
-        });
+          currentGroup = { separator: item, orders: [] };
+        } else {
+          currentGroup.orders.push(item);
+        }
       }
+      groups.push(currentGroup);
 
-      ordersTable.innerHTML = orders
-        .map((order) => {
+      // Enrich and sort orders within each group
+      for (const group of groups) {
+        group.orders = group.orders.map((order) => {
           const inst =
             instrumentsCache[order.isin] || instrumentsCache[order.name] || {};
+          const lot = inst.lot || 1;
+          const price = parseFloat(order.price) || 0;
+          const qty = parseInt(order.qty) || 0;
+          const facevalue = inst.facevalue || 0;
+          const isBond =
+            order.isin.startsWith("SU") || order.isin.startsWith("RU000A");
+          const actualPrice =
+            isBond && facevalue ? facevalue * (price / 100) : price;
+          const sum = actualPrice * qty * lot;
+          const currentPrice = inst.price || 0;
+          const maturity = inst.maturity || "";
+          return {
+            ...order,
+            lot,
+            sum,
+            currentPrice,
+            maturity,
+            side: order.side === "B" ? "Покупка" : "Продажа",
+          };
+        });
+
+        if (ordersSortBy) {
+          const reverse = ordersSortDir === "desc";
+          group.orders.sort((a, b) => {
+            let va, vb;
+            switch (ordersSortBy) {
+              case "name": va = a.name; vb = b.name; break;
+              case "maturity": va = a.maturity; vb = b.maturity; break;
+              case "isin": va = a.isin; vb = b.isin; break;
+              case "side": va = a.side; vb = b.side; break;
+              case "lot": va = a.lot; vb = b.lot; break;
+              case "qty": va = parseInt(a.qty) || 0; vb = parseInt(b.qty) || 0; break;
+              case "price": va = parseFloat(a.price) || 0; vb = parseFloat(b.price) || 0; break;
+              case "currentPrice": va = a.currentPrice; vb = b.currentPrice; break;
+              case "sum": va = a.sum; vb = b.sum; break;
+            }
+            if (typeof va === "string")
+              return reverse ? vb.localeCompare(va) : va.localeCompare(vb);
+            return reverse ? vb - va : va - vb;
+          });
+        }
+      }
+
+      // Render: separator rows + order rows
+      const html = [];
+      for (const group of groups) {
+        if (group.separator) {
+          const text = group.separator.text.replace(/^[-═\s]+/, "").replace(/[-═\s]+$/, "");
+          html.push(`<tr class="category-row"><td colspan="10">&#9776; ${text}</td></tr>`);
+        }
+        for (const order of group.orders) {
           const price = parseFloat(order.price) || 0;
           const currentPrice = order.currentPrice;
           const diff =
@@ -174,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const isBond =
             order.isin.startsWith("SU") || order.isin.startsWith("RU000A");
 
-          return `
+          html.push(`
                 <tr class="${order.enabled ? "" : "disabled"} ${isBond ? "trade-bond" : ""}" data-raw-line="${order.raw.replace(/"/g, "&quot;")}">
                     <td>${order.name}</td>
                     <td class="maturity-cell">${order.maturity || ""}</td>
@@ -191,9 +184,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         <button class="btn-icon btn-cancel" data-isin="${order.isin}" disabled title="Отмена">&#x21BA;</button>
                         <button class="btn-icon btn-delete" data-isin="${order.isin}" title="Удалить">&#x1F5D1;</button>
                     </td>
-                </tr>`;
-        })
-        .join("");
+                </tr>`);
+        }
+      }
+      ordersTable.innerHTML = html.join("");
 
       initNumInputs();
 
@@ -274,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const el = document.createElement("div");
     el.className = `log-entry log-${level}`;
-    el.innerHTML = `<span class="log-time">${date} ${time}</span><span class="log-msg">${msg}</span>${undo ? '<button class="btn-undo" onclick="undoAction(this)" data-index="' + (logEntries.length - 1) + '" title="Отменить">&#x21A9;</button>' : ""}`;
+    el.innerHTML = `<span class="log-time">${date} ${time}</span><span class="log-msg">${msg}</span>${undo ? '<button class="btn-undo" onclick="undoAction(this)" data-undo=\'' + JSON.stringify(undo).replace(/'/g, "&#39;") + '\' title="Отменить">&#x21A9;</button>' : ""}`;
     webLogEntries.appendChild(el);
     webLogEntries.scrollTop = webLogEntries.scrollHeight;
 
@@ -293,11 +287,11 @@ document.addEventListener("DOMContentLoaded", () => {
       logEntries = entries;
       webLogEntries.innerHTML = entries
         .map(
-          (e, i) => `
+          (e) => `
                 <div class="log-entry log-${e.level}">
                     <span class="log-time">${e.date} ${e.time}</span>
                     <span class="log-msg">${e.msg}</span>
-                    ${e.undo ? `<button class="btn-undo" onclick="undoAction(this)" data-index="${i}" title="Отменить">&#x21A9;</button>` : ""}
+                    ${e.undo ? `<button class="btn-undo" onclick="undoAction(this)" data-undo='${JSON.stringify(e.undo).replace(/'/g, "&#39;")}' title="Отменить">&#x21A9;</button>` : ""}
                 </div>
             `,
         )
@@ -1119,28 +1113,24 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   window.undoAction = async function (btn) {
-    const index = parseInt(btn.dataset.index);
-    const response = await fetch("/api/actionlog");
-    const entries = await response.json();
-    const entry = entries[index];
-    if (!entry || !entry.undo) return;
+    const undo = JSON.parse(btn.dataset.undo);
+    if (!undo) return;
 
     if (!confirm("Отменить это действие?")) return;
 
     const res = await fetch("/api/actionlog/undo", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ undo: entry.undo }),
+      body: JSON.stringify({ undo }),
     });
 
     if (res.ok) {
-      const u = entry.undo;
       const desc =
-        u.action === "save"
-          ? `Сохранение ${u.isin} (qty=${u.old_qty}, price=${u.old_price})`
-          : u.action === "toggle"
-            ? `Переключение ${u.isin}`
-            : `Удаление ${u.isin}`;
+        undo.action === "save"
+          ? `Сохранение ${undo.isin} (qty=${undo.old_qty}, price=${undo.old_price})`
+          : undo.action === "toggle"
+            ? `Переключение ${undo.isin}`
+            : `Удаление ${undo.isin}`;
       webLog(`Откат: ${desc}`, "info");
     } else {
       btn.textContent = "Ошибка";

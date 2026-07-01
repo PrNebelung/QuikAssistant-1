@@ -43,7 +43,7 @@ def update_order(broker, isin):
 
     orders = read_orders(filepath)
     for order in orders:
-        if order["isin"] == isin:
+        if order.get("type") == "order" and order.get("isin") == isin:
             order["qty"] = data.get("qty", order["qty"])
             order["price"] = data.get("price", order["price"])
             break
@@ -109,7 +109,9 @@ def get_action_log():
     """Получить записи журнала действий."""
     if os.path.exists(ACTION_LOG_FILE):
         with open(ACTION_LOG_FILE, "r", encoding="utf-8") as f:
-            return jsonify(json.load(f))
+            entries = json.load(f)
+            entries.reverse()
+            return jsonify(entries)
     return jsonify([])
 
 
@@ -163,7 +165,7 @@ def undo_action():
     if action == "save":
         orders = read_orders(filepath)
         for order in orders:
-            if order["isin"] == isin:
+            if order.get("type") == "order" and order.get("isin") == isin:
                 order["qty"] = undo["old_qty"]
                 order["price"] = undo["old_price"]
                 break
@@ -276,7 +278,7 @@ def logs():
         log_file = log_files[0]
 
     entries = []
-    with open(log_file, "r", encoding="utf-8", errors="replace") as f:
+    with open(log_file, "r", encoding="cp1251", errors="replace") as f:
         for line in f:
             line = line.strip()
             if not line:
@@ -294,6 +296,7 @@ def logs():
 
             entries.append(entry)
 
+    entries.reverse()
     return jsonify(entries)
 
 
@@ -424,7 +427,7 @@ def stats():
             with open(filepath, "r", encoding="utf-8") as f:
                 for line in f:
                     line = line.strip()
-                    if line and not line.startswith("----"):
+                    if line and not line.startswith("----") and not line.startswith("-- ══"):
                         result["total"] += 1
                         if line.startswith("--"):
                             result["disabled"] += 1
@@ -483,7 +486,7 @@ def stats_all():
                 with open(filepath, "r", encoding="utf-8") as f:
                     for line in f:
                         line = line.strip()
-                        if line and not line.startswith("----"):
+                        if line and not line.startswith("----") and not line.startswith("-- ══"):
                             broker_stats["total"] += 1
                             if line.startswith("--"):
                                 broker_stats["disabled"] += 1
