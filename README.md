@@ -156,12 +156,8 @@ StartEngine.lua (точка входа)
 # Unit тесты (170)
 lua Tests/run_tests.lua
 
-# Integration тесты
-lua IntegrationTests/run_tests.lua --broker=TEST --session=main
-lua IntegrationTests/run_tests.lua --broker=VTB --session=main
-lua IntegrationTests/run_tests.lua --broker=PSB --session=main
-lua IntegrationTests/run_tests.lua --broker=FINAM --session=main
-lua IntegrationTests/run_tests.lua --broker=RSHB --session=main
+# Integration тесты (используют мок QUIK API)
+lua IntegrationTests/run_tests.lua
 ```
 
 ### Инструменты качества кода

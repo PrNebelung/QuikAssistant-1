@@ -53,15 +53,11 @@ Config: `stylua.toml` in project root (2-space indent, Windows line endings).
 # Unit tests (170 tests)
 lua Tests/run_tests.lua
 
-# Integration tests
-lua IntegrationTests/run_tests.lua --broker=TEST --session=main
-lua IntegrationTests/run_tests.lua --broker=VTB --session=main
-lua IntegrationTests/run_tests.lua --broker=PSB --session=main
-lua IntegrationTests/run_tests.lua --broker=FINAM --session=main
-lua IntegrationTests/run_tests.lua --broker=RSHB --session=main
+# Integration tests (uses mock QUIK API)
+lua IntegrationTests/run_tests.lua
 ```
 
-**Note:** Tests also don't work with UNC paths. Copy to temp directory first if needed.
+**Note:** Tests don't work with UNC paths. Copy to temp directory first if needed.
 
 ## Common Issues and Fixes
 
