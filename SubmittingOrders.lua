@@ -1,7 +1,6 @@
---- Модуль отправки заявок в QUIK.
---- Считывает список заявок из CSV-файлов,
---- проверяет их, корректирует цены и отправляет в QUIK.
---- Управляет таймерами сессий для автоматической работы.
+--- Оркестрация отправки ордеров в QUIK.
+--- Координирует загрузку ордеров из CSV, валидацию и отправку в QUIK.
+--- Управляет планированием сессий через SessionScheduler.
 
 require("Setting")
 require("FileFunction")
@@ -11,108 +10,38 @@ require("PositionService")
 require("OrderValidator")
 require("TransactionHandler")
 require("TableOrders")
+require("SessionScheduler")
+require("OrderLoader")
 local Config = require("Config")
 
---- Время старта основной сессии
-TimeMainStart = nil
-
---- Время старта утренней сессии
-TimeMorningStart = nil
-
---- Время старта вечерней сессии
-TimeEveningStart = nil
-
---- Флаг, что уже были отправлены заявки
-IsSentOrders = false
-
---- Флаг, что идёт отправка заявок
+-- Состояние отправки
 IsSendingOrders = false
 
---- Текущее время утра
-IsMorningTime = false
-
---- Текущее время основной
-IsMainTime = false
-
---- Текущее время вечерняя
-IsEveningTime = false
-
--- Хранилище для отправленных заявок (дедупликация с QUIK)
--- Формат: "SECURITY_CODE OPERATION", значение: true
+-- Отправленные ордры (для дедупликации)
 sendOrders = {}
 sendOrdersSet = {}
 
--- Cumulative stats across all cycles
+-- Статистика
 local cumStats = { loaded = 0, sent = 0, rejected = 0, duplicate = 0 }
-
--- Счётчик циклов
 local cycleCount = 0
 
--- Неизвестные тикеры, не найденные в QUIK
+-- Неизвестные ценные бумаги
 unknownSecurities = {}
 
---- Инициализация параметров запуска
+--- Инициализация ( делегируется SessionScheduler)
 function Initialization()
   SetClientSetting()
-
-  TimeMainStart = os.date("!*t", os.time())
-  TimeMainStart.hour = Config.SessionMain.hour
-  TimeMainStart.min = Config.SessionMain.min
-  TimeMainStart.sec = Config.SessionMain.sec
-
-  TimeMorningStart = os.date("!*t", os.time())
-  TimeMorningStart.hour = Config.SessionMorning.hour
-  TimeMorningStart.min = Config.SessionMorning.min
-  TimeMorningStart.sec = Config.SessionMorning.sec
-
-  TimeEveningStart = os.date("!*t", os.time())
-  TimeEveningStart.hour = Config.SessionEvening.hour
-  TimeEveningStart.min = Config.SessionEvening.min
-  TimeEveningStart.sec = Config.SessionEvening.sec
-
-  IsSentOrders = false
-  IsSendingOrders = false
-  IsMorningTime = false
-  IsMainTime = false
-  IsEveningTime = false
+  SessionScheduler.Initialization()
 end
 
---- Основной цикл отправки заявок.
+--- Проверка времени сессий и запуск отправки
 function SubmittingOrders()
-  local timeCurrent = os.time()
-
-  if (os.time(TimeMorningStart) < timeCurrent) and not IsMorningTime then
-    IsMorningTime = true
-    if Config.SessionMorningEnabled then
-      IsSentOrders = false
-    end
-  end
-
-  if (os.time(TimeMainStart) < timeCurrent) and not IsMainTime then
-    if IsSentOrders then
-      N_CloseAllOrder()
-    end
-    IsMainTime = true
-    if Config.SessionMainEnabled then
-      IsSentOrders = false
-    end
-  end
-
-  if (os.time(TimeEveningStart) < timeCurrent) and not IsEveningTime then
-    IsEveningTime = true
-    if Config.SessionEveningEnabled then
-      IsSentOrders = false
-    end
-  end
-
-  if not IsSentOrders then
-    if os.time(TimeMorningStart) < timeCurrent then
-      SubmittingOrdersRun()
-    end
+  if SessionScheduler.CheckSession() then
+    SubmittingOrdersRun()
   end
 end
 
---- Запуск процесса отправки заявок.
+--- Ожидание рыночных данных
 local marketDataWaited = false
 function WaitForMarketData()
   if marketDataWaited then
@@ -134,7 +63,7 @@ function WaitForMarketData()
       if value ~= nil and value.result == "1" and tonumber(value.param_value) > 0 then
         log.info(
           string.format(
-            "Рыночные данные загружены (%s, попытка %d)",
+            "Рыночные данные получены (%s, попытка %d)",
             sample.secCode,
             retry
           )
@@ -149,16 +78,17 @@ function WaitForMarketData()
     end
     sleep(retryInterval * 1000)
   end
-  log.warn("Рыночные данные не полностью загружены, продолжаем")
+  log.warn("Рыночные данные не получены, продолжаем")
   return false
 end
 
+--- Главный цикл отправки ордеров
 function SubmittingOrdersRun()
   if IsSendingOrders then
     return
   end
   if not Config.BrokerEnabled then
-    log.warn("Брокер отключен, пропуск выставления заявок")
+    log.warn("Брокер отключен, пропуск отправки ордеров")
     return
   end
 
@@ -167,12 +97,11 @@ function SubmittingOrdersRun()
   IsSendingOrders = true
   cycleCount = cycleCount + 1
 
-  -- Wait for market data on first cycle
+  -- Ожидание рыночных данных в первом цикле
   if cycleCount == 1 then
     WaitForMarketData()
   end
 
-  --- Сброс флага IsSendingOrders для безопасного завершения при ошибке.
   local function ensureSendingReset()
     IsSendingOrders = false
   end
@@ -181,13 +110,13 @@ function SubmittingOrdersRun()
     local stats = { loaded = 0, sent = 0, rejected = 0, duplicate = 0 }
     unknownSecurities = {}
 
-    log.info(string.format("=== Цикл %d старт ===", cycleCount))
+    log.info(string.format("=== Цикл %d запущен ===", cycleCount))
 
     if isSubmittingOrdersRun then
       log.debug(
-        string.format("2.1 Чтение заявок на покупку из файла %s", Config.FileBuyOrder)
+        string.format("2.1 Загрузка ордеров на покупку из файла %s", Config.FileBuyOrder)
       )
-      local orders = LoadOrdersFromFile(Config.FileBuyOrder)
+      local orders = OrderLoader.LoadOrdersFromFile(Config.FileBuyOrder)
       stats.loaded = stats.loaded + #orders
       local s = SubmitOrders(orders)
       stats.sent = stats.sent + s.sent
@@ -199,11 +128,11 @@ function SubmittingOrdersRun()
     if isSubmittingOrdersRun then
       log.debug(
         string.format(
-          "2.2 Чтение заявок на покупку облигаций edge %s",
+          "2.2 Загрузка ордеров на покупку облигаций edge %s",
           Config.FileBuyOrderBondsEdge
         )
       )
-      local orders = LoadOrdersFromFile(Config.FileBuyOrderBondsEdge)
+      local orders = OrderLoader.LoadOrdersFromFile(Config.FileBuyOrderBondsEdge)
       stats.loaded = stats.loaded + #orders
       local s = SubmitOrders(orders)
       stats.sent = stats.sent + s.sent
@@ -213,10 +142,10 @@ function SubmittingOrdersRun()
     end
 
     if isSubmittingOrdersRun then
-      local orders = LoadOrdersFromFile(Config.FileBuyOrderEdge)
+      local orders = OrderLoader.LoadOrdersFromFile(Config.FileBuyOrderEdge)
       log.debug(
         string.format(
-          "2.3 Чтение заявок на покупку из файла edge %s",
+          "2.3 Загрузка ордеров на покупку по цене edge %s",
           Config.FileBuyOrderEdge
         )
       )
@@ -229,9 +158,9 @@ function SubmittingOrdersRun()
     end
 
     log.debug(
-      string.format("2.7 Чтение заявок на продажу из файла %s", Config.FileSellOrder)
+      string.format("2.7 Загрузка ордеров на продажу из файла %s", Config.FileSellOrder)
     )
-    local orders = LoadOrdersFromFile(Config.FileSellOrder)
+    local orders = OrderLoader.LoadOrdersFromFile(Config.FileSellOrder)
     stats.loaded = stats.loaded + #orders
     local s = SubmitOrders(orders)
     stats.sent = stats.sent + s.sent
@@ -241,11 +170,11 @@ function SubmittingOrdersRun()
     if isSubmittingOrdersRun then
       log.debug(
         string.format(
-          "2.8 Чтение заявок на продажу из файла edge %s",
+          "2.8 Загрузка ордеров на продажу по цене edge %s",
           Config.FileSellOrderEdge
         )
       )
-      local orders = LoadOrdersFromFile(Config.FileSellOrderEdge)
+      local orders = OrderLoader.LoadOrdersFromFile(Config.FileSellOrderEdge)
       stats.loaded = stats.loaded + #orders
       local s = SubmitOrders(orders)
       stats.sent = stats.sent + s.sent
@@ -254,7 +183,7 @@ function SubmittingOrdersRun()
       sleep(1000)
     end
 
-    -- Update cumulative stats
+    -- Обновление кумулятивной статистики
     cumStats.loaded = cumStats.loaded + stats.loaded
     cumStats.sent = cumStats.sent + stats.sent
     cumStats.rejected = cumStats.rejected + stats.rejected
@@ -262,7 +191,7 @@ function SubmittingOrdersRun()
 
     log.info(
       string.format(
-        "=== Цикл %d итог: загружено=%d, отправлено=%d, отклонено=%d, дубликатов=%d ===",
+        "=== Цикл %d завершен: загружено=%d, отправлено=%d, отклонено=%d, дубликатов=%d ===",
         cycleCount,
         stats.loaded,
         stats.sent,
@@ -278,24 +207,24 @@ function SubmittingOrdersRun()
     if unknownCount > 0 then
       log.warn(
         string.format(
-          "=== Обнаружено %d тикеров, не найденных в QUIK (пропущены заявки):",
+          "=== Обнаружено %d бумаг, не найденных в QUIK (пропущены):",
           unknownCount
         )
       )
       for code, name in pairs(unknownSecurities) do
         log.warn(string.format("  %s (%s)", code, name))
       end
-      log.warn("=== Конец списка тикеров =====")
+      log.warn("=== Конец списка пропущенных =====")
     end
   end)
 
   ensureSendingReset()
 
   if not ok then
-    log.error("Ошибка в процессе отправки: " .. tostring(err))
+    log.error("Ошибка в цикле отправки: " .. tostring(err))
   end
 
-  -- Cumulative summary across all cycles
+  -- Итоговая статистика
   log.info(
     string.format(
       "=== Total after %d cycles: loaded=%d, sent=%d, rejected=%d, duplicate=%d ===",
@@ -307,7 +236,7 @@ function SubmittingOrdersRun()
     )
   )
 
-  IsSentOrders = true
+  SessionScheduler.MarkSent()
 
   for k in pairs(sendOrders) do
     sendOrders[k] = nil
@@ -315,108 +244,12 @@ function SubmittingOrdersRun()
   sendOrdersSet = {}
 end
 
---- Чтение заявок из файла.
-function LoadOrdersFromFile(fileName)
-  local orders = {}
-  local rows = getFromCSV(fileName)
-  local isFileSellEdge = fileName:find("_SellOrders_Edge")
-  local isEdge = fileName:find("_Edge") and not isFileSellEdge
-
-  for i, row in ipairs(rows) do
-    local securityName = row[1]
-    local isComment = string.find(securityName, "--", 1, true)
-    if isComment == nil then
-      local operation = string.match(row[2], "^%s*(.-)%s*$")
-      local securityCode = string.match(row[3], "^%s*(.-)%s*$")
-      local quantity = tonumber(row[4])
-      local price = tonumber(row[5])
-
-      local isBuyFile = fileName:find("[Bb][Uu][Yy]") ~= nil
-      local isSellFile = fileName:find("[Ss][Ee][Ll][Ll]") ~= nil
-      if isBuyFile and operation ~= "B" then
-        log.error(
-          string.format(
-            "[SKIP] Несоответствие операции в файле BUY: операция %s, нужна B [%s]",
-            operation,
-            securityCode
-          )
-        )
-      elseif isSellFile and operation ~= "S" then
-        log.error(
-          string.format(
-            "[SKIP] Несоответствие операции в файле SELL: операция %s, нужна S [%s]",
-            operation,
-            securityCode
-          )
-        )
-      elseif not isBuyFile and not isSellFile then
-        log.warn(
-          string.format(
-            "[SKIP] Файл %s не содержит BUY/SELL в имени, пропущен [%s]",
-            fileName,
-            securityCode
-          )
-        )
-      elseif securityCode == nil or operation == nil then
-        log.error("Несоответствие данных в CSV:", json.encode(row))
-      else
-        local order = Order:new(securityCode)
-        if order == nil then
-          log.error("Не удалось создать заявку " .. json.encode(row))
-          unknownSecurities[securityCode] = securityName
-        else
-          if isFileSellEdge ~= nil then
-            local priceMax = GetPriceMax(order)
-            if tonumber(priceMax) == nil or tonumber(priceMax) == 0 then
-              log.warn(
-                "Не удалось получить макс. цен. прод. заявки. (PRICEMAX). "
-                  .. order:Print()
-              )
-            else
-              local position = GetPosition(order.SecurityCode)
-              local positionQty = 0
-              if position ~= nil then
-                positionQty = tonumber(position.currentbal)
-              end
-              if positionQty > 0 then
-                order:SetQuantitySell(operation, priceMax, positionQty)
-                order.UseFileParams = true
-              else
-                log.error(string.format("[SKIP] Нет позиции для продажи [%s]", order.SecurityCode))
-              end
-            end
-          elseif isEdge ~= nil then
-            local priceMin = GetPriceMin(order)
-            if tonumber(priceMin) == nil or tonumber(priceMin) == 0 then
-              log.warn(
-                "Не удалось получить мин. цен. цен. грани. для заявки. (PRICEMIN). "
-                  .. order:Print()
-              )
-            else
-              local progressOrderVolumeMax = GetOrderVolumeMax(order, priceMin)
-              order:SetQuantity(operation, priceMin, progressOrderVolumeMax)
-            end
-          else
-            if quantity ~= nil and price ~= nil then
-              order:SetOperation(operation, price, quantity)
-              order.UseFileParams = true
-            else
-              log.error("Несоответствие данных для заявки в CSV:", json.encode(row))
-            end
-          end
-          if order.Quantity > 0 then
-            table.insert(orders, order)
-          end
-        end
-      end
-    end
-  end
-
-  return orders
+--- Проверка, был ли ордер уже отправлен
+function IsSendOrder(order)
+  return sendOrdersSet[order:GetDedupKey()] == true
 end
 
---- Отправка заявок в QUIK
---- @return table { sent = N, rejected = N, duplicate = N }
+--- Отправка ордеров в QUIK
 function SubmitOrders(orders)
   local stats = { sent = 0, rejected = 0, duplicate = 0 }
   local skipReasons = {}
@@ -439,11 +272,11 @@ function SubmitOrders(orders)
         end
         table.insert(skipTickers[key], order.SecurityCode)
       else
-        local clientAccountCode = AccountCode
+        local clientAccountCode = Config.AccountCode
 
         local trans_id, error = N_SetLimitOrder(
           clientAccountCode,
-          ClientCode,
+          Config.ClientCode,
           order.SecurityInfo.class_code,
           order.SecurityInfo.code,
           order.Operation,
@@ -452,7 +285,7 @@ function SubmitOrders(orders)
         )
         if error ~= "" then
           stats.rejected = stats.rejected + 1
-          log.error("Не удалось отправить заявку в QUIK: ", error, order:Print())
+          log.error("Не удалось отправить ордер в QUIK: ", error, order:Print())
         else
           stats.sent = stats.sent + 1
           log.info(
@@ -480,7 +313,7 @@ function SubmitOrders(orders)
   if stats.duplicate > 0 then
     log.debug(
       string.format(
-        "  [SKIP] %d заявок: уже в QUIK или отправлены на этой сессии",
+        "  [SKIP] %d ордеров: уже в QUIK или отправлены в этом цикле",
         stats.duplicate
       )
     )
@@ -488,18 +321,13 @@ function SubmitOrders(orders)
   for reason, count in pairs(skipReasons) do
     local tickers = skipTickers[reason] or {}
     local tickerList = table.concat(tickers, ", ")
-    log.warn(string.format("  [SKIP] %d заявок: %s [%s]", count, reason, tickerList))
+    log.warn(string.format("  [SKIP] %d ордеров: %s [%s]", count, reason, tickerList))
   end
 
   return stats
 end
 
---- Проверка, что заявка уже отправлена
-function IsSendOrder(order)
-  return sendOrdersSet[order:GetDedupKey()] == true
-end
-
---- Обработка сделки для закрытия позиции
+--- Закрытие позиции по сделке (обратная заявка)
 function TradeClosePosition(trade)
   local isBuy = (trade.buy_sell == "B") or (trade.buy_sell == nil and (trade.flags & FLAG_SELL) == 0)
   if not isBuy then
@@ -512,7 +340,7 @@ function TradeClosePosition(trade)
   local order = Order:new(securityCode)
 
   if order == nil then
-    log.error("Не удалось создать заявку " .. json.encode(trade))
+    log.error("Не удалось создать ордер " .. json.encode(trade))
     return
   end
 
@@ -523,22 +351,22 @@ function TradeClosePosition(trade)
   end
   if tonumber(price) == nil or tonumber(price) == 0 then
     log.warn(
-      "Не удалось получить макс. цен. прод. для закрытия позиции. (PRICEMAX). "
+      "Не удалось определить цену. Вх. Цен. Макс. для закрытия позиции. (PRICEMAX). "
         .. order:Print()
     )
     return
   end
 
-  log.info("Формируем заявку на продажу для закрытия позиции ", order:Print())
+  log.info("Создание ордера на продажу для закрытия позиции ", order:Print())
 
   order:SetOperation(operation, price, quantity)
   order.UseFileParams = true
 
-  local clientAccountCode = AccountCode
+  local clientAccountCode = Config.AccountCode
 
   local trans_id, err = N_SetLimitOrder(
     clientAccountCode,
-    ClientCode,
+    Config.ClientCode,
     order.SecurityInfo.class_code,
     order.SecurityInfo.code,
     order.Operation,
@@ -546,7 +374,7 @@ function TradeClosePosition(trade)
     order:FormatQuantity()
   )
   if err ~= "" then
-    log.error("Ошибка обратной продажи: ", err, order:Print())
+    log.error("Ошибка отправки ордера: ", err, order:Print())
   else
     log.info(
       string.format(
