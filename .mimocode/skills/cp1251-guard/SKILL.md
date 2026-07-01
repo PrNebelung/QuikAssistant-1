@@ -76,3 +76,15 @@ After editing, verify these critical files:
 - `SubmittingOrders.lua` - order orchestration
 - `BrokerAdapter.lua` - QUIK API wrapper
 - `OrderValidator.lua` - validation logic
+
+## Pre-commit Hook
+
+Автоматическая проверка кодировки перед каждым коммитом.
+
+Если .lua файл содержит UTF-8 кириллицу или U+FFFD — коммит блокируется.
+
+```bash
+# Хук уже установлен в .git/hooks/pre-commit
+# Для ручной проверки:
+bash .git/hooks/pre-commit
+```
