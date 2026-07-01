@@ -1,6 +1,6 @@
---- Интеграционные тесты для CheckOrder.
+--- пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ CheckOrder.
 
-package.path = "?.lua;IntegrationTests/?.lua;" .. package.path
+package.path = "?.lua;IntegrationTests/?.lua;libs/?.lua;utils/?.lua;" .. package.path
 
 local mock = dofile("IntegrationTests/quik_mock.lua")
 
@@ -120,6 +120,14 @@ end)
 test("qty<0 -> reject", function()
   fail(B("GAZP", 500, -5), "Invalid")
 end)
+test("price=0 -> converted to min_price_step -> below PRICEMIN", function()
+  -- SetOperation converts price=0 to min_price_step (0.1)
+  -- 0.1 < PRICEMIN 800 -> rejected
+  fail(B("GAZP", 0, 10), "PRICEMIN")
+end)
+test("price<0 -> reject", function()
+  fail(B("GAZP", -100, 10), "Invalid")
+end)
 test("valid buy -> pass", function()
   pass(B("GAZP", 1000, 10))
 end)
@@ -139,12 +147,24 @@ end)
 test("buy 900 > PRICEMIN -> pass", function()
   pass(B("GAZP", 900, 10))
 end)
+test("buy price=0 -> below PRICEMIN after conversion", function()
+  fail(B("GAZP", 0, 10), "PRICEMIN")
+end)
 test("sell ignores PRICEMIN", function()
   mock.AddPosition("GAZP", 100, 500)
   pass(S("GAZP", 100, 10))
 end)
 test("bond buy 50 < 80 -> reject", function()
   fail(B("RU000A10BFF4", 50, 1), "PRICEMIN")
+end)
+test("bond buy 80 = PRICEMIN -> pass", function()
+  local sv = Config.VolumeOrderLimit
+  local se = Config.LimitActuationOrderBondEdge
+  Config.VolumeOrderLimit = 10000000
+  Config.LimitActuationOrderBondEdge = 0
+  pass(B("RU000A10BFF4", 80, 1))
+  Config.VolumeOrderLimit = sv
+  Config.LimitActuationOrderBondEdge = se
 end)
 
 -- 3. checkPositionForSell
@@ -188,6 +208,12 @@ test("volume < limit -> pass", function()
   Config.VolumeOrderLimit = 100000
   pass(B("GAZP", 1000, 10))
   Config.VolumeOrderLimit = sv
+end)
+test("volume=0 -> reject by checkNotNil", function()
+  fail(B("GAZP", 1000, 0), "Invalid")
+end)
+test("volume<0 -> reject by checkNotNil", function()
+  fail(B("GAZP", 1000, -5), "Invalid")
 end)
 test("sell ignores volume", function()
   local sv = Config.VolumeOrderLimit
@@ -236,6 +262,15 @@ test("custom edge=30: 11% -> reject", function()
     error("expected actuation, got: " .. reason)
   end
 end)
+test("edge=0 -> actuation check disabled -> pass", function()
+  local sv = Config.VolumeOrderLimit
+  local se = Config.LimitActuationOrderEdge
+  Config.VolumeOrderLimit = 100000
+  Config.LimitActuationOrderEdge = 0
+  pass(B("GAZP", 900, 10))
+  Config.VolumeOrderLimit = sv
+  Config.LimitActuationOrderEdge = se
+end)
 
 print("\n--- checkBondPriceLimit ---")
 test("bond price 105 > 100% -> reject by actuation", function()
@@ -244,6 +279,15 @@ test("bond price 105 > 100% -> reject by actuation", function()
   Config.VolumeOrderLimit = 10000000
   fail(B("RU000A10BFF4", 105, 1), "actuation")
   Config.VolumeOrderLimit = sv
+end)
+test("bond price = 100% -> pass (actuation ok)", function()
+  local sv = Config.VolumeOrderLimit
+  local se = Config.LimitActuationOrderBondEdge
+  Config.VolumeOrderLimit = 10000000
+  Config.LimitActuationOrderBondEdge = 0
+  pass(B("RU000A10BFF4", 100, 1))
+  Config.VolumeOrderLimit = sv
+  Config.LimitActuationOrderBondEdge = se
 end)
 test("stock ignores bond limit", function()
   pass(B("GAZP", 2000, 10))

@@ -3,7 +3,7 @@
 --- очереди ордеров и сделок с помощью событийных
 --- callback-функций QUIK (OnInit, OnStop, OnOrder, OnTrade, OnTransReply).
 
-package.path = getScriptPath() .. "\\?.lua;"
+package.path = getScriptPath() .. "\\?.lua;" .. getScriptPath() .. "\\libs\\?.lua;" .. getScriptPath() .. "\\utils\\?.lua;"
 
 require("Assistant")
 
