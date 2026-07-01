@@ -85,7 +85,7 @@ end
 
 --- Обработка успешной транзакции. Логирует подтверждение.
 function N_OnTransOK(trans)
-  log.debug("N_OnTransOK() транзакция " .. trans.trans_id .. " успешно исполнена")
+  log.debug(string.format("N_OnTransOK: транзакция %s успешно исполнена", trans.trans_id))
   log.trace(json.encode(trans))
 end
 
