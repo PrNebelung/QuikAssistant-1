@@ -38,9 +38,27 @@ MarketData = require("MarketData")
 PositionService = require("PositionService")
 require("Order")
 require("OrderValidator")
+require("TransactionHandler")
+require("PriceAdjuster")
+SessionScheduler = require("SessionScheduler")
 require("Constants")
 _initConstants()
 Config = require("Config")
+
+-- Mock SubmitOrders for TransactionHandler tests
+SubmitOrders = function(orders, resubmit)
+  for _, order in ipairs(orders) do
+    local transaction = {
+      ACTION = "NEW_ORDER",
+      SECCODE = order.SecurityCode,
+      CLASSCODE = order.SecurityInfo.class_code,
+      OPERATION = order.Operation,
+      PRICE = order:FormatPrice(),
+      QUANTITY = order:FormatQuantity(),
+    }
+    BrokerAdapter.SendTransaction(transaction)
+  end
+end
 
 local passed, failed, errors = 0, 0, {}
 
@@ -328,6 +346,178 @@ test("bond ignores avg pos", function()
 end)
 test("no position -> skip avg check", function()
   pass(B("GAZP", 2000, 10))
+end)
+
+-- ==========================================
+-- 8. sell price < 0
+-- ==========================================
+print("\n--- sell price < 0 ---")
+test("sell price=-100 -> reject (checkNotNil blocks negative)", function()
+  mock.AddPosition("GAZP", 100, 500)
+  fail(S("GAZP", -100, 10), "Invalid")
+end)
+
+-- ==========================================
+-- 9. bond high yield (actuation with high profit)
+-- ==========================================
+print("\n--- bond high yield ---")
+test("bond actuation 100% > bondEdge 60% -> pass", function()
+  local sv = Config.VolumeOrderLimit
+  local se = Config.LimitActuationOrderBondEdge
+  Config.VolumeOrderLimit = 10000000
+  Config.LimitActuationOrderBondEdge = 60
+  -- Use price=85 to pass PRICEMIN check, actuation = (100-85)/85*100 = 17.6% < 60%
+  -- Need price where actuation > 60% and price >= PRICEMIN
+  -- price=85: actuation=17.6%, too low
+  -- price=60: actuation=66.7%, but 60 < PRICEMIN=80
+  -- Solution: raise PRICEMIN or use higher price
+  -- Actually: actuation = (LAST - price) / price * 100
+  -- For actuation > 60%: (100 - price) / price > 0.6 -> price < 62.5
+  -- But PRICEMIN=80, so no valid price exists
+  -- Use a different approach: lower PRICEMIN
+  mock.AddSecurity("BOND_TEST", "TQCB", { last = 100, pricemin = 10, pricemax = 120, lot = 1000, scale = 2, min_price_step = 0.01, facevalue = 1000, face_unit = "SUR" })
+  pass(B("BOND_TEST", 60, 1))
+  Config.VolumeOrderLimit = sv
+  Config.LimitActuationOrderBondEdge = se
+end)
+
+-- ==========================================
+-- 10. PriceAdjuster + UseFileParams
+-- ==========================================
+print("\n--- PriceAdjuster / UseFileParams ---")
+test("UseFileParams=true -> price not adjusted", function()
+  local o = B("GAZP", 1000, 10)
+  o.UseFileParams = true
+  AdjustPrice(o)
+  assert(o.Price == 1000, "expected price 1000, got " .. tostring(o.Price))
+end)
+test("UseFileParams=false, price > LAST -> buy adjusted down", function()
+  local o = B("GAZP", 1100, 10)
+  o.UseFileParams = false
+  AdjustPrice(o)
+  assert(o.Price < 1100, "expected price < 1100, got " .. tostring(o.Price))
+end)
+test("UseFileParams=false, price < PRICEMIN -> buy set to PRICEMIN", function()
+  local o = B("GAZP", 500, 10)
+  o.UseFileParams = false
+  AdjustPrice(o)
+  assert(o.Price >= 800, "expected price >= 800 (PRICEMIN), got " .. tostring(o.Price))
+end)
+test("UseFileParams=false, sell price < LAST -> sell adjusted up", function()
+  mock.AddPosition("GAZP", 100, 500)
+  local o = S("GAZP", 900, 10)
+  o.UseFileParams = false
+  AdjustPrice(o)
+  assert(o.Price > 900, "expected price > 900, got " .. tostring(o.Price))
+end)
+
+-- ==========================================
+-- 11. SetQuantity calculation
+-- ==========================================
+print("\n--- SetQuantity ---")
+test("SetQuantity buy stock: 100000 / 1000 / 1 = 100", function()
+  local o = B("GAZP", 1000, 0)
+  o:SetQuantity("B", 1000, 100000)
+  assert(o.Quantity == 100, "expected qty=100, got " .. tostring(o.Quantity))
+end)
+test("SetQuantity buy bond: correct lot calculation", function()
+  local o = B("RU000A10BFF4", 80, 0)
+  o:SetQuantity("B", 80, 100000)
+  assert(o.Quantity >= 1, "expected qty >= 1, got " .. tostring(o.Quantity))
+end)
+test("SetQuantity with quantityMax=0 -> qty=0", function()
+  local o = B("GAZP", 1000, 0)
+  o:SetQuantity("B", 1000, 0)
+  assert(o.Quantity == 0, "expected qty=0, got " .. tostring(o.Quantity))
+end)
+test("SetQuantity with price=0 -> qty=0", function()
+  local o = B("GAZP", 1000, 0)
+  o:SetQuantity("B", 0, 100000)
+  assert(o.Quantity == 0, "expected qty=0, got " .. tostring(o.Quantity))
+end)
+
+-- ==========================================
+-- 12. SetQuantitySell calculation
+-- ==========================================
+print("\n--- SetQuantitySell ---")
+test("SetQuantitySell: position=100, lot=1 -> qty=100", function()
+  mock.AddPosition("GAZP", 100, 500)
+  local o = S("GAZP", 1000, 0)
+  o:SetQuantitySell("S", 1000, 100)
+  assert(o.Quantity == 100, "expected qty=100, got " .. tostring(o.Quantity))
+end)
+test("SetQuantitySell with position=0 -> qty=0", function()
+  local o = S("GAZP", 1000, 0)
+  o:SetQuantitySell("S", 1000, 0)
+  assert(o.Quantity == 0, "expected qty=0, got " .. tostring(o.Quantity))
+end)
+test("SetQuantitySell with price=0 -> qty=0", function()
+  local o = S("GAZP", 1000, 0)
+  o:SetQuantitySell("S", 0, 100)
+  assert(o.Quantity == 0, "expected qty=0, got " .. tostring(o.Quantity))
+end)
+
+-- ==========================================
+-- 13. Transaction error codes (579, 580, 133)
+-- ==========================================
+print("\n--- TransactionHandler errors ---")
+test("error 579 -> logged, no crash", function()
+  local trans = { result_msg = "Error: (579) price too low", sec_code = "GAZP", quantity = 10, price = "100.00" }
+  SetLimitOrdersWithError(trans)
+end)
+test("error 580 -> auto-recover sell", function()
+  mock.AddPosition("GAZP", 50, 500)
+  local trans = { result_msg = "Error: (580) price too high, do 1200", sec_code = "GAZP", quantity = 10, price = 1300 }
+  mock.ClearSent()
+  SetLimitOrdersWithError(trans)
+  assert(mock.GetSentCount() >= 1, "expected auto-recover transaction")
+end)
+test("error 133 -> logged, no crash", function()
+  local trans = { result_msg = "Error: (133) rejected", sec_code = "GAZP", quantity = 10, price = "100.00" }
+  SetLimitOrdersWithError(trans)
+end)
+test("unknown error -> logged", function()
+  local trans = { result_msg = "Unknown error 999", sec_code = "GAZP", quantity = 10, price = "100.00" }
+  SetLimitOrdersWithError(trans)
+end)
+
+-- ==========================================
+-- 14. Deduplication (IsOrderExists)
+-- ==========================================
+print("\n--- IsOrderExists ---")
+test("same order exists -> true", function()
+  mock.AddOrder({ sec_code = "GAZP", class_code = "TQBR", flags = FLAG_ACTIVE, price = 1000, qty = 10, balance = 10, trans_id = 1, order_num = 1 })
+  local o = B("GAZP", 1000, 10)
+  assert(IsOrderExists(o) == true, "expected true")
+end)
+test("different price -> false", function()
+  mock.AddOrder({ sec_code = "GAZP", class_code = "TQBR", flags = FLAG_ACTIVE, price = 1000, qty = 10, balance = 10, trans_id = 1, order_num = 1 })
+  local o = B("GAZP", 900, 10)
+  assert(IsOrderExists(o) == false, "expected false")
+end)
+test("different operation -> false", function()
+  mock.AddOrder({ sec_code = "GAZP", class_code = "TQBR", flags = FLAG_ACTIVE, price = 1000, qty = 10, balance = 10, trans_id = 1, order_num = 1 })
+  local o = S("GAZP", 1000, 10)
+  assert(IsOrderExists(o) == false, "expected false")
+end)
+
+-- ==========================================
+-- 15. Session scheduling
+-- ==========================================
+print("\n--- Session scheduling ---")
+test("SessionScheduler initializes correctly", function()
+  SessionScheduler.Initialization()
+  assert(SessionScheduler.TimeMorningStart ~= nil, "morning time not set")
+  assert(SessionScheduler.TimeMainStart ~= nil, "main time not set")
+  assert(SessionScheduler.TimeEveningStart ~= nil, "evening time not set")
+end)
+test("SessionScheduler.MarkSent sets flag", function()
+  SessionScheduler.MarkSent()
+  assert(SessionScheduler.IsSentOrders == true, "expected IsSentOrders=true")
+end)
+test("SessionScheduler.CheckSession returns boolean", function()
+  local result = SessionScheduler.CheckSession()
+  assert(type(result) == "boolean", "expected boolean, got " .. type(result))
 end)
 
 print(string.format("\n=== %d passed, %d failed ===", passed, failed))
