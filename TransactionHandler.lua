@@ -43,7 +43,7 @@ end
 
 --- Проверяет наличие ошибки в сообщении по коду ошибки.
 function TransactionHandler.isError(result_msg, error_code)
-	return string.find(result_msg, ": (" .. error_code .. ")", 1, true)
+	return string.find(result_msg, string.format(": (%s)", error_code), 1, true)
 end
 
 --- Получает все ордера из QUIK и передаёт их в OnOrder.
@@ -109,10 +109,7 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
 		local operation = "S"
 		local order = Order:new(trans.sec_code)
 		if order == nil then
-			log.error(
-				"Не удалось создать заказ для корректирующей сделки",
-				trans.sec_code
-			)
+			log.error(string.format("Не удалось создать заказ для корректирующей сделки %s", trans.sec_code))
 			return
 		end
 		order:SetOperation(operation, maxPrice, trans.quantity)
@@ -137,10 +134,7 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
 		local operation = "B"
 		local order = Order:new(trans.sec_code)
 		if order == nil then
-			log.error(
-				"Не удалось создать заказ для корректирующей сделки",
-				trans.sec_code
-			)
+			log.error(string.format("Не удалось создать заказ для корректирующей сделки %s", trans.sec_code))
 			return
 		end
 		order:SetOperation(operation, minPrice, 0)

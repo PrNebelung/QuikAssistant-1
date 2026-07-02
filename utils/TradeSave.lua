@@ -40,7 +40,7 @@ function TradeSave(trade)
 
 	local fp, err = io.open(BrokerAdapter.GetScriptPath() .. "//Data//MyTrades.csv", "a+")
 	if not fp then
-		log.error("Не удалось открыть MyTrades.csv: " .. tostring(err))
+		log.error(string.format("Не удалось открыть MyTrades.csv: %s", tostring(err)))
 		return
 	end
 
@@ -50,6 +50,6 @@ function TradeSave(trade)
 		fp:close()
 	end)
 	if not ok then
-		log.error("Ошибка записи в MyTrades.csv: " .. werr)
+		log.error(string.format("Ошибка записи в MyTrades.csv: %s", werr))
 	end
 end

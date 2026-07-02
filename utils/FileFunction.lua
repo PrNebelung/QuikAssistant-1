@@ -27,7 +27,7 @@ function getFromCSV(nameFileCSV)
 			result[#result + 1] = r2
 		end
 	else
-		log.warn("Не удалось открыть CSV файл: " .. path)
+		log.warn(string.format("Не удалось открыть CSV файл: %s", path))
 	end
 
 	return result
