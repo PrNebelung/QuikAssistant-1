@@ -189,7 +189,7 @@ local checkChain = {
 --- @return string Пустая строка при успехе, причина отклонения при неудаче
 function OrderValidator.CheckOrder(order)
   if order == nil then
-    log.error("CheckOrder: order is nil")
+    log.error("CheckOrder: ордер равен nil")
     return false, "order is nil"
   end
   for _, check in ipairs(checkChain) do

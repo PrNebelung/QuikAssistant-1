@@ -197,7 +197,7 @@ function main()
       sleep(Constants.SLEEP_MAIN_LOOP_MS)
     end)
     if not loopOk then
-      log.error(string.format("Main loop error: %s", tostring(loopErr)))
+      log.error(string.format("Ошибка главного цикла: %s", tostring(loopErr)))
       sleep(Constants.SLEEP_ERROR_MS)
     end
   end

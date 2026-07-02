@@ -34,7 +34,7 @@ function PositionService.GetPosition(securityCode)
   for i = 1, #positionIndices do
     local position = BrokerAdapter.GetPosition(positionIndices[i])
     if position and position.sec_code == securityCode then
-      log.debug("Position found. ", securityCode)
+      log.debug("Позиция найдена. ", securityCode)
       log.trace(json.encode(position))
       positionCache[securityCode] = position
       return position

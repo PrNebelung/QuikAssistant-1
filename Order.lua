@@ -128,17 +128,17 @@ end
 --- @param quantity number|string Количество ордера (должно быть >= 0)
 function Order:SetOperation(operation, price, quantity)
   if operation ~= "B" and operation ~= "S" then
-    log.error("SetOperation: invalid operation '%s' (expected 'B' or 'S')" .. tostring(operation))
+    log.error("SetOperation: неверная операция '%s' (ожидается 'B' или 'S')" .. tostring(operation))
     return
   end
   local numPrice = tonumber(price)
   if numPrice == nil or numPrice < 0 then
-    log.error("SetOperation: invalid price " .. tostring(price) .. " (expected >= 0)")
+    log.error("SetOperation: неверная цена " .. tostring(price) .. " (ожидается >= 0)")
     return
   end
   local numQuantity = tonumber(quantity)
   if numQuantity == nil or numQuantity < 0 then
-    log.error("SetOperation: invalid quantity " .. tostring(quantity) .. " (expected >= 0)")
+    log.error("SetOperation: неверное количество " .. tostring(quantity) .. " (ожидается >= 0)")
     return
   end
   self.Operation = operation
@@ -175,12 +175,12 @@ end
 function Order:SetQuantity(operation, price, quantityMax)
   self.Operation = operation
   if price == nil then
-    log.error("SetQuantity: price is nil")
+    log.error("SetQuantity: цена равна nil")
     self.Quantity = 0
     return
   end
   if quantityMax == nil then
-    log.error("SetQuantity: quantityMax is nil")
+    log.error("SetQuantity: quantityMax равен nil")
     self.Quantity = 0
     return
   end

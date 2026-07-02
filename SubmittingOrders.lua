@@ -36,7 +36,7 @@ local function processFile(fileName, stats, isSubmittingOrdersRun)
     return
   end
 
-  log.debug(string.format("Loading orders from %s", fileName))
+  log.debug(string.format("Загрузка ордеров из %s", fileName))
   local orders = OrderLoader.LoadOrdersFromFile(fileName)
   stats.loaded = stats.loaded + #orders
   local s = SubmitOrders(orders)
