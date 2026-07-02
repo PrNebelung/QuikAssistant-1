@@ -44,6 +44,15 @@ Constants.MARKET_DATA_MAX_RETRIES = 30
 Constants.MARKET_DATA_RETRY_INTERVAL_S = 2
 Constants.MAX_RECURSION_DEPTH = 3
 
+-- ==========================================
+-- Пороги цвета и лимиты
+-- ==========================================
+Constants.ACTUATION_COLOR_RED = 2
+Constants.ACTUATION_COLOR_YELLOW = 5
+Constants.BOND_MAX_PRICE_PERCENT = 100.0
+Constants.RETRY_LOG_INTERVAL = 5
+Constants.TRADE_CLOSE_SLEEP_MS = 500
+
 --- Продвижение Constants.* в глобальное пространство (FLAG_ACTIVE и др.) для обратной совместимости.
 function _initConstants()
 	FLAG_ACTIVE = Constants.FLAG_ACTIVE
@@ -61,6 +70,11 @@ function _initConstants()
 	MARKET_DATA_MAX_RETRIES = Constants.MARKET_DATA_MAX_RETRIES
 	MARKET_DATA_RETRY_INTERVAL_S = Constants.MARKET_DATA_RETRY_INTERVAL_S
 	MAX_RECURSION_DEPTH = Constants.MAX_RECURSION_DEPTH
+	ACTUATION_COLOR_RED = Constants.ACTUATION_COLOR_RED
+	ACTUATION_COLOR_YELLOW = Constants.ACTUATION_COLOR_YELLOW
+	BOND_MAX_PRICE_PERCENT = Constants.BOND_MAX_PRICE_PERCENT
+	RETRY_LOG_INTERVAL = Constants.RETRY_LOG_INTERVAL
+	TRADE_CLOSE_SLEEP_MS = Constants.TRADE_CLOSE_SLEEP_MS
 end
 
 _initConstants()

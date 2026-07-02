@@ -621,7 +621,7 @@ test("CheckOrder - UseFileParams + price below PRICEMIN", function()
 	order.UseFileParams = true
 	local isCheck, rejectReason = CheckOrder(order)
 	assert_false(isCheck, "UseFileParams order with price < PRICEMIN should be rejected")
-	assert_true(string.find(rejectReason, "below PRICEMIN") ~= nil, "reason mentions PRICEMIN")
+	assert_true(string.find(rejectReason, "ниже PRICEMIN") ~= nil, "reason mentions PRICEMIN")
 	getParamEx = savedGetParamEx
 end)
 
@@ -745,7 +745,7 @@ test("CheckPriceBelowPricemin - price below minimum", function()
 	order:SetOperation("B", 50.00, 10)
 	local isCheck, reason = CheckOrder(order)
 	assert_false(isCheck, "order with price below PRICEMIN should be rejected")
-	assert_true(string.find(reason, "below PRICEMIN") ~= nil, "reason: below PRICEMIN")
+	assert_true(string.find(reason, "ниже PRICEMIN") ~= nil, "reason: below PRICEMIN")
 	getParamEx = savedGetParamEx
 end)
 

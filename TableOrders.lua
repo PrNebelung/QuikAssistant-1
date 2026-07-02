@@ -3,6 +3,7 @@
 --- название, код, операция, актуализация, цена, объём,
 --- номер ордера с цветовой индикацией.
 
+require("Constants")
 local BrokerAdapter = require("BrokerAdapter")
 
 local nameColumnSecurityName = "Наименование инструмента"
