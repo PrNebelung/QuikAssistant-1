@@ -184,10 +184,10 @@ local checkChain = {
 	checkAvgPositionPrice,
 }
 
---- Валидация ордера через все проверки (nil, pricemin, позиция, объём, срабатывание, облигация, средняя цена).???? ????).
---- @param table Объект Order to validate
+--- Валидация ордера через все проверки (nil, pricemin, позиция, объём, срабатывание, облигация, средняя цена).
+--- @param table Объект Order для валидации
 --- @return boolean true, если ордер прошёл все проверки
---- @return string ?????? ?????? ??? ??????, ??????? ?????????? ??? ???????
+--- @return string Пустая строка при успехе, причина отклонения при неудаче
 function OrderValidator.CheckOrder(order)
 	if order == nil then
 		log.error("CheckOrder: ордер равен nil")
