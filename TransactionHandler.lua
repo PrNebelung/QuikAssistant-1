@@ -96,15 +96,7 @@ end
 function TransactionHandler.SetLimitOrdersWithError(trans)
 	local error579 = TransactionHandler.isError(trans.result_msg, ERR_PRICE_TOO_LOW)
 	if error579 ~= nil then
-		log.warn(
-			"Error (579) for "
-				.. " (qty="
-				.. tostring(trans.quantity)
-				.. ", price="
-				.. tostring(trans.price)
-				.. "): "
-				.. trans.result_msg
-		)
+		log.warn(string.format("Error (579) (qty=%s, price=%s): %s", tostring(trans.quantity), tostring(trans.price), trans.result_msg))
 		return
 	end
 
@@ -163,15 +155,7 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
 
 	local error133 = TransactionHandler.isError(trans.result_msg, ERR_EXECUTION_REJECTED)
 	if error133 ~= nil then
-		log.warn(
-			"Error (133) for "
-				.. " (qty="
-				.. tostring(trans.quantity)
-				.. ", price="
-				.. tostring(trans.price)
-				.. "): "
-				.. trans.result_msg
-		)
+		log.warn(string.format("Error (133) (qty=%s, price=%s): %s", tostring(trans.quantity), tostring(trans.price), trans.result_msg))
 		return
 	end
 
