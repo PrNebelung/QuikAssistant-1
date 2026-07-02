@@ -1,8 +1,8 @@
 --- Интеграционные тесты для методов Order и PriceAdjuster.
 
-package.path = "?.lua;IntegrationTests/?.lua;" .. package.path
+package.path = "?.lua;Tests/?.lua;" .. package.path
 
-local mock = dofile("IntegrationTests/quik_mock.lua")
+local mock = dofile("Tests/quik_mock.lua")
 
 mock.AddSecurity(
 	"GAZP",

@@ -65,7 +65,7 @@ local function checkNotNil(order)
 				order and order:Print() or "nil"
 			)
 		)
-		return false, "Invalid order parameters"
+		return false, "некорректные параметры ордера"
 	end
 	return true, ""
 end
@@ -191,7 +191,7 @@ local checkChain = {
 function OrderValidator.CheckOrder(order)
 	if order == nil then
 		log.error("CheckOrder: ордер равен nil")
-		return false, "order is nil"
+		return false, "ордер равен nil"
 	end
 	for _, check in ipairs(checkChain) do
 		local passed, reason = check(order)

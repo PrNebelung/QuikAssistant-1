@@ -1,303 +1,265 @@
--- Мок API QUIK для unit-тестов
+--- Фейковый QUIK API для интеграционных тестов.
+--- Позволяет настраивать данные инструментов, позиции, заявки.
+--- Отслеживает все вызовы API и отправленные транзакции.
 
-_G.isConnected = function()
-	return 1
+-- ==========================================
+-- QUIK-константы (таблицы, события)
+-- ==========================================
+_G.QTABLE_LBUTTONDOWN = 1
+_G.QTABLE_RBUTTONDOWN = 2
+_G.QTABLE_LBUTTONDBLCLK = 3
+_G.QTABLE_RBUTTONDBLCLK = 4
+_G.QTABLE_SELCHANGED = 5
+_G.QTABLE_CHAR = 6
+_G.QTABLE_VKEY = 7
+_G.QTABLE_CONTEXTMENU = 8
+_G.QTABLE_MBUTTONDOWN = 9
+_G.QTABLE_MBUTTONDBLCLK = 10
+_G.QTABLE_LBUTTONUP = 11
+_G.QTABLE_RBUTTONUP = 12
+_G.QTABLE_CLOSE = 13
+_G.QTABLE_STRING_TYPE = "string"
+_G.QTABLE_DOUBLE_TYPE = "double"
+
+local QuikMock = {}
+
+-- ==========================================
+-- Хранилище данных
+-- ==========================================
+
+-- Инструменты: secCode -> { securityInfo, params }
+QuikMock.securities = {}
+
+-- Позиции (depo_limits): таблица [{sec_code, currentbal, wa_position_price, limit_kind}]
+QuikMock.positions = {}
+
+-- Заявки (orders): таблица [{sec_code, class_code, flags, price, qty, balance, trans_id, order_num}]
+QuikMock.orders = {}
+
+-- Сделки (trades): таблица [{sec_code, buy_sell, flags, price, qty, order_num, trade_num, trans_id}]
+QuikMock.trades = {}
+
+-- Отправленные транзакции
+QuikMock.sentTransactions = {}
+
+-- Счётчики для ID
+QuikMock.nextOrderNum = 1000
+QuikMock.nextTradeNum = 1000
+QuikMock.nextTransId = 1000
+
+-- ==========================================
+-- Настройка данных
+-- ==========================================
+
+--- Добавить инструмент с данными.
+--- @param secCode string Тикер/ISIN
+--- @param classCode string Код класса (TQBR, TQCB и т.д.)
+--- @param data table { last, pricemin, pricemax, prevprice, lot, scale, min_price_step }
+function QuikMock.AddSecurity(secCode, classCode, data)
+	classCode = classCode or "TQBR"
+	QuikMock.securities[secCode] = QuikMock.securities[secCode] or {}
+	QuikMock.securities[secCode][classCode] = {
+		securityInfo = {
+			code = secCode,
+			class_code = classCode,
+			class_name = data.class_name or classCode,
+			name = data.name or secCode,
+			short_name = data.short_name or secCode,
+			isin_code = data.isin or secCode,
+			regnumber = data.regnumber or "",
+			lot = data.lot or 1,
+			lot_size = data.lot or 1,
+			scale = data.scale or 2,
+			min_price_step = data.min_price_step or 0.01,
+			face_value = data.facevalue or 0,
+			face_unit = data.face_unit or "SUR",
+		},
+		params = {
+			LAST = data.last or "0",
+			PRICEMIN = data.pricemin or "0",
+			PRICEMAX = data.pricemax or "0",
+			PREVPRICE = data.prevprice or "0",
+		},
+	}
 end
 
-_G.getInfoParam = function(param)
-	if param == "USERID" then
-		return "119330"
-	end
-	if param == "SERVERTIME" then
-		return "10:30:00"
-	end
-	return ""
+--- Добавить позицию (depo_limit).
+--- @param secCode string Тикер
+--- @param balance number Текущий баланс
+--- @param waPrice number Средняя цена позиции
+--- @param limitKind number Тип лимита (2 = собственный)
+function QuikMock.AddPosition(secCode, balance, waPrice, limitKind)
+	table.insert(QuikMock.positions, {
+		sec_code = secCode,
+		currentbal = tostring(balance),
+		wa_position_price = tostring(waPrice),
+		limit_kind = limitKind or 2,
+	})
 end
 
-_G.getScriptPath = function()
-	return "."
+--- Добавить существующую заявку.
+function QuikMock.AddOrder(order)
+	QuikMock.nextOrderNum = QuikMock.nextOrderNum + 1
+	order.order_num = order.order_num or QuikMock.nextOrderNum
+	order.trans_id = order.trans_id or 0
+	order.flags = order.flags or 0x1
+	order.balance = order.balance or order.qty
+	table.insert(QuikMock.orders, order)
 end
 
-_G.sleep = function(ms) end
-_G.message = function(text) end
+--- Очистить все данные.
+function QuikMock.Reset()
+	QuikMock.securities = {}
+	QuikMock.positions = {}
+	QuikMock.orders = {}
+	QuikMock.trades = {}
+	QuikMock.sentTransactions = {}
+	QuikMock.nextOrderNum = 1000
+	QuikMock.nextTradeNum = 1000
+	QuikMock.nextTransId = 1000
+end
 
-local securities = {
-	GAZP = {
-		name = '"Газпром" (пАО) рн',
-		short_name = "Газпром рн",
-		code = "GAZP",
-		isin_code = "RU0007661625",
-		regnumber = "1-02-00028-A",
-		class_name = "Акциироссийских эмитентов",
-		class_code = "TQBR",
-		face_value = 5,
-		face_unit = "SUR",
-		scale = 2,
-		min_price_step = 0.01,
-		lot_size = 10,
-	},
-	["RU000A102RN7"] = {
-		name = "ОФЗ 26206",
-		short_name = "ОФЗ-ПД 26",
-		code = "RU000A102RN7",
-		isin_code = "RU000A102RN7",
-		regnumber = "4B020603354B",
-		class_name = "Облигации",
-		class_code = "TQOB",
-		face_value = 1000.00,
-		face_unit = "SUR",
-		scale = 2,
-		min_price_step = 0.01,
-		lot_size = 1,
-	},
-	ADBE_SPB = {
-		name = "Adobe Inc.",
-		short_name = "Adobe Inc.",
-		code = "ADBE_SPB",
-		isin_code = "US00724F1012",
-		regnumber = "",
-		class_name = "SPB: Иностранные",
-		class_code = "SPBXM",
-		face_value = 0.0001,
-		face_unit = "USD",
-		scale = 2,
-		min_price_step = 0.01,
-		lot_size = 1,
-	},
-	LKOH = {
-		name = '"Сбербанк" (ПАО) рн',
-		short_name = "Сбербанк рн",
-		code = "LKOH",
-		isin_code = "RU0009029458",
-		regnumber = "1-01-00010-A",
-		class_name = "Акциироссийских эмитентов",
-		class_code = "TQBR",
-		face_value = 25,
-		face_unit = "SUR",
-		scale = 2,
-		min_price_step = 5.0,
-		lot_size = 1,
-	},
-}
+--- Получить список отправленных транзакций.
+function QuikMock.GetSentTransactions()
+	return QuikMock.sentTransactions
+end
 
-_G.getSecurityInfo = function(class_code, sec_code)
-	local sec = securities[sec_code]
-	if sec and sec.class_code == class_code then
-		local copy = {}
-		for k, v in pairs(sec) do
-			copy[k] = v
-		end
-		return copy
+--- Получить количество отправленных транзакций.
+function QuikMock.GetSentCount()
+	return #QuikMock.sentTransactions
+end
+
+--- Очистить отправленные транзакции.
+function QuikMock.ClearSent()
+	QuikMock.sentTransactions = {}
+end
+
+-- ==========================================
+-- Фейковые функции QUIK API
+-- ==========================================
+
+--- getSecurityInfo(classCode, secCode)
+function _G.getSecurityInfo(classCode, secCode)
+	local sec = QuikMock.securities[secCode]
+	if sec and sec[classCode] then
+		return sec[classCode].securityInfo
 	end
 	return nil
 end
 
-local params = {
-	LAST = {},
-	PRICEMIN = {},
-	PRICEMAX = {},
-	PREVPRICE = {},
-	LASTCHANGE = {},
-}
-
-_G.getParamEx = function(class_code, sec_code, param)
-	local defaults = {
-		LAST = "250.0",
-		PRICEMIN = "200.0",
-		PRICEMAX = "300.0",
-		PREVPRICE = "245.0",
-		LASTCHANGE = "1.5",
-	}
-	return {
-		result = "1",
-		param_value = defaults[param] or "0",
-	}
+--- getParamEx(classCode, secCode, param)
+function _G.getParamEx(classCode, secCode, param)
+	local sec = QuikMock.securities[secCode]
+	if sec and sec[classCode] then
+		local value = sec[classCode].params[param]
+		if value ~= nil then
+			return { param_value = tostring(value), result = "1" }
+		end
+	end
+	return { param_value = "0", result = "0" }
 end
 
-local tables = {
-	orders = {},
-	depo_limits = {},
-}
-_G.tables = tables
-
-_G.getNumberOf = function(table_name)
-	if tables[table_name] then
-		return #tables[table_name]
+--- getNumberOf(itemType)
+function _G.getNumberOf(itemType)
+	if itemType == "orders" then
+		return #QuikMock.orders
+	elseif itemType == "depo_limits" then
+		return #QuikMock.positions
 	end
 	return 0
 end
 
-_G.SearchItems = function(table_name, from, to, func, params)
-	local items = tables[table_name] or {}
-	local results = {}
-	for i = from + 1, to + 1 do
-		if i <= #items then
-			local item = items[i]
-			if func then
-				local args = {}
-				for rawParam in string.gmatch(params, "([^,]+)") do
-					local param = rawParam:gsub("^%s+", ""):gsub("%s+$", "")
-					table.insert(args, item[param] or item[param:gsub("_", "")])
-				end
-				if func(unpack(args)) then
-					table.insert(results, i - 1)
-				end
-			else
-				table.insert(results, i - 1)
+--- SearchItems(itemType, startIndex, endIndex, filterFunc, params)
+--- params — строка полей через запятую: "field1, field2"
+--- QUIK передаёт в filterFunc значения полей, а не весь объект.
+function _G.SearchItems(itemType, startIndex, endIndex, filterFunc, params)
+	local items = {}
+	local list
+	if itemType == "orders" then
+		list = QuikMock.orders
+	elseif itemType == "depo_limits" then
+		list = QuikMock.positions
+	else
+		return {}
+	end
+
+	local fields = {}
+	if params then
+		for field in string.gmatch(params, "([^,]+)") do
+			fields[#fields + 1] = field:match("^%s*(.-)%s*$")
+		end
+	end
+
+	for i = startIndex + 1, math.min(endIndex + 1, #list) do
+		local item = list[i]
+		if item and filterFunc then
+			local args = {}
+			for _, field in ipairs(fields) do
+				args[#args + 1] = item[field]
+			end
+			local ok, result = pcall(filterFunc, table.unpack(args))
+			if ok and result then
+				table.insert(items, i - 1)
 			end
 		end
 	end
-	return results
+	return items
 end
 
-_G.getItem = function(table_name, index)
-	local items = tables[table_name] or {}
-	return items[index + 1]
+--- getItem(itemType, index)
+function _G.getItem(itemType, index)
+	local list
+	if itemType == "orders" then
+		list = QuikMock.orders
+	elseif itemType == "depo_limits" then
+		list = QuikMock.positions
+	else
+		return nil
+	end
+	return list[index + 1]
 end
 
-_G.sendTransaction = function(transaction)
+--- sendTransaction(transaction)
+function _G.sendTransaction(transaction)
+	table.insert(QuikMock.sentTransactions, transaction)
+	QuikMock.nextTransId = QuikMock.nextTransId + 1
 	return ""
 end
 
-_G.getPortfolioInfoEx = function(firm_id, client_code, flags)
-	return {
-		in_all_assets = 1500000,
-		all_assets = 1200000,
-		profit_loss = 50000,
-		rate_change = 2.5,
+--- isConnected()
+function _G.isConnected()
+	return 1
+end
+
+--- getInfoParam(param)
+function _G.getInfoParam(param)
+	if param == "USERID" then
+		return QuikMock.userId or "49653"
+	end
+	if param == "SERVERTIME" then
+		return os.date("%H:%M:%S")
+	end
+	return ""
+end
+
+--- getPortfolioInfoEx(firmId, clientCode, dataType)
+function _G.getPortfolioInfoEx(firmId, clientCode, dataType)
+	return QuikMock.portfolio or {
+		in_all_assets = 0,
+		all_assets = 0,
+		profit_loss = 0,
+		rate_change = 0,
 	}
 end
 
-local table_id_counter = 100
-
-_G.AllocTable = function()
-	table_id_counter = table_id_counter + 1
-	return table_id_counter
+--- getScriptPath()
+function _G.getScriptPath()
+	return QuikMock.scriptPath or (io.popen("cd"):read("*l") .. "\\")
 end
 
-_G.CreateWindow = function(t_id) end
-_G.DestroyTable = function(t_id) end
-_G.IsWindowClosed = function(t_id)
-	return false
-end
-_G.SetWindowCaption = function(t_id, caption) end
-_G.GetWindowCaption = function(t_id)
-	return ""
-end
-_G.SetWindowPos = function(t_id, x, y, dx, dy) end
-_G.GetWindowRect = function(t_id)
-	return 0, 0, 640, 480
-end
-_G.AddColumn = function(t_id, col, name, visible, c_type, width) end
-_G.Clear = function(t_id) end
-_G.InsertRow = function(t_id, pos)
-	return math.random(1, 100)
-end
-_G.GetTableSize = function(t_id)
-	return 0, 0
-end
-_G.SetCell = function(t_id, row, col, text, image) end
-_G.GetCell = function(t_id, row, col)
-	return { image = "", value = "" }
-end
-_G.SetColor = function(t_id, row, col, fg1, fg2, bg1, bg2) end
-_G.SetTableNotificationCallback = function(t_id, func) end
-
-_G.QTABLE_STRING_TYPE = 1
-_G.QTABLE_DOUBLE_TYPE = 2
-_G.QTABLE_INT64_TYPE = 3
-_G.QTABLE_NO_INDEX = -1
-_G.QTABLE_DEFAULT_COLOR = 0xFFFFFF
-_G.QTABLE_LBUTTONDBLCLK = 0x100
-
-_G.QTABLE_LBUTTONDOWN = 0x001
-_G.QTABLE_RBUTTONDOWN = 0x002
-_G.QTABLE_RBUTTONDBLCLK = 0x003
-_G.QTABLE_SELCHANGED = 0x004
-_G.QTABLE_CHAR = 0x005
-_G.QTABLE_VKEY = 0x006
-_G.QTABLE_CONTEXTMENU = 0x007
-_G.QTABLE_MBUTTONDOWN = 0x008
-_G.QTABLE_MBUTTONDBLCLK = 0x009
-_G.QTABLE_LBUTTONUP = 0x00A
-_G.QTABLE_RBUTTONUP = 0x00B
-_G.QTABLE_CLOSE = 0x00C
-
-_G.RGB = function(r, g, b)
-	return r * 65536 + g * 256 + b
+--- sleep(ms)
+function _G.sleep(ms)
+	-- Не спим в тестах
 end
 
-function addTestPosition(sec_code, balance, wa_price)
-	table.insert(tables.depo_limits, {
-		sec_code = sec_code,
-		limit_kind = 2,
-		currentbal = tostring(balance),
-		wa_position_price = tostring(wa_price),
-	})
-end
-
-function addTestOrder(sec_code, class_code, flags, trans_id, order_num, price, qty, balance)
-	table.insert(tables.orders, {
-		sec_code = sec_code,
-		class_code = class_code,
-		flags = flags,
-		trans_id = trans_id,
-		order_num = order_num,
-		price = tostring(price),
-		qty = qty,
-		balance = balance or 0,
-	})
-end
-
-function clearTestData()
-	tables.orders = {}
-	tables.depo_limits = {}
-end
-
-_G.ClearSecurityInfoCache = function() end
-_G.ClearPositionCache = function() end
-
-_G.log = {
-	trace = function(...) end,
-	debug = function(...) end,
-	info = function(...) end,
-	warn = function(...) end,
-	error = function(...) end,
-	fatal = function(...) end,
-	outfile = nil,
-	level = "trace",
-	usecolor = false,
-}
-
-_G.json = {
-	encode = function(t)
-		return "{}"
-	end,
-	decode = function(s)
-		return {}
-	end,
-}
-
-_G.FLAG_ACTIVE = 0x1
-_G.FLAG_EXECUTED = 0x2
-_G.FLAG_SELL = 0x4
-_G.ERR_PRICE_TOO_LOW = 579
-_G.ERR_PRICE_TOO_HIGH = 580
-_G.TRANS_STATUS_COMPLETED = 3
-_G.PRICE_DEVIATION_MULTIPLIER = 10
-
-_G.Broker = "TEST"
-_G.ClientCode = "10567"
-_G.AccountCode = "NL0011100043"
-_G.FirmId = ""
-_G.VolumeOrderMax = 11000
-_G.BondVolumeOrderMax = 7000
-_G.VolumeOrderLimit = 200000
-_G.LimitActuationOrderEdge = 5
-_G.LimitActuationOrderBondEdge = 60
-
-print("[MOCK] QUIK API инициализирован")
-
-if not unpack then
-	unpack = table.unpack
-end
+return QuikMock
