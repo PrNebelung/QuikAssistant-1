@@ -28,6 +28,32 @@ local cycleCount = 0
 -- Неизвестные ценные бумаги
 unknownSecurities = {}
 
+--- Process orders from a file
+--- @param fileName string
+--- @param stats table
+--- @param isSubmittingOrdersRun boolean
+local function processFile(fileName, stats, isSubmittingOrdersRun)
+  if not isSubmittingOrdersRun then
+    return
+  end
+
+  log.debug(string.format("Loading orders from %s", fileName))
+  local orders = OrderLoader.LoadOrdersFromFile(fileName)
+  stats.loaded = stats.loaded + #orders
+  local s = SubmitOrders(orders)
+  stats.sent = stats.sent + s.sent
+  stats.rejected = stats.rejected + s.rejected
+  stats.duplicate = stats.duplicate + s.duplicate
+  sleep(1000)
+end
+
+local function accumulateStats(cumStats, stats)
+  cumStats.loaded = cumStats.loaded + stats.loaded
+  cumStats.sent = cumStats.sent + stats.sent
+  cumStats.rejected = cumStats.rejected + stats.rejected
+  cumStats.duplicate = cumStats.duplicate + stats.duplicate
+end
+
 --- Инициализация ( делегируется SessionScheduler)
 function Initialization()
   SetClientSetting()
@@ -108,82 +134,14 @@ function SubmittingOrdersRun()
 
     log.info(string.format("=== Цикл %d запущен ===", cycleCount))
 
-    if isSubmittingOrdersRun then
-      log.debug(
-        string.format("2.1 Загрузка ордеров на покупку из файла %s", Config.FileBuyOrder)
-      )
-      local orders = OrderLoader.LoadOrdersFromFile(Config.FileBuyOrder)
-      stats.loaded = stats.loaded + #orders
-      local s = SubmitOrders(orders)
-      stats.sent = stats.sent + s.sent
-      stats.rejected = stats.rejected + s.rejected
-      stats.duplicate = stats.duplicate + s.duplicate
-      sleep(3000)
-    end
-
-    if isSubmittingOrdersRun then
-      log.debug(
-        string.format(
-          "2.2 Загрузка ордеров на покупку облигаций edge %s",
-          Config.FileBuyOrderBondsEdge
-        )
-      )
-      local orders = OrderLoader.LoadOrdersFromFile(Config.FileBuyOrderBondsEdge)
-      stats.loaded = stats.loaded + #orders
-      local s = SubmitOrders(orders)
-      stats.sent = stats.sent + s.sent
-      stats.rejected = stats.rejected + s.rejected
-      stats.duplicate = stats.duplicate + s.duplicate
-      sleep(3000)
-    end
-
-    if isSubmittingOrdersRun then
-      local orders = OrderLoader.LoadOrdersFromFile(Config.FileBuyOrderEdge)
-      log.debug(
-        string.format(
-          "2.3 Загрузка ордеров на покупку по цене edge %s",
-          Config.FileBuyOrderEdge
-        )
-      )
-      stats.loaded = stats.loaded + #orders
-      local s = SubmitOrders(orders)
-      stats.sent = stats.sent + s.sent
-      stats.rejected = stats.rejected + s.rejected
-      stats.duplicate = stats.duplicate + s.duplicate
-      sleep(1000)
-    end
-
-    log.debug(
-      string.format("2.7 Загрузка ордеров на продажу из файла %s", Config.FileSellOrder)
-    )
-    local orders = OrderLoader.LoadOrdersFromFile(Config.FileSellOrder)
-    stats.loaded = stats.loaded + #orders
-    local s = SubmitOrders(orders)
-    stats.sent = stats.sent + s.sent
-    stats.rejected = stats.rejected + s.rejected
-    stats.duplicate = stats.duplicate + s.duplicate
-
-    if isSubmittingOrdersRun then
-      log.debug(
-        string.format(
-          "2.8 Загрузка ордеров на продажу по цене edge %s",
-          Config.FileSellOrderEdge
-        )
-      )
-      local orders = OrderLoader.LoadOrdersFromFile(Config.FileSellOrderEdge)
-      stats.loaded = stats.loaded + #orders
-      local s = SubmitOrders(orders)
-      stats.sent = stats.sent + s.sent
-      stats.rejected = stats.rejected + s.rejected
-      stats.duplicate = stats.duplicate + s.duplicate
-      sleep(1000)
-    end
+    processFile(Config.FileBuyOrder, stats, isSubmittingOrdersRun)
+    processFile(Config.FileBuyOrderBondsEdge, stats, isSubmittingOrdersRun)
+    processFile(Config.FileBuyOrderEdge, stats, isSubmittingOrdersRun)
+    processFile(Config.FileSellOrder, stats, true)  -- Always process sell
+    processFile(Config.FileSellOrderEdge, stats, isSubmittingOrdersRun)
 
     -- Обновление кумулятивной статистики
-    cumStats.loaded = cumStats.loaded + stats.loaded
-    cumStats.sent = cumStats.sent + stats.sent
-    cumStats.rejected = cumStats.rejected + stats.rejected
-    cumStats.duplicate = cumStats.duplicate + stats.duplicate
+    accumulateStats(cumStats, stats)
 
     log.info(
       string.format(
