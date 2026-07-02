@@ -6,13 +6,6 @@
 Order = {}
 Order.__index = Order
 
-math.round = function(num, idp)
-  if num == nil then
-    return nil
-  end
-  local mult = 10 ^ (idp or 0)
-  return math.floor(num * mult + 0.5) / mult
-end
 
 -- ==========================================
 -- Кеш информации об инструментах
@@ -192,7 +185,8 @@ end
 
 --- Округляет цену до шага цены: ceil для покупки, floor для продажи.
 function Order:GetPriceRound()
-  local price = math.round(self.Price, self.SecurityInfo.scale)
+  local FormatUtils = require("FormatUtils")
+  local price = FormatUtils.round(self.Price, self.SecurityInfo.scale)
 
   if price == nil then
     price = 0

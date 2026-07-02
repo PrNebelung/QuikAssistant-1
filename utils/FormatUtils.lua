@@ -3,6 +3,15 @@
 
 local FormatUtils = {}
 
+--- ќбработка целых чисел.
+math.round = function(num, idp)
+  if num == nil then
+    return nil
+  end
+  local mult = 10 ^ (idp or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
 --- ‘орматирование числа с разделителем тыс€ч (пробел).
 function FormatUtils.comma_value(amount)
   local formatted = amount
