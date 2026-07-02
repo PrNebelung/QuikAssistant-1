@@ -1,6 +1,3 @@
---- Обёртка для взаимодействия с QUIK API.
---- Инкапсулирует все вызовы функций QUIK: getSecurityInfo, getParamEx,
---- SearchItems, getItem, sendTransaction, isConnected и др.
 --- Все вызовы обёрнуты в pcall для обработки ошибок.
 
 local BrokerAdapter = {}
@@ -17,7 +14,9 @@ function BrokerAdapter.ClearSecurityInfoCache()
   securityInfoCache = {}
 end
 
---- Получение информации о бумаге. Если нет в кэще — ищет по классам. Возвращает nil.
+--- Получение информации о бумаге из QUIK по всем кодам классов.
+--- @param securityCode string Код тикера бумаги
+--- @return table|nil Таблица информации о бумаге или nil if not found
 function BrokerAdapter.GetSecurityInfo(securityCode)
   if securityInfoCache[securityCode] then
     return securityInfoCache[securityCode]
@@ -38,6 +37,10 @@ end
 -- ==========================================
 
 --- Получение значения параметра (LAST, PRICEMIN, PRICEMAX и др.). Возвращает строку или nil.
+--- @param classCode string Код класса (например, "TQBR")
+--- @param secCode string Код бумаги (например, "GAZP")
+--- @param param string Имя параметра (например, "LAST", "PRICEMIN")
+--- @return string|nil Значение параметра или nil
 function BrokerAdapter.GetParamEx(classCode, secCode, param)
   local value = getParamEx(classCode, secCode, param)
   if value == nil or value.result == "0" then
@@ -46,7 +49,10 @@ function BrokerAdapter.GetParamEx(classCode, secCode, param)
   return value.param_value
 end
 
---- Получение данных параметра по объекту Order. Логирует ошибку если не найдено. Возвращает "0" по умолчанию.
+--- Получение значения параметра по объекту Order.
+--- @param table Объект Order с полями SecurityInfo.class_code и SecurityInfo.code
+--- @param string Имя параметра
+--- @return string Значение параметра или "0" при ошибке
 function BrokerAdapter.GetParamInfo(order, param)
   local value = getParamEx(order.SecurityInfo.class_code, order.SecurityInfo.code, param)
   if value == nil or value.result == "0" then
@@ -60,12 +66,16 @@ end
 -- Ордера
 -- ==========================================
 
---- Получение количества ордеров в QUIK.
+--- Возвращает количество ордеров в QUIK.
+--- @return number Количество ордеров
 function BrokerAdapter.GetNumberOfOrders()
   return getNumberOf("orders")
 end
 
---- Поиск ордеров по фильтру. Возвращает массив индексов.
+--- Поиск ордеров с использованием функции-фильтра.
+--- @param filterFunc function Функция-фильтр для SearchItems
+--- @param params string Параметры фильтрации
+--- @return table Массив индексов найденных ордеров
 function BrokerAdapter.SearchOrders(filterFunc, params)
   local count = BrokerAdapter.GetNumberOfOrders()
   if count <= 0 then
@@ -87,7 +97,9 @@ function BrokerAdapter.SearchOrders(filterFunc, params)
   return {}
 end
 
---- Получение данных ордера по индексу в QUIK.
+--- Получение ордера по индексу из QUIK.
+--- @param index number Индекс ордера
+--- @return table|nil Таблица ордера или nil
 function BrokerAdapter.GetOrder(index)
   local ok, order = pcall(function()
     return getItem("orders", index)
@@ -102,12 +114,16 @@ end
 -- Позиции (депо-лимиты)
 -- ==========================================
 
---- Получение количества депо-лимитов в QUIK.
+--- Возвращает количество депозитарных позиций в QUIK.
+--- @return number Количество позиций
 function BrokerAdapter.GetNumberOfPositions()
   return getNumberOf("depo_limits")
 end
 
---- Поиск позиций по фильтру. Возвращает массив индексов.
+--- Поиск депозитарных позиций с использованием функции-фильтра.
+--- @param filterFunc function Функция-фильтр для SearchItems
+--- @param params string Параметры фильтрации
+--- @return table Массив индексов найденных позиций
 function BrokerAdapter.SearchPositions(filterFunc, params)
   local count = BrokerAdapter.GetNumberOfPositions()
   if count <= 0 then
@@ -122,7 +138,9 @@ function BrokerAdapter.SearchPositions(filterFunc, params)
   return {}
 end
 
---- Получение данных позиции по индексу в QUIK.
+--- Получение депозитарной позиции по индексу из QUIK.
+--- @param index number Индекс позиции
+--- @return table|nil Таблица позиции или nil
 function BrokerAdapter.GetPosition(index)
   local ok, position = pcall(function()
     return getItem("depo_limits", index)
@@ -137,7 +155,9 @@ end
 -- Транзакции
 -- ==========================================
 
---- Отправка транзакции в QUIK. Возвращает строку ошибки или пустую строку.
+--- Отправка транзакции в QUIK (безопасная обёртка с pcall).
+--- @param table Таблица транзакции
+--- @return string Пустая строка при успехе, сообщение об ошибке при неудаче
 function BrokerAdapter.SendTransaction(transaction)
   local ok, result = pcall(function()
     return sendTransaction(transaction)
@@ -152,17 +172,23 @@ end
 -- Соединение и сервис
 -- ==========================================
 
---- Возвращает true если QUIK подключён к серверу.
+--- Возвращает true, если QUIK подключён к серверу.
+--- @return boolean true, если подключён
 function BrokerAdapter.IsConnected()
   return isConnected() == 1
 end
 
---- Получение служебного параметра QUIK (USERID, SERVERTIME и др.).
+--- Получение информационного параметра QUIK (USERID, SERVERTIME и др.).
+--- @param string Имя параметра
+--- @return string Значение параметра
 function BrokerAdapter.GetInfoParam(param)
   return getInfoParam(param)
 end
 
---- Получение портфеля и позиций (клиент, фирма/счёт).
+--- Получение информации о портфеле (деньги, активы).
+--- @param string Код фирмы
+--- @param string Код клиента
+--- @return table Информация о портфеле
 function BrokerAdapter.GetPortfolioInfo(firmId, clientCode)
   return getPortfolioInfoEx(firmId, clientCode, 0)
 end
@@ -171,7 +197,8 @@ end
 -- Путь к скрипту
 -- ==========================================
 
---- Получение пути к скрипту QUIK.
+--- Возвращает путь к текущему скрипту QUIK.
+--- @return string Путь к скрипту
 function BrokerAdapter.GetScriptPath()
   return getScriptPath()
 end

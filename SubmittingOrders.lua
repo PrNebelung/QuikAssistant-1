@@ -1,5 +1,3 @@
---- Оркестрация отправки ордеров в QUIK.
---- Координирует загрузку ордеров из CSV, валидацию и отправку в QUIK.
 --- Управляет планированием сессий через SessionScheduler.
 
 require("Setting")
@@ -13,6 +11,7 @@ require("TableOrders")
 SessionScheduler = require("SessionScheduler")
 OrderLoader = require("OrderLoader")
 local Config = require("Config")
+Constants = require("Constants")
 
 -- Состояние отправки
 IsSendingOrders = false
@@ -28,10 +27,10 @@ local cycleCount = 0
 -- Неизвестные ценные бумаги
 unknownSecurities = {}
 
---- Process orders from a file
---- @param fileName string
---- @param stats table
---- @param isSubmittingOrdersRun boolean
+--- Обработка ордеров из файла
+--- @param fileName string Имя файла
+--- @param stats table Таблица статистики
+--- @param isSubmittingOrdersRun boolean Флаг выполнения
 local function processFile(fileName, stats, isSubmittingOrdersRun)
   if not isSubmittingOrdersRun then
     return
@@ -44,7 +43,7 @@ local function processFile(fileName, stats, isSubmittingOrdersRun)
   stats.sent = stats.sent + s.sent
   stats.rejected = stats.rejected + s.rejected
   stats.duplicate = stats.duplicate + s.duplicate
-  sleep(1000)
+  sleep(Constants.SLEEP_BETWEEN_FILES_MS)
 end
 
 local function accumulateStats(cumStats, stats)
@@ -54,13 +53,13 @@ local function accumulateStats(cumStats, stats)
   cumStats.duplicate = cumStats.duplicate + stats.duplicate
 end
 
---- Инициализация ( делегируется SessionScheduler)
+--- Инициализация системы (настройки клиента и планировщик сессий).
 function Initialization()
   SetClientSetting()
   SessionScheduler.Initialization()
 end
 
---- Проверка времени сессий и запуск отправки
+--- Основная точка входа: проверка сессии и запуск отправки ордеров.
 function SubmittingOrders()
   if SessionScheduler.CheckSession() then
     SubmittingOrdersRun()
@@ -69,22 +68,24 @@ end
 
 --- Ожидание рыночных данных
 local marketDataWaited = false
+--- Ожидание доступности рыночных данных (проверка примеров бумаг).
+--- @return boolean true, если рыночные данные получены, false при тайм-ауте
 function WaitForMarketData()
   if marketDataWaited then
     return
   end
   marketDataWaited = true
 
-  local sampleSecurities = {
+  local marketIndicatorSecurities = {
     { classCode = "TQBR", secCode = "GAZP" },
     { classCode = "TQBR", secCode = "SBER" },
     { classCode = "TQOB", secCode = "SU26245RMFS9" },
   }
-  local maxRetries = 30
-  local retryInterval = 2
+  local maxRetries = Constants.MARKET_DATA_MAX_RETRIES
+  local retryInterval = Constants.MARKET_DATA_RETRY_INTERVAL_S
 
   for retry = 1, maxRetries do
-    for _, sample in ipairs(sampleSecurities) do
+    for _, sample in ipairs(marketIndicatorSecurities) do
       local value = getParamEx(sample.classCode, sample.secCode, "LAST")
       if value ~= nil and value.result == "1" and tonumber(value.param_value) > 0 then
         log.info(
@@ -104,7 +105,7 @@ function WaitForMarketData()
   return false
 end
 
---- Главный цикл отправки ордеров
+--- Выполнение цикла отправки ордеров (загрузка, валидация, отправка).
 function SubmittingOrdersRun()
   if IsSendingOrders then
     return
@@ -198,12 +199,17 @@ function SubmittingOrdersRun()
   sendOrdersSet = {}
 end
 
---- Проверка, был ли ордер уже отправлен
+--- Проверка, был ли ордер уже отправлен в этом цикле.
+--- @param table Объект Order
+--- @return boolean true, если уже отправлен
 function IsSendOrder(order)
   return sendOrdersSet[order:GetDedupKey()] == true
 end
 
---- Отправка ордеров в QUIK
+--- Отправка пакета ордеров в QUIK.
+--- @param table orders Массив объектов Order
+--- @param boolean|nil resubmit Необязательный флаг повторной отправки
+--- @return table Статистика: {sent, rejected, duplicate}
 function SubmitOrders(orders, resubmit)
   local stats = { sent = 0, rejected = 0, duplicate = 0 }
   local skipReasons = {}
@@ -282,7 +288,8 @@ function SubmitOrders(orders, resubmit)
   return stats
 end
 
---- Закрытие позиции по сделке (обратная заявка)
+--- Закрытие позиции отправкой обратного ордера после покупки.
+--- @param table trade Объект сделки из QUIK
 function TradeClosePosition(trade)
   local isBuy = (trade.buy_sell == "B") or (trade.buy_sell == nil and (trade.flags & FLAG_SELL) == 0)
   if not isBuy then

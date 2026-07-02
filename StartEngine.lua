@@ -6,6 +6,7 @@
 package.path = getScriptPath() .. "\\?.lua;" .. getScriptPath() .. "\\libs\\?.lua;" .. getScriptPath() .. "\\utils\\?.lua;"
 
 require("Assistant")
+Constants = require("Constants")
 
 log = require("log")
 
@@ -38,7 +39,7 @@ end
 Engine.OnClose = function()
   if N_OnClose ~= nil then
     N_OnClose()
-    sleep(1000)
+    sleep(Constants.SLEEP_MAIN_LOOP_MS)
   end
 end
 
@@ -193,11 +194,11 @@ function main()
         end
       end
 
-      sleep(1000)
+      sleep(Constants.SLEEP_MAIN_LOOP_MS)
     end)
     if not loopOk then
       log.error(string.format("Main loop error: %s", tostring(loopErr)))
-      sleep(5000)
+      sleep(Constants.SLEEP_ERROR_MS)
     end
   end
 end

@@ -1,7 +1,3 @@
---- Валидатор ордеров (цепочка проверок).
---- Проверяет ордера перед отправкой: обязательные поля,
---- цена ниже PRICEMIN, наличие позиции для продажи, лимит объёма,
---- срабатывание, цена облигации, средняя цена позиции.
 --- Также содержит логику расчёта максимального объёма ордера.
 
 local Config = require("Config")
@@ -13,12 +9,15 @@ local OrderValidator = {}
 
 local volumeWarnedTickers = {}
 
---- Очищает список тикеров с предупреждением об объёме.
+--- Очистка списка тикеров с предупреждениями об объёме.
 function OrderValidator.ClearVolumeWarnedTickers()
   volumeWarnedTickers = {}
 end
 
---- Рассчитывает коэффициент максимального объёма на основе разницы LAST и PRICEMIN.
+--- Расчёт коэффициента объёма на основе разницы LAST/PRICEMIN.
+--- @param table Объект Order
+--- @param string|number priceMin Минимальная цена (PRICEMIN)
+--- @return number Коэффициент объёма (>= 1)
 function OrderValidator.GetKoeffVolumeOrderMax(order, priceMin)
   local priceLast = MarketData.GetPriceLast(order)
   if tonumber(priceMin) == nil or tonumber(priceMin) == 0 or tonumber(priceLast) == nil then
@@ -31,7 +30,10 @@ function OrderValidator.GetKoeffVolumeOrderMax(order, priceMin)
   return 1
 end
 
---- Рассчитывает максимальный объём ордера с учётом коэффициента и лимитов.
+--- Расчёт максимально допустимого объёма ордера в валюте.
+--- @param table Объект Order
+--- @param string|number priceMin Минимальная цена (PRICEMIN)
+--- @return number Максимальный объём in currency
 function OrderValidator.GetOrderVolumeMax(order, priceMin)
   local koeff = OrderValidator.GetKoeffVolumeOrderMax(order, priceMin)
   local limit = Config.VolumeOrderMax
@@ -181,8 +183,15 @@ local checkChain = {
   checkAvgPositionPrice,
 }
 
---- Запускает цепочку проверок ордера. Возвращает (true, "") при успехе или (false, причина) при отклонении.
+--- Валидация ордера через все проверки (nil, pricemin, позиция, объём, срабатывание, облигация, средняя цена).
+--- @param table Объект Order to validate
+--- @return boolean true, если ордер прошёл все проверки
+--- @return string Пустая строка при успехе, причина отклонения при неудаче
 function OrderValidator.CheckOrder(order)
+  if order == nil then
+    log.error("CheckOrder: order is nil")
+    return false, "order is nil"
+  end
   for _, check in ipairs(checkChain) do
     local passed, reason = check(order)
     if not passed then
@@ -192,22 +201,31 @@ function OrderValidator.CheckOrder(order)
   return true, ""
 end
 
---- Глобальная обёртка для OrderValidator.GetKoeffVolumeOrderMax.
+--- Глобальная обёртка для OrderValidator.GetKoeffVolumeOrderMax (обратная совместимость).
+--- @param table Объект Order
+--- @param string|number priceMin Минимальная цена
+--- @return number Коэффициент объёма
 function GetKoeffVolumeOrderMax(order, priceMin)
   return OrderValidator.GetKoeffVolumeOrderMax(order, priceMin)
 end
 
---- Глобальная обёртка для OrderValidator.GetOrderVolumeMax.
+--- Глобальная обёртка для OrderValidator.GetOrderVolumeMax (обратная совместимость).
+--- @param table Объект Order
+--- @param string|number priceMin Минимальная цена
+--- @return number Максимальный объём
 function GetOrderVolumeMax(order, priceMin)
   return OrderValidator.GetOrderVolumeMax(order, priceMin)
 end
 
---- Глобальная обёртка для OrderValidator.ClearVolumeWarnedTickers.
+--- Глобальная обёртка для OrderValidator.ClearVolumeWarnedTickers (обратная совместимость).
 function ClearVolumeWarnedTickers()
   OrderValidator.ClearVolumeWarnedTickers()
 end
 
---- Глобальная обёртка для OrderValidator.CheckOrder.
+--- Глобальная обёртка для OrderValidator.CheckOrder (обратная совместимость).
+--- @param table Объект Order
+--- @return boolean true, если валиден
+--- @return string Пустая строка или причина отклонения
 function CheckOrder(order)
   return OrderValidator.CheckOrder(order)
 end

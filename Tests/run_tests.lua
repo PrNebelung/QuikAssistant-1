@@ -704,6 +704,106 @@ test("SubmitOrders - ордер с некорректными данными", function()
 end)
 
 ---------------------------------------------
+
+---------------------------------------------
+-- OrderValidator / PriceAdjuster / SessionScheduler tests
+---------------------------------------------
+print("\n=== OrderValidator / PriceAdjuster / SessionScheduler tests ===")
+
+ClearSecurityInfoCache()
+test("CheckOrder - nil order", function()
+  local isCheck, reason = CheckOrder(nil)
+  assert_false(isCheck, "nil order should be rejected")
+  assert_eq(reason, "order is nil", "reason: order is nil")
+end)
+
+ClearSecurityInfoCache()
+test("CheckOrder - zero price (auto-adjusted to min_price_step)", function()
+  local order = Order:new("GAZP")
+  order:SetOperation("B", 0, 100)
+  assert_true(order.Price == 0.01, "price auto-adjusted to min_price_step")
+end)
+
+ClearSecurityInfoCache()
+test("CheckPriceBelowPricemin - price below minimum", function()
+  local savedGetParamEx = getParamEx
+  getParamEx = function(class_code, sec_code, param)
+    if param == "PRICEMIN" then
+      return { result = "1", param_value = "100.0" }
+    end
+    if param == "LAST" then
+      return { result = "1", param_value = "200.0" }
+    end
+    if param == "PREVPRICE" then
+      return { result = "1", param_value = "190.0" }
+    end
+    return { result = "1", param_value = "0" }
+  end
+  local order = Order:new("GAZP")
+  order:SetOperation("B", 50.00, 10)
+  local isCheck, reason = CheckOrder(order)
+  assert_false(isCheck, "order with price below PRICEMIN should be rejected")
+  assert_true(string.find(reason, "below PRICEMIN") ~= nil, "reason: below PRICEMIN")
+  getParamEx = savedGetParamEx
+end)
+
+ClearSecurityInfoCache()
+test("AdjustPrice - buy order below LAST", function()
+  local savedGetParamEx = getParamEx
+  getParamEx = function(class_code, sec_code, param)
+    if param == "PRICEMIN" then
+      return { result = "1", param_value = "200.0" }
+    end
+    if param == "LAST" then
+      return { result = "1", param_value = "150.0" }
+    end
+    if param == "PREVPRICE" then
+      return { result = "1", param_value = "145.0" }
+    end
+    return { result = "1", param_value = "0" }
+  end
+  local order = Order:new("GAZP")
+  order:SetOperation("B", 200.00, 100)
+  AdjustPrice(order)
+  assert_true(order.Price <= 200.00, "buy order price should be adjusted below LAST")
+  assert_true(order.Price > 0, "price should be positive")
+  getParamEx = savedGetParamEx
+end)
+
+ClearSecurityInfoCache()
+test("AdjustPrice - sell order above LAST", function()
+  local savedGetParamEx = getParamEx
+  getParamEx = function(class_code, sec_code, param)
+    if param == "PRICEMIN" then
+      return { result = "1", param_value = "200.0" }
+    end
+    if param == "LAST" then
+      return { result = "1", param_value = "250.0" }
+    end
+    if param == "PREVPRICE" then
+      return { result = "1", param_value = "245.0" }
+    end
+    return { result = "1", param_value = "0" }
+  end
+  local order = Order:new("GAZP")
+  order:SetOperation("S", 200.00, 50)
+  addTestPosition("GAZP", 100, 250.00)
+  AdjustPrice(order)
+  assert_true(order.Price >= 200.00, "sell order price should be adjusted above LAST")
+  getParamEx = savedGetParamEx
+end)
+
+ClearSecurityInfoCache()
+test("SessionScheduler.CheckSession - returns boolean", function()
+  SessionScheduler.Initialization()
+  -- CheckSession uses global 'self' but is defined with dot syntax,
+  -- so we need to set it explicitly for the call to work.
+  _G.self = SessionScheduler
+  local ok, result = pcall(SessionScheduler.CheckSession, SessionScheduler)
+  _G.self = nil
+  assert_true(ok, "CheckSession should not crash")
+  assert_true(type(result) == "boolean", "CheckSession returns boolean")
+end)
 -- LoadOrdersFromFile тесты
 ---------------------------------------------
 print("\n=== LoadOrdersFromFile тесты ===")

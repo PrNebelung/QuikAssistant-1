@@ -39,36 +39,19 @@ end
 --- Проверка времени сессий.
 --- @return boolean shouldSubmit true если пора отправлять ордера
 function SessionScheduler.CheckSession()
-  local timeCurrent = os.time()
-
-  if (os.time(SessionScheduler.TimeMorningStart) < timeCurrent) and not SessionScheduler.IsMorningTime then
-    SessionScheduler.IsMorningTime = true
-    if Config.SessionMorningEnabled then
+  local now = os.time()
+  local sessions = {
+    { time = SessionScheduler.TimeMorningStart, enabled = Config.SessionMorningEnabled, flag = "morning" },
+    { time = SessionScheduler.TimeMainStart, enabled = Config.SessionMainEnabled, flag = "main" },
+    { time = SessionScheduler.TimeEveningStart, enabled = Config.SessionEveningEnabled, flag = "evening" },
+  }
+  for _, session in ipairs(sessions) do
+    if session.enabled and os.time(session.time) < now and not SessionScheduler["Is" .. session.flag .. "Time"] then
+      SessionScheduler["Is" .. session.flag .. "Time"] = true
       SessionScheduler.IsSentOrders = false
     end
   end
-
-  if (os.time(SessionScheduler.TimeMainStart) < timeCurrent) and not SessionScheduler.IsMainTime then
-    SessionScheduler.IsMainTime = true
-    if Config.SessionMainEnabled then
-      SessionScheduler.IsSentOrders = false
-    end
-  end
-
-  if (os.time(SessionScheduler.TimeEveningStart) < timeCurrent) and not SessionScheduler.IsEveningTime then
-    SessionScheduler.IsEveningTime = true
-    if Config.SessionEveningEnabled then
-      SessionScheduler.IsSentOrders = false
-    end
-  end
-
-  if not SessionScheduler.IsSentOrders then
-    if os.time(SessionScheduler.TimeMorningStart) < timeCurrent then
-      return true
-    end
-  end
-
-  return false
+  return not SessionScheduler.IsSentOrders and os.time(SessionScheduler.TimeMorningStart) < now
 end
 
 function SessionScheduler.MarkSent()

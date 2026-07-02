@@ -1,6 +1,3 @@
---- Модуль торгового ордера (Order).
---- Реализует конструктор Order:new(), методы установки цены,
---- количества, операции, проверки типа инструмента (акция/облигация/ETF),
 --- округления цен, расчёта объёма и форматирования для отправки в QUIK.
 
 Order = {}
@@ -11,13 +8,16 @@ Order.__index = Order
 -- Кеш информации об инструментах
 -- ==========================================
 local BrokerAdapter = require("BrokerAdapter")
+local log = require("log")
 
---- Очищает кеш информации об инструментах (делегирует в BrokerAdapter).
+--- Очистка кэша информации о бумагах (делегирует в BrokerAdapter).
 function ClearSecurityInfoCache()
   BrokerAdapter.ClearSecurityInfoCache()
 end
 
---- Получает информацию об инструменте по коду (делегирует в BrokerAdapter).
+--- Получение информации о бумаге из QUIK (делегирует в BrokerAdapter).
+--- @param securityCode string Код тикера бумаги
+--- @return table|nil Таблица информации о бумаге или nil
 function GetSecurityInfo(securityCode)
   return BrokerAdapter.GetSecurityInfo(securityCode)
 end
@@ -47,60 +47,72 @@ end
 -- Методы ордера (на метатаблице)
 -- ==========================================
 
---- Возвращает true если тикер в списке исключений проверки срабатывания.
+--- Возвращает true, если тикер в списке исключений (проверка срабатывания не выполняется).
+--- @return boolean true, если проверка срабатывания пропущена
 function Order:IsExceptionFromLimitActuation()
   return exceptionTickers[self.SecurityCode] == true
 end
 
---- Возвращает true если инструмент — облигация (по коду класса).
+--- Возвращает true, если бумага является облигацией (TQCB, EQOB, TQIR, TQRD, TQOB).
+--- @return boolean true, если облигация
 function Order:IsBond()
   return bondClassCodes[self.SecurityInfo.class_code] == true
 end
 
---- Возвращает true если инструмент — ОФЗ (класс TQOB).
+--- Возвращает true, если бумага является ОФЗ (класс TQOB).
+--- @return boolean true, если ОФЗ
 function Order:IsOFZ()
   return self.SecurityInfo.class_code == "TQOB"
 end
 
---- Возвращает true если инструмент — ETF (класс TQTF).
+--- Возвращает true, если бумага является ETF (класс TQTF).
+--- @return boolean true, если ETF
 function Order:IsEtf()
   return self.SecurityInfo.class_code == "TQTF"
 end
 
---- Возвращает true если операция = "B" (покупка).
+--- Возвращает true, если операция - покупка ("B").
+--- @return boolean true, если покупка
 function Order:IsBuy()
   return self.Operation ~= nil and self.Operation == "B"
 end
 
---- Возвращает true если операция = "S" (продажа).
+--- Возвращает true, если операция - продажа ("S").
+--- @return boolean true, если продажа
 function Order:IsSell()
   return self.Operation ~= nil and self.Operation == "S"
 end
 
---- Обнуляет операцию, количество и цену.
+--- Сброс полей ордера в пустое состояние.
 function Order:Clear()
   self.Operation = ""
   self.Quantity = 0
   self.Price = 0
 end
 
---- Форматирует цену в строку с нужным количеством знаков после запятой (по scale).
+--- Форматирование цены в соответствии с точностью бумаги (знаки после запятой).
+--- @return string Отформатированная строка цены
 function Order:FormatPrice()
   return string.format("%." .. self.SecurityInfo.scale .. "f", tonumber(self.Price))
 end
 
---- Форматирует количество в строку с n знаками после запятой (по умолчанию 0).
+--- Форматирование количества с указанным количеством знаков после запятой.
+--- @param n number|nil Количество знаков после запятой (по умолчанию: 0)
+--- @return string Отформатированная строка количества
 function Order:FormatQuantity(n)
   local n = (n or 0)
   return string.format("%." .. n .. "f", self.Quantity)
 end
 
 --- Возвращает ключ дедупликации: "код операция количество цена".
+--- @return string Ключ дедупликации для обнаружения дубликатов
 function Order:GetDedupKey()
   return self.SecurityInfo.code .. " " .. self.Operation .. " " .. self:FormatQuantity() .. " " .. self:FormatPrice()
 end
 
---- Конвертирует цену облигации из процентов в рубли (умножает на номинал/100).
+--- Конвертация цены в сумму в валюте (для облигаций: цена * номинал / 100).
+--- @param price number|string Значение цены
+--- @return number Цена в единицах валюты
 function Order:GetPriceInCurrency(price)
   if self:IsBond() then
     local nominal = self.SecurityInfo.face_value
@@ -110,8 +122,25 @@ function Order:GetPriceInCurrency(price)
   end
 end
 
---- Устанавливает операцию, цену и количество. Округляет цену.
+--- Установка операции, цены и количества с валидацией.
+--- @param operation string Тип операции: "B" (покупка) или "S" (продажа)
+--- @param price number|string Цена ордера (должна быть >= 0)
+--- @param quantity number|string Количество ордера (должно быть >= 0)
 function Order:SetOperation(operation, price, quantity)
+  if operation ~= "B" and operation ~= "S" then
+    log.error("SetOperation: invalid operation '%s' (expected 'B' or 'S')" .. tostring(operation))
+    return
+  end
+  local numPrice = tonumber(price)
+  if numPrice == nil or numPrice < 0 then
+    log.error("SetOperation: invalid price " .. tostring(price) .. " (expected >= 0)")
+    return
+  end
+  local numQuantity = tonumber(quantity)
+  if numQuantity == nil or numQuantity < 0 then
+    log.error("SetOperation: invalid quantity " .. tostring(quantity) .. " (expected >= 0)")
+    return
+  end
   self.Operation = operation
   self.Quantity = quantity
   self.Price = price
@@ -126,7 +155,8 @@ function Order:SetOperation(operation, price, quantity)
   end
 end
 
---- Устанавливает минимальную цену для покупки (1 лот по min_price_step) или нулевую для продажи.
+--- Установка ордера по минимальной цене (1 лот по min_price_step).
+--- @param operation string Тип операции: "B" (покупка) или "S" (продажа)
 function Order:SetPriceMin(operation)
   self.Operation = operation
   if self:IsBuy() then
@@ -138,9 +168,22 @@ function Order:SetPriceMin(operation)
   end
 end
 
---- Рассчитывает количество лотов исходя из цены и максимального объёма. Для облигаций учитывает номинал.
+--- Расчёт и установка количества на основе максимально доступной суммы.
+--- @param operation string Тип операции: "B" (покупка) или "S" (продажа)
+--- @param price number|string Цена за единицу
+--- @param quantityMax number|string Максимальная сумма в валюте для траты
 function Order:SetQuantity(operation, price, quantityMax)
   self.Operation = operation
+  if price == nil then
+    log.error("SetQuantity: price is nil")
+    self.Quantity = 0
+    return
+  end
+  if quantityMax == nil then
+    log.error("SetQuantity: quantityMax is nil")
+    self.Quantity = 0
+    return
+  end
   if price ~= nil and tonumber(price) > 0 and quantityMax ~= nil and tonumber(quantityMax) > 0 and self:IsBuy() then
     self.Price = tonumber(price)
     self:GetPriceRound()
@@ -160,7 +203,10 @@ function Order:SetQuantity(operation, price, quantityMax)
   end
 end
 
---- Рассчитывает количество для продажи по текущей позиции.
+--- Установка количества для продажи на основе текущего размера позиции.
+--- @param operation string Тип операции: "S" (продажа)
+--- @param price number|string Цена за единицу
+--- @param positionQty number|string Текущее количество позиции для продажи
 function Order:SetQuantitySell(operation, price, positionQty)
   self.Operation = operation
   if price ~= nil and tonumber(price) > 0 and positionQty ~= nil and tonumber(positionQty) > 0 and self:IsSell() then
@@ -172,7 +218,8 @@ function Order:SetQuantitySell(operation, price, positionQty)
   end
 end
 
---- Рассчитывает объём ордера в валюте (количество * цена * лот).
+--- Расчёт общего объёма ордера (количество * цена * размер лота).
+--- @return number Общий объём в валюте
 function Order:GetVolume()
   local priceInCurrency = 0
   if self:IsBond() then
@@ -183,7 +230,8 @@ function Order:GetVolume()
   return tonumber(self.Quantity) * tonumber(priceInCurrency) * tonumber(self.SecurityInfo.lot_size)
 end
 
---- Округляет цену до шага цены: ceil для покупки, floor для продажи.
+--- Округление цены до min_price_step (ceil для покупки, floor для продажи).
+--- @return number Округлённая цена
 function Order:GetPriceRound()
   local FormatUtils = require("FormatUtils")
   local price = FormatUtils.round(self.Price, self.SecurityInfo.scale)
@@ -202,7 +250,8 @@ function Order:GetPriceRound()
   self.Price = price
 end
 
---- Возвращает строковое представление ордера для логирования.
+--- Возвращает отформатированную строку ордера.
+--- @return string Строка с деталями ордера
 function Order:Print()
   return string.format(
     "[Instrument: %s; Code: %s; Class: %s; Operation: %s; Price: %f; Quantity: %f; Volume: %f;]",
@@ -220,7 +269,9 @@ end
 -- Конструктор
 -- ==========================================
 
---- Конструктор ордера. Получает информацию об инструменте из QUIK. Возвращает nil если инструмент не найден.
+--- Создание нового экземпляра Order.
+--- @param securityCode string Код тикера бумаги (e.g. "GAZP")
+--- @return table|nil Объект Order или nil, если бумага не найдена в QUIK
 function Order:new(securityCode)
   local obj = {}
   setmetatable(obj, self)

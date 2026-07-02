@@ -29,6 +29,21 @@ Constants.TRANS_STATUS_COMPLETED = 3
 -- ==========================================
 Constants.PRICE_DEVIATION_MULTIPLIER = 10
 
+-- ==========================================
+-- Временные константы
+-- ==========================================
+Constants.SLEEP_MAIN_LOOP_MS = 1000
+Constants.SLEEP_ERROR_MS = 5000
+Constants.SLEEP_BETWEEN_FILES_MS = 3000
+Constants.SLEEP_SHORT_MS = 1000
+
+-- ==========================================
+-- Константы повторных попыток
+-- ==========================================
+Constants.MARKET_DATA_MAX_RETRIES = 30
+Constants.MARKET_DATA_RETRY_INTERVAL_S = 2
+Constants.MAX_RECURSION_DEPTH = 3
+
 --- Продвижение Constants.* в глобальное пространство (FLAG_ACTIVE и др.) для обратной совместимости.
 function _initConstants()
   FLAG_ACTIVE = Constants.FLAG_ACTIVE
@@ -39,6 +54,13 @@ function _initConstants()
   ERR_EXECUTION_REJECTED = Constants.ERR_EXECUTION_REJECTED
   TRANS_STATUS_COMPLETED = Constants.TRANS_STATUS_COMPLETED
   PRICE_DEVIATION_MULTIPLIER = Constants.PRICE_DEVIATION_MULTIPLIER
+  SLEEP_MAIN_LOOP_MS = Constants.SLEEP_MAIN_LOOP_MS
+  SLEEP_ERROR_MS = Constants.SLEEP_ERROR_MS
+  SLEEP_BETWEEN_FILES_MS = Constants.SLEEP_BETWEEN_FILES_MS
+  SLEEP_SHORT_MS = Constants.SLEEP_SHORT_MS
+  MARKET_DATA_MAX_RETRIES = Constants.MARKET_DATA_MAX_RETRIES
+  MARKET_DATA_RETRY_INTERVAL_S = Constants.MARKET_DATA_RETRY_INTERVAL_S
+  MAX_RECURSION_DEPTH = Constants.MAX_RECURSION_DEPTH
 end
 
 _initConstants()

@@ -1,13 +1,13 @@
---- Обработка транзакций и ошибок QUIK.
---- Проверяет статус ордеров, определяет направление операции,
---- обрабатывает коды ошибок транзакций
---- (579, 580, 133) и выполняет повторную отправку.
+--- Обработка транзакций с заказами QUIK.
+--- Управление статусами ордеров, исполнением транзакций ошибочных цен,
+--- корректирующих сделок при отклонении цен
+--- (579, 580, 133) и обработка ошибок исполнения.
 
 local BrokerAdapter = require("BrokerAdapter")
 
 local TransactionHandler = {}
 
---- Определение операции по флагам: "S" если FLAG_SELL установлен, иначе "B".
+--- Возвращает операцию по флагам: "S" если FLAG_SELL установлен, иначе "B".
 function TransactionHandler.GetOperation(flags)
   if (flags & FLAG_SELL) > 0 then
     return "S"
@@ -16,12 +16,12 @@ function TransactionHandler.GetOperation(flags)
   end
 end
 
---- Определение статуса ордера: не активен и не в процессе исполнения.
+--- Определяет статус ордера: не активен и не исполнен полностью.
 function TransactionHandler.IsOrderExecuted(flags)
   return (flags & FLAG_ACTIVE) == 0 and (flags & FLAG_EXECUTED) == 0
 end
 
---- Функция для поиска ордеров: активные или исполненные.
+--- Фильтр для поиска ордеров: активные или исполненные.
 function TransactionHandler.FindOrder(flags, sec_code, class_code)
   if (flags & FLAG_ACTIVE) > 0 or TransactionHandler.IsOrderExecuted(flags) then
     return true
@@ -30,62 +30,71 @@ function TransactionHandler.FindOrder(flags, sec_code, class_code)
   end
 end
 
---- Получение текущих ордеров из QUIK и добавление их в N_Orders через OnOrder.
-function TransactionHandler.GetQuikOrders()
-  local orderIndices = BrokerAdapter.SearchOrders(TransactionHandler.FindOrder, "flags, sec_code, class_code")
-  log.debug(string.format("Получено ордеров: %d шт.", #orderIndices))
+--- Перебирает ордера через фильтр и вызывает callback для каждого.
+function TransactionHandler.forEachOrder(filterFunc, callback)
+  local orderIndices = BrokerAdapter.SearchOrders(filterFunc, "flags, sec_code, class_code")
   for i = 1, #orderIndices do
     local order = BrokerAdapter.GetOrder(orderIndices[i])
     if order then
-      OnOrder(order)
+      callback(order)
     end
   end
 end
 
---- Проверка существования ордера в QUIK (по тикеру, операции, цене).
-function TransactionHandler.IsOrderExists(newOrder)
-  local orderIndices = BrokerAdapter.SearchOrders(TransactionHandler.FindOrder, "flags, sec_code, class_code")
-  log.debug(
-    string.format(
-      "IsOrderExists: проверяем %s %s, найдено существующих в QUIK: %d",
-      newOrder.SecurityCode,
-      newOrder.Operation,
-      #orderIndices
-    )
-  )
-  for i = 1, #orderIndices do
-    local order = BrokerAdapter.GetOrder(orderIndices[i])
-    if order then
-      local operation
-      if (order.flags & FLAG_SELL) > 0 then
-        operation = "S"
-      else
-        operation = "B"
-      end
+--- Проверяет наличие ошибки в сообщении по коду ошибки.
+function TransactionHandler.isError(result_msg, error_code)
+  return string.find(result_msg, ": (" .. error_code .. ")", 1, true)
+end
 
+--- Получает все ордера из QUIK и передаёт их в OnOrder.
+function TransactionHandler.GetQuikOrders()
+  local count = 0
+  TransactionHandler.forEachOrder(TransactionHandler.FindOrder, function(order)
+    count = count + 1
+    OnOrder(order)
+  end)
+  log.debug(string.format("Получено ордеров: %d шт.", count))
+end
+
+--- Проверяет наличие аналогичного ордера в QUIK (по коду, операции, цене).
+function TransactionHandler.IsOrderExists(newOrder)
+  local exists = false
+  local count = 0
+  TransactionHandler.forEachOrder(TransactionHandler.FindOrder, function(order)
+    count = count + 1
+    if not exists then
+      local operation = TransactionHandler.GetOperation(order.flags)
       local priceNew = string.format("%." .. newOrder.SecurityInfo.scale .. "f", tonumber(newOrder.Price))
       local priceOld = string.format("%." .. newOrder.SecurityInfo.scale .. "f", tonumber(order.price))
 
       if order.sec_code == newOrder.SecurityCode and operation == newOrder.Operation and priceOld == priceNew then
         log.debug(
           string.format(
-            "IsOrderExists: найден дубликат ордер #%s %s %s цена=%s",
+            "IsOrderExists: Найден такой же #%s %s %s цена=%s",
             order.order_num,
             order.sec_code,
             operation,
             priceOld
           )
         )
-        return true
+        exists = true
       end
     end
-  end
-  return false
+  end)
+  log.debug(
+    string.format(
+      "IsOrderExists: Пока %s %s, найдено в QUIK: %d",
+      newOrder.SecurityCode,
+      newOrder.Operation,
+      count
+    )
+  )
+  return exists
 end
 
---- Обработка кодов ошибок транзакции: 579 (цена слишком низкая), 580 (цена слишком высокая), 133 (отклонена).
+--- Обрабатывает ошибки ценовых ограничений: 579 (цена ниже минимальной), 580 (цена выше максимальной), 133 (отклонено).
 function TransactionHandler.SetLimitOrdersWithError(trans)
-  local error579 = string.find(trans.result_msg, ": (" .. ERR_PRICE_TOO_LOW .. ")", 1, true)
+  local error579 = TransactionHandler.isError(trans.result_msg, ERR_PRICE_TOO_LOW)
   if error579 ~= nil then
     log.warn(
       "Error (579) for "
@@ -99,7 +108,7 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
     return
   end
 
-  local error580 = string.find(trans.result_msg, ": (" .. ERR_PRICE_TOO_HIGH .. ")", 1, true)
+  local error580 = TransactionHandler.isError(trans.result_msg, ERR_PRICE_TOO_HIGH)
   if error580 ~= nil then
     local maxPrice = tonumber(string.match(trans.result_msg, "do %d+%.?%d*"))
     if maxPrice == nil then
@@ -109,13 +118,13 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
     local order = Order:new(trans.sec_code)
     if order == nil then
       log.error(
-        "Не удалось создать ордер для повторной отправки",
+        "Не удалось создать заказ для корректирующей сделки",
         trans.sec_code
       )
       return
     end
     order:SetOperation(operation, maxPrice, trans.quantity)
-    log.info(string.format("Повторная отправка ордера по макс. цене: %s", order:Print()))
+    log.info(string.format("Создана корректирующая сделка на прод. цена: %s", order:Print()))
     local orders = {}
     table.insert(orders, order)
     SubmitOrders(orders, false)
@@ -132,17 +141,17 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
     local order = Order:new(trans.sec_code)
     if order == nil then
       log.error(
-        "Не удалось создать ордер для повторной отправки",
+        "Не удалось создать заказ для корректирующей сделки",
         trans.sec_code
       )
       return
     end
     order:SetOperation(operation, minPrice, 0)
-    log.info(string.format("Повторная отправка ордера по мин. цене: %s", order:Print()))
+    log.info(string.format("Создана корректирующая сделка на пок. цена: %s", order:Print()))
     return
   end
 
-  local error133 = string.find(trans.result_msg, ": (" .. ERR_EXECUTION_REJECTED .. ")", 1, true)
+  local error133 = TransactionHandler.isError(trans.result_msg, ERR_EXECUTION_REJECTED)
   if error133 ~= nil then
     log.warn(
       "Error (133) for "
@@ -156,36 +165,36 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
     return
   end
 
-  log.error(string.format("Неизвестный код ошибки транзакции. %s", trans.result_msg))
+  log.error(string.format("Непредвиденная ошибка исполнения. %s", trans.result_msg))
   log.error(json.encode(trans))
 end
 
---- Глобальная обёртка для TransactionHandler.GetOperation.
+--- Обёртка для TransactionHandler.GetOperation.
 function GetOperation(flags)
   return TransactionHandler.GetOperation(flags)
 end
 
---- Глобальная обёртка для TransactionHandler.IsOrderExecuted.
+--- Обёртка для TransactionHandler.IsOrderExecuted.
 function IsOrderExecuted(flags)
   return TransactionHandler.IsOrderExecuted(flags)
 end
 
---- Глобальная обёртка для TransactionHandler.FindOrder.
+--- Обёртка для TransactionHandler.FindOrder.
 function FindOrder(flags, sec_code, class_code)
   return TransactionHandler.FindOrder(flags, sec_code, class_code)
 end
 
---- Глобальная обёртка для TransactionHandler.GetQuikOrders.
+--- Обёртка для TransactionHandler.GetQuikOrders.
 function GetQuikOrders()
   TransactionHandler.GetQuikOrders()
 end
 
---- Глобальная обёртка для TransactionHandler.IsOrderExists.
+--- Обёртка для TransactionHandler.IsOrderExists.
 function IsOrderExists(newOrder)
   return TransactionHandler.IsOrderExists(newOrder)
 end
 
---- Глобальная обёртка для TransactionHandler.SetLimitOrdersWithError.
+--- Обёртка для TransactionHandler.SetLimitOrdersWithError.
 function SetLimitOrdersWithError(trans)
   TransactionHandler.SetLimitOrdersWithError(trans)
 end

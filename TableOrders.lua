@@ -76,6 +76,29 @@ function FindRow(t, orderNum)
   return nil
 end
 
+--- Ищет строку по номеру ордера или создаёт новую.
+function FindOrCreateRow(t, orderNum)
+  local row = FindRow(t, orderNum)
+  if row == nil then
+    row = t:AddLine()
+  end
+  return row
+end
+
+--- Заполняет ячейки строки данными ордера.
+function UpdateRowCells(t, row, secInfo, order, priceLast, operation, actuation, lastChange)
+  SetCell(t.t_id, row, 1, secInfo.name)
+  SetCell(t.t_id, row, 2, order.sec_code)
+  SetCell(t.t_id, row, 3, operation)
+  SetCell(t.t_id, row, 4, string.format("%.2f", actuation))
+  SetCell(t.t_id, row, 5, format_num(tonumber(priceLast), 6))
+  SetCell(t.t_id, row, 6, format_num(tonumber(order.price), 6))
+  SetCell(t.t_id, row, 7, format_num(tonumber(order.qty)))
+  SetCell(t.t_id, row, 8, format_num(tonumber(order.value), 2))
+  SetCell(t.t_id, row, 9, string.format("%.2f", lastChange))
+  SetCell(t.t_id, row, 10, string.format("%i", order.order_num))
+end
+
 --- Обновляет или добавляет строку для ордера с цветовой индикацией.
 function UpdateTableOrdersControl(t, order)
   local secInfo = GetSecurityInfo(order.sec_code)
@@ -88,21 +111,9 @@ function UpdateTableOrdersControl(t, order)
   local lastChange = BrokerAdapter.GetParamEx(order.class_code, order.sec_code, "LASTCHANGE")
   lastChange = lastChange or 0
 
-  local row = FindRow(t, order.order_num)
-  if row == nil then
-    row = t:AddLine()
-  end
+  local row = FindOrCreateRow(t, order.order_num)
 
-  SetCell(t.t_id, row, 1, secInfo.name)
-  SetCell(t.t_id, row, 2, order.sec_code)
-  SetCell(t.t_id, row, 3, operation)
-  SetCell(t.t_id, row, 4, string.format("%.2f", actuation))
-  SetCell(t.t_id, row, 5, format_num(tonumber(priceLast), 6))
-  SetCell(t.t_id, row, 6, format_num(tonumber(order.price), 6))
-  SetCell(t.t_id, row, 7, format_num(tonumber(order.qty)))
-  SetCell(t.t_id, row, 8, format_num(tonumber(order.value), 2))
-  SetCell(t.t_id, row, 9, string.format("%.2f", lastChange))
-  SetCell(t.t_id, row, 10, string.format("%i", order.order_num))
+  UpdateRowCells(t, row, secInfo, order, priceLast, operation, actuation, lastChange)
 
   -- Подсветка
   if math.abs(actuation) < 2 then
@@ -149,6 +160,8 @@ TableOrders = {
   CreateTableOrdersControl = CreateTableOrdersControl,
   ShowTableOrdersControl = ShowTableOrdersControl,
   FindRow = FindRow,
+  FindOrCreateRow = FindOrCreateRow,
+  UpdateRowCells = UpdateRowCells,
   UpdateTableOrdersControl = UpdateTableOrdersControl,
   GetOrderOperation = GetOrderOperation,
   GetPriceCurrent = GetPriceCurrent,
