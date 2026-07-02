@@ -367,20 +367,16 @@ test("bond actuation 100% > bondEdge 60% -> pass", function()
 	-- For actuation > 60%: (100 - price) / price > 0.6 -> price < 62.5
 	-- But PRICEMIN=80, so no valid price exists
 	-- Use a different approach: lower PRICEMIN
-	mock.AddSecurity(
-		"BOND_TEST",
-		"TQCB",
-		{
-			last = 100,
-			pricemin = 10,
-			pricemax = 120,
-			lot = 1000,
-			scale = 2,
-			min_price_step = 0.01,
-			facevalue = 1000,
-			face_unit = "SUR",
-		}
-	)
+	mock.AddSecurity("BOND_TEST", "TQCB", {
+		last = 100,
+		pricemin = 10,
+		pricemax = 120,
+		lot = 1000,
+		scale = 2,
+		min_price_step = 0.01,
+		facevalue = 1000,
+		face_unit = "SUR",
+	})
 	pass(B("BOND_TEST", 60, 1))
 	Config.VolumeOrderLimit = sv
 	Config.LimitActuationOrderBondEdge = se

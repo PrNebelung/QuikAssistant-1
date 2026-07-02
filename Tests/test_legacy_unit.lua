@@ -58,12 +58,8 @@ local function assert_eq(actual, expected, msg)
 		passed = passed + 1
 	else
 		failed = failed + 1
-		local err = string.format(
-			"FAIL: %s (expected: %s, actual: %s)",
-			msg or "",
-			tostring(expected),
-			tostring(actual)
-		)
+		local err =
+			string.format("FAIL: %s (expected: %s, actual: %s)", msg or "", tostring(expected), tostring(actual))
 		table.insert(errors, err)
 		print("  " .. err)
 	end
@@ -74,8 +70,7 @@ local function assert_true(value, msg)
 		passed = passed + 1
 	else
 		failed = failed + 1
-		local err =
-			string.format("FAIL: %s (expected: true, actual: %s)", msg or "", tostring(value))
+		local err = string.format("FAIL: %s (expected: true, actual: %s)", msg or "", tostring(value))
 		table.insert(errors, err)
 		print("  " .. err)
 	end
@@ -86,8 +81,7 @@ local function assert_false(value, msg)
 		passed = passed + 1
 	else
 		failed = failed + 1
-		local err =
-			string.format("FAIL: %s (expected: false, actual: %s)", msg or "", tostring(value))
+		local err = string.format("FAIL: %s (expected: false, actual: %s)", msg or "", tostring(value))
 		table.insert(errors, err)
 		print("  " .. err)
 	end

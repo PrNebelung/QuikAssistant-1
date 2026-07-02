@@ -137,7 +137,8 @@ local function checkActuation(order)
 	end
 
 	if actuation ~= nil and tonumber(actuation) < tonumber(limit) then
-		local reason = string.format("срабатывание %.2f%% ниже лимита %s%%", actuation, tostring(limit))
+		local reason =
+			string.format("срабатывание %.2f%% ниже лимита %s%%", actuation, tostring(limit))
 		return false, reason
 	end
 	return true, ""
@@ -150,7 +151,10 @@ local function checkBondPriceLimit(order)
 	end
 	local nominal = Constants.BOND_MAX_PRICE_PERCENT
 	if tonumber(order.Price) > tonumber(nominal) then
-		local reason = string.format("цена облигации превышает 100%% (цена: %s%%)", tostring(order.Price))
+		local reason = string.format(
+			"цена облигации превышает 100%% (цена: %s%%)",
+			tostring(order.Price)
+		)
 		log.warn(string.format("%s %s", reason, order:Print()))
 		return false, reason
 	end
@@ -217,7 +221,6 @@ end
 function GetOrderVolumeMax(order, priceMin)
 	return OrderValidator.GetOrderVolumeMax(order, priceMin)
 end
-
 
 --- Глобальная обёртка для OrderValidator.CheckOrder (обратная совместимость).
 --- @param table Объект Order

@@ -27,12 +27,12 @@ local cycleCount = 0
 -- Неизвестные ценные бумаги
 unknownSecurities = {}
 local function createLogOrder(order)
-  local logOrder = {}
-  logOrder.SecurityCode = order.SecurityInfo.code
-  logOrder.Operation = order.Operation
-  logOrder.Quantity = order:FormatQuantity()
-  logOrder.Price = order:FormatPrice()
-  return logOrder
+	local logOrder = {}
+	logOrder.SecurityCode = order.SecurityInfo.code
+	logOrder.Operation = order.Operation
+	logOrder.Quantity = order:FormatQuantity()
+	logOrder.Price = order:FormatPrice()
+	return logOrder
 end
 
 --- Обработка ордеров из файла
@@ -280,8 +280,8 @@ function SubmitOrders(orders, resubmit)
 							order:FormatPrice()
 						)
 					)
-local logOrder = createLogOrder(order)
-table.insert(sendOrders, logOrder)
+					local logOrder = createLogOrder(order)
+					table.insert(sendOrders, logOrder)
 					sendOrdersSet[order:GetDedupKey()] = true
 				end
 			end
@@ -370,8 +370,8 @@ function TradeClosePosition(trade)
 				order:FormatPrice()
 			)
 		)
-local logOrder = createLogOrder(order)
-table.insert(sendOrders, logOrder)
+		local logOrder = createLogOrder(order)
+		table.insert(sendOrders, logOrder)
 		sendOrdersSet[order:GetDedupKey()] = true
 	end
 end

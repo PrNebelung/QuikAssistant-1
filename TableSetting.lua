@@ -131,7 +131,6 @@ function SetAccountSetting(t)
 	SetCell(t.t_id, row, 2, Config.AccountCode)
 	SetCell(t.t_id, row, 3, problem)
 
-
 	local row = FindSetting(t, nameSettingVolumeOrderMax)
 	if row == nil then
 		row = t:AddLine()
@@ -293,6 +292,5 @@ function EventCallbackTableSetting(t_id, msg, par1, par2)
 				log.error(string.format("Недопустимое имя файла: %s", tostring(filename)))
 			end
 		end
-
 	end
 end

@@ -96,7 +96,14 @@ end
 function TransactionHandler.SetLimitOrdersWithError(trans)
 	local error579 = TransactionHandler.isError(trans.result_msg, ERR_PRICE_TOO_LOW)
 	if error579 ~= nil then
-		log.warn(string.format("Error (579) (qty=%s, price=%s): %s", tostring(trans.quantity), tostring(trans.price), trans.result_msg))
+		log.warn(
+			string.format(
+				"Error (579) (qty=%s, price=%s): %s",
+				tostring(trans.quantity),
+				tostring(trans.price),
+				trans.result_msg
+			)
+		)
 		return
 	end
 
@@ -109,7 +116,12 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
 		local operation = "S"
 		local order = Order:new(trans.sec_code)
 		if order == nil then
-			log.error(string.format("Не удалось создать заказ для корректирующей сделки %s", trans.sec_code))
+			log.error(
+				string.format(
+					"Не удалось создать заказ для корректирующей сделки %s",
+					trans.sec_code
+				)
+			)
 			return
 		end
 		order:SetOperation(operation, maxPrice, trans.quantity)
@@ -134,7 +146,12 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
 		local operation = "B"
 		local order = Order:new(trans.sec_code)
 		if order == nil then
-			log.error(string.format("Не удалось создать заказ для корректирующей сделки %s", trans.sec_code))
+			log.error(
+				string.format(
+					"Не удалось создать заказ для корректирующей сделки %s",
+					trans.sec_code
+				)
+			)
 			return
 		end
 		order:SetOperation(operation, minPrice, 0)
@@ -149,7 +166,14 @@ function TransactionHandler.SetLimitOrdersWithError(trans)
 
 	local error133 = TransactionHandler.isError(trans.result_msg, ERR_EXECUTION_REJECTED)
 	if error133 ~= nil then
-		log.warn(string.format("Error (133) (qty=%s, price=%s): %s", tostring(trans.quantity), tostring(trans.price), trans.result_msg))
+		log.warn(
+			string.format(
+				"Error (133) (qty=%s, price=%s): %s",
+				tostring(trans.quantity),
+				tostring(trans.price),
+				trans.result_msg
+			)
+		)
 		return
 	end
 

@@ -133,7 +133,8 @@ for i, x in ipairs(modes) do
 
 		-- Вывод в файл лога (если доступен)
 		if Config.Broker and Config.Broker ~= "" then
-			local str = string.format("%-6s %s [%s] %s: %s\n", nameupper, os.date("%H:%M:%S"), Config.Broker, lineinfo, msg)
+			local str =
+				string.format("%-6s %s [%s] %s: %s\n", nameupper, os.date("%H:%M:%S"), Config.Broker, lineinfo, msg)
 			local fp = openLogFile()
 			if not fp then
 				fp = reopenLogFile()
