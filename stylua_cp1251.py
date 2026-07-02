@@ -1,140 +1,92 @@
-"""
-StyLua wrapper for cp1251 encoded Lua files.
-
-Converts cp1251 -> UTF-8, runs StyLua, converts back -> cp1251.
-
-Usage:
-    python stylua_cp1251.py check           # Check formatting
-    python stylua_cp1251.py format          # Format all files
-    python stylua_cp1251.py format file.lua # Format specific file
-"""
-
+#!/usr/bin/env python3
+"""Обёртка для stylua: форматирует Lua-файлы в cp1251 через UTF-8."""
 import sys
 import os
 import subprocess
 import tempfile
 import shutil
 
-def convert_to_utf8(src, tmp_dir):
-    """Convert cp1251 file to UTF-8 in temp directory."""
-    with open(src, 'rb') as f:
-        content = f.read()
+sys.stdout.reconfigure(encoding='utf-8')
+
+def format_cp1251_file(filepath):
+    """Форматирует один cp1251 Lua-файл через stylua."""
+    with open(filepath, 'rb') as f:
+        cp1251_bytes = f.read()
+
+    # Декодируем cp1251
+    try:
+        text = cp1251_bytes.decode('cp1251')
+    except UnicodeDecodeError as e:
+        print(f'  Ошибка декодирования {filepath}: {e}')
+        return False
+
+    # Записываем во временный UTF-8 файл
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.lua', delete=False, encoding='utf-8') as tmp:
+        tmp.write(text)
+        tmp_path = tmp.name
 
     try:
-        text = content.decode('cp1251')
-    except UnicodeDecodeError:
-        text = content.decode('cp1251', errors='replace')
+        # Запускаем stylua
+        result = subprocess.run(
+            ['stylua', tmp_path],
+            capture_output=True, text=True
+        )
 
-    tmp_path = os.path.join(tmp_dir, os.path.basename(src))
-    with open(tmp_path, 'w', encoding='utf-8') as f:
-        f.write(text)
+        if result.returncode != 0:
+            print(f'  stylua ошибка для {filepath}: {result.stderr.strip()}')
+            return False
 
-    return tmp_path
+        # Читаем отформатированный UTF-8
+        with open(tmp_path, 'r', encoding='utf-8') as f:
+            formatted = f.read()
 
-def convert_to_cp1251(utf8_path, dest):
-    """Convert UTF-8 file back to cp1251."""
-    with open(utf8_path, 'r', encoding='utf-8') as f:
-        text = f.read()
+        # Конвертируем обратно в cp1251
+        cp1251_out = formatted.encode('cp1251', errors='replace')
 
-    with open(dest, 'wb') as f:
-        f.write(text.encode('cp1251', errors='replace'))
+        # Проверяем, что не потеряли русский текст
+        original_russian = sum(1 for b in cp1251_bytes if 0xC0 <= b <= 0xFF)
+        formatted_russian = sum(1 for b in cp1251_out if 0xC0 <= b <= 0xFF)
 
-def find_lua_files(path):
-    """Find all .lua files."""
-    files = []
-    if os.path.isfile(path):
-        return [path]
+        if original_russian > 0 and formatted_russian < original_russian * 0.9:
+            print(f'  Предупреждение: возможна потеря русского текста в {filepath}')
+            print(f'    Оригинал: {original_russian} русских байт, результат: {formatted_russian}')
+            return False
 
-    for root, dirs, filenames in os.walk(path):
-        # Skip hidden dirs and venv
-        dirs[:] = [d for d in dirs if not d.startswith('.') and d != 'venv']
-        for f in filenames:
-            if f.endswith('.lua'):
-                files.append(os.path.join(root, f))
-    return files
+        # Записываем обратно
+        with open(filepath, 'wb') as f:
+            f.write(cp1251_out)
 
-def run_stylua(tmp_dir, check_only=False):
-    """Run StyLua on temp directory."""
-    cmd = ['stylua', '--config-path', 'stylua.toml']
-    if check_only:
-        cmd.append('--check')
-    cmd.append('.')
+        print(f'  OK: {filepath}')
+        return True
 
-    result = subprocess.run(
-        cmd,
-        cwd=tmp_dir,
-        capture_output=True
-    )
-    return result
+    finally:
+        os.unlink(tmp_path)
+
 
 def main():
     if len(sys.argv) < 2:
-        print(__doc__)
-        sys.exit(1)
+        # Форматируем все .lua файлы
+        files = []
+        for root, dirs, filenames in os.walk('.'):
+            # Пропускаем служебные директории
+            dirs[:] = [d for d in dirs if d not in ['.git', '__pycache__', '.mimocode', 'docs']]
+            for f in filenames:
+                if f.endswith('.lua'):
+                    files.append(os.path.join(root, f))
+    else:
+        files = sys.argv[1:]
 
-    action = sys.argv[1]
-    target = sys.argv[2] if len(sys.argv) > 2 else '.'
+    success = 0
+    failed = 0
 
-    check_only = (action == 'check')
-    if action not in ('check', 'format'):
-        print(f"Unknown action: {action}")
-        print("Use 'check' or 'format'")
-        sys.exit(1)
+    for filepath in files:
+        if format_cp1251_file(filepath):
+            success += 1
+        else:
+            failed += 1
 
-    # Create temp directory
-    tmp_dir = tempfile.mkdtemp(prefix='stylua_')
+    print(f'\nИтого: {success} успешно, {failed} ошибок')
 
-    try:
-        # Find all Lua files
-        lua_files = find_lua_files(target)
-        if not lua_files:
-            print("No .lua files found")
-            return
-
-        print(f"Found {len(lua_files)} Lua files")
-
-        # Convert all files to UTF-8 in temp
-        file_map = {}  # tmp_path -> original_path
-        for src in lua_files:
-            rel_path = os.path.relpath(src, '.')
-            tmp_path = os.path.join(tmp_dir, rel_path)
-            os.makedirs(os.path.dirname(tmp_path), exist_ok=True)
-            convert_to_utf8(src, tmp_dir)
-            file_map[tmp_path] = src
-
-        # Copy stylua.toml to temp
-        if os.path.exists('stylua.toml'):
-            shutil.copy('stylua.toml', tmp_dir)
-
-        # Run StyLua
-        print(f"Running StyLua ({'check' if check_only else 'format'})...")
-        result = run_stylua(tmp_dir, check_only)
-
-        if result.stdout:
-            print(result.stdout.decode('utf-8', errors='replace'))
-        if result.stderr:
-            print(result.stderr.decode('utf-8', errors='replace'))
-
-        if result.returncode != 0:
-            print(f"\nStyLua found issues (exit code: {result.returncode})")
-            if not check_only:
-                sys.exit(result.returncode)
-
-        # If formatting, convert back to cp1251
-        if not check_only and result.returncode == 0:
-            converted = 0
-            for tmp_path, orig_path in file_map.items():
-                if os.path.exists(tmp_path):
-                    convert_to_cp1251(tmp_path, orig_path)
-                    converted += 1
-            print(f"\nFormatted and converted {converted} files back to cp1251")
-
-        if check_only and result.returncode == 0:
-            print("\nAll files are properly formatted!")
-
-    finally:
-        # Cleanup
-        shutil.rmtree(tmp_dir, ignore_errors=True)
 
 if __name__ == '__main__':
     main()

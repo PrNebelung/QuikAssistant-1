@@ -4,9 +4,9 @@ package.path = "?.lua;IntegrationTests/?.lua;" .. package.path
 
 local mock = dofile("IntegrationTests/quik_mock.lua")
 mock.AddSecurity(
-  "GAZP",
-  "TQBR",
-  { last = 1000, pricemin = 800, pricemax = 1200, lot = 1, scale = 2, min_price_step = 0.1 }
+	"GAZP",
+	"TQBR",
+	{ last = 1000, pricemin = 800, pricemax = 1200, lot = 1, scale = 2, min_price_step = 0.1 }
 )
 
 log = require("log")
@@ -20,7 +20,7 @@ _initConstants()
 Config = require("Config")
 
 getScriptPath = function()
-  return "."
+	return "."
 end
 SettingsManager = require("SettingsManager")
 require("SubmittingOrders")
@@ -28,13 +28,13 @@ require("SubmittingOrders")
 -- ==========================================
 local passed, failed = 0, 0
 local function ok(name, cond)
-  if cond then
-    passed = passed + 1
-    print("  PASS: " .. name)
-  else
-    failed = failed + 1
-    print("  FAIL: " .. name)
-  end
+	if cond then
+		passed = passed + 1
+		print("  PASS: " .. name)
+	else
+		failed = failed + 1
+		print("  FAIL: " .. name)
+	end
 end
 
 -- ==========================================
@@ -53,10 +53,10 @@ IsSentOrders = true
 Config.SessionMorningEnabled = true
 -- Ёмулируем логику SubmittingOrders дл€ утра
 if (os.time(TimeMorningStart) < os.time()) and not IsMorningTime then
-  IsMorningTime = true
-  if Config.SessionMorningEnabled then
-    IsSentOrders = false
-  end
+	IsMorningTime = true
+	if Config.SessionMorningEnabled then
+		IsSentOrders = false
+	end
 end
 ok("утро: IsMorningTime=true", IsMorningTime == true)
 ok("утро: IsSentOrders=false", IsSentOrders == false)
@@ -66,10 +66,10 @@ IsMorningTime = false
 IsSentOrders = true
 Config.SessionMorningEnabled = false
 if (os.time(TimeMorningStart) < os.time()) and not IsMorningTime then
-  IsMorningTime = true
-  if Config.SessionMorningEnabled then
-    IsSentOrders = false
-  end
+	IsMorningTime = true
+	if Config.SessionMorningEnabled then
+		IsSentOrders = false
+	end
 end
 ok("утро disabled: IsSentOrders не сбрасываетс€", IsSentOrders == true)
 
@@ -82,10 +82,10 @@ IsMainTime = false
 IsSentOrders = true
 Config.SessionMainEnabled = true
 if (os.time(TimeMainStart) < os.time()) and not IsMainTime then
-  IsMainTime = true
-  if Config.SessionMainEnabled then
-    IsSentOrders = false
-  end
+	IsMainTime = true
+	if Config.SessionMainEnabled then
+		IsSentOrders = false
+	end
 end
 ok("день: IsMainTime=true", IsMainTime == true)
 ok("день: IsSentOrders=false", IsSentOrders == false)
@@ -94,10 +94,10 @@ IsMainTime = false
 IsSentOrders = true
 Config.SessionMainEnabled = false
 if (os.time(TimeMainStart) < os.time()) and not IsMainTime then
-  IsMainTime = true
-  if Config.SessionMainEnabled then
-    IsSentOrders = false
-  end
+	IsMainTime = true
+	if Config.SessionMainEnabled then
+		IsSentOrders = false
+	end
 end
 ok("день disabled: IsSentOrders не сбрасываетс€", IsSentOrders == true)
 
@@ -111,10 +111,10 @@ IsEveningTime = false
 IsSentOrders = true
 Config.SessionEveningEnabled = true
 if (os.time(TimeEveningStart) < os.time()) and not IsEveningTime then
-  IsEveningTime = true
-  if Config.SessionEveningEnabled then
-    IsSentOrders = false
-  end
+	IsEveningTime = true
+	if Config.SessionEveningEnabled then
+		IsSentOrders = false
+	end
 end
 ok("вечер: IsEveningTime=true", IsEveningTime == true)
 ok("вечер: IsSentOrders=false", IsSentOrders == false)

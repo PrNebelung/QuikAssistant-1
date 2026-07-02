@@ -12,32 +12,29 @@ local SettingsManager = require("SettingsManager")
 
 --- Кэш: какой USERID соответствует какому брокеру
 BrokerUserMap = {
-  ["171783"] = "FINAM",
-  ["49653"] = "VTB",
-  ["34146"] = "PSB",
-  ["48640"] = "RSHB",
+	["171783"] = "FINAM",
+	["49653"] = "VTB",
+	["34146"] = "PSB",
+	["48640"] = "RSHB",
 }
-
 
 --- Определение брокера по USERID и применение настроек из settings.json
 function SetClientSetting()
-  if ClearSecurityInfoCache then
-    ClearSecurityInfoCache()
-  end
+	if ClearSecurityInfoCache then
+		ClearSecurityInfoCache()
+	end
 
-  local userId = BrokerAdapter.GetInfoParam("USERID")
-  local brokerName = BrokerUserMap[userId]
+	local userId = BrokerAdapter.GetInfoParam("USERID")
+	local brokerName = BrokerUserMap[userId]
 
-  if brokerName then
-    -- Загружаем настройки из settings.json для этого брокера
-    SettingsManager.ApplyBroker(brokerName)
-  else
-    Config.Broker = ""
-    Config.ClientCode = ""
-    Config.AccountCode = ""
-    Config.VolumeOrderMax = 0
-    Config.BrokerEnabled = false
-  end
-
-
+	if brokerName then
+		-- Загружаем настройки из settings.json для этого брокера
+		SettingsManager.ApplyBroker(brokerName)
+	else
+		Config.Broker = ""
+		Config.ClientCode = ""
+		Config.AccountCode = ""
+		Config.VolumeOrderMax = 0
+		Config.BrokerEnabled = false
+	end
 end

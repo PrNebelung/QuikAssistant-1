@@ -5,14 +5,14 @@ package.path = "?.lua;IntegrationTests/?.lua;" .. package.path
 local mock = dofile("IntegrationTests/quik_mock.lua")
 
 mock.AddSecurity(
-  "GAZP",
-  "TQBR",
-  { last = 0, pricemin = 800, pricemax = 1200, lot = 1, scale = 2, min_price_step = 0.1 }
+	"GAZP",
+	"TQBR",
+	{ last = 0, pricemin = 800, pricemax = 1200, lot = 1, scale = 2, min_price_step = 0.1 }
 )
 mock.AddSecurity(
-  "SBER",
-  "TQBR",
-  { last = 0, pricemin = 250, pricemax = 350, lot = 1, scale = 2, min_price_step = 0.01 }
+	"SBER",
+	"TQBR",
+	{ last = 0, pricemin = 250, pricemax = 350, lot = 1, scale = 2, min_price_step = 0.01 }
 )
 
 log = require("log")
@@ -29,12 +29,12 @@ local getParamExCalls = {}
 local lastGetParamExResult = { param_value = "0", result = "0" }
 
 _G.getParamEx = function(classCode, secCode, param)
-  table.insert(getParamExCalls, { classCode = classCode, secCode = secCode, param = param })
-  return lastGetParamExResult
+	table.insert(getParamExCalls, { classCode = classCode, secCode = secCode, param = param })
+	return lastGetParamExResult
 end
 
 _G.sleep = function(ms)
-  table.insert(sleepCalls, ms)
+	table.insert(sleepCalls, ms)
 end
 
 require("SubmittingOrders")
@@ -43,13 +43,13 @@ require("SubmittingOrders")
 local passed, failed = 0, 0
 
 local function check(name, condition)
-  if condition then
-    passed = passed + 1
-    print("  PASS: " .. name)
-  else
-    failed = failed + 1
-    print("  FAIL: " .. name)
-  end
+	if condition then
+		passed = passed + 1
+		print("  PASS: " .. name)
+	else
+		failed = failed + 1
+		print("  FAIL: " .. name)
+	end
 end
 
 -- ==========================================

@@ -11,29 +11,29 @@ local securityCode = "GAZP"
 local order = Order:new(securityCode)
 
 local gazp = {
-  name = '"Газпром" (ПАО) ао', --Инструмент
-  short_name = "ГАЗПРОМ ао", --	Инструмент сокр.
-  code = "GAZP", --	Код инструмента
-  isin_code = "RU0007661625", --	ISIN
-  regnumber = "1-02-00028-A", --	Рег.номер
-  class_name = "МБ ФР: Т+ Акции и ДР", --	Класс
-  class_code = "TQBR", --	Код класса
-  face_value = 5, --	Номинал
-  face_unit = "SUR", --	Валюта
-  scale = 2, --	Точность
-  min_price_step = 0.01, --	Шаг цены
-  lot_size = 10, --	Размер лота
+	name = '"Газпром" (ПАО) ао', --Инструмент
+	short_name = "ГАЗПРОМ ао", --	Инструмент сокр.
+	code = "GAZP", --	Код инструмента
+	isin_code = "RU0007661625", --	ISIN
+	regnumber = "1-02-00028-A", --	Рег.номер
+	class_name = "МБ ФР: Т+ Акции и ДР", --	Класс
+	class_code = "TQBR", --	Код класса
+	face_value = 5, --	Номинал
+	face_unit = "SUR", --	Валюта
+	scale = 2, --	Точность
+	min_price_step = 0.01, --	Шаг цены
+	lot_size = 10, --	Размер лота
 }
 
 --- Поиск инструмента
 assert(order.SecurityCode == securityCode)
 assert(
-  order.SecurityInfo.name == gazp.name,
-  string.format("Инструмент: %s != %s", order.SecurityInfo.name, gazp.name)
+	order.SecurityInfo.name == gazp.name,
+	string.format("Инструмент: %s != %s", order.SecurityInfo.name, gazp.name)
 )
 assert(
-  order.SecurityInfo.short_name == gazp.short_name,
-  string.format("Инструмент сокр.: %s != %s", order.SecurityInfo.short_name, gazp.short_name)
+	order.SecurityInfo.short_name == gazp.short_name,
+	string.format("Инструмент сокр.: %s != %s", order.SecurityInfo.short_name, gazp.short_name)
 )
 assert(order.SecurityInfo.code == gazp.code)
 assert(order.SecurityInfo.isin_code == gazp.isin_code)
@@ -63,8 +63,8 @@ local price = 250.1
 order:SetOperation(operation, price, quantity)
 
 assert(
-  order.Operation == operation,
-  string.format("Операция: %s != %s", order.SecurityInfo.Operation, operation)
+	order.Operation == operation,
+	string.format("Операция: %s != %s", order.SecurityInfo.Operation, operation)
 )
 assert(order.Quantity == quantity)
 assert(order.Price == price)
@@ -76,29 +76,29 @@ assert(order.IsSell() == false)
 local quantityMax = 10000
 order:SetQuantity(operation, price, quantityMax)
 assert(
-  order.Operation == operation,
-  string.format("Операция: %s != %s", order.SecurityInfo.Operation, operation)
+	order.Operation == operation,
+	string.format("Операция: %s != %s", order.SecurityInfo.Operation, operation)
 )
 assert(
-  order.Quantity == 3,
-  string.format(
-    "Количество выставляемых лотов: %s != %s",
-    tostring(order.Quantity),
-    tostring(3)
-  )
+	order.Quantity == 3,
+	string.format(
+		"Количество выставляемых лотов: %s != %s",
+		tostring(order.Quantity),
+		tostring(3)
+	)
 )
 assert(order.Price == price)
 assert(
-  order:GetVolume() == 7503,
-  string.format("Объем заявки: %s != %s", tostring(order:GetVolume()), tostring(7503))
+	order:GetVolume() == 7503,
+	string.format("Объем заявки: %s != %s", tostring(order:GetVolume()), tostring(7503))
 )
 
 --- Минимально возможная заявка
 order:SetPriceMin(operation)
 
 assert(
-  order.Operation == operation,
-  string.format("Операция: %s != %s", order.SecurityInfo.Operation, operation)
+	order.Operation == operation,
+	string.format("Операция: %s != %s", order.SecurityInfo.Operation, operation)
 )
 assert(order.Quantity == 1)
 assert(order.Price == gazp.min_price_step)
@@ -110,8 +110,8 @@ operation = "S"
 order:SetPriceMin(operation)
 
 assert(
-  order.Operation == operation,
-  string.format("Операция: %s != %s", order.SecurityInfo.Operation, operation)
+	order.Operation == operation,
+	string.format("Операция: %s != %s", order.SecurityInfo.Operation, operation)
 )
 assert(order.Quantity == 0)
 assert(order.Price == 0)
@@ -127,35 +127,35 @@ local bondCode = "RU000A102RN7"
 local orderBond = Order:new(bondCode)
 
 local bond = {
-  name = "КБ Ренессанс Кредит БО-06", --Инструмент
-  short_name = "РенКредБО6", --	Инструмент сокр.
-  code = "RU000A102RN7", --	Код инструмента
-  isin_code = "RU000A102RN7", --	ISIN
-  regnumber = "4B020603354B", --	Рег.номер
-  class_name = "МБ ФР: Т+: Корпоративные облигации", --	Класс
-  class_code = "TQCB", --	Код класса
-  face_value = 1000.00, --	Номинал
-  face_unit = "SUR", --	Валюта
-  scale = 2, --	Точность
-  min_price_step = 0.01, --	Шаг цены
-  lot_size = 1, --	Размер лота
+	name = "КБ Ренессанс Кредит БО-06", --Инструмент
+	short_name = "РенКредБО6", --	Инструмент сокр.
+	code = "RU000A102RN7", --	Код инструмента
+	isin_code = "RU000A102RN7", --	ISIN
+	regnumber = "4B020603354B", --	Рег.номер
+	class_name = "МБ ФР: Т+: Корпоративные облигации", --	Класс
+	class_code = "TQCB", --	Код класса
+	face_value = 1000.00, --	Номинал
+	face_unit = "SUR", --	Валюта
+	scale = 2, --	Точность
+	min_price_step = 0.01, --	Шаг цены
+	lot_size = 1, --	Размер лота
 }
 
 --- Поиск инструмента
 assert(orderBond.SecurityCode == bondCode)
 assert(
-  orderBond.SecurityInfo.name == bond.name,
-  string.format("Инструмент: %s != %s", orderBond.SecurityInfo.name, bond.name)
+	orderBond.SecurityInfo.name == bond.name,
+	string.format("Инструмент: %s != %s", orderBond.SecurityInfo.name, bond.name)
 )
 assert(
-  orderBond.SecurityInfo.short_name == bond.short_name,
-  string.format("Инструмент сокр.: %s != %s", orderBond.SecurityInfo.short_name, bond.short_name)
+	orderBond.SecurityInfo.short_name == bond.short_name,
+	string.format("Инструмент сокр.: %s != %s", orderBond.SecurityInfo.short_name, bond.short_name)
 )
 assert(orderBond.SecurityInfo.code == bond.code)
 assert(orderBond.SecurityInfo.isin_code == bond.isin_code)
 assert(
-  orderBond.SecurityInfo.regnumber == bond.regnumber,
-  string.format("Рег.номер: %s != %s", orderBond.SecurityInfo.regnumber, bond.regnumber)
+	orderBond.SecurityInfo.regnumber == bond.regnumber,
+	string.format("Рег.номер: %s != %s", orderBond.SecurityInfo.regnumber, bond.regnumber)
 )
 assert(orderBond.SecurityInfo.class_name == bond.class_name)
 assert(orderBond.SecurityInfo.class_code == bond.class_code)
@@ -170,8 +170,8 @@ assert(orderBond.Quantity == 0)
 assert(orderBond.Price == 0)
 assert(orderBond:GetVolume() == 0)
 assert(
-  orderBond.IsBond() == true,
-  string.format("Облигация?: %s != %s", tostring(orderBond.IsBond), tostring(true))
+	orderBond.IsBond() == true,
+	string.format("Облигация?: %s != %s", tostring(orderBond.IsBond), tostring(true))
 )
 assert(orderBond.IsOFZ() == false)
 assert(orderBond.IsBuy() == false)
@@ -185,8 +185,8 @@ local price = 101.5
 orderBond:SetOperation(operation, price, quantity)
 
 assert(
-  orderBond.Operation == operation,
-  string.format("Операция: %s != %s", orderBond.SecurityInfo.Operation, operation)
+	orderBond.Operation == operation,
+	string.format("Операция: %s != %s", orderBond.SecurityInfo.Operation, operation)
 )
 assert(orderBond.Quantity == quantity)
 
@@ -203,8 +203,8 @@ local price = 101.12345
 orderBond:SetOperation(operation, price, quantity)
 
 assert(
-  orderBond.Operation == operation,
-  string.format("Операция: %s != %s", orderBond.SecurityInfo.Operation, operation)
+	orderBond.Operation == operation,
+	string.format("Операция: %s != %s", orderBond.SecurityInfo.Operation, operation)
 )
 assert(orderBond.Quantity == quantity)
 
@@ -217,8 +217,8 @@ assert(orderBond.IsSell() == false)
 orderBond:SetPriceMin(operation)
 
 assert(
-  orderBond.Operation == operation,
-  string.format("Операция: %s != %s", orderBond.SecurityInfo.Operation, operation)
+	orderBond.Operation == operation,
+	string.format("Операция: %s != %s", orderBond.SecurityInfo.Operation, operation)
 )
 assert(orderBond.Quantity == 1)
 assert(orderBond.Price == bond.min_price_step)
@@ -230,8 +230,8 @@ operation = "S"
 orderBond:SetPriceMin(operation)
 
 assert(
-  orderBond.Operation == operation,
-  string.format("Операция: %s != %s", orderBond.SecurityInfo.Operation, operation)
+	orderBond.Operation == operation,
+	string.format("Операция: %s != %s", orderBond.SecurityInfo.Operation, operation)
 )
 assert(orderBond.Quantity == 0)
 assert(orderBond.Price == 0)
@@ -247,29 +247,29 @@ local spbCode = "ADBE_SPB"
 local orderSpb = Order:new(spbCode)
 
 local adobe = {
-  name = "Adobe Inc.", --Инструмент
-  short_name = "Adobe Inc.", --	Инструмент сокр.
-  code = "ADBE_SPB", --	Код инструмента
-  isin_code = "US00724F1012", --	ISIN
-  regnumber = "", --	Рег.номер
-  class_name = "SPB: Акции", --	Класс
-  class_code = "SPBXM", --	Код класса
-  face_value = 0.0001, --	Номинал
-  face_unit = "USD", --	Валюта
-  scale = 2, --	Точность
-  min_price_step = 0.01, --	Шаг цены
-  lot_size = 1, --	Размер лота
+	name = "Adobe Inc.", --Инструмент
+	short_name = "Adobe Inc.", --	Инструмент сокр.
+	code = "ADBE_SPB", --	Код инструмента
+	isin_code = "US00724F1012", --	ISIN
+	regnumber = "", --	Рег.номер
+	class_name = "SPB: Акции", --	Класс
+	class_code = "SPBXM", --	Код класса
+	face_value = 0.0001, --	Номинал
+	face_unit = "USD", --	Валюта
+	scale = 2, --	Точность
+	min_price_step = 0.01, --	Шаг цены
+	lot_size = 1, --	Размер лота
 }
 
 --- Поиск инструмента
 assert(orderSpb.SecurityCode == spbCode)
 assert(
-  orderSpb.SecurityInfo.name == adobe.name,
-  string.format("Инструмент: %s != %s", orderSpb.SecurityInfo.name, adobe.name)
+	orderSpb.SecurityInfo.name == adobe.name,
+	string.format("Инструмент: %s != %s", orderSpb.SecurityInfo.name, adobe.name)
 )
 assert(
-  orderSpb.SecurityInfo.short_name == adobe.short_name,
-  string.format("Инструмент сокр.: %s != %s", orderSpb.SecurityInfo.short_name, adobe.short_name)
+	orderSpb.SecurityInfo.short_name == adobe.short_name,
+	string.format("Инструмент сокр.: %s != %s", orderSpb.SecurityInfo.short_name, adobe.short_name)
 )
 assert(orderSpb.SecurityInfo.code == adobe.code)
 assert(orderSpb.SecurityInfo.isin_code == adobe.isin_code)
@@ -287,8 +287,8 @@ assert(orderSpb.Quantity == 0)
 assert(orderSpb.Price == 0)
 assert(orderSpb:GetVolume() == 0)
 assert(
-  orderSpb.IsBond() == false,
-  string.format("Облигация?: %s != %s", tostring(orderSpb.IsBond), tostring(false))
+	orderSpb.IsBond() == false,
+	string.format("Облигация?: %s != %s", tostring(orderSpb.IsBond), tostring(false))
 )
 assert(orderSpb.IsOFZ() == false)
 assert(orderSpb.IsBuy() == false)
@@ -302,8 +302,8 @@ local price = 500.1
 orderSpb:SetOperation(operation, price, quantity)
 
 assert(
-  orderSpb.Operation == operation,
-  string.format("Операция: %s != %s", orderSpb.SecurityInfo.Operation, operation)
+	orderSpb.Operation == operation,
+	string.format("Операция: %s != %s", orderSpb.SecurityInfo.Operation, operation)
 )
 assert(orderSpb.Quantity == quantity)
 assert(orderSpb.Price == price)
@@ -315,29 +315,29 @@ assert(orderSpb.IsSell() == false)
 local quantityMax = 10000
 orderSpb:SetQuantity(operation, price, quantityMax)
 assert(
-  orderSpb.Operation == operation,
-  string.format("Операция: %s != %s", orderSpb.SecurityInfo.Operation, operation)
+	orderSpb.Operation == operation,
+	string.format("Операция: %s != %s", orderSpb.SecurityInfo.Operation, operation)
 )
 assert(
-  orderSpb.Quantity == 19,
-  string.format(
-    "Количество выставляемых лотов: %s != %s",
-    tostring(orderSpb.Quantity),
-    tostring(19)
-  )
+	orderSpb.Quantity == 19,
+	string.format(
+		"Количество выставляемых лотов: %s != %s",
+		tostring(orderSpb.Quantity),
+		tostring(19)
+	)
 )
 assert(orderSpb.Price == price)
 assert(
-  orderSpb:GetVolume() == 9501.90,
-  string.format("Объем заявки: %s != %s", tostring(orderSpb:GetVolume()), tostring(9501.90))
+	orderSpb:GetVolume() == 9501.90,
+	string.format("Объем заявки: %s != %s", tostring(orderSpb:GetVolume()), tostring(9501.90))
 )
 
 --- Минимально возможная заявка
 orderSpb:SetPriceMin(operation)
 
 assert(
-  orderSpb.Operation == operation,
-  string.format("Операция: %s != %s", orderSpb.SecurityInfo.Operation, operation)
+	orderSpb.Operation == operation,
+	string.format("Операция: %s != %s", orderSpb.SecurityInfo.Operation, operation)
 )
 assert(orderSpb.Quantity == 1)
 assert(orderSpb.Price == adobe.min_price_step)
@@ -349,8 +349,8 @@ operation = "S"
 orderSpb:SetPriceMin(operation)
 
 assert(
-  orderSpb.Operation == operation,
-  string.format("Операция: %s != %s", orderSpb.SecurityInfo.Operation, operation)
+	orderSpb.Operation == operation,
+	string.format("Операция: %s != %s", orderSpb.SecurityInfo.Operation, operation)
 )
 assert(orderSpb.Quantity == 0)
 assert(orderSpb.Price == 0)

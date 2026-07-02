@@ -13,87 +13,126 @@ json = require("json")
 
 --- Инициализация ассистента. Проверяет подключение к брокеру, очищает кеш, инициализирует настройки и таблицы.
 function N_OnInit()
-  if not BrokerAdapter.IsConnected() then
-    log.error("N_OnInit() ошибка подключения к серверу")
-    return
-  end
-  -- Очистка кэша данных
-  ClearSecurityInfoCache()
-  Initialization()
-  UpdateTableSetting()
-  RefreshTableOrdersControl()
-  log.debug("N_OnInit() инициализация завершена")
+	if not BrokerAdapter.IsConnected() then
+		log.error("N_OnInit() ошибка подключения к серверу")
+		return
+	end
+	-- Очистка кэша данных
+	ClearSecurityInfoCache()
+	Initialization()
+	UpdateTableSetting()
+	RefreshTableOrdersControl()
+	log.debug("N_OnInit() инициализация завершена")
 end
 
 --- Основной цикл. Проверяет подключение, вызывает SubmittingOrders(), обновляет таблицы настроек и ордеров.
 function N_OnMainLoop()
-  if not BrokerAdapter.IsConnected() then
-    log.error("N_OnMainLoop() ошибка подключения к серверу")
-    return
-  end
-  SubmittingOrders()
-  RefreshDataToTableSetting(tableSetting)
-  RefreshTableOrdersControl()
+	if not BrokerAdapter.IsConnected() then
+		log.error("N_OnMainLoop() ошибка подключения к серверу")
+		return
+	end
+	SubmittingOrders()
+	RefreshDataToTableSetting(tableSetting)
+	RefreshTableOrdersControl()
 end
 
 --- Остановка. Удаляет таблицы интерфейса, логирует завершение.
 function N_OnStop()
-  -- Удаление окон таблиц
-  tableSetting:Delete()
-  tableOrdersControl:Delete()
-  -- Сохранение данных
-  log.debug("N_OnStop() завершение работы скрипта")
+	-- Удаление окон таблиц
+	tableSetting:Delete()
+	tableOrdersControl:Delete()
+	-- Сохранение данных
+	log.debug("N_OnStop() завершение работы скрипта")
 end
 
 --- Закрытие. Логирует закрытие ассистента.
 function N_OnClose()
-  -- Удаление окон таблиц
-  log.debug("N_OnClose() закрытие соединения")
+	-- Удаление окон таблиц
+	log.debug("N_OnClose() закрытие соединения")
 end
 
 --- Обработка ошибки отправки транзакции. Помечает ордер с ошибкой, логирует детали.
 function N_OnTransSendError(trans)
-  SetLimitOrdersWithError(trans)
-  log.warn(string.format("N_OnTransSendError() ошибка отправки транзакции %s: %s", trans.trans_id, trans.result_msg))
-  log.trace(json.encode(trans))
+	SetLimitOrdersWithError(trans)
+	log.warn(
+		string.format(
+			"N_OnTransSendError() ошибка отправки транзакции %s: %s",
+			trans.trans_id,
+			trans.result_msg
+		)
+	)
+	log.trace(json.encode(trans))
 end
 
 --- Обработка ошибки исполнения транзакции. Помечает ордер, логирует код ошибки, цену, количество.
 function N_OnTransExecutionError(trans)
-  -- Обработка ошибок для повторной отправки заявки (если это возможно)
-  SetLimitOrdersWithError(trans)
-  log.warn(string.format("N_OnTransExecutionError() ошибка исполнения транзакции %s: %s (по бумаге %s, количество %s, цена %s)", trans.trans_id, trans.result_msg, trans.sec_code, trans.quantity, tostring(trans.price or "nil")))
-  log.trace(json.encode(trans))
+	-- Обработка ошибок для повторной отправки заявки (если это возможно)
+	SetLimitOrdersWithError(trans)
+	log.warn(
+		string.format(
+			"N_OnTransExecutionError() ошибка исполнения транзакции %s: %s (по бумаге %s, количество %s, цена %s)",
+			trans.trans_id,
+			trans.result_msg,
+			trans.sec_code,
+			trans.quantity,
+			tostring(trans.price or "nil")
+		)
+	)
+	log.trace(json.encode(trans))
 end
 
 --- Обработка успешной транзакции. Логирует подтверждение.
 function N_OnTransOK(trans)
-  log.debug(string.format("N_OnTransOK: транзакция %s успешно исполнена", trans.trans_id))
-  log.trace(json.encode(trans))
+	log.debug(string.format("N_OnTransOK: транзакция %s успешно исполнена", trans.trans_id))
+	log.trace(json.encode(trans))
 end
 
 --- Обработка нового ордера. Логирует номер, транзакцию, бумагу, цену, количество.
 function N_OnNewOrder(order)
-  log.debug(string.format("N_OnNewOrder() создана новая заявка №%s по транзакции №%s, бумага: %s, цена: %s, количество: %s", order.order_num, order.trans_id, order.sec_code, order.price, order.qty))
-  log.trace(json.encode(order))
+	log.debug(
+		string.format(
+			"N_OnNewOrder() создана новая заявка №%s по транзакции №%s, бумага: %s, цена: %s, количество: %s",
+			order.order_num,
+			order.trans_id,
+			order.sec_code,
+			order.price,
+			order.qty
+		)
+	)
+	log.trace(json.encode(order))
 end
 
 --- Обработка частичного исполнения ордера. Логирует количество исполненного.
 function N_OnExecutionOrder(order)
-  log.debug(string.format("N_OnExecutionOrder() исполнение заявки №%s executed на %s из %s", order.order_num, (order.qty - (order.last_execution_count or 0)), order.balance))
-  log.trace(json.encode(order))
+	log.debug(
+		string.format(
+			"N_OnExecutionOrder() исполнение заявки №%s executed на %s из %s",
+			order.order_num,
+			(order.qty - (order.last_execution_count or 0)),
+			order.balance
+		)
+	)
+	log.trace(json.encode(order))
 end
 
 --- Обработка новой сделки. Сохраняет сделку в файл, закрывает позицию, логирует цену и количество.
 function N_OnNewTrade(trade)
-  -- Сохранение сделки в файл
-  TradeSave(trade)
+	-- Сохранение сделки в файл
+	TradeSave(trade)
 
-  -- Закрытие позиции по сделке
-  TradeClosePosition(trade)
+	-- Закрытие позиции по сделке
+	TradeClosePosition(trade)
 
-  log.debug(string.format("N_OnNewTrade() новая сделка №%s по транзакции №%s по цене %s кол-во %s", trade.trade_num, trade.trans_id, trade.price, trade.qty))
-  log.trace(json.encode(trade))
+	log.debug(
+		string.format(
+			"N_OnNewTrade() новая сделка №%s по транзакции №%s по цене %s кол-во %s",
+			trade.trade_num,
+			trade.trans_id,
+			trade.price,
+			trade.qty
+		)
+	)
+	log.trace(json.encode(trade))
 end
 
 -- Счётчик рекурсии для защиты от бесконечного цикла
@@ -104,86 +143,88 @@ local LIMIT_ORDER_MAX_RECURSION = 3
 --- Формирует транзакцию, отправляет через BrokerAdapter,
 --- обрабатывает ошибки. Возвращает (transId, error).
 function N_SetLimitOrder(
-  accountCode,
-  clientCode,
-  classCode,
-  securiyCode,
-  operation, -- Операция ('B' - buy, 'S' - sell)
-  price,
-  quantity
+	accountCode,
+	clientCode,
+	classCode,
+	securiyCode,
+	operation, -- Операция ('B' - buy, 'S' - sell)
+	price,
+	quantity
 )
-  -- Защита от бесконечной рекурсии (N_SetLimitOrder -> ошибка -> SetLimitOrdersWithError -> N_SetLimitOrder)
-  limitOrderRecursionDepth = limitOrderRecursionDepth + 1
-  if limitOrderRecursionDepth > LIMIT_ORDER_MAX_RECURSION then
-    log.error(string.format("Превышена глубина рекурсии N_SetLimitOrder, прерывание"))
-    limitOrderRecursionDepth = limitOrderRecursionDepth - 1
-    return transId, "Превышена глубина рекурсии"
-  end
+	-- Защита от бесконечной рекурсии (N_SetLimitOrder -> ошибка -> SetLimitOrdersWithError -> N_SetLimitOrder)
+	limitOrderRecursionDepth = limitOrderRecursionDepth + 1
+	if limitOrderRecursionDepth > LIMIT_ORDER_MAX_RECURSION then
+		log.error(
+			string.format("Превышена глубина рекурсии N_SetLimitOrder, прерывание")
+		)
+		limitOrderRecursionDepth = limitOrderRecursionDepth - 1
+		return transId, "Превышена глубина рекурсии"
+	end
 
-  transId = transId + 1
-  local Transaction = {
-    ["TRANS_ID"] = tostring(transId),
-    ["ACCOUNT"] = accountCode,
-    ["CLASSCODE"] = classCode,
-    ["SECCODE"] = securiyCode,
-    ["ACTION"] = "NEW_ORDER",
-    ["TYPE"] = "L",
-    ["OPERATION"] = operation,
-    ["PRICE"] = price,
-    ["QUANTITY"] = quantity,
-    ["CLIENT_CODE"] = clientCode,
-  }
+	transId = transId + 1
+	local Transaction = {
+		["TRANS_ID"] = tostring(transId),
+		["ACCOUNT"] = accountCode,
+		["CLASSCODE"] = classCode,
+		["SECCODE"] = securiyCode,
+		["ACTION"] = "NEW_ORDER",
+		["TYPE"] = "L",
+		["OPERATION"] = operation,
+		["PRICE"] = price,
+		["QUANTITY"] = quantity,
+		["CLIENT_CODE"] = clientCode,
+	}
 
-  log.trace(json.encode(Transaction))
+	log.trace(json.encode(Transaction))
 
-  local ok, Res = pcall(function()
-    return BrokerAdapter.SendTransaction(Transaction)
-  end)
-  if not ok then
-    Res = string.format("Ошибка sendTransaction: %s", tostring(Res))
-  end
-  if Res ~= "" then
-    if N_OnTransSendError ~= nil then
-      local trans = {}
-      trans.trans_id = transId
-      trans.transaction = Transaction
-      trans.result_msg = Res
-      trans.sec_code = securiyCode
-      trans.quantity = quantity
-      trans.price = price
-      N_OnTransSendError(trans)
-    end
-    limitOrderRecursionDepth = limitOrderRecursionDepth - 1
-    return transId, Res
-  end
+	local ok, Res = pcall(function()
+		return BrokerAdapter.SendTransaction(Transaction)
+	end)
+	if not ok then
+		Res = string.format("Ошибка sendTransaction: %s", tostring(Res))
+	end
+	if Res ~= "" then
+		if N_OnTransSendError ~= nil then
+			local trans = {}
+			trans.trans_id = transId
+			trans.transaction = Transaction
+			trans.result_msg = Res
+			trans.sec_code = securiyCode
+			trans.quantity = quantity
+			trans.price = price
+			N_OnTransSendError(trans)
+		end
+		limitOrderRecursionDepth = limitOrderRecursionDepth - 1
+		return transId, Res
+	end
 
-  limitOrderRecursionDepth = limitOrderRecursionDepth - 1
-  return transId, Res
+	limitOrderRecursionDepth = limitOrderRecursionDepth - 1
+	return transId, Res
 end
 
 --- Отмена всех заявок
 function N_CloseAllOrder()
-  local ord = "orders"
-  local orders = SearchItems(ord, 0, getNumberOf(ord) - 1, function(F)
-    return ((F & FLAG_ACTIVE) ~= 0)
-  end, "flags")
-  if (orders ~= nil) and (#orders > 0) then
-    for i = 1, #orders do
-      local item = getItem(ord, orders[i])
-      if item then
-        transId = transId + 1
-        local transaction = {
-          TRANS_ID = tostring(transId),
-          ACTION = "KILL_ORDER",
-          CLASSCODE = item.class_code,
-          SECCODE = item.sec_code,
-          ORDER_KEY = tostring(item.order_num),
-        }
-        pcall(function()
-          BrokerAdapter.SendTransaction(transaction)
-        end)
-      end
-    end
-  end
-  tableOrdersControl:Clear()
+	local ord = "orders"
+	local orders = SearchItems(ord, 0, getNumberOf(ord) - 1, function(F)
+		return ((F & FLAG_ACTIVE) ~= 0)
+	end, "flags")
+	if (orders ~= nil) and (#orders > 0) then
+		for i = 1, #orders do
+			local item = getItem(ord, orders[i])
+			if item then
+				transId = transId + 1
+				local transaction = {
+					TRANS_ID = tostring(transId),
+					ACTION = "KILL_ORDER",
+					CLASSCODE = item.class_code,
+					SECCODE = item.sec_code,
+					ORDER_KEY = tostring(item.order_num),
+				}
+				pcall(function()
+					BrokerAdapter.SendTransaction(transaction)
+				end)
+			end
+		end
+	end
+	tableOrdersControl:Clear()
 end

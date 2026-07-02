@@ -4,14 +4,14 @@ package.path = "?.lua;IntegrationTests/?.lua;" .. package.path
 
 local mock = dofile("IntegrationTests/quik_mock.lua")
 mock.AddSecurity(
-  "GAZP",
-  "TQBR",
-  { last = 1000, pricemin = 800, pricemax = 1200, lot = 1, scale = 2, min_price_step = 0.1 }
+	"GAZP",
+	"TQBR",
+	{ last = 1000, pricemin = 800, pricemax = 1200, lot = 1, scale = 2, min_price_step = 0.1 }
 )
 mock.AddSecurity(
-  "SBER",
-  "TQBR",
-  { last = 300, pricemin = 250, pricemax = 350, lot = 1, scale = 2, min_price_step = 0.01 }
+	"SBER",
+	"TQBR",
+	{ last = 300, pricemin = 250, pricemax = 350, lot = 1, scale = 2, min_price_step = 0.01 }
 )
 
 log = require("log")
@@ -35,20 +35,20 @@ sendOrders = {}
 sendOrdersSet = {}
 
 function OnOrder(order)
-  table.insert(N_Orders, order)
+	table.insert(N_Orders, order)
 end
 
 require("SubmittingOrders")
 
 local passed, failed = 0, 0
 local function ok(name, cond)
-  if cond then
-    passed = passed + 1
-    print("  PASS: " .. name)
-  else
-    failed = failed + 1
-    print("  FAIL: " .. name)
-  end
+	if cond then
+		passed = passed + 1
+		print("  PASS: " .. name)
+	else
+		failed = failed + 1
+		print("  FAIL: " .. name)
+	end
 end
 
 -- ==========================================
@@ -57,7 +57,7 @@ print("=== Initialization Tests ===\n")
 local called = false
 local orig = SetClientSetting
 SetClientSetting = function()
-  called = true
+	called = true
 end
 Initialization()
 SetClientSetting = orig
@@ -89,14 +89,14 @@ ok("нет заказов -> N_Orders пуст", #N_Orders == 0)
 
 mock.Reset()
 mock.AddOrder({
-  sec_code = "GAZP",
-  class_code = "TQBR",
-  flags = FLAG_ACTIVE,
-  trans_id = 1,
-  order_num = 1,
-  price = 1000,
-  qty = 10,
-  balance = 10,
+	sec_code = "GAZP",
+	class_code = "TQBR",
+	flags = FLAG_ACTIVE,
+	trans_id = 1,
+	order_num = 1,
+	price = 1000,
+	qty = 10,
+	balance = 10,
 })
 N_Orders = {}
 GetQuikOrders()
@@ -104,14 +104,14 @@ ok("1 активный заказ -> N_Orders=1", #N_Orders == 1)
 ok("sec_code = GAZP", N_Orders[1] and N_Orders[1].sec_code == "GAZP")
 
 mock.AddOrder({
-  sec_code = "SBER",
-  class_code = "TQBR",
-  flags = FLAG_ACTIVE,
-  trans_id = 2,
-  order_num = 2,
-  price = 300,
-  qty = 10,
-  balance = 10,
+	sec_code = "SBER",
+	class_code = "TQBR",
+	flags = FLAG_ACTIVE,
+	trans_id = 2,
+	order_num = 2,
+	price = 300,
+	qty = 10,
+	balance = 10,
 })
 N_Orders = {}
 GetQuikOrders()
