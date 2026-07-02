@@ -26,6 +26,14 @@ local cycleCount = 0
 
 -- Неизвестные ценные бумаги
 unknownSecurities = {}
+local function createLogOrder(order)
+  local logOrder = {}
+  logOrder.SecurityCode = order.SecurityInfo.code
+  logOrder.Operation = order.Operation
+  logOrder.Quantity = order:FormatQuantity()
+  logOrder.Price = order:FormatPrice()
+  return logOrder
+end
 
 --- Обработка ордеров из файла
 --- @param fileName string Имя файла
@@ -98,7 +106,7 @@ function WaitForMarketData()
 				return true
 			end
 		end
-		if retry % 5 == 0 then
+		if retry % RETRY_LOG_INTERVAL == 0 then
 			log.info(
 				string.format(
 					"Ожидание рыночных данных... (попытка %d/%d)",
@@ -249,8 +257,7 @@ function SubmitOrders(orders, resubmit)
 					order.SecurityInfo.code,
 					order.Operation,
 					order:FormatPrice(),
-					order:FormatQuantity(),
-					resubmit
+					order:FormatQuantity()
 				)
 				if error ~= "" then
 					stats.rejected = stats.rejected + 1
@@ -273,12 +280,8 @@ function SubmitOrders(orders, resubmit)
 							order:FormatPrice()
 						)
 					)
-					local logOrder = {}
-					logOrder.SecurityCode = order.SecurityInfo.code
-					logOrder.Operation = order.Operation
-					logOrder.Quantity = order:FormatQuantity()
-					logOrder.Price = order:FormatPrice()
-					table.insert(sendOrders, logOrder)
+local logOrder = createLogOrder(order)
+table.insert(sendOrders, logOrder)
 					sendOrdersSet[order:GetDedupKey()] = true
 				end
 			end
@@ -322,7 +325,7 @@ function TradeClosePosition(trade)
 
 	local price = GetPriceMax(order)
 	if tonumber(price) == nil or tonumber(price) == 0 then
-		sleep(500)
+		sleep(Constants.TRADE_CLOSE_SLEEP_MS)
 		price = GetPriceMax(order)
 	end
 	if tonumber(price) == nil or tonumber(price) == 0 then
@@ -367,12 +370,8 @@ function TradeClosePosition(trade)
 				order:FormatPrice()
 			)
 		)
-		local logOrder = {}
-		logOrder.SecurityCode = order.SecurityInfo.code
-		logOrder.Operation = order.Operation
-		logOrder.Quantity = order:FormatQuantity()
-		logOrder.Price = order:FormatPrice()
-		table.insert(sendOrders, logOrder)
+local logOrder = createLogOrder(order)
+table.insert(sendOrders, logOrder)
 		sendOrdersSet[order:GetDedupKey()] = true
 	end
 end

@@ -125,11 +125,7 @@ end
 
 -- Глобальная обёртка для обратной совместимости
 function LoadOrdersFromFile(fileName)
-	OrderLoader = OrderLoader
-
 	return OrderLoader.LoadOrdersFromFile(fileName)
 end
-
-OrderLoader = OrderLoader
 
 return OrderLoader

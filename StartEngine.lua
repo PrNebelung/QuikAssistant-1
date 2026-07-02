@@ -48,6 +48,8 @@ Engine.OnClose = function()
 	end
 end
 
+--- Обработчик ответа транзакции от QUIK.
+--- @param trans_reply table объект ответа транзакции из QUIK API
 Engine.OnTransReply = function(trans_reply)
 	for i, TransReply in ipairs(Engine.N_TransReplies) do
 		if Engine.N_TransReplies[i].trans_id == trans_reply.trans_id then
@@ -64,6 +66,8 @@ Engine.OnTransReply = function(trans_reply)
 	end
 end
 
+--- Обработчик обновления ордера из QUIK.
+--- @param order table объект ордера из QUIK API
 Engine.OnOrder = function(order)
 	for i, Order in ipairs(Engine.N_Orders) do
 		if Engine.N_Orders[i].trans_id == order.trans_id then
@@ -83,6 +87,8 @@ Engine.OnOrder = function(order)
 	end
 end
 
+--- Обработчик исполнения сделки из QUIK.
+--- @param trade table объект сделки из QUIK API
 Engine.OnTrade = function(trade)
 	for i, Trade in ipairs(Engine.N_Trades) do
 		if Engine.N_Trades[i].trade_num == trade.trade_num then

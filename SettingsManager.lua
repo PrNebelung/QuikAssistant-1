@@ -8,30 +8,8 @@ local Config = require("Config")
 local SettingsManager = {}
 local SETTINGS_FILE = getScriptPath() .. "\\settings.json"
 
-local defaults = {
-	clientCode = "",
-	accountCode = "",
-	firmId = "",
-	volumeOrderMax = 0,
-	bondVolumeOrderMax = 0,
-	volumeOrderLimit = 200000,
-	limitActuationOrderEdge = 5,
-	limitActuationOrderBondEdge = 60,
-	sessionMorningEnabled = false,
-	sessionMainEnabled = false,
-	sessionEveningEnabled = false,
-	brokerEnabled = false,
-	sessionMorningHour = 7,
-	sessionMorningMin = 0,
-	sessionMorningSec = 30,
-	sessionMainHour = 10,
-	sessionMainMin = 0,
-	sessionMainSec = 30,
-	sessionEveningHour = 19,
-	sessionEveningMin = 2,
-	sessionEveningSec = 10,
-}
-
+--- Загрузка всех настроек из settings.json.
+--- @return table все настройки брокеров, ключ — имя брокера
 function SettingsManager.LoadAll()
 	local f = io.open(SETTINGS_FILE, "r")
 	if f == nil then
@@ -50,6 +28,9 @@ function SettingsManager.LoadAll()
 	return data
 end
 
+--- Сохранение всех настроек в settings.json.
+--- @param data table все настройки для сохранения
+--- @return boolean результат операции (true при успехе)
 function SettingsManager.SaveAll(data)
 	local f = io.open(SETTINGS_FILE, "w")
 	if f == nil then
@@ -61,22 +42,49 @@ function SettingsManager.SaveAll(data)
 	return true
 end
 
+--- Получение настроек брокера с значениями по умолчанию.
+--- @param brokerName string идентификатор брокера
+--- @return table настройки брокера с применёнными значениями по умолчанию
 function SettingsManager.GetBroker(brokerName)
 	local all = SettingsManager.LoadAll()
 	local broker = all[brokerName] or {}
-	local result = {}
-	for k, v in pairs(defaults) do
-		result[k] = broker[k] ~= nil and broker[k] or v
-	end
-	return result
+	return {
+		clientCode = broker.clientCode or Config.ClientCode,
+		accountCode = broker.accountCode or Config.AccountCode,
+		firmId = broker.firmId or Config.FirmId,
+		volumeOrderMax = broker.volumeOrderMax or Config.VolumeOrderMax,
+		bondVolumeOrderMax = broker.bondVolumeOrderMax or Config.BondVolumeOrderMax,
+		volumeOrderLimit = broker.volumeOrderLimit or Config.VolumeOrderLimit,
+		limitActuationOrderEdge = broker.limitActuationOrderEdge or Config.LimitActuationOrderEdge,
+		limitActuationOrderBondEdge = broker.limitActuationOrderBondEdge or Config.LimitActuationOrderBondEdge,
+		sessionMorningEnabled = broker.sessionMorningEnabled or Config.SessionMorningEnabled,
+		sessionMainEnabled = broker.sessionMainEnabled or Config.SessionMainEnabled,
+		sessionEveningEnabled = broker.sessionEveningEnabled or Config.SessionEveningEnabled,
+		brokerEnabled = broker.brokerEnabled or Config.BrokerEnabled,
+		sessionMorningHour = broker.sessionMorningHour or Config.SessionMorning.hour,
+		sessionMorningMin = broker.sessionMorningMin or Config.SessionMorning.min,
+		sessionMorningSec = broker.sessionMorningSec or Config.SessionMorning.sec,
+		sessionMainHour = broker.sessionMainHour or Config.SessionMain.hour,
+		sessionMainMin = broker.sessionMainMin or Config.SessionMain.min,
+		sessionMainSec = broker.sessionMainSec or Config.SessionMain.sec,
+		sessionEveningHour = broker.sessionEveningHour or Config.SessionEvening.hour,
+		sessionEveningMin = broker.sessionEveningMin or Config.SessionEvening.min,
+		sessionEveningSec = broker.sessionEveningSec or Config.SessionEvening.sec,
+	}
 end
 
+--- Сохранение настроек брокера.
+--- @param brokerName string идентификатор брокера
+--- @param data table настройки брокера
+--- @return boolean результат операции
 function SettingsManager.SaveBroker(brokerName, data)
 	local all = SettingsManager.LoadAll()
 	all[brokerName] = data
 	return SettingsManager.SaveAll(all)
 end
 
+--- Применение настроек брокера к глобальному модулю Config.
+--- @param brokerName string идентификатор брокера
 function SettingsManager.ApplyBroker(brokerName)
 	local all = SettingsManager.LoadAll()
 	if not all[brokerName] then

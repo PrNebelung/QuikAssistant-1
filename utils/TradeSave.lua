@@ -7,6 +7,8 @@ local Config = require("Config")
 
 --Сохранение сделок в файл и в таблицу заявок
 --- Сохранение сделок в файл MyTrades.csv: дата, время, тикер, операция, количество, цена, брокер.
+--- Сохранение сделки в файл MyTrades.csv.
+--- @param trade table объект сделки из QUIK API
 function TradeSave(trade)
 	local isSell = (trade.buy_sell == "S") or ((trade.flags & FLAG_SELL) > 0)
 	local Operation = ""

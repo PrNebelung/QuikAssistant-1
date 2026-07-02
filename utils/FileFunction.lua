@@ -13,6 +13,9 @@ local BrokerAdapter = require("BrokerAdapter")
 local csv = require("csv")
 
 --- Читает CSV-файл из папки Data, возвращает массив строк.
+--- Чтение данных из CSV-файла в папке Data.
+--- @param nameFileCSV string имя CSV-файла (относительно Data/)
+--- @return table массив строк, каждая строка — массив значений
 function getFromCSV(nameFileCSV)
 	local result = {}
 	local path = BrokerAdapter.GetScriptPath() .. "//Data//" .. nameFileCSV

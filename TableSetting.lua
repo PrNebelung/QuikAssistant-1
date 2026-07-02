@@ -6,23 +6,23 @@
 require("TableConstructor")
 local Config = require("Config")
 
-nameSettingServerTime = "Время сервера"
-nameSettingBroker = "Брокер"
-nameSettingClientCode = "Код клиента"
-nameSettingAccountCode = "Код счета"
-nameSettingVolumeOrderMax = "Максимальный размер суммы (рубли)"
-nameSettingFileBuyOrder = "Файл с заявками на покупку"
-nameSettingFileSellOrder = "Файл с заявками на продажу"
-nameSettingFileBuyOrderEdge = "Файл с заявками на покупку на экстремумах"
-nameSettingFileBuyOrderBondsEdge =
+local nameSettingServerTime = "Время сервера"
+local nameSettingBroker = "Брокер"
+local nameSettingClientCode = "Код клиента"
+local nameSettingAccountCode = "Код счета"
+local nameSettingVolumeOrderMax = "Максимальный размер суммы (рубли)"
+local nameSettingFileBuyOrder = "Файл с заявками на покупку"
+local nameSettingFileSellOrder = "Файл с заявками на продажу"
+local nameSettingFileBuyOrderEdge = "Файл с заявками на покупку на экстремумах"
+local nameSettingFileBuyOrderBondsEdge =
 	"Файл с заявками на покупку облигаций на экстремумах"
 
-nameSettingFileSellOrderEdge = "Файл с заказами на продажу (настольчик)"
-nameSettingInAllAssets = "Все валюты активы"
-nameSettingAllAssets = "Активы в валюте"
-nameSettingProfitLoss = "Прибыль/убыток"
-nameSettingRateChange = "% Изменение"
-nameSettingIndexMOEX = "Индекс мосбиржи"
+local nameSettingFileSellOrderEdge = "Файл с заказами на продажу (настольчик)"
+local nameSettingInAllAssets = "Все валюты активы"
+local nameSettingAllAssets = "Активы в валюте"
+local nameSettingProfitLoss = "Прибыль/убыток"
+local nameSettingRateChange = "% Изменение"
+local nameSettingIndexMOEX = "Индекс мосбиржи"
 
 tableSetting = nil
 
@@ -131,7 +131,6 @@ function SetAccountSetting(t)
 	SetCell(t.t_id, row, 2, Config.AccountCode)
 	SetCell(t.t_id, row, 3, problem)
 
-	SetCell(t.t_id, row, 3, problem)
 
 	local row = FindSetting(t, nameSettingVolumeOrderMax)
 	if row == nil then
@@ -295,7 +294,5 @@ function EventCallbackTableSetting(t_id, msg, par1, par2)
 			end
 		end
 
-		if param == nameSettingServerTime then
-		end
 	end
 end

@@ -99,8 +99,7 @@ end
 --- @param n number|nil Количество знаков после запятой (по умолчанию: 0)
 --- @return string Отформатированная строка количества
 function Order:FormatQuantity(n)
-	local n = (n or 0)
-	return string.format("%." .. n .. "f", self.Quantity)
+	return string.format("%." .. (n or 0) .. "f", self.Quantity)
 end
 
 --- Возвращает ключ дедупликации: "код операция количество цена".

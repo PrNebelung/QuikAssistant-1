@@ -5,16 +5,16 @@
 
 local BrokerAdapter = require("BrokerAdapter")
 
-nameColumnSecurityName = "Наименование инструмента"
-nameColumnSecurityCode = "Код бумаги (тикер)"
-nameColumnOperation = "Операция"
-nameColumnPriceLast = "Последняя цена"
-nameColumnOrderPrice = "Цена заявки"
-nameColumnQuantity = "Количество"
-nameColumnVolume = "Сумма с учётом номинала"
-nameColumnActuation = "Отклонение"
-nameColumnLastChange = "% Изменение от предыдущей"
-nameColumnOrderNum = "Номер заявки с сервера брокера "
+local nameColumnSecurityName = "Наименование инструмента"
+local nameColumnSecurityCode = "Код бумаги (тикер)"
+local nameColumnOperation = "Операция"
+local nameColumnPriceLast = "Последняя цена"
+local nameColumnOrderPrice = "Цена заявки"
+local nameColumnQuantity = "Количество"
+local nameColumnVolume = "Сумма с учётом номинала"
+local nameColumnActuation = "Отклонение"
+local nameColumnLastChange = "% Изменение от предыдущей"
+local nameColumnOrderNum = "Номер заявки с сервера брокера "
 
 tableOrdersControl = nil
 
@@ -116,9 +116,9 @@ function UpdateTableOrdersControl(t, order)
 	UpdateRowCells(t, row, secInfo, order, priceLast, operation, actuation, lastChange)
 
 	-- Подсветка
-	if math.abs(actuation) < 2 then
+	if math.abs(actuation) < ACTUATION_COLOR_RED then
 		t:Red(row, 4)
-	elseif math.abs(actuation) < 5 then
+	elseif math.abs(actuation) < ACTUATION_COLOR_YELLOW then
 		t:Yellow(row, 4)
 	else
 		t:Default(row, 4)
