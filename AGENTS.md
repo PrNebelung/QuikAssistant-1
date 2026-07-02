@@ -4,7 +4,7 @@
 
 **When working with .lua files:**
 1. Load skill `cp1251-guard` for encoding rules
-2. Use `python cp1255_wrapper.py check_all` after any changes
+2. Use `python cp1251_wrapper.py check_all` after any changes
 3. NEVER use Edit tool on .lua files with Russian text
 
 ## CRITICAL: File Encoding
@@ -178,18 +178,14 @@ for i, line in enumerate(text.split(chr(10))[:20], 1):
 - **Do NOT add price correction to CheckOrder** — was a bug (double adjustment)
 
 ### Log Levels in File
-- Only INFO and above go to log file (TRACE/DEBUG only to console)
+- All levels that pass `log.level` go to both console and log file
 - Log file is UTF-8 encoded
 - `[SKIP]` messages include ticker symbols in brackets
 
 ### Test Commands
 ```bash
-lua Tests/run_tests.lua                                    # Unit tests (170)
-lua Tests/run_tests.lua                         # Integration tests (uses mock QUIK API)
+lua Tests/run_tests.lua                                    # Unit tests (271)
 ```
 
 ### Known Issues (manual fix needed)
-- 12 unused functions in QuikFunction, TableOrders, TableSetting, TableConstructor
-- Commented-out code block in TableOrders.lua:14-40
-- Unused globals in Setting.lua (TRANS_STATUS_REJECTED, VolumeOrderMin, OFZVolumeOrderMax)
 - Function removal via Python scripts is unreliable due to Lua nesting complexity — use IDE

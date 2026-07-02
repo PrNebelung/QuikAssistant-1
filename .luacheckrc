@@ -204,7 +204,6 @@ read_globals = {
     "TableSetting",
     "Setting",
     "Constants",
-    "OrderLoader",
     -- Test/indicator globals
     "_initConstants",
     "WaitForMarketData",
@@ -290,10 +289,8 @@ read_globals = {
     "GetPriceCurrent",
     "GetOrderOperation",
     "EventTable",
-    "EventCallbackTableSetting",
     "top",
     "bottom",
-    "left",
     "right",
     "k",
     "res",
@@ -337,21 +334,6 @@ files["Tests/**/*.lua"] = {
         "addTestPosition",
         "clearTestData",
         "tables",
-    },
-}
-
-files["IntegrationTests/**/*.lua"] = {
-    globals = {
-        "quik_mock",
-        "Config",
-        "SettingsManager",
-        "PositionService",
-        "MarketData",
-        "BrokerAdapter",
-        "N_SetLimitOrder",
-        "_initConstants",
-        "Order",
-        "WaitForMarketData",
     },
 }
 
