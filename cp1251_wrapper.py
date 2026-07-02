@@ -76,7 +76,7 @@ def check_all():
     lua_files = sorted(
         glob.glob("*.lua")
         + glob.glob("Tests/*.lua")
-        + glob.glob("IntegrationTests/*.lua")
+        + glob.glob("Tests/*.lua")
     )
     for f in lua_files:
         with open(f, "rb") as fh:

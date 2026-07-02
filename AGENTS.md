@@ -185,7 +185,7 @@ for i, line in enumerate(text.split(chr(10))[:20], 1):
 ### Test Commands
 ```bash
 lua Tests/run_tests.lua                                    # Unit tests (170)
-lua IntegrationTests/run_tests.lua                         # Integration tests (uses mock QUIK API)
+lua Tests/run_tests.lua                         # Integration tests (uses mock QUIK API)
 ```
 
 ### Known Issues (manual fix needed)

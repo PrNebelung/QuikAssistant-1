@@ -1,5 +1,5 @@
 --- Legacy unit tests migrated from Tests/run_tests.lua
---- Adapted for IntegrationTests quik_mock environment
+--- Adapted for Tests quik_mock environment
 
 package.path = "?.lua;Tests/?.lua;libs/?.lua;utils/?.lua;" .. package.path
 
