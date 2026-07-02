@@ -54,12 +54,7 @@ end
 --- Обработка ошибки отправки транзакции. Помечает ордер с ошибкой, логирует детали.
 function N_OnTransSendError(trans)
   SetLimitOrdersWithError(trans)
-  log.warn(
-    "N_OnTransSendError() ошибка отправки транзакции "
-      .. trans.trans_id
-      .. ": "
-      .. trans.result_msg
-  )
+  log.warn(string.format("N_OnTransSendError() ошибка отправки транзакции %s: %s", trans.trans_id, trans.result_msg))
   log.trace(json.encode(trans))
 end
 
@@ -67,19 +62,7 @@ end
 function N_OnTransExecutionError(trans)
   -- Обработка ошибок для повторной отправки заявки (если это возможно)
   SetLimitOrdersWithError(trans)
-  log.warn(
-    "N_OnTransExecutionError() ошибка исполнения транзакции "
-      .. trans.trans_id
-      .. ": "
-      .. trans.result_msg
-      .. " (по бумаге "
-      .. trans.sec_code
-      .. ", количество "
-      .. trans.quantity
-      .. ", цена "
-      .. (trans.price or "nil")
-      .. ")"
-  )
+  log.warn(string.format("N_OnTransExecutionError() ошибка исполнения транзакции %s: %s (по бумаге %s, количество %s, цена %s)", trans.trans_id, trans.result_msg, trans.sec_code, trans.quantity, tostring(trans.price or "nil")))
   log.trace(json.encode(trans))
 end
 
@@ -91,31 +74,13 @@ end
 
 --- Обработка нового ордера. Логирует номер, транзакцию, бумагу, цену, количество.
 function N_OnNewOrder(order)
-  log.debug(
-    "N_OnNewOrder() создана новая заявка №"
-      .. order.order_num
-      .. " по транзакции №"
-      .. order.trans_id
-      .. ", бумага: "
-      .. order.sec_code
-      .. ", цена: "
-      .. order.price
-      .. ", количество: "
-      .. order.qty
-  )
+  log.debug(string.format("N_OnNewOrder() создана новая заявка №%s по транзакции №%s, бумага: %s, цена: %s, количество: %s", order.order_num, order.trans_id, order.sec_code, order.price, order.qty))
   log.trace(json.encode(order))
 end
 
 --- Обработка частичного исполнения ордера. Логирует количество исполненного.
 function N_OnExecutionOrder(order)
-  log.debug(
-    "N_OnExecutionOrder() исполнение заявки №"
-      .. order.order_num
-      .. " executed на "
-      .. (order.qty - (order.last_execution_count or 0))
-      .. " из "
-      .. order.balance
-  )
+  log.debug(string.format("N_OnExecutionOrder() исполнение заявки №%s executed на %s из %s", order.order_num, (order.qty - (order.last_execution_count or 0)), order.balance))
   log.trace(json.encode(order))
 end
 
@@ -127,16 +92,7 @@ function N_OnNewTrade(trade)
   -- Закрытие позиции по сделке
   TradeClosePosition(trade)
 
-  log.debug(
-    "N_OnNewTrade() новая сделка №"
-      .. trade.trade_num
-      .. " по транзакции №"
-      .. trade.trans_id
-      .. " по цене "
-      .. trade.price
-      .. " кол-во "
-      .. trade.qty
-  )
+  log.debug(string.format("N_OnNewTrade() новая сделка №%s по транзакции №%s по цене %s кол-во %s", trade.trade_num, trade.trans_id, trade.price, trade.qty))
   log.trace(json.encode(trade))
 end
 
@@ -184,7 +140,7 @@ function N_SetLimitOrder(
     return BrokerAdapter.SendTransaction(Transaction)
   end)
   if not ok then
-    Res = "Ошибка sendTransaction: " .. tostring(Res)
+    Res = string.format("Ошибка sendTransaction: %s", tostring(Res))
   end
   if Res ~= "" then
     if N_OnTransSendError ~= nil then
