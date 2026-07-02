@@ -1,6 +1,6 @@
 --- Интеграционные тесты для IsSendOrder.
 
-package.path = "?.lua;Tests/?.lua;" .. package.path
+package.path = "?.lua;Tests/?.lua;libs/?.lua;utils/?.lua;" .. package.path
 
 local mock = dofile("Tests/quik_mock.lua")
 mock.AddSecurity(

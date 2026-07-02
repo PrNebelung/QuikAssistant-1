@@ -6,6 +6,30 @@ local json = require("json")
 local Config = require("Config")
 
 local SettingsManager = {}
+
+local defaults = {
+	clientCode = "",
+	accountCode = "",
+	firmId = "",
+	volumeOrderMax = 0,
+	bondVolumeOrderMax = 0,
+	volumeOrderLimit = 200000,
+	limitActuationOrderEdge = 5,
+	limitActuationOrderBondEdge = 60,
+	sessionMorningEnabled = false,
+	sessionMainEnabled = false,
+	sessionEveningEnabled = false,
+	brokerEnabled = false,
+	sessionMorningHour = 7,
+	sessionMorningMin = 0,
+	sessionMorningSec = 30,
+	sessionMainHour = 10,
+	sessionMainMin = 0,
+	sessionMainSec = 30,
+	sessionEveningHour = 19,
+	sessionEveningMin = 2,
+	sessionEveningSec = 10,
+}
 local SETTINGS_FILE = getScriptPath() .. "\\settings.json"
 
 --- Загрузка всех настроек из settings.json.
@@ -49,18 +73,18 @@ function SettingsManager.GetBroker(brokerName)
 	local all = SettingsManager.LoadAll()
 	local broker = all[brokerName] or {}
 	return {
-		clientCode = broker.clientCode or Config.ClientCode,
-		accountCode = broker.accountCode or Config.AccountCode,
-		firmId = broker.firmId or Config.FirmId,
-		volumeOrderMax = broker.volumeOrderMax or Config.VolumeOrderMax,
-		bondVolumeOrderMax = broker.bondVolumeOrderMax or Config.BondVolumeOrderMax,
-		volumeOrderLimit = broker.volumeOrderLimit or Config.VolumeOrderLimit,
-		limitActuationOrderEdge = broker.limitActuationOrderEdge or Config.LimitActuationOrderEdge,
-		limitActuationOrderBondEdge = broker.limitActuationOrderBondEdge or Config.LimitActuationOrderBondEdge,
-		sessionMorningEnabled = broker.sessionMorningEnabled or Config.SessionMorningEnabled,
-		sessionMainEnabled = broker.sessionMainEnabled or Config.SessionMainEnabled,
-		sessionEveningEnabled = broker.sessionEveningEnabled or Config.SessionEveningEnabled,
-		brokerEnabled = broker.brokerEnabled or Config.BrokerEnabled,
+		clientCode = broker.clientCode or defaults.clientCode,
+		accountCode = broker.accountCode or defaults.accountCode,
+		firmId = broker.firmId or defaults.firmId,
+		volumeOrderMax = broker.volumeOrderMax or defaults.volumeOrderMax,
+		bondVolumeOrderMax = broker.bondVolumeOrderMax or defaults.bondVolumeOrderMax,
+		volumeOrderLimit = broker.volumeOrderLimit or defaults.volumeOrderLimit,
+		limitActuationOrderEdge = broker.limitActuationOrderEdge or defaults.limitActuationOrderEdge,
+		limitActuationOrderBondEdge = broker.limitActuationOrderBondEdge or defaults.limitActuationOrderBondEdge,
+		sessionMorningEnabled = broker.sessionMorningEnabled or defaults.sessionMorningEnabled,
+		sessionMainEnabled = broker.sessionMainEnabled or defaults.sessionMainEnabled,
+		sessionEveningEnabled = broker.sessionEveningEnabled or defaults.sessionEveningEnabled,
+		brokerEnabled = broker.brokerEnabled or defaults.brokerEnabled,
 		sessionMorningHour = broker.sessionMorningHour or Config.SessionMorning.hour,
 		sessionMorningMin = broker.sessionMorningMin or Config.SessionMorning.min,
 		sessionMorningSec = broker.sessionMorningSec or Config.SessionMorning.sec,
