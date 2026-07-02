@@ -84,11 +84,11 @@ local function resetAll()
 	sendOrders = {}
 	sendOrdersSet = {}
 	unknownSecurities = {}
-	IsSentOrders = false
+	SessionScheduler.IsSentOrders = false
 	IsSendingOrders = false
-	IsMorningTime = false
-	IsMainTime = false
-	IsEveningTime = false
+	SessionScheduler.IsMorningTime = false
+	SessionScheduler.IsMainTime = false
+	SessionScheduler.IsEveningTime = false
 	csvData = {}
 
 	Config.BrokerEnabled = true

@@ -18,7 +18,8 @@ BrokerAdapter = require("BrokerAdapter")
 require("Order")
 require("Constants")
 _initConstants()
-Broker = "VTB"
+Config = require("Config")
+Config.Broker = "VTB"
 
 require("TradeSave")
 

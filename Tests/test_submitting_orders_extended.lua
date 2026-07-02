@@ -68,13 +68,13 @@ require("SubmittingOrders")
 
 print("--- SubmittingOrders() вызывает SubmittingOrdersRun ---")
 test("Вызов SubmittingOrdersRun когда время утра наступило", function()
-	TimeMorningStart = os.date("*t", 0)
-	TimeMainStart = os.date("*t", 2000000000)
-	TimeEveningStart = os.date("*t", 2000000000)
-	IsMorningTime = false
-	IsMainTime = false
-	IsEveningTime = false
-	IsSentOrders = false
+	SessionScheduler.TimeMorningStart = os.date("*t", 0)
+	SessionScheduler.TimeMainStart = os.date("*t", 2000000000)
+	SessionScheduler.TimeEveningStart = os.date("*t", 2000000000)
+	SessionScheduler.IsMorningTime = false
+	SessionScheduler.IsMainTime = false
+	SessionScheduler.IsEveningTime = false
+	SessionScheduler.IsSentOrders = false
 	IsSendingOrders = false
 	Config.SessionMorningEnabled = true
 
@@ -90,11 +90,11 @@ test("Вызов SubmittingOrdersRun когда время утра наступило", function()
 end)
 
 test("Run НЕ вызывается когда утро ещё не наступило", function()
-	TimeMorningStart = os.date("*t", 2000000000)
-	TimeMainStart = os.date("*t", 2000000000)
-	TimeEveningStart = os.date("*t", 2000000000)
-	IsMorningTime = false
-	IsSentOrders = false
+	SessionScheduler.TimeMorningStart = os.date("*t", 2000000000)
+	SessionScheduler.TimeMainStart = os.date("*t", 2000000000)
+	SessionScheduler.TimeEveningStart = os.date("*t", 2000000000)
+	SessionScheduler.IsMorningTime = false
+	SessionScheduler.IsSentOrders = false
 	local runCalled = false
 	local saved = SubmittingOrdersRun
 	SubmittingOrdersRun = function()
@@ -108,13 +108,13 @@ end)
 
 print("\n--- N_CloseAllOrder при старте основной сессии ---")
 test("CloseAllOrder вызван при переходе на основную сессию", function()
-	TimeMorningStart = os.date("*t", 0)
-	TimeMainStart = os.date("*t", 0)
-	TimeEveningStart = os.date("*t", 2000000000)
-	IsMorningTime = true
-	IsMainTime = false
-	IsEveningTime = false
-	IsSentOrders = true
+	SessionScheduler.TimeMorningStart = os.date("*t", 0)
+	SessionScheduler.TimeMainStart = os.date("*t", 0)
+	SessionScheduler.TimeEveningStart = os.date("*t", 2000000000)
+	SessionScheduler.IsMorningTime = true
+	SessionScheduler.IsMainTime = false
+	SessionScheduler.IsEveningTime = false
+	SessionScheduler.IsSentOrders = true
 	Config.SessionMainEnabled = true
 
 	local closeCalled = false
@@ -129,16 +129,16 @@ test("CloseAllOrder вызван при переходе на основную сессию", function()
 	SubmittingOrdersRun = savedRun
 
 	assert(closeCalled, "N_CloseAllOrder должен быть вызван")
-	assert(IsMainTime == true, "IsMainTime должен стать true")
+	assert(SessionScheduler.IsMainTime == true, "IsMainTime должен стать true")
 end)
 
 test("CloseAllOrder НЕ вызван когда IsSentOrders=false", function()
-	TimeMorningStart = os.date("*t", 0)
-	TimeMainStart = os.date("*t", 0)
-	TimeEveningStart = os.date("*t", 2000000000)
-	IsMorningTime = true
-	IsMainTime = false
-	IsSentOrders = false
+	SessionScheduler.TimeMorningStart = os.date("*t", 0)
+	SessionScheduler.TimeMainStart = os.date("*t", 0)
+	SessionScheduler.TimeEveningStart = os.date("*t", 2000000000)
+	SessionScheduler.IsMorningTime = true
+	SessionScheduler.IsMainTime = false
+	SessionScheduler.IsSentOrders = false
 	Config.SessionMainEnabled = true
 
 	local closeCalled = false
@@ -157,13 +157,13 @@ end)
 
 print("\n--- Сессии отключены ---")
 test("Все сессии отключены -> IsSentOrders не сбрасывается", function()
-	TimeMorningStart = os.date("*t", 0)
-	TimeMainStart = os.date("*t", 0)
-	TimeEveningStart = os.date("*t", 0)
-	IsMorningTime = false
-	IsMainTime = false
-	IsEveningTime = false
-	IsSentOrders = true
+	SessionScheduler.TimeMorningStart = os.date("*t", 0)
+	SessionScheduler.TimeMainStart = os.date("*t", 0)
+	SessionScheduler.TimeEveningStart = os.date("*t", 0)
+	SessionScheduler.IsMorningTime = false
+	SessionScheduler.IsMainTime = false
+	SessionScheduler.IsEveningTime = false
+	SessionScheduler.IsSentOrders = true
 	Config.SessionMorningEnabled = false
 	Config.SessionMainEnabled = false
 	Config.SessionEveningEnabled = false
@@ -173,18 +173,18 @@ test("Все сессии отключены -> IsSentOrders не сбрасывается", function()
 	SubmittingOrders()
 	SubmittingOrdersRun = savedRun
 
-	assert(IsSentOrders == true, "IsSentOrders должен остаться true")
+	assert(SessionScheduler.IsSentOrders == true, "IsSentOrders должен остаться true")
 end)
 
 print("\n--- Переход между сессиями ---")
 test("Утро -> основная: IsMorningTime=true, IsMainTime=true", function()
-	TimeMorningStart = os.date("*t", 0)
-	TimeMainStart = os.date("*t", 0)
-	TimeEveningStart = os.date("*t", 2000000000)
-	IsMorningTime = false
-	IsMainTime = false
-	IsEveningTime = false
-	IsSentOrders = false
+	SessionScheduler.TimeMorningStart = os.date("*t", 0)
+	SessionScheduler.TimeMainStart = os.date("*t", 0)
+	SessionScheduler.TimeEveningStart = os.date("*t", 2000000000)
+	SessionScheduler.IsMorningTime = false
+	SessionScheduler.IsMainTime = false
+	SessionScheduler.IsEveningTime = false
+	SessionScheduler.IsSentOrders = false
 	Config.SessionMorningEnabled = true
 	Config.SessionMainEnabled = true
 
@@ -193,8 +193,8 @@ test("Утро -> основная: IsMorningTime=true, IsMainTime=true", function()
 	SubmittingOrders()
 	SubmittingOrdersRun = saved
 
-	assert(IsMorningTime == true, "IsMorningTime=true")
-	assert(IsMainTime == true, "IsMainTime=true")
+	assert(SessionScheduler.IsMorningTime == true, "IsMorningTime=true")
+	assert(SessionScheduler.IsMainTime == true, "IsMainTime=true")
 end)
 
 -- ==========================================
@@ -302,7 +302,7 @@ local function resetRun()
 	sendOrders = {}
 	sendOrdersSet = {}
 	unknownSecurities = {}
-	IsSentOrders = false
+	SessionScheduler.IsSentOrders = false
 	IsSendingOrders = false
 	csvData = {}
 	Config.BrokerEnabled = true
@@ -413,7 +413,7 @@ print("\n--- IsSentOrders ---")
 testRun("IsSentOrders=true после SubmittingOrdersRun", function()
 	csvData["TEST_BuyOrders.csv"] = {}
 	SubmittingOrdersRun()
-	assert(IsSentOrders == true, "IsSentOrders должен стать true")
+	assert(SessionScheduler.IsSentOrders == true, "IsSentOrders должен стать true")
 end)
 
 testRun("IsSendingOrders=false после SubmittingOrdersRun", function()
