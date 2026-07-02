@@ -46,8 +46,13 @@ function SessionScheduler.CheckSession()
 		{ time = SessionScheduler.TimeEveningStart, enabled = Config.SessionEveningEnabled, flag = "evening" },
 	}
 	for _, session in ipairs(sessions) do
-		if session.enabled and os.time(session.time) < now and not SessionScheduler["Is" .. session.flag .. "Time"] then
-			SessionScheduler["Is" .. session.flag .. "Time"] = true
+		local flagCap = session.flag:sub(1,1):upper() .. session.flag:sub(2)
+		if session.enabled and os.time(session.time) < now and not SessionScheduler["Is" .. flagCap .. "Time"] then
+			SessionScheduler["Is" .. flagCap .. "Time"] = true
+			-- Закрываем ордера только если были отправлены
+			if SessionScheduler.IsSentOrders and N_CloseAllOrder then
+				N_CloseAllOrder()
+			end
 			SessionScheduler.IsSentOrders = false
 		end
 	end

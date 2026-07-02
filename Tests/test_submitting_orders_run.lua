@@ -121,7 +121,7 @@ test("BrokerEnabled=false -> skip", function()
 	Config.BrokerEnabled = false
 	SubmittingOrdersRun()
 	assert(#N_Orders == 0)
-	assert(IsSentOrders == false)
+	assert(SessionScheduler.IsSentOrders == false)
 end)
 
 test("IsSendingOrders=true -> skip", function()
@@ -148,7 +148,7 @@ end)
 test("IsSentOrders=true после цикла", function()
 	csvData["TEST_BuyOrders.csv"] = {}
 	SubmittingOrdersRun()
-	assert(IsSentOrders == true)
+	assert(SessionScheduler.IsSentOrders == true)
 end)
 
 test("IsSendingOrders=false после цикла", function()
